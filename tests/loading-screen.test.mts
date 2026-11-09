@@ -436,7 +436,7 @@ test('utan målad meny tas overlayen ändå bort efter rk-done', async () => {
   assert.equal(dom.window.document.getElementById('rk-loading'), null);
 });
 
-test('byggt index.html pekar på /rpg-demo/ om dist finns', () => {
+test('byggt index.html pekar på /runornas-kall-laro/ om dist finns', () => {
   const dist = join(root, 'dist/index.html');
   if (!existsSync(dist)) return;
   const html = readFileSync(dist, 'utf8');
@@ -444,8 +444,8 @@ test('byggt index.html pekar på /rpg-demo/ om dist finns', () => {
   const appAt = html.indexOf('id="app"');
   const fadeAt = html.indexOf('id="fade"');
   assert.ok(loadingAt > 0 && loadingAt < appAt && loadingAt < fadeAt);
-  assert.match(html, /href="\/rpg-demo\/assets\/ui\/loading\/loading\.css"/);
-  assert.match(html, /src="\/rpg-demo\/assets\/ui\/loading\/titel\.webp"/);
+  assert.match(html, /href="\/runornas-kall-laro\/assets\/ui\/loading\/loading\.css"/);
+  assert.match(html, /src="\/runornas-kall-laro\/assets\/ui\/loading\/titel\.webp"/);
   assert.equal(existsSync(join(root, 'dist/assets/ui/loading/loading.css')), true);
   assert.equal(existsSync(join(root, 'dist/assets/ui/loading/titel.webp')), true);
   assert.match(html, /background:\s*#0d0f12/);

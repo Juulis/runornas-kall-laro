@@ -1,6 +1,6 @@
 /** Delade sprite-/animations-typer och asset-URL (ingen pixi-import — undviker cykler). */
 
-const BASE = `${import.meta.env?.BASE_URL ?? '/rpg-demo/'}assets/`;
+const BASE = `${import.meta.env?.BASE_URL ?? '/runornas-kall-laro/'}assets/`;
 export const assetUrl = (p: string): string => BASE + p;
 
 export const DIRS = ['S', 'SV', 'V', 'NV', 'N', 'NO', 'O', 'SO'] as const;

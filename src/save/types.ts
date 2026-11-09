@@ -1,3 +1,4 @@
+import type { LearnSettings } from '../learn/types';
 import type { FoundEntry } from '../core/SaveBackend';
 import type { Equipment, ItemInstance } from '../core/GameContext';
 import type { WorldState } from '../world/worldStateTypes';
@@ -49,6 +50,8 @@ export interface SaveFile {
   fog?: Record<string, string>;
   /** Per-hjälte världstillstånd (#37). */
   worldState?: WorldState;
+  /** Nivå och ämne. Saknas i äldre sparfiler. */
+  learn?: LearnSettings;
   savedAt?: number;
 }
 

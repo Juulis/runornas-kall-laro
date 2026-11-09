@@ -1,0 +1,2525 @@
+{
+  "amne": "engelska",
+  "fragor": [
+    {
+      "id": "en-forskola-001",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter röd på engelska?",
+      "ratt": "red",
+      "fel": [
+        "blue",
+        "green",
+        "yellow"
+      ]
+    },
+    {
+      "id": "en-forskola-002",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter blå på engelska?",
+      "ratt": "blue",
+      "fel": [
+        "red",
+        "green",
+        "yellow"
+      ]
+    },
+    {
+      "id": "en-forskola-003",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter grön på engelska?",
+      "ratt": "green",
+      "fel": [
+        "red",
+        "blue",
+        "yellow"
+      ]
+    },
+    {
+      "id": "en-forskola-004",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter gul på engelska?",
+      "ratt": "yellow",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-forskola-005",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter svart på engelska?",
+      "ratt": "black",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-forskola-006",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter vit på engelska?",
+      "ratt": "white",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-forskola-007",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter brun på engelska?",
+      "ratt": "brown",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-forskola-008",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter rosa på engelska?",
+      "ratt": "pink",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-forskola-009",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter hund på engelska?",
+      "ratt": "dog",
+      "fel": [
+        "cat",
+        "bird",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-forskola-010",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter katt på engelska?",
+      "ratt": "cat",
+      "fel": [
+        "dog",
+        "bird",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-forskola-011",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter fågel på engelska?",
+      "ratt": "bird",
+      "fel": [
+        "dog",
+        "cat",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-forskola-012",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter fisk på engelska?",
+      "ratt": "fish",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-forskola-013",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter häst på engelska?",
+      "ratt": "horse",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-forskola-014",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 1 på engelska?",
+      "ratt": "one",
+      "fel": [
+        "two",
+        "three",
+        "four"
+      ]
+    },
+    {
+      "id": "en-forskola-015",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 2 på engelska?",
+      "ratt": "two",
+      "fel": [
+        "one",
+        "three",
+        "four"
+      ]
+    },
+    {
+      "id": "en-forskola-016",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 3 på engelska?",
+      "ratt": "three",
+      "fel": [
+        "one",
+        "two",
+        "four"
+      ]
+    },
+    {
+      "id": "en-forskola-017",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 4 på engelska?",
+      "ratt": "four",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-forskola-018",
+      "niva": "forskola",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 5 på engelska?",
+      "ratt": "five",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-019",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter röd på engelska?",
+      "ratt": "red",
+      "fel": [
+        "blue",
+        "green",
+        "yellow"
+      ]
+    },
+    {
+      "id": "en-ak1-020",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter blå på engelska?",
+      "ratt": "blue",
+      "fel": [
+        "red",
+        "green",
+        "yellow"
+      ]
+    },
+    {
+      "id": "en-ak1-021",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter grön på engelska?",
+      "ratt": "green",
+      "fel": [
+        "red",
+        "blue",
+        "yellow"
+      ]
+    },
+    {
+      "id": "en-ak1-022",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter gul på engelska?",
+      "ratt": "yellow",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-023",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter svart på engelska?",
+      "ratt": "black",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-024",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter vit på engelska?",
+      "ratt": "white",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-025",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter brun på engelska?",
+      "ratt": "brown",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-026",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter rosa på engelska?",
+      "ratt": "pink",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-027",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter orange på engelska?",
+      "ratt": "orange",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-028",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter lila på engelska?",
+      "ratt": "purple",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-029",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter grå på engelska?",
+      "ratt": "grey",
+      "fel": [
+        "red",
+        "blue",
+        "green"
+      ]
+    },
+    {
+      "id": "en-ak1-030",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter hund på engelska?",
+      "ratt": "dog",
+      "fel": [
+        "cat",
+        "bird",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-ak1-031",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter katt på engelska?",
+      "ratt": "cat",
+      "fel": [
+        "dog",
+        "bird",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-ak1-032",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter fågel på engelska?",
+      "ratt": "bird",
+      "fel": [
+        "dog",
+        "cat",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-ak1-033",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter fisk på engelska?",
+      "ratt": "fish",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-034",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter häst på engelska?",
+      "ratt": "horse",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-035",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter ko på engelska?",
+      "ratt": "cow",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-036",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter gris på engelska?",
+      "ratt": "pig",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-037",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter mus på engelska?",
+      "ratt": "mouse",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-038",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter anka på engelska?",
+      "ratt": "duck",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-039",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter groda på engelska?",
+      "ratt": "frog",
+      "fel": [
+        "dog",
+        "cat",
+        "bird"
+      ]
+    },
+    {
+      "id": "en-ak1-040",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 1 på engelska?",
+      "ratt": "one",
+      "fel": [
+        "two",
+        "three",
+        "four"
+      ]
+    },
+    {
+      "id": "en-ak1-041",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 2 på engelska?",
+      "ratt": "two",
+      "fel": [
+        "one",
+        "three",
+        "four"
+      ]
+    },
+    {
+      "id": "en-ak1-042",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 3 på engelska?",
+      "ratt": "three",
+      "fel": [
+        "one",
+        "two",
+        "four"
+      ]
+    },
+    {
+      "id": "en-ak1-043",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 4 på engelska?",
+      "ratt": "four",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-044",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 5 på engelska?",
+      "ratt": "five",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-045",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 6 på engelska?",
+      "ratt": "six",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-046",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 7 på engelska?",
+      "ratt": "seven",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-047",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 8 på engelska?",
+      "ratt": "eight",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-048",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 9 på engelska?",
+      "ratt": "nine",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-049",
+      "niva": "ak1",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 10 på engelska?",
+      "ratt": "ten",
+      "fel": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    {
+      "id": "en-ak1-050",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "cat",
+      "fel": [
+        "kat",
+        "catt",
+        "cet"
+      ]
+    },
+    {
+      "id": "en-ak1-051",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "dog",
+      "fel": [
+        "dogg",
+        "doog",
+        "dag"
+      ]
+    },
+    {
+      "id": "en-ak1-052",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "red",
+      "fel": [
+        "redd",
+        "rad",
+        "reed"
+      ]
+    },
+    {
+      "id": "en-ak1-053",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "blue",
+      "fel": [
+        "blu",
+        "bloo",
+        "bluu"
+      ]
+    },
+    {
+      "id": "en-ak1-054",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "book",
+      "fel": [
+        "bok",
+        "booke",
+        "buk"
+      ]
+    },
+    {
+      "id": "en-ak1-055",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "sun",
+      "fel": [
+        "sunn",
+        "sonn",
+        "sunne"
+      ]
+    },
+    {
+      "id": "en-ak1-056",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "fish",
+      "fel": [
+        "fich",
+        "fissh",
+        "fis"
+      ]
+    },
+    {
+      "id": "en-ak1-057",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "bird",
+      "fel": [
+        "burd",
+        "birdd",
+        "brid"
+      ]
+    },
+    {
+      "id": "en-ak1-058",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "milk",
+      "fel": [
+        "milc",
+        "milkk",
+        "mlik"
+      ]
+    },
+    {
+      "id": "en-ak1-059",
+      "niva": "ak1",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "ball",
+      "fel": [
+        "bal",
+        "balll",
+        "bol"
+      ]
+    },
+    {
+      "id": "en-ak2-060",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter hus på engelska?",
+      "ratt": "house",
+      "fel": [
+        "book",
+        "sun",
+        "water"
+      ]
+    },
+    {
+      "id": "en-ak2-061",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter bok på engelska?",
+      "ratt": "book",
+      "fel": [
+        "house",
+        "sun",
+        "water"
+      ]
+    },
+    {
+      "id": "en-ak2-062",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter sol på engelska?",
+      "ratt": "sun",
+      "fel": [
+        "house",
+        "book",
+        "water"
+      ]
+    },
+    {
+      "id": "en-ak2-063",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter vatten på engelska?",
+      "ratt": "water",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-064",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter mamma på engelska?",
+      "ratt": "mother",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-065",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter pappa på engelska?",
+      "ratt": "father",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-066",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter skola på engelska?",
+      "ratt": "school",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-067",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter äpple på engelska?",
+      "ratt": "apple",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-068",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter boll på engelska?",
+      "ratt": "ball",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-069",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter bil på engelska?",
+      "ratt": "car",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-070",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter träd på engelska?",
+      "ratt": "tree",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-071",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter mjölk på engelska?",
+      "ratt": "milk",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-072",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter bröd på engelska?",
+      "ratt": "bread",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-073",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter stol på engelska?",
+      "ratt": "chair",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-074",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter dörr på engelska?",
+      "ratt": "door",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-075",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter fönster på engelska?",
+      "ratt": "window",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-076",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter vän på engelska?",
+      "ratt": "friend",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-077",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter glad på engelska?",
+      "ratt": "happy",
+      "fel": [
+        "house",
+        "book",
+        "sun"
+      ]
+    },
+    {
+      "id": "en-ak2-078",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 11 på engelska?",
+      "ratt": "eleven",
+      "fel": [
+        "twelve",
+        "thirteen",
+        "fourteen"
+      ]
+    },
+    {
+      "id": "en-ak2-079",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 12 på engelska?",
+      "ratt": "twelve",
+      "fel": [
+        "eleven",
+        "thirteen",
+        "fourteen"
+      ]
+    },
+    {
+      "id": "en-ak2-080",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 13 på engelska?",
+      "ratt": "thirteen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "fourteen"
+      ]
+    },
+    {
+      "id": "en-ak2-081",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 14 på engelska?",
+      "ratt": "fourteen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-082",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 15 på engelska?",
+      "ratt": "fifteen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-083",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 16 på engelska?",
+      "ratt": "sixteen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-084",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 17 på engelska?",
+      "ratt": "seventeen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-085",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 18 på engelska?",
+      "ratt": "eighteen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-086",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 19 på engelska?",
+      "ratt": "nineteen",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-087",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter siffran 20 på engelska?",
+      "ratt": "twenty",
+      "fel": [
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    },
+    {
+      "id": "en-ak2-088",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter får på engelska?",
+      "ratt": "sheep",
+      "fel": [
+        "rabbit",
+        "wolf",
+        "fox"
+      ]
+    },
+    {
+      "id": "en-ak2-089",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter kanin på engelska?",
+      "ratt": "rabbit",
+      "fel": [
+        "sheep",
+        "wolf",
+        "fox"
+      ]
+    },
+    {
+      "id": "en-ak2-090",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter varg på engelska?",
+      "ratt": "wolf",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "fox"
+      ]
+    },
+    {
+      "id": "en-ak2-091",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter räv på engelska?",
+      "ratt": "fox",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak2-092",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter uggla på engelska?",
+      "ratt": "owl",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak2-093",
+      "niva": "ak2",
+      "typ": "glosa",
+      "fraga": "Vad heter orm på engelska?",
+      "ratt": "snake",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak2-094",
+      "niva": "ak2",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "house",
+      "fel": [
+        "hous",
+        "howse",
+        "huose"
+      ]
+    },
+    {
+      "id": "en-ak2-095",
+      "niva": "ak2",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "water",
+      "fel": [
+        "watter",
+        "vater",
+        "woter"
+      ]
+    },
+    {
+      "id": "en-ak2-096",
+      "niva": "ak2",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "school",
+      "fel": [
+        "skool",
+        "schol",
+        "scool"
+      ]
+    },
+    {
+      "id": "en-ak2-097",
+      "niva": "ak2",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "apple",
+      "fel": [
+        "appel",
+        "aple",
+        "applle"
+      ]
+    },
+    {
+      "id": "en-ak2-098",
+      "niva": "ak2",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "friend",
+      "fel": [
+        "frend",
+        "freind",
+        "friende"
+      ]
+    },
+    {
+      "id": "en-ak2-099",
+      "niva": "ak2",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "window",
+      "fel": [
+        "windov",
+        "windo",
+        "windowe"
+      ]
+    },
+    {
+      "id": "en-ak3-100",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter lärare på engelska?",
+      "ratt": "teacher",
+      "fel": [
+        "family",
+        "morning",
+        "evening"
+      ]
+    },
+    {
+      "id": "en-ak3-101",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter familj på engelska?",
+      "ratt": "family",
+      "fel": [
+        "teacher",
+        "morning",
+        "evening"
+      ]
+    },
+    {
+      "id": "en-ak3-102",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter morgon på engelska?",
+      "ratt": "morning",
+      "fel": [
+        "teacher",
+        "family",
+        "evening"
+      ]
+    },
+    {
+      "id": "en-ak3-103",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter kväll på engelska?",
+      "ratt": "evening",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-104",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter ledsen på engelska?",
+      "ratt": "sad",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-105",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter stor på engelska?",
+      "ratt": "big",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-106",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter liten på engelska?",
+      "ratt": "small",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-107",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter snabb på engelska?",
+      "ratt": "fast",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-108",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter långsam på engelska?",
+      "ratt": "slow",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-109",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter hej på engelska?",
+      "ratt": "hello",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-110",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter hej då på engelska?",
+      "ratt": "goodbye",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-111",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter tack på engelska?",
+      "ratt": "thanks",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-112",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter namn på engelska?",
+      "ratt": "name",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-113",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter regn på engelska?",
+      "ratt": "rain",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-114",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter snö på engelska?",
+      "ratt": "snow",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-115",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter hand på engelska?",
+      "ratt": "hand",
+      "fel": [
+        "teacher",
+        "family",
+        "morning"
+      ]
+    },
+    {
+      "id": "en-ak3-116",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter får på engelska?",
+      "ratt": "sheep",
+      "fel": [
+        "rabbit",
+        "wolf",
+        "fox"
+      ]
+    },
+    {
+      "id": "en-ak3-117",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter kanin på engelska?",
+      "ratt": "rabbit",
+      "fel": [
+        "sheep",
+        "wolf",
+        "fox"
+      ]
+    },
+    {
+      "id": "en-ak3-118",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter varg på engelska?",
+      "ratt": "wolf",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "fox"
+      ]
+    },
+    {
+      "id": "en-ak3-119",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter räv på engelska?",
+      "ratt": "fox",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak3-120",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter uggla på engelska?",
+      "ratt": "owl",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak3-121",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter orm på engelska?",
+      "ratt": "snake",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak3-122",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter bi på engelska?",
+      "ratt": "bee",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak3-123",
+      "niva": "ak3",
+      "typ": "glosa",
+      "fraga": "Vad heter myra på engelska?",
+      "ratt": "ant",
+      "fel": [
+        "sheep",
+        "rabbit",
+        "wolf"
+      ]
+    },
+    {
+      "id": "en-ak3-124",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "teacher",
+      "fel": [
+        "teecher",
+        "teachar",
+        "teachr"
+      ]
+    },
+    {
+      "id": "en-ak3-125",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "family",
+      "fel": [
+        "famaly",
+        "famely",
+        "familie"
+      ]
+    },
+    {
+      "id": "en-ak3-126",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "morning",
+      "fel": [
+        "morining",
+        "mornig",
+        "moring"
+      ]
+    },
+    {
+      "id": "en-ak3-127",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "evening",
+      "fel": [
+        "evning",
+        "evenig",
+        "eavening"
+      ]
+    },
+    {
+      "id": "en-ak3-128",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "goodbye",
+      "fel": [
+        "godbye",
+        "goodby",
+        "good-bye"
+      ]
+    },
+    {
+      "id": "en-ak3-129",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "thanks",
+      "fel": [
+        "thancs",
+        "thankes",
+        "thnaks"
+      ]
+    },
+    {
+      "id": "en-ak3-130",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "because",
+      "fel": [
+        "becaus",
+        "becouse",
+        "beacuse"
+      ]
+    },
+    {
+      "id": "en-ak3-131",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "yellow",
+      "fel": [
+        "yello",
+        "yelow",
+        "yellov"
+      ]
+    },
+    {
+      "id": "en-ak3-132",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "purple",
+      "fel": [
+        "purpel",
+        "purpul",
+        "purplle"
+      ]
+    },
+    {
+      "id": "en-ak3-133",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "twelve",
+      "fel": [
+        "twelv",
+        "twelfe",
+        "twalve"
+      ]
+    },
+    {
+      "id": "en-ak3-134",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "friend",
+      "fel": [
+        "freind",
+        "frend",
+        "friende"
+      ]
+    },
+    {
+      "id": "en-ak3-135",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "school",
+      "fel": [
+        "skool",
+        "schol",
+        "scool"
+      ]
+    },
+    {
+      "id": "en-ak3-136",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "animal",
+      "fel": [
+        "animel",
+        "animall",
+        "anmal"
+      ]
+    },
+    {
+      "id": "en-ak3-137",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "number",
+      "fel": [
+        "nummer",
+        "numbr",
+        "numbar"
+      ]
+    },
+    {
+      "id": "en-ak3-138",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "colour",
+      "fel": [
+        "collor",
+        "colur",
+        "coulor"
+      ]
+    },
+    {
+      "id": "en-ak3-139",
+      "niva": "ak3",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "happy",
+      "fel": [
+        "happi",
+        "hapy",
+        "happpy"
+      ]
+    },
+    {
+      "id": "en-ak4_6-140",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter eftersom på engelska?",
+      "ratt": "because",
+      "fel": [
+        "weather",
+        "mountain",
+        "question"
+      ]
+    },
+    {
+      "id": "en-ak4_6-141",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter väder på engelska?",
+      "ratt": "weather",
+      "fel": [
+        "because",
+        "mountain",
+        "question"
+      ]
+    },
+    {
+      "id": "en-ak4_6-142",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter berg på engelska?",
+      "ratt": "mountain",
+      "fel": [
+        "because",
+        "weather",
+        "question"
+      ]
+    },
+    {
+      "id": "en-ak4_6-143",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter fråga på engelska?",
+      "ratt": "question",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-144",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter svar på engelska?",
+      "ratt": "answer",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-145",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter vacker på engelska?",
+      "ratt": "beautiful",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-146",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter farlig på engelska?",
+      "ratt": "dangerous",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-147",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter bibliotek på engelska?",
+      "ratt": "library",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-148",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter igår på engelska?",
+      "ratt": "yesterday",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-149",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter imorgon på engelska?",
+      "ratt": "tomorrow",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-150",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter ibland på engelska?",
+      "ratt": "sometimes",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-151",
+      "niva": "ak4_6",
+      "typ": "glosa",
+      "fraga": "Vad heter tillsammans på engelska?",
+      "ratt": "together",
+      "fel": [
+        "because",
+        "weather",
+        "mountain"
+      ]
+    },
+    {
+      "id": "en-ak4_6-152",
+      "niva": "ak4_6",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "because",
+      "fel": [
+        "becaus",
+        "becouse",
+        "beacuse"
+      ]
+    },
+    {
+      "id": "en-ak4_6-153",
+      "niva": "ak4_6",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "weather",
+      "fel": [
+        "wether",
+        "weathar",
+        "wheather"
+      ]
+    },
+    {
+      "id": "en-ak4_6-154",
+      "niva": "ak4_6",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "beautiful",
+      "fel": [
+        "beutiful",
+        "beautifull",
+        "beatiful"
+      ]
+    },
+    {
+      "id": "en-ak4_6-155",
+      "niva": "ak4_6",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "library",
+      "fel": [
+        "libary",
+        "librery",
+        "libarary"
+      ]
+    },
+    {
+      "id": "en-ak4_6-156",
+      "niva": "ak4_6",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "yesterday",
+      "fel": [
+        "yesterdy",
+        "yesterdayy",
+        "yestaday"
+      ]
+    },
+    {
+      "id": "en-ak7_9-157",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter fastän på engelska?",
+      "ratt": "although",
+      "fel": [
+        "necessary",
+        "environment",
+        "government"
+      ]
+    },
+    {
+      "id": "en-ak7_9-158",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter nödvändig på engelska?",
+      "ratt": "necessary",
+      "fel": [
+        "although",
+        "environment",
+        "government"
+      ]
+    },
+    {
+      "id": "en-ak7_9-159",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter miljö på engelska?",
+      "ratt": "environment",
+      "fel": [
+        "although",
+        "necessary",
+        "government"
+      ]
+    },
+    {
+      "id": "en-ak7_9-160",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter regering på engelska?",
+      "ratt": "government",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-161",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter temperatur på engelska?",
+      "ratt": "temperature",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-162",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter försök på engelska?",
+      "ratt": "experiment",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-163",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter slutsats på engelska?",
+      "ratt": "conclusion",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-164",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter adjektiv på engelska?",
+      "ratt": "adjective",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-165",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter mening på engelska?",
+      "ratt": "sentence",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-166",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter stycke på engelska?",
+      "ratt": "paragraph",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-167",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter kunskap på engelska?",
+      "ratt": "knowledge",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-168",
+      "niva": "ak7_9",
+      "typ": "glosa",
+      "fraga": "Vad heter samhälle på engelska?",
+      "ratt": "society",
+      "fel": [
+        "although",
+        "necessary",
+        "environment"
+      ]
+    },
+    {
+      "id": "en-ak7_9-169",
+      "niva": "ak7_9",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "necessary",
+      "fel": [
+        "necesary",
+        "necessery",
+        "neccesary"
+      ]
+    },
+    {
+      "id": "en-ak7_9-170",
+      "niva": "ak7_9",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "environment",
+      "fel": [
+        "enviroment",
+        "enviornment",
+        "environmant"
+      ]
+    },
+    {
+      "id": "en-ak7_9-171",
+      "niva": "ak7_9",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "government",
+      "fel": [
+        "goverment",
+        "governement",
+        "govermnent"
+      ]
+    },
+    {
+      "id": "en-ak7_9-172",
+      "niva": "ak7_9",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "temperature",
+      "fel": [
+        "temprature",
+        "tempereture",
+        "temparature"
+      ]
+    },
+    {
+      "id": "en-ak7_9-173",
+      "niva": "ak7_9",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "knowledge",
+      "fel": [
+        "knowlege",
+        "knowladge",
+        "knolwedge"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-174",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter hypotes på engelska?",
+      "ratt": "hypothesis",
+      "fel": [
+        "evidence",
+        "democracy",
+        "responsibility"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-175",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter bevis på engelska?",
+      "ratt": "evidence",
+      "fel": [
+        "hypothesis",
+        "democracy",
+        "responsibility"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-176",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter demokrati på engelska?",
+      "ratt": "democracy",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "responsibility"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-177",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter ansvar på engelska?",
+      "ratt": "responsibility",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-178",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter ungefär på engelska?",
+      "ratt": "approximately",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-179",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter samvete på engelska?",
+      "ratt": "conscience",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-180",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter förekomst på engelska?",
+      "ratt": "occurrence",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-181",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter självständig på engelska?",
+      "ratt": "independent",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-182",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter slutsats på engelska?",
+      "ratt": "conclusion",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-183",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter källa på engelska?",
+      "ratt": "source",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-184",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter argument på engelska?",
+      "ratt": "argument",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-185",
+      "niva": "gymnasiet",
+      "typ": "glosa",
+      "fraga": "Vad heter perspektiv på engelska?",
+      "ratt": "perspective",
+      "fel": [
+        "hypothesis",
+        "evidence",
+        "democracy"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-186",
+      "niva": "gymnasiet",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "hypothesis",
+      "fel": [
+        "hypoteses",
+        "hipothesis",
+        "hypothesys"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-187",
+      "niva": "gymnasiet",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "conscience",
+      "fel": [
+        "concience",
+        "consciense",
+        "consience"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-188",
+      "niva": "gymnasiet",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "occurrence",
+      "fel": [
+        "occurence",
+        "occurrance",
+        "ocurrence"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-189",
+      "niva": "gymnasiet",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "responsibility",
+      "fel": [
+        "responsability",
+        "responsiblity",
+        "responcibility"
+      ]
+    },
+    {
+      "id": "en-gymnasiet-190",
+      "niva": "gymnasiet",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "approximately",
+      "fel": [
+        "aproximately",
+        "approximatly",
+        "approxiamtely"
+      ]
+    },
+    {
+      "id": "en-vuxen-191",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter rekommendation på engelska?",
+      "ratt": "recommendation",
+      "fel": [
+        "procedure",
+        "availability",
+        "commitment"
+      ]
+    },
+    {
+      "id": "en-vuxen-192",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter förfarande på engelska?",
+      "ratt": "procedure",
+      "fel": [
+        "recommendation",
+        "availability",
+        "commitment"
+      ]
+    },
+    {
+      "id": "en-vuxen-193",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter tillgänglighet på engelska?",
+      "ratt": "availability",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "commitment"
+      ]
+    },
+    {
+      "id": "en-vuxen-194",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter åtagande på engelska?",
+      "ratt": "commitment",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-195",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter förhandla på engelska?",
+      "ratt": "negotiate",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-196",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter analys på engelska?",
+      "ratt": "analysis",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-197",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter perspektiv på engelska?",
+      "ratt": "perspective",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-198",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter betydande på engelska?",
+      "ratt": "significant",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-199",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter sammanhang på engelska?",
+      "ratt": "context",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-200",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter bedömning på engelska?",
+      "ratt": "assessment",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-201",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter slutsats på engelska?",
+      "ratt": "conclusion",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-202",
+      "niva": "vuxen",
+      "typ": "glosa",
+      "fraga": "Vad heter påverkan på engelska?",
+      "ratt": "influence",
+      "fel": [
+        "recommendation",
+        "procedure",
+        "availability"
+      ]
+    },
+    {
+      "id": "en-vuxen-203",
+      "niva": "vuxen",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "recommendation",
+      "fel": [
+        "recomendation",
+        "reccomendation",
+        "recommaendation"
+      ]
+    },
+    {
+      "id": "en-vuxen-204",
+      "niva": "vuxen",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "commitment",
+      "fel": [
+        "comitment",
+        "committment",
+        "commitement"
+      ]
+    },
+    {
+      "id": "en-vuxen-205",
+      "niva": "vuxen",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "availability",
+      "fel": [
+        "availibility",
+        "avaliability",
+        "availablety"
+      ]
+    },
+    {
+      "id": "en-vuxen-206",
+      "niva": "vuxen",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "assessment",
+      "fel": [
+        "assesment",
+        "assessement",
+        "assesementt"
+      ]
+    },
+    {
+      "id": "en-vuxen-207",
+      "niva": "vuxen",
+      "typ": "stavning",
+      "fraga": "Vilket engelskt ord är rätt stavat?",
+      "ratt": "significant",
+      "fel": [
+        "significent",
+        "significiant",
+        "significantt"
+      ]
+    },
+    {
+      "id": "en-forskola-208",
+      "niva": "forskola",
+      "typ": "djur",
+      "fraga": "Vad heter hund på engelska?",
+      "ratt": "dog",
+      "fel": [
+        "cat",
+        "bird",
+        "fish"
+      ]
+    },
+    {
+      "id": "en-ak1-209",
+      "niva": "ak1",
+      "typ": "djur",
+      "fraga": "Vad heter hund på engelska?",
+      "ratt": "dog",
+      "fel": [
+        "cat",
+        "horse",
+        "cow"
+      ]
+    },
+    {
+      "id": "en-ak2-210",
+      "niva": "ak2",
+      "typ": "djur",
+      "fraga": "Vad heter katt på engelska?",
+      "ratt": "cat",
+      "fel": [
+        "dog",
+        "rat",
+        "cow"
+      ]
+    }
+  ]
+}

@@ -104,7 +104,7 @@
     "hp": "Liv",
     "stamina": "Uthållighet",
     "proviant": "{count} st",
-    "help": "Klick: gå/anfall · F: prata · J: uppdrag · Högerklick/Q: färdighet · E: runa · B/I: utrustning · Alt/Z: föremål · 1–4: färdigheter · Alt+3/4: proviant"
+    "help": "Klick: gå · Fråga när du möter ett monster · F: prata · J: uppdrag · Högerklick/Q: färdighet · E: runa · B/I: utrustning · Nivå-knappen: svårighet · Alt/Z: föremål · 1–4: färdigheter · Alt+3/4: proviant"
   },
   "msg": {
     "rune_awake": "Runan vaknar! ({n}/3)",
@@ -127,7 +127,8 @@
     "court": "De dödas hov kallas!",
     "boss_dead": "{name} är besegrad! Byn är fri.",
     "died": "Du har fallit. Klicka för att börja om vid portalen.",
-    "gold": "+{amount} guld"
+    "gold": "+{amount} guld",
+    "new_gear": "Ny utrustning: {name}"
   },
   "fx": {
     "miss": "Miss",

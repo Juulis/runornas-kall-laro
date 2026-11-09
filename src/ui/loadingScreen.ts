@@ -24,7 +24,7 @@ type LoadingKey = 'loading.hint' | 'loading.aria';
 
 export function loadingPublicBase(baseUrl?: string): string {
   const raw = baseUrl ?? viteBaseUrl();
-  if (!raw) return '/rpg-demo/';
+  if (!raw) return '/runornas-kall-laro/';
   return raw.endsWith('/') ? raw : `${raw}/`;
 }
 
@@ -35,7 +35,7 @@ function viteBaseUrl(): string {
   } catch {
     /* Node-test utan Vite-env. */
   }
-  return '/rpg-demo/';
+  return '/runornas-kall-laro/';
 }
 
 /** Absolut eller sid-relativ URL till en fil i public/assets/ui/loading/. */
@@ -45,7 +45,7 @@ export function loadingAssetUrl(file: string, baseUrl?: string): string {
 
 /**
  * Katalog där loadingskärmens bilder ligger, läst från den markup Vite redan skrivit.
- * Fungerar med BASE_URL (`/rpg-demo/` på Pages) utan att hårdkoda sökvägen i JS.
+ * Fungerar med BASE_URL (`/runornas-kall-laro/` på Pages) utan att hårdkoda sökvägen i JS.
  */
 export function loadingArtDirectory(doc: Document, baseUrl?: string): string {
   const img = doc.querySelector<HTMLImageElement>('#rk-loading img.rk-title-img');

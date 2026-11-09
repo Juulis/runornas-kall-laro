@@ -56,6 +56,7 @@ export class HeroLoader {
         city: resume ? g.city : 'besatt',
       },
       worldState: save.worldState,
+      ...(save.learn ? { learn: save.learn } : {}),
     });
     if (fresh) delete h.fresh;
     this.autosave.begin(save);

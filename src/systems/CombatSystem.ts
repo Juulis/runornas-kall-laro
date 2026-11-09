@@ -32,6 +32,8 @@ export class CombatSystem {
   onHeroDied: () => void = () => undefined;
   /** Spelaren hjälpte en patrull att fälla monstret. */
   onPatrolAidKill: () => void = () => undefined;
+  /** Lärversionen: monster ska inte döda hjälten före frågan. Quiz-skada går inte genom hurt. */
+  suppressHeroHurt = true;
 
   constructor(
     private readonly w: () => World,
@@ -149,11 +151,12 @@ export class CombatSystem {
       qualityMult: lo?.quality_mult ?? 1,
     });
     const ups = w.hero.gainXp(reward.xp);
+    const equipped = this.loot.grantAuto(reward.drops);
     if (ups) {
       w.fb.flash(w.text.t('msg.level_up', { level: w.hero.level }));
       w.bus.emit('level_up', { level: w.hero.level });
     }
-    this.loot.scatter(m.pos, reward.drops);
+    for (const name of equipped) w.fb.flash(w.text.t('msg.new_gear', { name }));
     w.bus.emit('kill', {
       id: m.uid ?? m.id,
       area: w.zone.areaId,
@@ -169,6 +172,7 @@ export class CombatSystem {
 
   /** Hjälten tar skada. from = varifrån slaget kom (för block), m = anfallaren. */
   hurt(raw: number, from: Vec2 | null, m: Monster | null): void {
+    if (this.suppressHeroHurt) return;
     const w = this.w();
     const h = w.hero;
     const st = { ...h.stats, defense: h.effectiveDefense() };

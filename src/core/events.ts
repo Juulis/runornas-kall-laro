@@ -1,3 +1,5 @@
+import type { LearnSettings } from '../learn/types';
+
 /* eslint-disable @typescript-eslint/no-invalid-void-type -- void = event utan payload (godkänt kontrakt) */
 /**
  * Alla spelhändelser med payload (godkänt kontrakt mellan Utvecklare 1 och 2).
@@ -43,4 +45,6 @@ export type GameEvents = {
   night_ambient: { intensity: number };
   /** Sparning misslyckades (R5-M1). */
   save_failed: { reason?: string };
+  /** Nivå och ämne i lärversionen. */
+  learn_settings: LearnSettings;
 };

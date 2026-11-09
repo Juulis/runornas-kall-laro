@@ -85,6 +85,10 @@ import { FOREST_CITY_PORTALS } from '../world/forestConstants';
 import { cityPortEntry, cityAreaId, isPlayableCityZone, parseSavedZone, PLAYABLE_CITIES } from '../world/cityZones';
 import { ZoneFactory } from '../world/ZoneFactory';
 import type { Zone, ZoneName } from '../world/Zone';
+import { LearnEncounter } from '../learn/LearnEncounter';
+import { readLearnSettings, writeLearnSettings, parseLearnSettings } from '../learn/settings';
+import type { LearnSettings } from '../learn/types';
+import { LocalStore } from './storage';
 
 const CLASS_TINT: Record<string, number> = { riddare: 0xffffff, barbar: 0xffd2b8, amazonkrigare: 0xffe6c8 };
 
@@ -169,6 +173,9 @@ export class Game {
   private targetMonster: Monster | null = null;
   private targetDrop: GroundDrop | null = null;
   private dead = false;
+  private menuOpen = false;
+  private learn: LearnEncounter | null = null;
+  private learnSettings: LearnSettings = readLearnSettings(new LocalStore());
   private decorAnims: StripAnimSprite[] = [];
   private forestGround: ForestGroundChunks | BigWorldStreamGround | null = null;
   private streamMetricsCx = NaN;
@@ -284,6 +291,14 @@ export class Game {
     };
     // Kartan (U2, MapView) täcker skärmen med rubrik överst och legend nederst: dölj HUD-delar som annars krockar.
     this.bus.on('map_toggle', ({ open }) => document.body.classList.toggle('map-open', open));
+    this.bus.on('ui_open', ({ panel }) => {
+      if (panel !== 'menu') return;
+      this.menuOpen = true;
+      this.learn?.cancel();
+    });
+    this.bus.on('ui_close', ({ panel }) => {
+      if (panel === 'menu') this.menuOpen = false;
+    });
     this.bus.on('locale_changed', ({ locale }) => {
       setClockLocale(locale);
       setSetLocale(locale);
@@ -309,6 +324,15 @@ export class Game {
       this.hud.flash(this.text.t('msg.save_failed'));
     });
     this.bindInput(r.app.canvas);
+    this.learn = new LearnEncounter(
+      w,
+      this.combat,
+      this.ai,
+      this.learnSettings,
+      () => this.learnBlocked(),
+      () => this.heroDied(),
+    );
+    this.learn.overlaySettings.onSettings = (s) => this.setLearnSettings(s);
     DevCheatsView.tryCreate(this.input);
     const resize = (): void => {
       this.camera.resize(r.width, r.height);
@@ -362,6 +386,7 @@ export class Game {
     for (const id of s.killed) this.ctx.session.killed.add(id);
     if (h.id) this.bus.emit('hero_loaded', { heroId: h.id });
     this.gameClock.load(g?.worldTime);
+    this.applyLearn(save.learn, false);
     if (this.camera) {
       this.enterZone(parseSavedZone(h.zone), h.resumePos ?? undefined);
     }
@@ -400,7 +425,26 @@ export class Game {
         bwCoordEpoch: this.ctx.session.bwCoordEpoch ?? BIG_WORLD_COORD_EPOCH,
       },
       worldState: this.worldState.snapshot(),
+      learn: this.learnSettings,
     };
+  }
+
+  /** Sparar nivå och ämne. Pågående fråga byts inte. */
+  setLearnSettings(settings: LearnSettings): void {
+    this.applyLearn(settings, true);
+  }
+
+  private applyLearn(raw: LearnSettings | undefined, emit: boolean): void {
+    const parsed = raw ? parseLearnSettings(raw) : null;
+    if (!parsed) return;
+    this.learnSettings = parsed;
+    writeLearnSettings(new LocalStore(), parsed);
+    this.learn?.setSettings(parsed);
+    if (emit) this.bus.emit('learn_settings', parsed);
+  }
+
+  private learnBlocked(): boolean {
+    return this.menuOpen || this.dead || this.switching || this.npcDialog.isOpen || this.invUI.isOpen() || this.questLog.isOpen || isLoreBookOpen();
   }
 
   /** Nytt game (D2): ny seed, tomma killed, runor nollställs, start i skogen. Hjälte och utrustning behålls. */
@@ -423,6 +467,7 @@ export class Game {
   }
 
   dispose(): void {
+    this.learn?.dispose();
     for (const m of this.modules) m.dispose();
     this.input.dispose();
     this.hud.dispose();
@@ -476,6 +521,7 @@ export class Game {
 
   /** Bygger zonen, placerar hjälten, befolkar monster och skickar zone_enter när allt är klart. */
   enterZone(name: ZoneName, spawn?: Vec2): void {
+    this.learn?.cancel();
     const r = this.renderer;
     r.ground.removeChildren().forEach((c) => c.destroy({ children: true }));
     r.objects.removeChildren().forEach((c) => c.destroy({ children: true }));
@@ -644,7 +690,10 @@ export class Game {
     this.hud.flash(this.text.t('msg.boss_dead', { name: this.bossName(m) }), '#c7a35a');
   }
   private heroDied(): void {
-    this.mustWorld().hero.clearAttack();
+    this.learn?.cancel();
+    this.learn?.closeSettings();
+    const w = this.world;
+    w?.hero.clearAttack();
     this.dead = true;
     this.hud.flash(this.text.t('msg.died'), '#ff6060');
   }
@@ -670,9 +719,16 @@ export class Game {
   private bindInput(canvas: HTMLCanvasElement): void {
     const i = (this.input = new Input(canvas));
     const toggleInv = (): void => this.invUI.toggle();
-    i.bind('KeyB', toggleInv);
-    i.bind('KeyI', toggleInv);
+    i.bind('KeyB', () => {
+      if (this.learn?.blocksInput()) return;
+      toggleInv();
+    });
+    i.bind('KeyI', () => {
+      if (this.learn?.blocksInput()) return;
+      toggleInv();
+    });
     i.bind('Escape', () => {
+      if (this.learn?.busy()) return;
       if (this.npcDialog.isOpen) {
         this.npcDialog.close();
         this.bus.emit('ui_close', { panel: 'npc' });
@@ -688,26 +744,42 @@ export class Game {
         this.bus.emit('ui_close', { panel: 'lore' });
         return;
       }
-      if (this.invUI.isOpen()) this.invUI.close();
+      if (this.invUI.isOpen()) {
+        this.invUI.close();
+        return;
+      }
+      this.learn?.toggleSettings();
     });
     i.bind('KeyJ', () => {
-      if (this.npcDialog.isOpen) return;
+      if (this.learn?.blocksInput() || this.npcDialog.isOpen) return;
       this.questLog.toggle();
       this.bus.emit(this.questLog.isOpen ? 'ui_open' : 'ui_close', { panel: 'quests' });
     });
-    i.bind('KeyF', () => this.tryTalkNpc());
+    i.bind('KeyF', () => {
+      if (this.learn?.blocksInput()) return;
+      this.tryTalkNpc();
+    });
     for (let n = 1; n <= 4; n++) {
       const slot = n - 1;
       i.bind(`Digit${n}`, () => {
+        if (this.learn?.isQuestion()) {
+          this.learn.answer(slot);
+          return;
+        }
+        if (this.learn?.blocksInput()) return;
         if (this.input.altHeld && (n === 3 || n === 4)) {
           this.quaff(n === 3 ? 'hp' : 'st');
           return;
         }
         this.combat.useBarSkill(slot, true);
       });
-      i.bind(`up:Digit${n}`, () => this.combat.useBarSkill(slot, false));
+      i.bind(`up:Digit${n}`, () => {
+        if (this.learn?.blocksInput()) return;
+        this.combat.useBarSkill(slot, false);
+      });
     }
     i.bind('KeyE', () => {
+      if (this.learn?.blocksInput()) return;
       const n = this.portals.nearRune();
       if (n >= 0) this.portals.activate(n, false);
     });
@@ -720,11 +792,15 @@ export class Game {
     };
     i.bind('ShiftLeft', shiftDodge);
     i.bind('ShiftRight', shiftDodge);
-    i.bind('KeyQ', () => this.combat.skill(true));
+    i.bind('KeyQ', () => {
+      if (this.learn?.blocksInput()) return;
+      this.combat.skill(true);
+    });
     i.bind('up:KeyQ', () => this.combat.skill(false));
     i.bind('reset', () => this.combat.skill(false));
     canvas.addEventListener('pointerdown', (e) => {
       if (!this.world) return;
+      if (this.learn?.blocksInput()) return;
       if (this.dead) return this.respawn();
       if (e.button === 2) return this.combat.skill(true);
       if (e.button === 0) this.worldClick();
@@ -901,7 +977,7 @@ export class Game {
 
   private tryDodge(): void {
     const w = this.world;
-    if (!w || this.dead || this.npcDialog.isOpen || this.invUI.isOpen() || isLoreBookOpen()) return;
+    if (!w || this.dead || this.learn?.blocksInput() || this.npcDialog.isOpen || this.invUI.isOpen() || isLoreBookOpen()) return;
     const h = w.hero;
     if (!this.input.overCanvas()) return;
     const mouse = this.camera.toWorld(this.input.mouse.x, this.input.mouse.y);
@@ -920,7 +996,7 @@ export class Game {
   }
 
   private worldClick(): void {
-    if (this.invUI.holding || this.npcDialog.isOpen || isLoreBookOpen()) return;
+    if (this.learn?.blocksInput() || this.invUI.holding || this.npcDialog.isOpen || isLoreBookOpen()) return;
     const { x, y } = this.input.mouse;
     const w = this.world;
     if (w) {
@@ -1004,6 +1080,7 @@ export class Game {
       syncProximitySpawns(w, this.factory, h.pos, citySpawn);
     }
     this.ai.update(dt);
+    this.learn?.tick(dt);
     this.combat.update(dt);
     this.lootSys.update(dt);
     this.portals.update(dt);
@@ -1043,8 +1120,15 @@ export class Game {
     }
     const s = h.s;
     h.regen(dt);
+    const learnFreeze = this.learn?.blocksMovement() === true;
+    if (learnFreeze) {
+      h.moveTarget = null;
+      this.targetMonster = null;
+      this.targetDrop = null;
+      h.moving = false;
+    }
     let sprinting = false;
-    if (h.dodging()) {
+    if (!learnFreeze && h.dodging()) {
       h.pos.x += h.dodgeVx * dt;
       h.pos.y += h.dodgeVy * dt;
       w.zone.collide(h.pos, 0.5);
@@ -1052,7 +1136,7 @@ export class Game {
       h.moving = false;
       this.targetMonster = null;
       this.targetDrop = null;
-    } else {
+    } else if (!learnFreeze) {
       // fortsatt klick-och-håll styr mot muspekaren (D2)
       if (this.input.leftDown && !this.targetMonster && !this.targetDrop && !this.invUI.holding && this.input.overCanvas())
         h.moveTarget = this.camera.toWorld(this.input.mouse.x, this.input.mouse.y);
@@ -1077,7 +1161,6 @@ export class Game {
         s.facing = Math.atan2(m.pos.x - h.pos.x, m.pos.y - h.pos.y);
         if (d <= h.stats.reach + (m.boss ? 0.6 : 0.2)) {
           h.moveTarget = null;
-          this.combat.attack();
           if (!this.input.leftDown) this.targetMonster = null;
         } else h.moveTarget = { ...m.pos };
       }

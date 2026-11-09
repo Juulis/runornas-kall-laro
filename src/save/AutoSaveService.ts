@@ -28,6 +28,7 @@ export class AutoSaveService {
     'legendary_found',
     'city_state_changed',
     'runes_changed',
+    'learn_settings',
   ];
   private current: SaveFile | null = null;
   private playing = false;
@@ -127,6 +128,7 @@ export class AutoSaveService {
       },
       savedAt: Date.now(),
       worldState: snap.worldState ?? cur.worldState,
+      ...(snap.learn || cur.learn ? { learn: snap.learn ?? cur.learn } : {}),
       ...(cur.foundItems ? { foundItems: cur.foundItems, found: cur.found } : {}),
       ...(cur.fog ? { fog: cur.fog } : {}),
     };

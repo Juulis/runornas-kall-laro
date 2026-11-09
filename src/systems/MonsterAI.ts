@@ -17,6 +17,8 @@ function dmgOf(a: MonsterAttack | undefined, what: string): number {
 export class MonsterAI {
   /** Anropas när bossen aktiveras (hjälten går in i arenan). */
   onBossStart: (m: Monster) => void = () => undefined;
+  /** Frågerutan pausar levande monster. Döda fortsätter att tona bort. */
+  paused = false;
   onBossPhase: (m: Monster, phase: number) => void = () => undefined;
 
   constructor(
@@ -37,6 +39,10 @@ export class MonsterAI {
           m.view.destroy({ children: true });
           w.monsters.splice(w.monsters.indexOf(m), 1);
         }
+        continue;
+      }
+      if (this.paused) {
+        this.sync(m, dt);
         continue;
       }
       const threat = this.pickThreat(w, m);

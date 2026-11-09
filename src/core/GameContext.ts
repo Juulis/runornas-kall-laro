@@ -4,6 +4,7 @@ import type { Session } from './Session';
 import type { Rng } from './Rng';
 import type { FoundEntry } from './SaveBackend';
 import type { GameData, VillageZoneDef } from '../data/types';
+import type { LearnSettings } from '../learn/types';
 import type { WorldState } from '../world/worldStateTypes';
 import type { WorldStateService } from '../world/WorldStateService';
 import type { GameClockSnapshot } from '../world/GameClock';
@@ -113,6 +114,8 @@ export interface HeroSave {
   /** Per-hjälte fynd (lorebok); sätts av SaveBackend vid load, inte av Game.getSnapshot(). */
   foundItems?: Record<string, FoundEntry>;
   worldState?: WorldState;
+  /** Nivå och ämne för frågespelet. Saknas i äldre sparfiler. */
+  learn?: LearnSettings;
 }
 
 /** Delas ut till varje modul via init(). Inga globaler. */

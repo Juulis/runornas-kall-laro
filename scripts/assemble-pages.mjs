@@ -1,4 +1,5 @@
-// Pages-artefakt: 2D-bygget (dist/ från Vite) på roten. /next/ och /legacy-3d/ omdirigerar till roten.
+// Pages-artefakt: 2D-bygget (dist/ från Vite) publiceras under /runornas-kall-laro/.
+// /next/ och /legacy-3d/ omdirigerar relativt till samma rot.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +13,9 @@ if (!existsSync(index)) {
 const html = readFileSync(index, 'utf8');
 if (!html.includes('/assets/') && !html.includes('assets/')) {
   throw new Error('dist/index.html ser inte ut som Vite 2D-bygget (saknar assets/)');
+}
+if (!html.includes('/runornas-kall-laro/')) {
+  throw new Error('dist/index.html saknar basen /runornas-kall-laro/ (kolla vite.config.ts base)');
 }
 if (existsSync(resolve(dist, 'game.js'))) {
   throw new Error('dist/ innehåller legacy 3D (game.js) — deploy ska bara innehålla 2D-bygget');

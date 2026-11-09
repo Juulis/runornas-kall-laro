@@ -1,4 +1,4 @@
-// Röktest av Pages-artefakten: servera dist/ under /rpg-demo/ och verifiera 2D-spelet på roten.
+// Röktest av Pages-artefakten: servera dist/ under /runornas-kall-laro/ och verifiera 2D-spelet på roten.
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, resolve } from 'node:path';
@@ -22,15 +22,15 @@ const TYPES = {
 };
 const server = createServer((req, res) => {
   const url = decodeURIComponent((req.url ?? '/').split('?')[0]);
-  if (!url.startsWith('/rpg-demo/')) return void res.writeHead(404).end();
-  let p = join(dist, url.slice('/rpg-demo/'.length));
+  if (!url.startsWith('/runornas-kall-laro/')) return void res.writeHead(404).end();
+  let p = join(dist, url.slice('/runornas-kall-laro/'.length));
   if (existsSync(p) && statSync(p).isDirectory()) p = join(p, 'index.html');
   if (!existsSync(p)) return void res.writeHead(404).end();
   res.writeHead(200, { 'content-type': TYPES[extname(p)] ?? 'application/octet-stream' });
   createReadStream(p).pipe(res);
 });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const base = `http://127.0.0.1:${server.address().port}/rpg-demo/`;
+const base = `http://127.0.0.1:${server.address().port}/runornas-kall-laro/`;
 
 const fail = [];
 if (!existsSync(join(dist, 'index.html'))) fail.push('roten saknar index.html');
@@ -311,7 +311,7 @@ for (const legacyPath of ['next/', 'legacy-3d/']) {
   const page = await browser.newPage();
   await page.goto(base + legacyPath, { waitUntil: 'load' });
   await page.waitForTimeout(1500);
-  const ok = new URL(page.url()).pathname.endsWith('/rpg-demo/') || new URL(page.url()).pathname === '/rpg-demo/';
+  const ok = new URL(page.url()).pathname.endsWith('/runornas-kall-laro/') || new URL(page.url()).pathname === '/runornas-kall-laro/';
   console.log(`${legacyPath}: ${ok ? 'OK (omdirigerad)' : 'FEL'}`);
   if (!ok) fail.push(`${legacyPath} omdirigerar inte till roten`);
   await page.close();
