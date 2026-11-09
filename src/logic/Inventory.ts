@@ -4,9 +4,9 @@ import { isConsumableCategory } from './consumables';
 import { SLOTS, type Equip, type Item, type Slot } from './loot/types';
 
 export const BAG_W = 10;
-export const BAG_H = 4;
+export const BAG_H = 12;
 
-/** Väska (10×4) och utrustning: logik utan DOM. Ändringar meddelas via onChange. */
+/** Väska (10×12) och utrustning: logik utan DOM. Ändringar meddelas via onChange. */
 export class Inventory {
   onChange: () => void = () => undefined;
 

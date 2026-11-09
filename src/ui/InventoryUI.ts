@@ -28,7 +28,7 @@ const SLOT_POS: Record<Slot, [number, number, number, number]> = {
 const pct = (v: number): string => Math.round(v * 1000) / 10 + ' %';
 
 /**
- * Inventory i Diablo 2-stil: gubbe med platser, väska 10×4. Klick lyfter ett föremål till handen, klick lägger det
+ * Inventory i Diablo 2-stil: gubbe med platser, väska 10×12. Klick lyfter ett föremål till handen, klick lägger det
  * (byte om platsen är upptagen). Högerklick: ta på / ta av / drick. Tooltip med jämförelse och statistikruta.
  */
 export class InventoryUI {

@@ -14,10 +14,10 @@ function ringKey(ring: number): string {
   return specific;
 }
 
-/** Mellanmark — monster per chunk från varldsgenerator.json (design: [0,2], medel 1). */
+/** Mellanmark — monster per chunk från varldsgenerator.json (design: [1,3], medel 2). */
 export function mellanmarkSpawnCountRange(ring: number): RingRange {
   const key = ringKey(ring);
-  return genTable[key] ?? genTable.ring_3_och_ut ?? [0, 2];
+  return genTable[key] ?? genTable.ring_3_och_ut ?? [1, 3];
 }
 
 /** Namngiven region — fördelar region.tathet.monster_per_game över regionens chunkar. */

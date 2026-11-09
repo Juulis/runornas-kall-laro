@@ -205,7 +205,8 @@ assert.equal(ev.defaultPrevented, false, 'Tab ska släppas igenom när menyn är
 const input = document.querySelector('.hero-name') as HTMLInputElement;
 input.value = 'Ragnar';
 (document.getElementById('hnOk') as HTMLButtonElement).click();
-await new Promise((r) => setTimeout(r, 120)); // skapandet går via async SaveBackend (serialiserad kö)
+// skapandet går via async SaveBackend (serialiserad kö); vänta tills spelet startat i stället för en fast tid
+for (let i = 0; i < 100 && !(ctx.hero.playing && !menu.isOpen); i++) await new Promise((r) => setTimeout(r, 20));
 assert.equal(menu.isOpen, false);
 assert.equal(ctx.hero.name, 'Ragnar');
 assert.equal(ctx.hero.playing, true);

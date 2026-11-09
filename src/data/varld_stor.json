@@ -1317,7 +1317,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 2,
+        "monster_per_game": 4,
         "kalla": "delområdena i bana1_stor.json har egna monster_per_game; talet gäller regionens övriga chunkar"
       }
     },
@@ -1364,7 +1364,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 2,
+        "monster_per_game": 4,
         "kalla": "delområdena i bana1_stor.json har egna monster_per_game; talet gäller regionens övriga chunkar"
       }
     },
@@ -1418,7 +1418,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 2,
+        "monster_per_game": 4,
         "kalla": "delområdena i bana1_stor.json har egna monster_per_game; talet gäller regionens övriga chunkar"
       }
     },
@@ -1512,7 +1512,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 2,
+        "monster_per_game": 4,
         "kalla": "delområdena i bana1_stor.json har egna monster_per_game; talet gäller regionens övriga chunkar"
       }
     },
@@ -1558,7 +1558,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 2,
+        "monster_per_game": 3,
         "kalla": "delområdena i bana1_stor.json har egna monster_per_game; talet gäller regionens övriga chunkar"
       }
     },
@@ -1605,7 +1605,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 12,
+        "monster_per_game": 24,
         "kalla": "bana1_stor.json nivakurva.ring_2_kontroll"
       }
     },
@@ -1663,7 +1663,7 @@
       "atkomst": "oppen",
       "boss_poi": "gamla_byn_kyrkogard",
       "tathet": {
-        "monster_per_game": 23,
+        "monster_per_game": 46,
         "kalla": "bana1_stor.json nivakurva.ring_2_kontroll (spawnzoner.json areas.gamla_byn)"
       }
     },
@@ -1708,7 +1708,7 @@
       "atkomst": "teleport",
       "ingang_poi": "kryptans_port",
       "tathet": {
-        "monster_per_game": 8,
+        "monster_per_game": 16,
         "kalla": "bana1_stor.json nivakurva.ring_2_kontroll"
       }
     },
@@ -1753,7 +1753,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 12,
+        "monster_per_game": 24,
         "kalla": "bana1_stor.json nivakurva.ring_2_kontroll"
       }
     },
@@ -1799,7 +1799,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 12,
+        "monster_per_game": 24,
         "kalla": "bana1_stor.json nivakurva.ring_2_kontroll"
       }
     },
@@ -1843,7 +1843,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -1896,7 +1896,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 15,
+        "monster_per_game": 30,
         "kalla": "spawnzoner.json areas.dimmerstrand medel"
       }
     },
@@ -1941,7 +1941,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -1985,7 +1985,7 @@
       "atkomst": "teleport",
       "ingang_poi": "sjunkna_kyrkans_port",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     },
@@ -2029,7 +2029,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2074,7 +2074,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2118,7 +2118,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2172,7 +2172,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 26,
+        "monster_per_game": 52,
         "kalla": "spawnzoner.json areas.kopparberg medel"
       }
     },
@@ -2216,7 +2216,7 @@
       "atkomst": "teleport",
       "ingang_poi": "jarnklostrets_port",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     },
@@ -2260,7 +2260,7 @@
       "atkomst": "teleport",
       "ingang_poi": "gruvlaven",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     },
@@ -2306,7 +2306,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2352,7 +2352,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2407,7 +2407,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 17,
+        "monster_per_game": 34,
         "kalla": "spawnzoner.json areas.askeborg medel"
       }
     },
@@ -2451,7 +2451,7 @@
       "atkomst": "teleport",
       "ingang_poi": "katakombernas_ingang",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     },
@@ -2496,7 +2496,7 @@
       "atkomst": "teleport",
       "ingang_poi": "katedralens_port",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     },
@@ -2541,7 +2541,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2631,7 +2631,7 @@
       ],
       "atkomst": "oppen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "vildmark ring 3 och ut"
       }
     },
@@ -2677,7 +2677,7 @@
       "atkomst": "teleport",
       "ingang_poi": "smittans_port",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     },
@@ -2722,7 +2722,7 @@
       "atkomst": "teleport",
       "ingang_poi": "fjarde_stenen",
       "tathet": {
-        "monster_per_game": 6,
+        "monster_per_game": 12,
         "kalla": "instans bakom teleport"
       }
     }

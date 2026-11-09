@@ -10,6 +10,7 @@ import { ParentView } from '../ui/ParentView';
 import { RewardHud } from '../ui/RewardHud';
 import { RewardToast } from '../ui/RewardToast';
 import { StickerAlbum } from '../ui/StickerAlbum';
+import { celebrateCorrect, heroBounceFrame, HERO_BOUNCE_S, type StarFlyInfo } from './celebrate';
 import { applyWrongAnswer } from './damage';
 import { questionsForEncounter } from './questions';
 import { loadRewards } from './rewards';
@@ -19,6 +20,9 @@ import { encounterKindOf, type LearnSettings } from './types';
 const FIGHT_S = 1.25;
 const HIT_AT = [0.12, 0.48, 0.86];
 const WRONG_S = 1.1;
+/** Monstret hinner svinga innan träffen landar och livet sjunker. */
+const HURT_LAND_AT = 0.24;
+const ENEMY_SWING_S = 0.7;
 /** Andning mellan frågor i boss- och championpack. Vanlig strid med en fråga hoppar över den. */
 export const LEARN_PACK_PAUSE_S = 0.5;
 
@@ -54,6 +58,17 @@ export class LearnEncounter {
   private shownAt = 0;
   /** Rätt i det pågående mötet. Champion och boss räknas på sista frågan. */
   private encounterCorrect = 0;
+  private hurtT = 0;
+  private hurtLanded = false;
+  private hurtResult: { hp: number; damage: number; died: boolean } | null = null;
+  private heroFlash = 0;
+  private heroShake = 0;
+  /** -1 = ingen studs. Annars sekunder sedan rätt svar. */
+  private heroBounceT = -1;
+  private heroBounceBaseY: number | null = null;
+  private heroBounceBaseScale: { x: number; y: number } | null = null;
+  /** Stjärnor mot en räknare. Standard gör inget tills en annan del kopplar på. */
+  onCorrectCelebrate: (info: StarFlyInfo) => void = () => undefined;
 
   constructor(
     private readonly w: () => World,
@@ -137,7 +152,13 @@ export class LearnEncounter {
   }
 
   cancel(): void {
+    this.clearMonsterSwing();
     this.restoreShake();
+    this.restoreHeroBounce();
+    this.heroFlash = 0;
+    this.clearHeroHurtTint();
+    this.heroShake = 0;
+    this.hurtResult = null;
     this.phase = 'idle';
     this.monster = null;
     this.questions = [];
@@ -154,14 +175,23 @@ export class LearnEncounter {
     const correct = choice === q.correctIndex;
     this.noteAnswer(q, correct);
     if (correct) {
+      const spot = this.overlay.celebratePoint();
+      const info: StarFlyInfo = { x: spot.x, y: spot.y, starsHint: 1 };
+      const phrase = celebrateCorrect(info);
+      this.onCorrectCelebrate(info);
       this.overlay.hideQuiz();
-      this.w().fb.flash('Rätt!', '#7dff9a');
+      this.w().fb.flash(phrase, '#7dff9a');
+      this.beginHeroBounce();
       this.beginFight();
       return;
     }
     this.phase = 'feedback';
     this.timer = WRONG_S;
-    this.overlay.showWrong(q.answer);
+    this.hurtT = 0;
+    this.hurtLanded = false;
+    this.hurtResult = null;
+    this.overlay.showWrong(q, choice);
+    this.beginWrongHurt();
   }
 
   tick(dt: number): void {
@@ -176,6 +206,7 @@ export class LearnEncounter {
     else if (this.phase === 'pause') this.tickPause(dt);
     else if (this.phase === 'ask') this.face();
     else this.tryStart();
+    this.tickHeroBounce(dt);
     this.applyShake(dt);
   }
 
@@ -349,16 +380,17 @@ export class LearnEncounter {
   }
 
   private tickFeedback(dt: number): void {
+    this.tickWrongHurt(dt);
     this.timer -= dt;
     if (this.timer > 0) return;
+    if (!this.hurtLanded) this.landHurt();
+    const dealt = this.hurtResult;
     const w = this.w();
     const h = w.hero;
-    const dealt = applyWrongAnswer(h.s.hp, h.stats.maxHp);
-    h.s.hp = dealt.hp;
-    w.fb.float(h.pos, damageLabel(dealt.damage), 'hurt', 100);
     const last = this.index >= this.questions.length - 1;
     const m = this.monster;
-    if (dealt.died) {
+    this.clearMonsterSwing();
+    if (dealt?.died) {
       h.s.playing = false;
       if (last && m && !m.dead) this.fell(m);
       this.endQuiet();
@@ -373,8 +405,87 @@ export class LearnEncounter {
     this.openNextQuestion();
   }
 
+  /** Monster svingar mot hjälten. Livet sjunker när slaget träffar, inte efter en tom paus. */
+  private beginWrongHurt(): void {
+    this.heroFlash = 0.85;
+    this.heroShake = 0;
+    const w = this.worldOrNull();
+    const m = this.monster;
+    const h = w?.hero;
+    if (m && h) {
+      m.facing = Math.atan2(h.pos.x - m.pos.x, h.pos.y - m.pos.y);
+      m.moving = false;
+      m.atk = ENEMY_SWING_S;
+      m.view.play('attack', true);
+    }
+    if (h) this.paintHeroHurt(h);
+  }
+
+  private tickWrongHurt(dt: number): void {
+    this.hurtT += dt;
+    const m = this.monster;
+    if (m && m.atk > 0) m.atk = Math.max(0, m.atk - dt);
+    if (!this.hurtLanded && this.hurtT >= HURT_LAND_AT) this.landHurt();
+    const h = this.worldOrNull()?.hero;
+    if (!h) return;
+    if (this.heroFlash > 0) {
+      this.heroFlash = Math.max(0, this.heroFlash - dt);
+      if (this.heroFlash > 0) this.paintHeroHurt(h);
+      else this.clearHeroHurtTint();
+    }
+    if (this.heroShake > 0) {
+      const mag = 18;
+      const flip = Math.floor(this.hurtT * 28) % 2 === 0 ? mag : -mag;
+      h.view.position.x += flip;
+      h.view.position.y += flip > 0 ? -8 : 7;
+      this.heroShake = Math.max(0, this.heroShake - dt);
+    }
+  }
+
+  private landHurt(): void {
+    if (this.hurtLanded) return;
+    this.hurtLanded = true;
+    this.heroShake = Math.max(this.heroShake, 0.38);
+    this.heroFlash = Math.max(this.heroFlash, 0.45);
+    const w = this.w();
+    const h = w.hero;
+    const dealt = applyWrongAnswer(h.s.hp, h.stats.maxHp);
+    h.s.hp = dealt.hp;
+    this.hurtResult = dealt;
+    w.fb.float(h.pos, damageLabel(dealt.damage), 'hurt', 100);
+    this.paintHeroHurt(h);
+  }
+
+  private paintHeroHurt(h: {
+    view: { sprite: { tint: number }; applyTint?: (color: number) => void; position: { x: number; y: number } };
+  }): void {
+    const blink = Math.floor(this.hurtT * 14) % 2 === 0;
+    const color = blink ? 0xff2020 : 0xff7070;
+    h.view.sprite.tint = color;
+    h.view.applyTint?.(color);
+  }
+
+  /** Återställer röd blink så hjälten inte blir kvar i skade-tint. */
+  private clearHeroHurtTint(): void {
+    const h = this.worldOrNull()?.hero;
+    if (!h) return;
+    h.view.sprite.tint = 0xffffff;
+    h.view.applyTint?.(0xffffff);
+  }
+
+  private clearMonsterSwing(): void {
+    const m = this.monster;
+    if (m) m.atk = 0;
+  }
+
   /** Pack: vänta en kort stund så nästa fråga inte kedjas direkt. */
   private openNextQuestion(): void {
+    this.clearMonsterSwing();
+    this.restoreHeroBounce();
+    this.heroFlash = 0;
+    this.clearHeroHurtTint();
+    this.heroShake = 0;
+    this.hurtResult = null;
     this.index++;
     this.restoreShake();
     this.phase = 'pause';
@@ -447,8 +558,57 @@ export class LearnEncounter {
     this.shakeBaseX = null;
   }
 
+  private beginHeroBounce(): void {
+    const view = this.worldOrNull()?.hero.view;
+    this.heroBounceT = 0;
+    this.heroBounceBaseY = view ? view.position.y : null;
+    const scale = view?.scale;
+    this.heroBounceBaseScale = scale ? { x: scale.x, y: scale.y } : null;
+  }
+
+  private tickHeroBounce(dt: number): void {
+    if (this.heroBounceT < 0) return;
+    this.heroBounceT += dt;
+    if (this.heroBounceT >= HERO_BOUNCE_S) {
+      this.restoreHeroBounce();
+      return;
+    }
+    this.applyHeroBounce();
+  }
+
+  private applyHeroBounce(): void {
+    const view = this.worldOrNull()?.hero.view;
+    if (!view || this.heroBounceBaseY === null) return;
+    const frame = heroBounceFrame(this.heroBounceT / HERO_BOUNCE_S);
+    view.position.y = this.heroBounceBaseY - frame.lift;
+    const base = this.heroBounceBaseScale;
+    const scale = view.scale;
+    if (!base || !scale) return;
+    const sign = base.x < 0 ? -1 : 1;
+    scale.x = sign * Math.abs(base.x) * frame.scale;
+    scale.y = base.y * frame.scale;
+  }
+
+  private restoreHeroBounce(): void {
+    const view = this.worldOrNull()?.hero.view;
+    if (view && this.heroBounceBaseY !== null) view.position.y = this.heroBounceBaseY;
+    if (view && this.heroBounceBaseScale) {
+      view.scale.x = this.heroBounceBaseScale.x;
+      view.scale.y = this.heroBounceBaseScale.y;
+    }
+    this.heroBounceT = -1;
+    this.heroBounceBaseY = null;
+    this.heroBounceBaseScale = null;
+  }
+
   private endQuiet(): void {
+    this.clearMonsterSwing();
     this.restoreShake();
+    this.restoreHeroBounce();
+    this.heroFlash = 0;
+    this.clearHeroHurtTint();
+    this.heroShake = 0;
+    this.hurtResult = null;
     this.phase = 'idle';
     this.monster = null;
     this.questions = [];

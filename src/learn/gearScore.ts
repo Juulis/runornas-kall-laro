@@ -1,5 +1,6 @@
 import type { Inventory } from '../logic/Inventory';
 import type { HeroModel } from '../logic/HeroModel';
+import { shouldKeepInInventory } from '../logic/inventoryDiscard';
 import type { ItemStats, Loot } from '../logic/loot/Loot';
 import { SLOTS, type Item, type Slot } from '../logic/loot/types';
 
@@ -66,9 +67,25 @@ export function chooseAutoEquipSlot(L: Loot, inv: Inventory, it: Item): Slot | n
   return null;
 }
 
-/** Tar på föremålet om det är bättre. Det gamla läggs i väskan av Inventory.equipTo. */
+function displacedByEquip(L: Loot, inv: Inventory, it: Item, slot: Slot): Item[] {
+  const out: Item[] = [];
+  const old = inv.equip[slot];
+  if (old && old !== it) out.push(old);
+  if (slot === 'vapen' && L.base(it).two_handed) {
+    const off = inv.equip.offhand;
+    if (off && off !== it && off !== old) out.push(off);
+  }
+  return out;
+}
+
+/** Tar på föremålet om det är bättre. Undanträngt stannar i väskan bara om det är unikt, set eller legendary. */
 export function autoEquipItem(L: Loot, hero: HeroModel, it: Item): Slot | null {
   const slot = chooseAutoEquipSlot(L, hero.inv, it);
   if (!slot) return null;
+  for (const old of displacedByEquip(L, hero.inv, it, slot)) {
+    if (shouldKeepInInventory(old)) continue;
+    const held = hero.inv.slotOfItem(old);
+    if (held) hero.inv.equip[held] = null;
+  }
   return hero.inv.equipTo(it, slot) ? slot : null;
 }

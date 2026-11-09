@@ -42,19 +42,19 @@
       "3. Biomet saknar helt monster i bandet: använd närmaste regions huvudfamilj och dess undertyper enligt steg 1 till 2. Ska inte inträffa i ring 1 till 7 (se tackning)."
     ],
     "tathet_per_chunk": {
-      "ring_0": [0, 2],
-      "ring_1": [0, 2],
-      "ring_2": [0, 2],
-      "ring_3": [0, 2],
-      "ring_4": [0, 2],
-      "ring_5": [0, 2],
-      "ring_6": [0, 2],
-      "ring_7": [0, 2],
-      "ring_3_och_ut": [0, 2],
-      "not": "Monster per chunk och game i mellanmark, slumpat jämnt i intervallet (medel 1,0). En chunk är 128 × 128 och skärmen ser radie 52, alltså π × 52² / 128² = 0,52 chunk per skärmläge: medel 1,0 per chunk ger cirka 0,5 monster per skärmläge, ungefär 1 monster per 2 skärmlägen (förut 0,5 per chunk, 1 per 4). Klart glesare än regionerna (minst 1,5 × mellanmarken, tathet.region_golv). ring_3_och_ut finns kvar för koden och är lika med ring_3 till ring_7. Namngivna regioner och delområden använder sina egna tal (varld_stor.json regioner[].tathet, bana1_stor.json)."
+      "ring_0": [1, 3],
+      "ring_1": [1, 3],
+      "ring_2": [1, 3],
+      "ring_3": [1, 3],
+      "ring_4": [1, 3],
+      "ring_5": [1, 3],
+      "ring_6": [1, 3],
+      "ring_7": [1, 3],
+      "ring_3_och_ut": [1, 3],
+      "not": "Monster per chunk och game i mellanmark, slumpat jämnt i intervallet (medel 2,0). En chunk är 128 × 128 och skärmen ser radie 52, alltså π × 52² / 128² = 0,52 chunk per skärmläge: medel 2,0 per chunk ger cirka 1 monster per skärmläge (förut medel 1,0 per chunk, cirka 1 per 2 skärmlägen). Klart glesare än regionerna (minst 1,5 × mellanmarken, tathet.region_golv). ring_3_och_ut finns kvar för koden och är lika med ring_3 till ring_7. Namngivna regioner och delområden använder sina egna tal (varld_stor.json regioner[].tathet, bana1_stor.json)."
     },
     "grupper": "Grupper om 1 till 3, ledare (gravargsledare, skelett_kapten och liknande) alltid ensam med 2 till 3 av närmaste lägre undertyp som följe.",
-    "elit": "Mellanmark: bara champions, inga unika. Från ring 2 blir en mellanmarksgrupp champion med chans 0,10 (hela gruppen, monster_niva.json elites.champion), högst en per chunk. Med tätheten 0 till 2 monster per chunk (cirka 0,5 grupper per chunk) blir det ungefär en championgrupp per 20 chunkar. Ring 0 och 1 har inga champions i mellanmarken. Unika finns bara i namngivna områden enligt spawnzoner.json session_roll.uniques. Rullas med chunk_seed vid spawn som övriga monster. Belöning: elites.champion.loot (en extra rullning, drop 1,0, kvalitet × 1,5) ovanpå undertypens tabell i drop_tabeller.json, XP × 3.",
+    "elit": "Mellanmark: bara champions, inga unika. Från ring 2 blir en mellanmarksgrupp champion med chans 0,10 (hela gruppen, monster_niva.json elites.champion), högst en per chunk. Med tätheten 1 till 3 monster per chunk (cirka en grupp per chunk) blir det ungefär en championgrupp per 10 chunkar. Ring 0 och 1 har inga champions i mellanmarken. Unika finns bara i namngivna områden enligt spawnzoner.json session_roll.uniques. Rullas med chunk_seed vid spawn som övriga monster. Belöning: elites.champion.loot (en extra rullning, drop 1,0, kvalitet × 1,5) ovanpå undertypens tabell i drop_tabeller.json, XP × 3.",
     "per_biom": [
       {
         "biom": "skog",
@@ -140,7 +140,7 @@
         "not": "Nivå 6 efter Vargaby, 7 efter Ulvhild i Idets skog (6102 XP), alltså före ring 2; nivå 8 vid Gravåsen, 11 efter Benkungen (15119 XP)."
       },
       "region_golv": 1.5,
-      "region_golv_not": "Region med öppna chunkar har minst region_golv × mellanmarkens medel monster per chunk (1,5 × 1,0), så att regioner alltid är tätare än mellanmarken. tathet.py använder samma golv."
+      "region_golv_not": "Region med öppna chunkar har minst region_golv × mellanmarkens medel monster per chunk (1,5 × 2,0), så att regioner alltid är tätare än mellanmarken. tathet.py använder samma golv."
     },
     "elit_modell": {
       "fran_ring": 2,
