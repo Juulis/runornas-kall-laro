@@ -11,13 +11,18 @@ import {
   type SubjectId,
 } from './types';
 
-function subjectFor(rng: Rng, subject: SubjectId): QuestionSubject {
-  if (subject === 'blandat') return rng.pick(['matte', 'svenska', 'engelska'] as const);
-  return subject;
+const LAS_GRADES: ReadonlySet<GradeId> = new Set(['forskola', 'ak1', 'ak2', 'ak3']);
+
+/** Blandat tar med läsförståelse bara på nivåer som har egna frågor i banken. */
+function subjectFor(rng: Rng, subject: SubjectId, grade: GradeId): QuestionSubject {
+  if (subject !== 'blandat') return subject;
+  const choices: QuestionSubject[] = ['matte', 'svenska', 'engelska'];
+  if (LAS_GRADES.has(grade)) choices.push('lasforstaelse');
+  return rng.pick(choices);
 }
 
 function oneQuestion(rng: Rng, grade: GradeId, subject: SubjectId, index: number, idPrefix: string, avoid: Set<string>): LearnQuestion {
-  const picked = subjectFor(rng, subject);
+  const picked = subjectFor(rng, subject, grade);
   let last: unknown;
   for (let attempt = 0; attempt < 8; attempt++) {
     try {

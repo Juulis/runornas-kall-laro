@@ -18,12 +18,14 @@ const CSS = `
 .rk-q-card{width:min(640px,100%);background:#1c1612;border:4px solid #c7a35a;border-radius:18px;padding:28px 24px;box-shadow:0 12px 40px #000}
 .rk-q-card.forskola{width:min(760px,100%);padding:36px 28px}
 .rk-q-progress{font-size:18px;color:#e0b060}
+.rk-q-passage{font-size:clamp(20px,3vw,28px);color:#e8dcc0;line-height:1.35;margin:12px 0 8px}
+.rk-q-card.forskola .rk-q-passage{font-size:clamp(26px,4vw,40px)}
 .rk-q-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0 20px}
 .rk-q-prompt{font-size:clamp(26px,4vw,40px);color:#fff8e8;margin:0;line-height:1.25}
 .rk-q-card.forskola .rk-q-prompt{font-size:clamp(34px,5.2vw,56px)}
 .rk-q-eng{display:block;text-align:center;font-size:clamp(40px,6vw,68px);color:#ffe08a;margin:0 0 16px;line-height:1.1}
 .rk-q-card.forskola .rk-q-eng{font-size:clamp(48px,7vw,80px)}
-.rk-q-eng[hidden],.rk-q-speak[hidden]{display:none}
+.rk-q-eng[hidden],.rk-q-speak[hidden],.rk-q-passage[hidden]{display:none}
 .rk-q-speak{flex:0 0 auto;font-size:36px;min-width:72px;min-height:72px;border-radius:18px;border:3px solid #c7a35a;background:#3a2e18;color:#fff8e8;cursor:pointer}
 .rk-q-card.forskola .rk-q-speak{font-size:48px;min-width:88px;min-height:88px}
 .rk-q-speak:hover{border-color:#e0b060}
@@ -45,6 +47,7 @@ export class LearnOverlay {
   private readonly quiz: HTMLDivElement;
   private readonly card: HTMLDivElement;
   private readonly progress: HTMLDivElement;
+  private readonly passage: HTMLDivElement;
   private readonly prompt: HTMLDivElement;
   private readonly engWord: HTMLDivElement;
   private readonly feedback: HTMLDivElement;
@@ -90,6 +93,9 @@ export class LearnOverlay {
     this.card.className = 'rk-q-card';
     this.progress = document.createElement('div');
     this.progress.className = 'rk-q-progress';
+    this.passage = document.createElement('div');
+    this.passage.className = 'rk-q-passage';
+    this.passage.hidden = true;
     const head = document.createElement('div');
     head.className = 'rk-q-head';
     this.prompt = document.createElement('div');
@@ -119,7 +125,7 @@ export class LearnOverlay {
     }
     this.feedback = document.createElement('div');
     this.feedback.className = 'rk-q-feedback bad hidden';
-    this.card.append(this.progress, head, this.engWord, this.choiceRow, this.feedback);
+    this.card.append(this.progress, this.passage, head, this.engWord, this.choiceRow, this.feedback);
     this.quiz.append(this.card);
     this.root.append(levelBtn, this.settingsPanel, this.quiz);
     document.body.append(this.root);
@@ -148,6 +154,9 @@ export class LearnOverlay {
     this.quiz.classList.remove('hidden');
     this.card.classList.toggle('forskola', q.grade === 'forskola');
     this.progress.textContent = `Fråga ${index + 1} av ${total}`;
+    const passage = q.passage?.trim() ?? '';
+    this.passage.textContent = passage;
+    this.passage.hidden = passage.length === 0;
     this.prompt.textContent = q.prompt;
     const eng = q.speakLang === 'en-US' || q.speakLang === 'en-GB' ? (q.speakText ?? '') : '';
     this.engWord.textContent = eng;

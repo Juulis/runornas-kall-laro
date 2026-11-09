@@ -15,6 +15,7 @@ export const SUBJECTS = [
   { id: 'matte', label: 'Matte' },
   { id: 'svenska', label: 'Svenska' },
   { id: 'engelska', label: 'Engelska' },
+  { id: 'lasforstaelse', label: 'Läsförståelse' },
 ] as const;
 
 export type GradeId = (typeof GRADES)[number]['id'];
@@ -36,6 +37,8 @@ export type SpeakLang = 'sv-SE' | 'en-US' | 'en-GB';
 export interface LearnQuestion {
   id: string;
   prompt: string;
+  /** Läsningstext som visas ovanför frågan. */
+  passage?: string;
   choices: readonly [string, string, string, string];
   correctIndex: number;
   answer: string;
