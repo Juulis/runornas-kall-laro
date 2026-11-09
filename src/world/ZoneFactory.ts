@@ -7,10 +7,10 @@ import { Iso, TILE_WORLD } from '../render/Iso';
 import { StripAnimSprite } from '../render/StripAnimSprite';
 import { FOREST_CITY_PORTALS, FOREST_DECOR_MID, FOREST_DECOR_OUTER, FOREST_PLAY_RADIUS, FOREST_SAFE_RADIUS } from './forestConstants';
 import { ForestGroundChunks } from './ForestGroundChunks';
-import { BigWorldStreamGround } from './bigWorld/BigWorldStreamGround';
 import { BIG_WORLD_STREAMING_ENABLED } from './bigWorld/bigWorldConfig';
 import { bigWorldCityPortalWorld } from './bigWorld/bigWorldPortals';
-import { campStartPos } from './bigWorld/heroRegion';
+import { bigWorldRuntime } from './bigWorld/runtime';
+import { campStartPos } from './bigWorld/startskogenFootprint';
 import { applyStartskogenAnchor } from './bigWorld/startskogenSpawn';
 import {
   CITY_RNG_SEED,
@@ -141,6 +141,7 @@ export class ZoneFactory {
 
   /** Stor värld: chunk-streaming (world_seed + game_seed). Obegränsad värld — se BIG_WORLD_UNBOUNDED. */
   private bigWorldForest(): BuiltZone {
+    const { BigWorldStreamGround } = bigWorldRuntime();
     const zone = new Zone('forest', 'startskogen', 4096, 4096);
     zone.bigWorldStreaming = true;
     zone.safeRadius = FOREST_SAFE_RADIUS;

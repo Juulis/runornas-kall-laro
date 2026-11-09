@@ -2,7 +2,11 @@ import './style.css';
 import './ui/ui.css';
 import { Game } from './core/Game';
 import type { GameModule } from './core/GameContext';
-import { AudioModule, LoreBookModule, MapModule, MenuModule, SaveModule, WorldStateModule } from './index';
+import { AudioModule } from './audio/AudioModule';
+import { deferredModule } from './boot/deferredModule';
+import { MenuModule } from './menu/MenuModule';
+import { SaveModule } from './save/SaveModule';
+import { WorldStateModule } from './world/WorldStateModule';
 import { cryptoSeed } from './core/entropy';
 import { LocaleManager } from './i18n';
 import { smokeMetricsEnabled, captureSmokeHooksEnabled } from './dev/smokeGate';
@@ -33,8 +37,14 @@ const modules: GameModule[] = [
   save,
   new MenuModule(save, i18n),
   new AudioModule(save),
-  new MapModule(save, i18n),
-  new LoreBookModule(save),
+  deferredModule('Laddar karta…', async () => {
+    const { MapModule } = await import('./map/MapModule');
+    return new MapModule(save, i18n);
+  }),
+  deferredModule('Laddar lorebok…', async () => {
+    const { LoreBookModule } = await import('./lore/LoreBookModule');
+    return new LoreBookModule(save);
+  }),
 ];
 
 const host = document.getElementById('app');

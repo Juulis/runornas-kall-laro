@@ -7,13 +7,16 @@ import { JSDOM } from 'jsdom';
 import engelska from '../src/data/fragor_engelska.json';
 import svenska from '../src/data/fragor_svenska.json';
 import { MemoryStore } from '../src/core/storage';
-import { bankCount } from '../src/learn/bank';
+import { bankCount, ensureBank } from '../src/learn/bank';
 import { generateQuestions } from '../src/learn/questions';
 import { parseLearnSettings, readLearnSettings, writeLearnSettings } from '../src/learn/settings';
 import { canSpeak, speak } from '../src/learn/speech';
 import { isValidQuestion, type LearnQuestion } from '../src/learn/types';
 import { LearnOverlay } from '../src/ui/LearnOverlay';
 import { buildLearnFields } from '../src/ui/learnDom';
+
+await ensureBank('svenska');
+await ensureBank('engelska');
 
 const EMOJI = /(?:\p{Extended_Pictographic}\uFE0F?|\p{Emoji_Presentation}|[0-9#*]\uFE0F?\u20E3)/u;
 

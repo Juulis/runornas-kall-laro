@@ -11,6 +11,7 @@ import { button, el } from './dom';
 import type { LocalePicker } from './LocalePicker';
 import type { MenuAssets } from './MenuAssets';
 import { buildLearnFields } from '../ui/learnDom';
+import { preloadLearnForPlay } from '../learn/preloadLearn';
 import { readLearnSettings, writeLearnSettings } from '../learn/settings';
 import type { LearnSettings } from '../learn/types';
 import { LocalStore } from '../core/storage';
@@ -25,6 +26,7 @@ export class HeroSelectMenu {
   /** Håller raderingsbekräftelsen vid språkbyte. */
   private deleteConfirmHeroId: string | null = null;
   private learnDraft: LearnSettings = readLearnSettings(new LocalStore());
+  private starting = false;
   private readonly offLocale: () => void;
 
   constructor(
@@ -62,6 +64,7 @@ export class HeroSelectMenu {
   }
 
   show(): void {
+    this.starting = false;
     this.deps.onLeaveGame();
     this.deleteConfirmHeroId = null;
     if (!this.open) {
@@ -82,11 +85,17 @@ export class HeroSelectMenu {
   }
 
   private start(d: SaveFile, resume: boolean): void {
+    if (this.starting) return;
+    this.starting = true;
     this.deleteConfirmHeroId = null;
     d.learn = { ...this.learnDraft };
     writeLearnSettings(new LocalStore(), this.learnDraft);
-    this.hide();
-    void this.deps.loader.start(d, resume);
+    const settings = this.learnDraft;
+    void preloadLearnForPlay(settings).then(() => {
+      if (!this.starting) return;
+      this.hide();
+      void this.deps.loader.start(d, resume);
+    });
   }
 
   renderList(): void {
@@ -161,6 +170,7 @@ export class HeroSelectMenu {
     const learn = buildLearnFields(this.learnDraft, (next) => {
       this.learnDraft = next;
       writeLearnSettings(new LocalStore(), next);
+      void preloadLearnForPlay(next);
       if (!d) return;
       d.learn = { ...next };
       void roster.store(d);

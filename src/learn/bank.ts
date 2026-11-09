@@ -1,9 +1,7 @@
-import engelska from '../data/fragor_engelska.json';
-import svenska from '../data/fragor_svenska.json';
 import { isRecord } from '../core/json';
 import type { Rng } from '../core/Rng';
 import { multipleChoice } from './choices';
-import { isGradeId, type GradeId, type LearnQuestion, type QuestionSubject, type SpeakLang } from './types';
+import { isGradeId, type GradeId, type LearnQuestion, type LearnSettings, type QuestionSubject, type SpeakLang } from './types';
 
 interface RawQuestion {
   id: string;
@@ -28,6 +26,45 @@ interface RawFile {
 interface WrongPart {
   text: string;
   emoji: string | null;
+}
+
+type BankSubject = 'svenska' | 'engelska';
+type BankImporter = () => Promise<unknown>;
+
+const defaultImporters: Record<BankSubject, BankImporter> = {
+  svenska: () => import('../data/fragor_svenska.json'),
+  engelska: () => import('../data/fragor_engelska.json'),
+};
+
+const importers: Record<BankSubject, BankImporter> = { ...defaultImporters };
+const pools = new Map<BankSubject, RawQuestion[]>();
+const pending = new Map<BankSubject, Promise<RawQuestion[]>>();
+
+/** Test: byt ut den dynamiska importen. null återställer den vanliga. */
+export function setBankImporterForTests(subject: BankSubject, importer: BankImporter | null): void {
+  importers[subject] = importer ?? defaultImporters[subject];
+}
+
+/** Tömmer cache så ett nytt anrop hämtar igen. Utan ämne töms båda. */
+export function clearBankCache(subject?: BankSubject): void {
+  if (!subject) {
+    pools.clear();
+    pending.clear();
+    return;
+  }
+  pools.delete(subject);
+  pending.delete(subject);
+}
+
+export function bankSubjectsFor(subject: LearnSettings['subject']): BankSubject[] {
+  if (subject === 'matte') return [];
+  if (subject === 'blandat') return ['svenska', 'engelska'];
+  return [subject];
+}
+
+function unwrapModule(mod: unknown): unknown {
+  if (isRecord(mod) && 'default' in mod && isRecord(mod.default) && Array.isArray(mod.default.fragor)) return mod.default;
+  return mod;
 }
 
 function asRaw(data: unknown, subject: QuestionSubject): RawQuestion[] {
@@ -75,15 +112,56 @@ function validRaw(row: RawQuestion): row is RawQuestion & { niva: GradeId } {
   return wrongParts(row).length >= 3;
 }
 
-const SVENSKA = asRaw(svenska, 'svenska').filter((row) => validRaw(row));
-const ENGELSKA = asRaw(engelska, 'engelska').filter((row) => validRaw(row));
-
-export function bankQuestions(subject: 'svenska' | 'engelska', grade: GradeId): readonly RawQuestion[] {
-  const pool = subject === 'svenska' ? SVENSKA : ENGELSKA;
-  return pool.filter((row) => row.niva === grade);
+function poolOf(subject: BankSubject): readonly RawQuestion[] {
+  const pool = pools.get(subject);
+  if (!pool) throw new Error(`Frågebanken för ${subject} är inte laddad`);
+  return pool;
 }
 
-export function bankCount(subject: 'svenska' | 'engelska', grade: GradeId): number {
+/** Laddar och cachar en frågebank. Samma pågående anrop delas. Matte har ingen bank. */
+export function ensureBank(subject: BankSubject): Promise<readonly RawQuestion[]> {
+  const hit = pools.get(subject);
+  if (hit) return Promise.resolve(hit);
+  const inflight = pending.get(subject);
+  if (inflight) return inflight;
+  const job = importers[subject]()
+    .then((mod) => {
+      const rows = asRaw(unwrapModule(mod), subject).filter(validRaw);
+      pools.set(subject, rows);
+      pending.delete(subject);
+      return rows;
+    })
+    .catch((err: unknown) => {
+      pending.delete(subject);
+      throw err;
+    });
+  pending.set(subject, job);
+  return job;
+}
+
+/** Laddar de banker ämnet behöver. Matte gör inget. Progress är 0–1 när varje bank är klar. */
+export async function preloadLearnBanks(settings: Pick<LearnSettings, 'subject'>, onProgress?: (ratio: number) => void): Promise<void> {
+  const subjects = bankSubjectsFor(settings.subject);
+  if (!subjects.length) {
+    onProgress?.(1);
+    return;
+  }
+  let done = 0;
+  onProgress?.(0);
+  await Promise.all(
+    subjects.map(async (subject) => {
+      await ensureBank(subject);
+      done += 1;
+      onProgress?.(done / subjects.length);
+    }),
+  );
+}
+
+export function bankQuestions(subject: BankSubject, grade: GradeId): readonly RawQuestion[] {
+  return poolOf(subject).filter((row) => row.niva === grade);
+}
+
+export function bankCount(subject: BankSubject, grade: GradeId): number {
   return bankQuestions(subject, grade).length;
 }
 
@@ -92,10 +170,10 @@ function withSpeech(q: LearnQuestion, text: string | undefined, lang: SpeakLang 
   return { ...q, speakText: text, ...(lang ? { speakLang: lang } : {}) };
 }
 
-/** Plockar en bankfråga och blandar alternativen. */
+/** Plockar en bankfråga och blandar alternativen. Kräver att ensureBank redan lösts. */
 export function nextBankQuestion(
   rng: Rng,
-  subject: 'svenska' | 'engelska',
+  subject: BankSubject,
   grade: GradeId,
   index: number,
   idPrefix: string,

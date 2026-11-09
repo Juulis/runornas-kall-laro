@@ -16,10 +16,10 @@ import type { Monster } from '../entities/Monster';
 import { MonsterFactory } from '../entities/MonsterFactory';
 import { syncProximitySpawns } from '../systems/SpawnProximity';
 import { ForestGroundChunks } from '../world/ForestGroundChunks';
-import { BigWorldStreamGround } from '../world/bigWorld/BigWorldStreamGround';
+import type { BigWorldStreamGround } from '../world/bigWorld/BigWorldStreamGround';
 import { BIG_WORLD_GROUND_VIEW_MARGIN } from '../world/bigWorld/bigWorldConfig';
 import { syncBigWorldChunkMonsters, resetBigWorldMonsterSync } from '../world/bigWorld/syncBigWorldChunkMonsters';
-import { heroInsideStartskogenRegion } from '../world/bigWorld/heroRegion';
+import { loadBigWorldRuntime, peekBigWorldRuntime } from '../world/bigWorld/runtime';
 import { smokeMetricsEnabled } from '../dev/smokeGate';
 import { worldToChunk } from '../world/bigWorld/bigWorldCoords';
 import { Input } from '../input/Input';
@@ -85,9 +85,10 @@ import { FOREST_CITY_PORTALS } from '../world/forestConstants';
 import { cityPortEntry, cityAreaId, isPlayableCityZone, parseSavedZone, PLAYABLE_CITIES } from '../world/cityZones';
 import { ZoneFactory } from '../world/ZoneFactory';
 import type { Zone, ZoneName } from '../world/Zone';
-import { LearnEncounter } from '../learn/LearnEncounter';
+import type { LearnEncounter } from '../learn/LearnEncounter';
 import { readLearnSettings, writeLearnSettings, parseLearnSettings } from '../learn/settings';
 import type { LearnSettings } from '../learn/types';
+import { trackChunkLoad } from '../ui/chunkLoad';
 import { LocalStore } from './storage';
 
 const CLASS_TINT: Record<string, number> = { riddare: 0xffffff, barbar: 0xffd2b8, amazonkrigare: 0xffe6c8 };
@@ -176,6 +177,12 @@ export class Game {
   private menuOpen = false;
   private learn: LearnEncounter | null = null;
   private learnSettings: LearnSettings = readLearnSettings(new LocalStore());
+  /** Sant när lär-modulen och rätt frågebank finns. Innan dess pausas monster om spelaren är igång. */
+  private questionsReady = false;
+  private learnWanted = false;
+  private learnPrep: Promise<void> | null = null;
+  private booting = false;
+  private booted = false;
   private decorAnims: StripAnimSprite[] = [];
   private forestGround: ForestGroundChunks | BigWorldStreamGround | null = null;
   private streamMetricsCx = NaN;
@@ -205,7 +212,7 @@ export class Game {
   } | null {
     const w = this.world;
     const fg = this.forestGround;
-    if (!w || !(fg instanceof BigWorldStreamGround) || !w.zone.bigWorldStreaming) return null;
+    if (!w || !this.isStreamGround(fg) || !w.zone.bigWorldStreaming) return null;
     const foot = this.camera.toScreen(w.hero.pos.x, w.hero.pos.y);
     return {
       groundReady: fg.isGroundReady(),
@@ -229,7 +236,7 @@ export class Game {
   bumpBigWorldHeroPosition(): void {
     const w = this.world;
     const fg = this.forestGround;
-    if (!w || !(fg instanceof BigWorldStreamGround) || !w.zone.bigWorldStreaming) return;
+    if (!w || !this.isStreamGround(fg) || !w.zone.bigWorldStreaming) return;
     resetBigWorldMonsterSync();
     fg.bumpHeroPosition(w.hero.pos);
     const view = this.camera.viewWorldAabb(BIG_WORLD_GROUND_VIEW_MARGIN);
@@ -237,6 +244,15 @@ export class Game {
   }
 
   async start(host: HTMLElement): Promise<void> {
+    if (this.booted || this.booting) return;
+    this.booting = true;
+    await trackChunkLoad('Laddar världen…', async (onProgress) => {
+      onProgress(0.2);
+      await loadBigWorldRuntime();
+      onProgress(1);
+    });
+    if (this.booted) return;
+    this.booted = true;
     const issues = validateData();
     if (issues.length) console.warn('Datavarningar:', issues);
     await this.renderer.init(host);
@@ -295,6 +311,8 @@ export class Game {
       if (panel !== 'menu') return;
       this.menuOpen = true;
       this.learn?.cancel();
+      this.learnWanted = true;
+      void this.prepareLearn();
     });
     this.bus.on('ui_close', ({ panel }) => {
       if (panel === 'menu') this.menuOpen = false;
@@ -324,15 +342,6 @@ export class Game {
       this.hud.flash(this.text.t('msg.save_failed'));
     });
     this.bindInput(r.app.canvas);
-    this.learn = new LearnEncounter(
-      w,
-      this.combat,
-      this.ai,
-      this.learnSettings,
-      () => this.learnBlocked(),
-      () => this.heroDied(),
-    );
-    this.learn.overlaySettings.onSettings = (s) => this.setLearnSettings(s);
     DevCheatsView.tryCreate(this.input);
     const resize = (): void => {
       this.camera.resize(r.width, r.height);
@@ -437,10 +446,56 @@ export class Game {
   private applyLearn(raw: LearnSettings | undefined, emit: boolean): void {
     const parsed = raw ? parseLearnSettings(raw) : null;
     if (!parsed) return;
+    const same =
+      parsed.grade === this.learnSettings.grade &&
+      parsed.subject === this.learnSettings.subject &&
+      parsed.readAloud === this.learnSettings.readAloud;
     this.learnSettings = parsed;
     writeLearnSettings(new LocalStore(), parsed);
     this.learn?.setSettings(parsed);
     if (emit) this.bus.emit('learn_settings', parsed);
+    if (!same || !this.questionsReady) {
+      this.questionsReady = false;
+      this.learnWanted = true;
+      void this.prepareLearn();
+    }
+  }
+
+  /** Laddar lär-modul och frågebank innan första frågan. Pågående laddning delas. */
+  private prepareLearn(): Promise<void> {
+    if (this.questionsReady) return Promise.resolve();
+    if (this.learnPrep) return this.learnPrep;
+    const settings = this.learnSettings;
+    this.learnPrep = this.finishLearn(settings).finally(() => {
+      this.learnPrep = null;
+      if (!this.questionsReady && this.learnWanted) void this.prepareLearn();
+    });
+    return this.learnPrep;
+  }
+
+  private async finishLearn(settings: LearnSettings): Promise<void> {
+    const { preloadLearnForPlay } = await import('../learn/preloadLearn');
+    await preloadLearnForPlay(settings);
+    if (this.learnSettings.subject !== settings.subject || this.learnSettings.grade !== settings.grade) return;
+    if (!this.learn) {
+      const { LearnEncounter } = await import('../learn/LearnEncounter');
+      const enc = new LearnEncounter(
+        () => this.mustWorld(),
+        this.combat,
+        this.ai,
+        this.learnSettings,
+        () => this.learnBlocked(),
+        () => this.heroDied(),
+      );
+      enc.overlaySettings.onSettings = (s) => this.setLearnSettings(s);
+      this.learn = enc;
+    } else this.learn.setSettings(this.learnSettings);
+    this.questionsReady = true;
+  }
+
+  private isStreamGround(g: unknown): g is BigWorldStreamGround {
+    const Ctor = peekBigWorldRuntime()?.BigWorldStreamGround;
+    return !!Ctor && g instanceof Ctor;
   }
 
   private learnBlocked(): boolean {
@@ -542,7 +597,7 @@ export class Game {
     this.dayNight?.attachWorldEffects(r.effects);
     const built = this.zones.build(name);
     r.ground.addChild(built.ground);
-    this.forestGround = built.ground instanceof ForestGroundChunks || built.ground instanceof BigWorldStreamGround ? built.ground : null;
+    this.forestGround = built.ground instanceof ForestGroundChunks || this.isStreamGround(built.ground) ? built.ground : null;
     for (const d of built.decor) r.objects.addChild(d);
     this.decorAnims = built.decorAnims;
     const hs = this.heroState;
@@ -595,7 +650,7 @@ export class Game {
     const areaId = zone.areaId;
     const citySpawn = this.worldState.get().city_states[areaId] ?? (areaId === 'gamla_byn' ? hs.city : 'besatt');
     this.factory.populate(this.world, citySpawn);
-    if (zone.bigWorldStreaming && this.forestGround instanceof BigWorldStreamGround) {
+    if (zone.bigWorldStreaming && this.isStreamGround(this.forestGround)) {
       resetBigWorldMonsterSync();
       const view = this.camera.viewWorldAabb(BIG_WORLD_GROUND_VIEW_MARGIN);
       this.forestGround.sync(
@@ -1045,7 +1100,7 @@ export class Game {
     const h = w.hero;
     if (h.s.playing) this.heroUpdate(dt);
     if (h.s.playing) this.camera.follow(h.pos, dt);
-    if (this.forestGround instanceof BigWorldStreamGround) {
+    if (this.isStreamGround(this.forestGround)) {
       const view = this.camera.viewWorldAabb(BIG_WORLD_GROUND_VIEW_MARGIN);
       this.forestGround.sync(
         h.pos,
@@ -1056,7 +1111,7 @@ export class Game {
         view,
       );
       syncBigWorldChunkMonsters(w, this.forestGround.chunkCache, this.factory, w.session.worldSeed, w.session.seed, h.pos);
-      if (heroInsideStartskogenRegion(h.pos)) {
+      if (peekBigWorldRuntime()?.heroInsideStartskogenRegion(h.pos)) {
         const citySpawn = this.worldState.get().city_states[w.zone.areaId] ?? (w.zone.areaId === 'gamla_byn' ? h.s.city : 'besatt');
         syncProximitySpawns(w, this.factory, h.pos, citySpawn);
       }
@@ -1087,12 +1142,19 @@ export class Game {
       const citySpawn = this.worldState.get().city_states[w.zone.areaId] ?? (w.zone.areaId === 'gamla_byn' ? h.s.city : 'besatt');
       syncProximitySpawns(w, this.factory, h.pos, citySpawn);
     }
+    // Frågorna får inte hoppas över medan banken laddas. Menyn startar laddningen; innan dess står monster stilla.
+    const holdLearn = w.hero.s.playing && !this.questionsReady;
+    if (holdLearn) {
+      this.ai.paused = true;
+      if (this.learnWanted) void this.prepareLearn();
+    }
     this.ai.update(dt);
     this.learn?.tick(dt);
+    if (holdLearn) this.ai.paused = true;
     this.combat.update(dt);
     this.lootSys.update(dt);
     this.portals.update(dt);
-    if (!(this.forestGround instanceof BigWorldStreamGround)) this.camera.follow(h.pos, dt);
+    if (!this.isStreamGround(this.forestGround)) this.camera.follow(h.pos, dt);
     this.parallax.update(this.camera.pos);
     this.hud.update(dt, h, this.camera, {
       period: clockPeriodLabel(this.gameClock.view.isNight),
