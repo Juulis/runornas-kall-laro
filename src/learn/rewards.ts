@@ -1,6 +1,6 @@
 import { isRecord } from '../core/json';
 import type { KeyValueStore } from '../core/storage';
-import type { EncounterKind, GradeId, SubjectId } from './types';
+import { questionCount, type EncounterKind, type GradeId, type SubjectId } from './types';
 import { isIsoDate, stockholmDate } from './stockholm';
 
 /** localStorage. rk_laro (nivå och ämne) rörs inte. */
@@ -76,8 +76,8 @@ export const STICKERS: readonly StickerDef[] = [
   { id: 'engelska_ak1', namn: 'Word friend', hint: 'Tjugo rätt i engelska, åk 1' },
   { id: 'las_ak1', namn: 'Läsare', hint: 'Tjugo rätt i läsning, åk 1' },
   { id: 'forskola_stjarna', namn: 'Förskoleljus', hint: 'Femton rätt i förskolan' },
-  { id: 'champion_3', namn: 'Championvän', hint: 'Tre champions, minst två av tre rätt' },
-  { id: 'boss_1', namn: 'Bosskämpe', hint: 'En boss, minst fyra av fem rätt' },
+  { id: 'champion_3', namn: 'Championvän', hint: 'Tre champions, minst tre av fyra rätt' },
+  { id: 'boss_1', namn: 'Bosskämpe', hint: 'En boss, minst fem av sex rätt' },
   { id: 'blandat_50', namn: 'Blandmästare', hint: 'Femtio rätt när ämnet är blandat' },
   { id: 'dag_7', namn: 'Veckovanör', hint: 'Klara dagens mål sju dagar' },
   { id: 'las_ak3', namn: 'Bokorm', hint: 'Trettio rätt i läsning, åk 3' },
@@ -264,6 +264,14 @@ export function unlockNewStickers(state: RewardState): StickerId[] {
   return fresh;
 }
 
+/** Andel rätt som krävs för att ett champion- eller bossmöte räknas (designens 2/3 och 4/5). */
+const PASS_RATIO: Record<EncounterKind, number> = { normal: 0, champion: 2 / 3, boss: 4 / 5 };
+
+/** Minsta antal rätt i mötet för att det ska räknas. Följer antalet frågor: champion 3 av 4, boss 5 av 6. */
+export function encounterPassThreshold(kind: EncounterKind): number {
+  return Math.ceil(questionCount(kind) * PASS_RATIO[kind] - 1e-9);
+}
+
 export interface AnswerRewardInput {
   correct: boolean;
   kind: EncounterKind;
@@ -342,8 +350,8 @@ export function applyLearnAnswer(state: RewardState, input: AnswerRewardInput): 
 
   if (input.encounterDone) {
     const got = input.encounterCorrect ?? 0;
-    if (input.kind === 'champion' && got >= 2) next.champions_ok += 1;
-    if (input.kind === 'boss' && got >= 4) next.bossar_ok += 1;
+    if (input.kind === 'champion' && got >= encounterPassThreshold('champion')) next.champions_ok += 1;
+    if (input.kind === 'boss' && got >= encounterPassThreshold('boss')) next.bossar_ok += 1;
   }
 
   const unlockedStickers = unlockNewStickers(next);
