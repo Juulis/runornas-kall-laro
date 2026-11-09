@@ -17,6 +17,7 @@ import { burstConfetti } from '../src/ui/Confetti';
 import {
   CELEBRATE_PHRASES,
   celebrateCorrect,
+  HERO_BOUNCE_S,
   heroBounceFrame,
   playHappyChime,
   setStarFlyHandler,
@@ -26,7 +27,17 @@ import { applyWrongAnswer } from '../src/learn/damage';
 import { autoEquipItem, chooseAutoEquipSlot, gearScore } from '../src/learn/gearScore';
 import { MATH_RULES } from '../src/learn/mathQuestions';
 import { bankCount, clearBankCache, ensureBank, preloadLearnBanks, setBankImporterForTests } from '../src/learn/bank';
-import { LEARN_PACK_PAUSE_S, LearnEncounter } from '../src/learn/LearnEncounter';
+import {
+  ENEMY_SWING_S,
+  FIGHT_S,
+  HERO_HURT_FLASH_S,
+  HERO_HURT_SHAKE_S,
+  HURT_LAND_AT,
+  LEARN_PACK_PAUSE_S,
+  LEARN_WRONG_PAUSE_S,
+  LearnEncounter,
+  WRONG_S,
+} from '../src/learn/LearnEncounter';
 import { generateQuestions, questionsForEncounter } from '../src/learn/questions';
 import {
   GRADES,
@@ -56,9 +67,9 @@ assert.equal(GRADES.length, 8);
 assert.equal(SUBJECTS.length, 5);
 assert.equal(SUBJECTS[4]?.id, 'lasforstaelse');
 assert.equal(SUBJECTS[4]?.label, 'Läsförståelse');
-assert.equal(questionCount('boss'), 5);
-assert.equal(questionCount('champion'), 3);
-assert.equal(questionCount('normal'), 1);
+assert.equal(questionCount('boss'), 6);
+assert.equal(questionCount('champion'), 4);
+assert.equal(questionCount('normal'), 3);
 assert.equal(encounterKindOf({ boss: true, elite: 'champion' }), 'boss');
 assert.equal(encounterKindOf({ boss: false, elite: 'champion' }), 'champion');
 assert.equal(encounterKindOf({ boss: false, elite: 'minion' }), 'normal');
@@ -199,7 +210,7 @@ for (const grade of grades) {
 
 const bossA = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_ulvhild', grade: 'ak2', subject: 'matte', seed: 1 });
 const bossB = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_ulvhild', grade: 'ak2', subject: 'matte', seed: 999 });
-assert.equal(bossA.length, 5);
+assert.equal(bossA.length, 6);
 assert.deepEqual(bossA, bossB);
 for (const q of bossA) {
   assert.equal(isValidQuestion(q), true);
@@ -210,8 +221,8 @@ const otherBoss = questionsForEncounter({ kind: 'boss', monsterId: 'benkungen_va
 const otherGrade = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_ulvhild', grade: 'ak3', subject: 'matte', seed: 1 });
 assert.notDeepEqual(bossA, otherBoss);
 assert.notDeepEqual(bossA, otherGrade);
-assert.equal(questionsForEncounter({ kind: 'champion', monsterId: 'varg', grade: 'ak1', subject: 'svenska', seed: 3 }).length, 3);
-assert.equal(questionsForEncounter({ kind: 'normal', monsterId: 'varg', grade: 'ak1', subject: 'engelska', seed: 3 }).length, 1);
+assert.equal(questionsForEncounter({ kind: 'champion', monsterId: 'varg', grade: 'ak1', subject: 'svenska', seed: 3 }).length, 4);
+assert.equal(questionsForEncounter({ kind: 'normal', monsterId: 'varg', grade: 'ak1', subject: 'engelska', seed: 3 }).length, 3);
 
 assert.deepEqual(applyWrongAnswer(100, 100), { damage: 25, hp: 75, died: false });
 assert.deepEqual(applyWrongAnswer(20, 100), { damage: 25, hp: 0, died: true });
@@ -561,33 +572,48 @@ function startQuestion(pack: LearnPack, n: number, total: number): void {
 }
 
 assert.equal(LEARN_PACK_PAUSE_S, 0.5);
+assert.ok(LEARN_WRONG_PAUSE_S > LEARN_PACK_PAUSE_S);
+assert.ok(LEARN_WRONG_PAUSE_S >= 0.85 && LEARN_WRONG_PAUSE_S <= 1);
+assert.ok(FIGHT_S >= 1.1 && FIGHT_S <= 1.3);
+assert.ok(WRONG_S >= 2.6 && WRONG_S <= 2.9);
+assert.ok(WRONG_S > FIGHT_S * 1.8);
+assert.ok(WRONG_S > FIGHT_S + HERO_BOUNCE_S);
+assert.ok(HURT_LAND_AT >= 0.55 && HURT_LAND_AT <= 0.7);
+assert.ok(ENEMY_SWING_S >= 1.15 && ENEMY_SWING_S <= 1.35);
+assert.ok(ENEMY_SWING_S > HURT_LAND_AT, 'svingen pågår när träffen landar');
+assert.ok(HERO_HURT_SHAKE_S >= 0.55 && HERO_HURT_SHAKE_S <= 0.7);
+assert.ok(HERO_HURT_FLASH_S >= 1 && HERO_HURT_FLASH_S <= 1.2);
 
 const champ = makeLearn('champion');
 try {
-  startQuestion(champ, 1, 3);
+  const total = champ.questions.length;
+  assert.equal(total, 4);
+  startQuestion(champ, 1, total);
   champ.enc.answer(champ.questions[0]?.correctIndex ?? -1);
   assert.equal(quiz(champ.enc).hidden, true, 'rätt svar går till strid');
-  champ.enc.tick(1.3);
+  champ.enc.tick(FIGHT_S + 0.05);
   assert.equal(champ.enc.isQuestion(), false);
   assert.equal(champ.enc.busy(), true);
   assert.equal(champ.enc.blocksInput(), true, 'färdigheter är blockerade i pausen');
   assert.equal(champ.kills.length, 0);
   assert.equal(champ.monster.hp, 30);
   assert.equal(champ.monster.dead, 0);
-  champ.enc.tick(0.49);
-  assert.equal(champ.enc.isQuestion(), false, 'paus på 0,5 s är inte klar');
+  champ.enc.tick(LEARN_PACK_PAUSE_S - 0.01);
+  assert.equal(champ.enc.isQuestion(), false, 'paus efter rätt är inte klar');
   champ.enc.tick(0.02);
   assert.equal(champ.enc.isQuestion(), true);
-  assert.equal(quiz(champ.enc).progress, 'Fråga 2 av 3');
-  champ.enc.answer(champ.questions[1]?.correctIndex ?? -1);
-  champ.enc.tick(1.3);
-  assert.equal(champ.kills.length, 0);
-  champ.enc.tick(0.49);
-  assert.equal(quiz(champ.enc).hidden, true);
-  champ.enc.tick(0.02);
-  assert.equal(quiz(champ.enc).progress, 'Fråga 3 av 3');
-  champ.enc.answer(champ.questions[2]?.correctIndex ?? -1);
-  champ.enc.tick(1.3);
+  assert.equal(quiz(champ.enc).progress, `Fråga 2 av ${total}`);
+  for (let i = 1; i < total; i++) {
+    champ.enc.answer(champ.questions[i]?.correctIndex ?? -1);
+    champ.enc.tick(FIGHT_S + 0.05);
+    if (i < total - 1) {
+      assert.equal(champ.kills.length, 0);
+      champ.enc.tick(LEARN_PACK_PAUSE_S - 0.01);
+      assert.equal(quiz(champ.enc).hidden, true);
+      champ.enc.tick(0.02);
+      assert.equal(quiz(champ.enc).progress, `Fråga ${i + 2} av ${total}`);
+    }
+  }
   assert.equal(champ.kills.length, 1);
   assert.ok(champ.monster.dead > 0);
   assert.equal(champ.enc.busy(), false);
@@ -598,7 +624,9 @@ try {
 
 const wrong = makeLearn('champion');
 try {
-  startQuestion(wrong, 1, 3);
+  const total = wrong.questions.length;
+  assert.equal(total, 4);
+  startQuestion(wrong, 1, total);
   const bad = ((wrong.questions[0]?.correctIndex ?? 0) + 1) % 4;
   wrong.enc.answer(bad);
   assert.equal(quiz(wrong.enc).hidden, false);
@@ -608,29 +636,42 @@ try {
   assert.equal(wrongButtons[wrong.questions[0]?.correctIndex ?? -1]?.classList.contains('correct'), true);
   assert.equal(wrongButtons[bad]?.classList.contains('wrong'), true);
   assert.equal(wrong.hero.s.hp, 100, 'livet sjunker inte förrän slaget träffar');
+  assert.equal(wrong.monster.atk, ENEMY_SWING_S);
   assert.ok(wrong.swings.includes('attack'), 'monstret ska svinga');
-  assert.ok(wrong.heroTint.tint === 0xff2020 || wrong.heroTint.tint === 0xff7070, 'hjälten ska blinka rött');
+  assert.equal(wrong.heroTint.tint, 0xffffff, 'blinken börjar när träffen landar');
   assert.equal(wrong.floats.length, 0);
-  wrong.enc.tick(0.2);
+  const beforeLand = HURT_LAND_AT - 0.05;
+  wrong.enc.tick(beforeLand);
   assert.equal(wrong.hero.s.hp, 100);
-  wrong.enc.tick(0.05);
+  assert.ok(wrong.monster.atk > 0, 'svingen syns innan träffen');
+  assert.equal(quiz(wrong.enc).hidden, false, 'quiz synlig medan monstret svingar');
+  wrong.enc.tick(0.06);
   assert.equal(wrong.hero.s.hp, 75, 'skadan landar med träffen');
   assert.equal(
     wrong.floats.some((f) => f.kind === 'hurt' && f.text.startsWith('-')),
     true,
   );
+  assert.ok(wrong.heroTint.tint === 0xff2020 || wrong.heroTint.tint === 0xff7070, 'hjälten ska blinka rött');
   assert.equal(quiz(wrong.enc).hidden, false, 'feltexten ska synas medan slaget spelas');
+  assert.match(wrong.enc.overlaySettings.root.textContent ?? '', /Rätt svar var:/);
   assert.equal(wrong.enc.isQuestion(), false);
-  wrong.enc.tick(0.9);
+  const elapsed = beforeLand + 0.06;
+  const remain = WRONG_S - elapsed;
+  wrong.enc.tick(remain - 0.05);
+  assert.equal(quiz(wrong.enc).hidden, false, 'quiz synlig under hela fel-sekvensen');
+  assert.match(wrong.enc.overlaySettings.root.textContent ?? '', /Rätt svar var:/);
+  assert.equal(wrong.hero.s.hp, 75);
+  assert.equal(wrong.enc.isQuestion(), false);
+  wrong.enc.tick(0.06);
   assert.equal(wrong.hero.s.hp, 75);
   assert.equal(wrong.enc.isQuestion(), false);
   assert.equal(quiz(wrong.enc).hidden, true);
   assert.equal(wrong.kills.length, 0);
-  wrong.enc.tick(0.49);
-  assert.equal(wrong.enc.isQuestion(), false);
-  wrong.enc.tick(0.02);
+  wrong.enc.tick(LEARN_WRONG_PAUSE_S - 0.05);
+  assert.equal(wrong.enc.isQuestion(), false, 'fel-pausen är längre än rätt-pausen');
+  wrong.enc.tick(0.06);
   assert.equal(wrong.enc.isQuestion(), true);
-  assert.equal(quiz(wrong.enc).progress, 'Fråga 2 av 3');
+  assert.equal(quiz(wrong.enc).progress, `Fråga 2 av ${total}`);
   assert.equal(wrong.hero.s.hp, 75);
   assert.equal(wrong.position.x, 0);
 } finally {
@@ -639,15 +680,27 @@ try {
 
 const one = makeLearn('normal');
 try {
-  startQuestion(one, 1, 1);
-  one.enc.answer(one.questions[0]?.correctIndex ?? -1);
+  const total = one.questions.length;
+  assert.equal(total, 3);
+  startQuestion(one, 1, total);
+  for (let i = 0; i < total - 1; i++) {
+    one.enc.answer(one.questions[i]?.correctIndex ?? -1);
+    let guard = 0;
+    while (!one.enc.isQuestion() && guard < 80) {
+      one.enc.tick(0.05);
+      guard++;
+    }
+    assert.equal(one.kills.length, 0);
+    assert.equal(quiz(one.enc).progress, `Fråga ${i + 2} av ${total}`);
+  }
+  one.enc.answer(one.questions[total - 1]?.correctIndex ?? -1);
   let t = 0;
   while (one.kills.length === 0 && t < 3) {
     one.enc.tick(0.05);
     t += 0.05;
     assert.ok(Math.abs(one.position.x) < 5, `skak driver ${one.position.x}`);
   }
-  assert.ok(t > 1.1 && t < 1.45, `en fråga dödar efter striden (${t}s), utan extra paus`);
+  assert.ok(t > 1.1 && t < 1.45, `sista frågan dödar efter striden (${t}s), utan extra paus`);
   assert.equal(one.kills.length, 1);
   assert.equal(one.enc.busy(), false);
   assert.equal(one.position.x, 0, 'sprite-x återställs när striden tar slut');
@@ -657,7 +710,7 @@ try {
 
 const shake = makeLearn('champion');
 try {
-  startQuestion(shake, 1, 3);
+  startQuestion(shake, 1, shake.questions.length);
   shake.enc.answer(shake.questions[0]?.correctIndex ?? -1);
   let left = false;
   let back = false;
@@ -686,7 +739,7 @@ try {
 
 const gone = makeLearn('champion');
 try {
-  startQuestion(gone, 1, 3);
+  startQuestion(gone, 1, gone.questions.length);
   gone.enc.answer(gone.questions[0]?.correctIndex ?? -1);
   let moved = false;
   for (let i = 0; i < 40 && !moved; i++) {
@@ -704,7 +757,7 @@ try {
 
 const despawn = makeLearn('champion');
 try {
-  startQuestion(despawn, 1, 3);
+  startQuestion(despawn, 1, despawn.questions.length);
   despawn.enc.answer(despawn.questions[0]?.correctIndex ?? -1);
   let moved = false;
   for (let i = 0; i < 40 && !moved; i++) {
@@ -722,13 +775,13 @@ try {
 
 const between = makeLearn('champion');
 try {
-  startQuestion(between, 1, 3);
+  startQuestion(between, 1, between.questions.length);
   between.enc.answer(between.questions[0]?.correctIndex ?? -1);
   let sawNext = false;
   for (let i = 0; i < 250 && !sawNext; i++) {
     between.enc.tick(0.02);
     assert.ok(Math.abs(between.position.x) < 5, `skak driver ${between.position.x}`);
-    if (between.enc.isQuestion() && quiz(between.enc).progress === 'Fråga 2 av 3') {
+    if (between.enc.isQuestion() && quiz(between.enc).progress === `Fråga 2 av ${between.questions.length}`) {
       assert.equal(between.position.x, 0, 'ingen offset kvar mellan frågor');
       sawNext = true;
     }
@@ -743,7 +796,7 @@ const missed = makeLearn('normal');
 const starHits: StarFlyInfo[] = [];
 setStarFlyHandler((info) => starHits.push(info));
 try {
-  startQuestion(missed, 1, 1);
+  startQuestion(missed, 1, missed.questions.length);
   const q = missed.questions[0];
   assert.ok(q);
   missed.enc.answer((q.correctIndex + 1) % 4);
@@ -756,7 +809,7 @@ const cheered = makeLearn('normal');
 const viaEncounter: StarFlyInfo[] = [];
 cheered.enc.onCorrectCelebrate = (info) => viaEncounter.push(info);
 try {
-  startQuestion(cheered, 1, 1);
+  startQuestion(cheered, 1, cheered.questions.length);
   const q = cheered.questions[0];
   assert.ok(q);
   const bannersBefore = document.querySelectorAll('.rk-celebrate').length;
@@ -782,6 +835,17 @@ try {
   assert.equal(cheered.heroView.scale.x, 1);
   assert.equal(cheered.heroView.scale.y, 1);
   assert.equal(cheered.heroView.position.y, 0, 'studsen ska tillbaka');
+  assert.equal(cheered.kills.length, 0, 'första rätta svaret fäller inte');
+  for (let n = 1; n < cheered.questions.length; n++) {
+    let guard = 0;
+    while (!cheered.enc.isQuestion() && cheered.kills.length === 0 && guard < 40) {
+      cheered.enc.tick(0.05);
+      guard++;
+    }
+    assert.equal(quiz(cheered.enc).progress, `Fråga ${n + 1} av ${cheered.questions.length}`);
+    cheered.enc.answer(cheered.questions[n]?.correctIndex ?? -1);
+    cheered.enc.tick(FIGHT_S + 0.05);
+  }
   assert.equal(cheered.kills.length, 1, 'striden ska fortfarande fälla');
 } finally {
   setStarFlyHandler(null);

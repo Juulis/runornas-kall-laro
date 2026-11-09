@@ -17,20 +17,29 @@ import { loadRewards } from './rewards';
 import { recordLearnAnswer } from './rewardEvents';
 import { encounterKindOf, type LearnSettings } from './types';
 
-const FIGHT_S = 1.25;
+/** Rätt svar: kort glad hjälte-attack. */
+export const FIGHT_S = 1.25;
 const HIT_AT = [0.12, 0.48, 0.86];
-const WRONG_S = 1.1;
+/** Fel svar: långsammare så barnet hinner se sving, träff och liv. */
+export const WRONG_S = 2.75;
 /** Monstret hinner svinga innan träffen landar och livet sjunker. */
-const HURT_LAND_AT = 0.24;
-const ENEMY_SWING_S = 0.7;
-/** Andning mellan frågor i boss- och championpack. Vanlig strid med en fråga hoppar över den. */
+export const HURT_LAND_AT = 0.625;
+export const ENEMY_SWING_S = 1.25;
+/** Andning efter rätt svar, innan nästa fråga. */
 export const LEARN_PACK_PAUSE_S = 0.5;
+/** Längre andning efter fel så skadan hinns ses. */
+export const LEARN_WRONG_PAUSE_S = 0.9;
+/** Hur länge hjälten skakar när träffen landar. */
+export const HERO_HURT_SHAKE_S = 0.65;
+/** Mjuk röd blink efter träffen. Ingen blod, bara färgen. */
+export const HERO_HURT_FLASH_S = 1.1;
 
 type Phase = 'idle' | 'ask' | 'feedback' | 'fight' | 'pause';
 
 /**
- * Pausar när hjälten möter ett monster, visar en fråga och spelar sedan en kort strid.
- * Fel svar kostar en fjärdedel av maxlivet. Monstret dör när alla frågor är besvarade.
+ * Pausar när hjälten möter ett monster, visar frågor och spelar sedan striden.
+ * Fel svar kostar en fjärdedel av maxlivet och tar längre tid så träffen syns.
+ * Monstret dör när alla frågor är besvarade.
  * Träffarna i animationen är kosmetiska så att bossfaser inte triggas i förtid.
  */
 export class LearnEncounter {
@@ -63,6 +72,8 @@ export class LearnEncounter {
   private hurtResult: { hp: number; damage: number; died: boolean } | null = null;
   private heroFlash = 0;
   private heroShake = 0;
+  /** Paus innan nästa fråga. Längre när senaste svaret var fel. */
+  private packPause = LEARN_PACK_PAUSE_S;
   /** -1 = ingen studs. Annars sekunder sedan rätt svar. */
   private heroBounceT = -1;
   private heroBounceBaseY: number | null = null;
@@ -181,10 +192,12 @@ export class LearnEncounter {
       this.onCorrectCelebrate(info);
       this.overlay.hideQuiz();
       this.w().fb.flash(phrase, '#7dff9a');
+      this.packPause = LEARN_PACK_PAUSE_S;
       this.beginHeroBounce();
       this.beginFight();
       return;
     }
+    this.packPause = LEARN_WRONG_PAUSE_S;
     this.phase = 'feedback';
     this.timer = WRONG_S;
     this.hurtT = 0;
@@ -405,9 +418,9 @@ export class LearnEncounter {
     this.openNextQuestion();
   }
 
-  /** Monster svingar mot hjälten. Livet sjunker när slaget träffar, inte efter en tom paus. */
+  /** Monster svingar först. Liv, siffra och blink kommer när slaget träffar. */
   private beginWrongHurt(): void {
-    this.heroFlash = 0.85;
+    this.heroFlash = 0;
     this.heroShake = 0;
     const w = this.worldOrNull();
     const m = this.monster;
@@ -418,7 +431,6 @@ export class LearnEncounter {
       m.atk = ENEMY_SWING_S;
       m.view.play('attack', true);
     }
-    if (h) this.paintHeroHurt(h);
   }
 
   private tickWrongHurt(dt: number): void {
@@ -445,8 +457,8 @@ export class LearnEncounter {
   private landHurt(): void {
     if (this.hurtLanded) return;
     this.hurtLanded = true;
-    this.heroShake = Math.max(this.heroShake, 0.38);
-    this.heroFlash = Math.max(this.heroFlash, 0.45);
+    this.heroShake = Math.max(this.heroShake, HERO_HURT_SHAKE_S);
+    this.heroFlash = Math.max(this.heroFlash, HERO_HURT_FLASH_S);
     const w = this.w();
     const h = w.hero;
     const dealt = applyWrongAnswer(h.s.hp, h.stats.maxHp);
@@ -478,7 +490,7 @@ export class LearnEncounter {
     if (m) m.atk = 0;
   }
 
-  /** Pack: vänta en kort stund så nästa fråga inte kedjas direkt. */
+  /** Vänta innan nästa fråga. Längre efter fel så skadan hinns ses. */
   private openNextQuestion(): void {
     this.clearMonsterSwing();
     this.restoreHeroBounce();
@@ -489,7 +501,7 @@ export class LearnEncounter {
     this.index++;
     this.restoreShake();
     this.phase = 'pause';
-    this.timer = LEARN_PACK_PAUSE_S;
+    this.timer = this.packPause;
     this.overlay.hideQuiz();
     this.ai.paused = true;
   }
