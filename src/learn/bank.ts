@@ -236,6 +236,5 @@ export function nextBankQuestion(
     return { ...base, speakText: `${passage} ${row.fraga.trim()}`, speakLang: 'sv-SE', speakPrompt: false };
   }
   if (eng) return withSpeech(base, eng, 'en-US');
-  if (row.typ === 'rattstavning') return withSpeech(base, row.ratt, 'sv-SE');
   return base;
 }

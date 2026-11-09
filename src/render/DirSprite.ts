@@ -54,6 +54,12 @@ export class DirSprite extends Container {
     this.apply();
   }
 
+  /** Färgar kropp och paper-doll-lager så en blink syns även på riddaren. */
+  applyTint(color: number): void {
+    this.sprite.tint = color;
+    for (const sp of this.layerSprites) sp.tint = color;
+  }
+
   play(name: AnimName, restart = false): void {
     let n: AnimName = name;
     if (!this.set[n]) {

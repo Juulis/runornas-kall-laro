@@ -1300,7 +1300,7 @@ export class Game {
       } else v.playbackRate = 1;
     }
     v.update(dt);
-    v.sprite.tint = h.blocking || h.shieldDodge ? 0xa0c8ff : (CLASS_TINT[s.cls] ?? 0xffffff);
+    v.applyTint(h.blocking || h.shieldDodge ? 0xa0c8ff : (CLASS_TINT[s.cls] ?? 0xffffff));
     const sp = Iso.worldToScreen(h.pos.x, h.pos.y);
     v.position.set(sp.x, sp.y);
     v.zIndex = h.pos.x + h.pos.y;

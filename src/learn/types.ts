@@ -46,7 +46,7 @@ export interface LearnQuestion {
   grade: GradeId;
   rule: string;
   meta?: QuestionMeta;
-  /** Text som läses upp. Saknas: prompten, utom rättstavning som läser svaret. */
+  /** Text som läses upp. Saknas: prompten. Rättstavning läser bara prompten, aldrig ordet. */
   speakText?: string;
   speakLang?: SpeakLang;
   /** Emoji i samma ordning som choices. null om alternativet saknar bild. */

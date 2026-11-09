@@ -13,6 +13,15 @@ import type { DirSprite } from '../src/render/DirSprite';
 import { Loot } from '../src/logic/loot/Loot';
 import type { Affix } from '../src/logic/loot/types';
 import { Text } from '../src/text/Text';
+import { burstConfetti } from '../src/ui/Confetti';
+import {
+  CELEBRATE_PHRASES,
+  celebrateCorrect,
+  heroBounceFrame,
+  playHappyChime,
+  setStarFlyHandler,
+  type StarFlyInfo,
+} from '../src/learn/celebrate';
 import { applyWrongAnswer } from '../src/learn/damage';
 import { autoEquipItem, chooseAutoEquipSlot, gearScore } from '../src/learn/gearScore';
 import { MATH_RULES } from '../src/learn/mathQuestions';
@@ -259,13 +268,29 @@ assert.equal(autoEquipItem(L, low, armor), 'brost');
 assert.equal(low.inv.equip.brost?.base, 'laderharnesk');
 assert.equal(autoEquipItem(L, low, magic), 'vapen');
 assert.equal(low.inv.equip.vapen, magic);
-assert.ok(low.inv.bag.includes(plain));
+assert.equal(low.inv.bag.includes(plain), false, 'vanligt svärd som byts ut ska inte ligga kvar i väskan');
 
 const high = hero(6);
 assert.equal(high.inv.equipTo(plain, 'vapen'), true);
 assert.equal(autoEquipItem(L, high, long), 'vapen');
 assert.equal(high.inv.equip.vapen?.base, 'langsvard');
-assert.ok(high.inv.bag.some((it) => it.base === 'rostig_kortsvard'));
+assert.equal(
+  high.inv.bag.some((it) => it.base === 'rostig_kortsvard'),
+  false,
+);
+
+const keeper = hero(8);
+const legGloves = L.makeItem('tyghandskar', { quality: 'legendary', leg: 'okand_leg' });
+assert.equal(keeper.inv.equipTo(legGloves, 'handskar'), true);
+const betterGloves = L.makeItem('laderhandskar', { quality: 'magic' });
+assert.equal(autoEquipItem(L, keeper, betterGloves), 'handskar');
+assert.equal(keeper.inv.equip.handskar, betterGloves);
+assert.ok(keeper.inv.bag.includes(legGloves), 'undanträngt unikt ska till väskan');
+const junkHero = hero(8);
+const normalGloves = L.makeItem('tyghandskar');
+assert.equal(junkHero.inv.equipTo(normalGloves, 'handskar'), true);
+assert.equal(autoEquipItem(L, junkHero, L.makeItem('laderhandskar')), 'handskar');
+assert.equal(junkHero.inv.bag.includes(normalGloves), false);
 const weaker = L.makeItem('rostig_kortsvard');
 assert.equal(autoEquipItem(L, high, weaker), null);
 assert.equal(high.inv.equip.vapen?.base, 'langsvard');
@@ -349,7 +374,31 @@ function combatFixture(): { combat: CombatSystem; hero: Hero; monster: Monster; 
   return { combat, hero, monster, anims, box };
 }
 
+playHappyChime();
+burstConfetti(null, 4, 5);
+const earlyPhrases = [
+  celebrateCorrect({ x: 1, y: 2, starsHint: 3, parent: null }),
+  celebrateCorrect({ x: 1, y: 2, parent: null }),
+  celebrateCorrect({ x: 1, y: 2, parent: null }),
+];
+assert.deepEqual(earlyPhrases, [...CELEBRATE_PHRASES]);
+const hop = heroBounceFrame(0.25);
+assert.ok(hop.scale > 1 && hop.lift > 0);
+assert.equal(heroBounceFrame(0).scale, 1);
+assert.equal(heroBounceFrame(0).lift, 0);
+assert.equal(heroBounceFrame(1).lift, 0);
+const directStars: StarFlyInfo[] = [];
+setStarFlyHandler((info) => directStars.push(info));
+celebrateCorrect({ x: 8, y: 9, starsHint: 2, parent: null });
+assert.deepEqual(directStars, [{ x: 8, y: 9, starsHint: 2 }]);
+setStarFlyHandler(null);
+celebrateCorrect({ x: 0, y: 0, parent: null });
+assert.equal(directStars.length, 1);
+
 installDom();
+
+playHappyChime();
+burstConfetti(null, 0, 0);
 
 const fight = combatFixture();
 assert.equal(fight.combat.suppressHeroMonsterDamage, true);
@@ -407,10 +456,15 @@ interface LearnPack {
   kills: Monster[];
   questions: LearnQuestion[];
   position: { x: number };
+  swings: string[];
+  floats: { text: string; kind: string }[];
+  heroTint: { tint: number };
+  heroView: { position: { x: number; y: number }; scale: { x: number; y: number } };
 }
 
 function makeLearn(kind: EncounterKind): LearnPack {
   const position = { x: 0 };
+  const swings: string[] = [];
   const monster = {
     id: 'varg',
     boss: kind === 'boss',
@@ -419,11 +473,21 @@ function makeLearn(kind: EncounterKind): LearnPack {
     hp: 30,
     max: 30,
     active: true,
+    atk: 0,
     pos: { x: 0, y: 1 },
     flash: 0,
     def: { attack_range: 1.6, name: 'Varg' },
-    view: { position, height2: 40, sprite: { alpha: 1 }, play() {} },
+    view: {
+      position,
+      height2: 40,
+      sprite: { alpha: 1 },
+      play(name: string) {
+        swings.push(name);
+      },
+    },
   } as unknown as Monster;
+  const heroTint = { tint: 0xffffff };
+  const heroView = { position: { x: 0, y: 0 }, scale: { x: 1, y: 1 } };
   const hero = {
     pos: { x: 0, y: 0 },
     moveTarget: null as { x: number; y: number } | null,
@@ -431,18 +495,33 @@ function makeLearn(kind: EncounterKind): LearnPack {
     atkT: 0,
     stats: { reach: 2.2, maxHp: 100, dmgMin: 4, dmgMax: 8 },
     s: { playing: true, hp: 100, facing: 0, maxHp: 100 },
-    view: { playbackRate: 1, play() {} },
+    view: {
+      playbackRate: 1,
+      sprite: heroTint,
+      position: heroView.position,
+      scale: heroView.scale,
+      play() {},
+      applyTint(color: number) {
+        heroTint.tint = color;
+      },
+    },
     clearAttack() {
       this.atkPendingHit = false;
       this.atkT = 0;
     },
   };
   const monsters = [monster];
+  const floats: { text: string; kind: string }[] = [];
   const world = {
     hero,
     monsters,
     rng: { next: () => RNG_NEXT },
-    fb: { flash() {}, float() {} },
+    fb: {
+      flash() {},
+      float(_p: unknown, text: string, kind: string) {
+        floats.push({ text, kind });
+      },
+    },
   };
   const kills: Monster[] = [];
   const combat = {
@@ -464,7 +543,7 @@ function makeLearn(kind: EncounterKind): LearnPack {
     () => undefined,
   );
   const questions = questionsForEncounter({ kind, monsterId: 'varg', grade: 'ak1', subject: 'matte', seed: LEARN_SEED });
-  return { enc, monster, monsters, hero, kills, questions, position };
+  return { enc, monster, monsters, hero, kills, questions, position, swings, floats, heroTint, heroView };
 }
 
 function quiz(enc: LearnEncounter): { hidden: boolean; progress: string } {
@@ -523,11 +602,26 @@ try {
   const bad = ((wrong.questions[0]?.correctIndex ?? 0) + 1) % 4;
   wrong.enc.answer(bad);
   assert.equal(quiz(wrong.enc).hidden, false);
+  assert.match(wrong.enc.overlaySettings.root.textContent ?? '', /Rätt svar var:/);
+  assert.equal(wrong.enc.overlaySettings.root.querySelector('.rk-q-choices')?.classList.contains('hidden'), false);
+  const wrongButtons = wrong.enc.overlaySettings.root.querySelectorAll('.rk-q-choices button');
+  assert.equal(wrongButtons[wrong.questions[0]?.correctIndex ?? -1]?.classList.contains('correct'), true);
+  assert.equal(wrongButtons[bad]?.classList.contains('wrong'), true);
+  assert.equal(wrong.hero.s.hp, 100, 'livet sjunker inte förrän slaget träffar');
+  assert.ok(wrong.swings.includes('attack'), 'monstret ska svinga');
+  assert.ok(wrong.heroTint.tint === 0xff2020 || wrong.heroTint.tint === 0xff7070, 'hjälten ska blinka rött');
+  assert.equal(wrong.floats.length, 0);
+  wrong.enc.tick(0.2);
   assert.equal(wrong.hero.s.hp, 100);
-  wrong.enc.tick(1.09);
-  assert.equal(wrong.hero.s.hp, 100, 'skadan kommer efter fel-feedback');
+  wrong.enc.tick(0.05);
+  assert.equal(wrong.hero.s.hp, 75, 'skadan landar med träffen');
+  assert.equal(
+    wrong.floats.some((f) => f.kind === 'hurt' && f.text.startsWith('-')),
+    true,
+  );
+  assert.equal(quiz(wrong.enc).hidden, false, 'feltexten ska synas medan slaget spelas');
   assert.equal(wrong.enc.isQuestion(), false);
-  wrong.enc.tick(0.02);
+  wrong.enc.tick(0.9);
   assert.equal(wrong.hero.s.hp, 75);
   assert.equal(wrong.enc.isQuestion(), false);
   assert.equal(quiz(wrong.enc).hidden, true);
@@ -643,6 +737,55 @@ try {
   assert.equal(between.kills.length, 0);
 } finally {
   between.enc.dispose();
+}
+
+const missed = makeLearn('normal');
+const starHits: StarFlyInfo[] = [];
+setStarFlyHandler((info) => starHits.push(info));
+try {
+  startQuestion(missed, 1, 1);
+  const q = missed.questions[0];
+  assert.ok(q);
+  missed.enc.answer((q.correctIndex + 1) % 4);
+  assert.equal(starHits.length, 0, 'fel svar ska inte skicka stjärnor');
+} finally {
+  missed.enc.dispose();
+}
+
+const cheered = makeLearn('normal');
+const viaEncounter: StarFlyInfo[] = [];
+cheered.enc.onCorrectCelebrate = (info) => viaEncounter.push(info);
+try {
+  startQuestion(cheered, 1, 1);
+  const q = cheered.questions[0];
+  assert.ok(q);
+  const bannersBefore = document.querySelectorAll('.rk-celebrate').length;
+  const confettiBefore = document.querySelectorAll('.rk-confetti').length;
+  cheered.enc.answer(q.correctIndex);
+  assert.equal(quiz(cheered.enc).hidden, true, 'rätt svar går fortfarande till strid');
+  assert.equal(starHits.length, 1);
+  assert.equal(viaEncounter.length, 1);
+  assert.equal(typeof starHits[0]?.x, 'number');
+  assert.equal(typeof starHits[0]?.y, 'number');
+  assert.equal(starHits[0]?.starsHint, 1);
+  assert.deepEqual(viaEncounter[0], starHits[0]);
+  const banners = [...document.querySelectorAll('.rk-celebrate')];
+  assert.equal(banners.length, bannersBefore + 1);
+  const banner = banners[banners.length - 1];
+  assert.ok(banner instanceof HTMLElement);
+  assert.ok(CELEBRATE_PHRASES.includes(banner.textContent as (typeof CELEBRATE_PHRASES)[number]));
+  assert.equal(document.querySelectorAll('.rk-confetti').length, confettiBefore + 1);
+  cheered.enc.tick(0.2);
+  assert.ok(cheered.heroView.scale.y > 1, 'hjälten ska studsa');
+  assert.ok(cheered.heroView.position.y < 0);
+  for (let i = 0; i < 30; i++) cheered.enc.tick(0.05);
+  assert.equal(cheered.heroView.scale.x, 1);
+  assert.equal(cheered.heroView.scale.y, 1);
+  assert.equal(cheered.heroView.position.y, 0, 'studsen ska tillbaka');
+  assert.equal(cheered.kills.length, 1, 'striden ska fortfarande fälla');
+} finally {
+  setStarFlyHandler(null);
+  cheered.enc.dispose();
 }
 
 console.log('learn encounter ok');

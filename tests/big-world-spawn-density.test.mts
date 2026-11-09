@@ -15,7 +15,10 @@ assert.equal(start.spawns.length, 0, 'startskogen-chunk ska inte få genererade 
 
 const gamla = DATA.varldStor.regioner.find((r) => r.id === 'gamla_byn');
 assert.ok(gamla);
+const near = mellanmarkSpawnCountRange(0);
+assert.deepEqual(near, [1, 3], 'mellanmarken ska vara tätare än det gamla [0, 2]');
 const gamlaBudget = (gamla.tathet as { monster_per_game?: number })?.monster_per_game ?? 2;
+assert.ok(gamlaBudget >= 40, `namngivna regioner ska vara tätare (${gamlaBudget})`);
 let gamlaSpawns = 0;
 for (let dx = -gamla.radie; dx <= gamla.radie; dx++) {
   for (let dy = -gamla.radie; dy <= gamla.radie; dy++) {

@@ -4,6 +4,7 @@ import type { FoundRegistry } from '../core/SaveBackend';
 import type { AssetStore } from '../render/Assets';
 import { Iso } from '../render/Iso';
 import { autoEquipItem } from '../learn/gearScore';
+import { shouldKeepInInventory } from '../logic/inventoryDiscard';
 import type { Drop, Item } from '../logic/loot/types';
 import type { GroundDrop, World } from './World';
 
@@ -76,7 +77,8 @@ export class LootSystem {
   }
 
   /**
-   * Plockar upp droppar direkt. Bättre utrustning tas på (gamla läggs i väskan).
+   * Plockar upp droppar direkt. Bättre utrustning tas på.
+   * Bara unika, set och legendaries läggs i väskan. Annat som inte tas på slängs.
    * Returnerar namn på det som togs på, så anroparen kan visa toasten efter nivå-upp.
    */
   grantAuto(drops: Drop[]): string[] {
@@ -100,6 +102,7 @@ export class LootSystem {
         w.bus.emit('pickup', { itemId: foundId, first: false, quality: it.quality });
         continue;
       }
+      if (!shouldKeepInInventory(it)) continue;
       if (h.inv.add(it)) {
         w.bus.emit('pickup', { itemId: foundId, first: false, quality: it.quality });
         continue;

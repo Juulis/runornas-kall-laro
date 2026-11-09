@@ -1,5 +1,5 @@
 import { readAloudOf } from '../learn/settings';
-import { questionUtterance, speak, cancel } from '../learn/speech';
+import { answerSpeech, choiceSpeech, questionUtterance, speak, cancel } from '../learn/speech';
 import type { LearnQuestion, LearnSettings } from '../learn/types';
 import { buildLearnFields, setLearnFieldValues } from './learnDom';
 
@@ -38,7 +38,18 @@ const CSS = `
 .rk-q-choices button{font-size:clamp(22px,3vw,32px);padding:14px 16px;width:100%;border-radius:14px;border:3px solid #6b5a3e;background:#2a231c;color:#fff8e8;cursor:pointer;text-align:left}
 .rk-q-card.forskola .rk-q-choices button{font-size:clamp(30px,4.4vw,46px);padding:20px 18px;border-radius:18px;border-width:4px}
 .rk-q-choices button:hover:not(:disabled){border-color:#e0b060}
+.rk-q-choices button.selected{border-color:#ffe08a;background:#5a4320;color:#fff;box-shadow:0 0 0 4px #e0b060;transform:scale(1.04)}
+.rk-q-card.forskola .rk-q-choices button.selected{border-width:6px;padding:24px 20px;font-size:clamp(34px,5vw,52px)}
+.rk-q-choices button.correct{border-color:#178a38;background:#2fbf55;color:#fff;box-shadow:0 0 0 6px #b6ff9c;transform:scale(1.08);opacity:1}
+.rk-q-choices button.wrong{border-color:#c62828;background:#8f2d24;color:#fff8f6;box-shadow:0 0 0 5px #ffb0a4;opacity:1}
 .rk-q-choices button:disabled{opacity:.55;cursor:default}
+.rk-q-choices button.correct:disabled,.rk-q-choices button.wrong:disabled{opacity:1;cursor:default}
+.rk-q-card.forskola .rk-q-choices button.correct{border-width:7px;font-size:clamp(36px,5.2vw,56px);padding:22px 18px}
+.rk-q-submit{display:block;width:100%;margin-top:18px;font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:.06em;padding:18px 16px;border-radius:18px;border:4px solid #6a5a40;background:#2c261e;color:#b5a48c;cursor:pointer}
+.rk-q-submit:disabled{opacity:.5;cursor:default}
+.rk-q-submit:not(:disabled){background:#2f6b3a;border-color:#8dff9a;color:#fff8e8}
+.rk-q-card.forskola .rk-q-submit{font-size:clamp(40px,6vw,64px);padding:26px 18px;min-height:96px;border-width:5px;border-radius:22px}
+.rk-q-choices.hidden,.rk-q-submit.hidden,.rk-q-feedback.hidden{display:none}
 .rk-q-feedback{font-size:clamp(22px,3vw,32px);margin-top:8px}
 .rk-q-card.forskola .rk-q-feedback{font-size:clamp(28px,4vw,40px)}
 .rk-q-feedback.bad{color:#ffb089}
@@ -58,12 +69,12 @@ export class LearnOverlay {
   private readonly choiceRow: HTMLDivElement;
   private readonly speakBtn: HTMLButtonElement;
   private readonly choices: HTMLButtonElement[] = [];
+  private readonly submitBtn: HTMLButtonElement;
   private readonly settingsPanel: HTMLDivElement;
   private readonly fields: HTMLDivElement;
   private settings: LearnSettings;
   private current: LearnQuestion | null = null;
-  private pressTimer: ReturnType<typeof setTimeout> | null = null;
-  private suppressClick = false;
+  private selectedIndex = -1;
   onAnswer: (index: number) => void = () => undefined;
   onToggleSettings: () => void = () => undefined;
   onSettings: (settings: LearnSettings) => void = () => undefined;
@@ -140,16 +151,26 @@ export class LearnOverlay {
       this.choices.push(btn);
       this.choiceRow.append(btn);
     }
+    this.submitBtn = document.createElement('button');
+    this.submitBtn.type = 'button';
+    this.submitBtn.className = 'rk-q-submit';
+    this.submitBtn.textContent = 'SVARA';
+    this.submitBtn.disabled = true;
+    this.submitBtn.addEventListener('click', () => {
+      if (this.submitBtn.disabled || this.selectedIndex < 0) return;
+      const index = this.selectedIndex;
+      this.disableChoices();
+      this.onAnswer(index);
+    });
     this.feedback = document.createElement('div');
     this.feedback.className = 'rk-q-feedback bad hidden';
-    this.card.append(this.progress, this.passage, head, this.engWord, this.choiceRow, this.feedback);
+    this.card.append(this.progress, this.passage, head, this.engWord, this.choiceRow, this.submitBtn, this.feedback);
     this.quiz.append(this.card);
     this.root.append(levelBtn, this.settingsPanel, this.quiz);
     document.body.append(this.root);
   }
 
   dispose(): void {
-    this.clearPress();
     cancel();
     this.root.remove();
     this.style.remove();
@@ -165,8 +186,8 @@ export class LearnOverlay {
   }
 
   showQuestion(q: LearnQuestion, index: number, total: number): void {
-    this.clearPress();
     this.current = q;
+    this.selectedIndex = -1;
     this.root.classList.add('quiz-open');
     this.quiz.classList.remove('hidden');
     this.card.classList.toggle('forskola', q.grade === 'forskola');
@@ -181,6 +202,8 @@ export class LearnOverlay {
     this.feedback.textContent = '';
     this.feedback.classList.add('hidden');
     this.choiceRow.classList.remove('hidden');
+    this.submitBtn.classList.remove('hidden');
+    this.submitBtn.disabled = true;
     const showSpeaker = q.grade === 'forskola' || readAloudOf(this.settings);
     this.speakBtn.hidden = !showSpeaker;
     q.choices.forEach((choice, i) => {
@@ -188,25 +211,46 @@ export class LearnOverlay {
       if (!btn) return;
       btn.textContent = choice;
       btn.disabled = false;
+      btn.classList.remove('selected', 'correct', 'wrong');
+      btn.setAttribute('aria-pressed', 'false');
     });
     if (readAloudOf(this.settings)) this.readQuestion(q);
   }
 
-  showWrong(answer: string): void {
+  /** Fel svar: valen stannar kvar, rätt alternativ blir grönt, och svaret läses upp (inte vid rättstavning). */
+  showWrong(q: LearnQuestion, chosenIndex: number): void {
     this.disableChoices();
-    this.choiceRow.classList.add('hidden');
     this.feedback.classList.remove('hidden');
-    this.feedback.textContent = `Rätt svar var: ${answer}`;
+    this.feedback.textContent = `Rätt svar var: ${q.answer}`;
+    this.choices.forEach((btn, i) => {
+      const correct = i === q.correctIndex;
+      btn.classList.toggle('correct', correct);
+      btn.classList.toggle('wrong', i === chosenIndex && !correct);
+      btn.classList.remove('selected');
+    });
+    const uttered = answerSpeech(q);
+    if (uttered) speak(uttered.text, uttered.lang);
+  }
+
+  /** Punkt nära frågekortet, så en senare stjärna kan flyga därifrån. */
+  celebratePoint(): { x: number; y: number } {
+    const rect = this.card.getBoundingClientRect();
+    if (rect.width > 0 || rect.height > 0) return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    const w = typeof window === 'undefined' ? 0 : window.innerWidth;
+    const h = typeof window === 'undefined' ? 0 : window.innerHeight;
+    if (w > 0 || h > 0) return { x: w / 2, y: h * 0.4 };
+    return { x: 0, y: 0 };
   }
 
   disableChoices(): void {
     for (const btn of this.choices) btn.disabled = true;
+    this.submitBtn.disabled = true;
   }
 
   hideQuiz(): void {
-    this.clearPress();
     cancel();
     this.current = null;
+    this.selectedIndex = -1;
     this.quiz.classList.add('hidden');
     this.root.classList.remove('quiz-open');
   }
@@ -216,48 +260,27 @@ export class LearnOverlay {
     speak(uttered.text, uttered.lang);
   }
 
-  private speakChoice(index: number): void {
+  private selectChoice(index: number): void {
+    const btn = this.choices[index];
+    if (!btn || btn.disabled) return;
+    this.selectedIndex = index;
+    this.choices.forEach((choice, i) => {
+      const on = i === index;
+      choice.classList.toggle('selected', on);
+      choice.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    this.submitBtn.disabled = false;
     const q = this.current;
-    if (!q || (q.grade !== 'forskola' && !readAloudOf(this.settings))) return;
-    const choice = q.choices[index];
-    if (!choice) return;
-    const emoji = q.choiceEmojis?.[index];
-    const text = emoji && choice.startsWith(emoji) ? choice.slice(emoji.length).trim() : choice;
-    if (!text) return;
-    speak(text, 'sv-SE');
+    if (!q) return;
+    const uttered = choiceSpeech(q, index);
+    if (uttered) speak(uttered.text, uttered.lang);
   }
 
   private bindChoice(btn: HTMLButtonElement, index: number): void {
-    btn.addEventListener('pointerenter', (ev) => {
-      if (ev.pointerType === 'touch') return;
-      this.speakChoice(index);
-    });
-    btn.addEventListener('pointerdown', () => {
-      this.clearPress();
-      this.suppressClick = false;
-      this.pressTimer = setTimeout(() => {
-        this.suppressClick = true;
-        this.speakChoice(index);
-      }, 450);
-    });
-    const end = (): void => this.clearPress();
-    btn.addEventListener('pointerup', end);
-    btn.addEventListener('pointerleave', end);
-    btn.addEventListener('pointercancel', end);
+    btn.setAttribute('aria-pressed', 'false');
     btn.addEventListener('click', () => {
-      if (this.suppressClick) {
-        this.suppressClick = false;
-        return;
-      }
       if (btn.disabled) return;
-      this.disableChoices();
-      this.onAnswer(index);
+      this.selectChoice(index);
     });
-  }
-
-  private clearPress(): void {
-    if (this.pressTimer === null) return;
-    clearTimeout(this.pressTimer);
-    this.pressTimer = null;
   }
 }

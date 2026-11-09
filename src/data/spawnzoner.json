@@ -38,8 +38,8 @@
             -22
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -80,8 +80,8 @@
             4
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -113,8 +113,8 @@
             28
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -146,8 +146,8 @@
             32
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -179,8 +179,8 @@
             22
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -212,8 +212,8 @@
             -2
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -254,8 +254,8 @@
             -26
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -287,8 +287,8 @@
             -34
           ],
           "groups": [
-            1,
-            2
+            2,
+            3
           ],
           "group_size": [
             1,
@@ -352,8 +352,8 @@
       "runes_rule": "Skogen genereras en gång per game. Vid tredje runan läggs en engångsgrupp skuggvargar vid två slumpade inaktiva punkter (samma seed).",
       "session_roll": {
         "active_spawn_points": [
-          3,
-          7
+          6,
+          8
         ],
         "groups_per_point": "se spawn_points[].groups",
         "monsters_per_group": [
@@ -370,16 +370,16 @@
         },
         "rolled": "en gång per game med hash(game_seed, area_id)",
         "expected_monsters_per_game": {
-          "p5": 7,
-          "medel": 14,
-          "p95": 23,
-          "note": "exklusive boss och unika minions. Simulerat med kodens algoritm (SpawnSystem.roll, spel/design/verktyg/rung_sim.py, 200 000 games): medel 14,2, p5 7, p95 23 med 3 till 7 aktiva punkter. Rungläntan (chunk [1, 1]) har 14 monster per game, samma tal som bana1_stor.json delomraden.runglantan.monster_per_game. Ersätter det tidigare snittet 17, som enligt samma simulering egentligen gav 18,5 (5 till 8 punkter)."
+          "p5": 25,
+          "medel": 34,
+          "p95": 43,
+          "note": "Inklusive sällsynta unika och deras följe, exklusive en eventuell boss. Simulerat med SpawnSystem.roll (4 000 games): medel 33,7, p5 25, p95 43 med 6 till 8 aktiva punkter och 2 till 3 grupper per punkt. Ungefär 2,4 gånger det tidigare medlet 14,2 (3 till 7 punkter, 1 till 2 grupper)."
         },
         "groups_total": [
-          3,
-          14
+          12,
+          24
         ],
-        "active_spawn_points_beslut": "Designens 3 till 7 aktiva punkter gäller och ersätter kodens 5 till 8 (src/data spawnzoner, SpawnSystem). Koden ska ändras till [3, 7]. Simulering: spel/design/verktyg/rung_sim.py (medel 14,2 monster per game, p5 7, p95 23)."
+        "active_spawn_points_beslut": "6 till 8 av 8 punkter, och 2 till 3 grupper per punkt, ger ungefär 2 till 3 gånger den tidigare tätheten (medel 14,2). Simulering med SpawnSystem.roll, 4 000 games: medel 33,7, p5 25, p95 43."
       },
       "recommended_hero_level": [
         1,
