@@ -1,7 +1,9 @@
+import { isHardQuestion } from '../learn/hardQuestion';
 import { readAloudOf } from '../learn/settings';
 import { answerSpeech, choiceSpeech, questionUtterance, speak, cancel } from '../learn/speech';
 import type { LearnQuestion, LearnSettings } from '../learn/types';
 import { buildLearnFields, setLearnFieldValues } from './learnDom';
+import { Scratchpad } from './Scratchpad';
 
 const CSS = `
 #rk-learn-level{position:fixed;left:14px;top:12px;z-index:16;font:18px Cinzel,serif;padding:8px 14px;border-radius:12px;border:2px solid #c7a35a;background:#1a1612;color:#efe7d2;cursor:pointer}
@@ -17,6 +19,7 @@ const CSS = `
 #rk-learn-settings .learn-links button:hover{border-color:#c7a35a;color:#efe7d2}
 #rk-learn-settings .learn-links button:focus-visible{outline:3px solid #c7a35a;outline-offset:2px}
 #rk-learn-quiz{position:fixed;inset:0;z-index:35;display:flex;align-items:center;justify-content:center;background:rgba(12,8,6,.72);padding:24px}
+#rk-learn-quiz.rk-with-scratch{align-items:flex-start;overflow:auto}
 #rk-learn-quiz.hidden,#rk-learn-settings.hidden{display:none}
 #rk-learn.quiz-open #rk-learn-level,#rk-learn.quiz-open #rk-learn-settings{display:none}
 .rk-q-card{width:min(640px,100%);background:#1c1612;border:4px solid #c7a35a;border-radius:18px;padding:28px 24px;box-shadow:0 12px 40px #000}
@@ -53,6 +56,14 @@ const CSS = `
 .rk-q-feedback{font-size:clamp(22px,3vw,32px);margin-top:8px}
 .rk-q-card.forskola .rk-q-feedback{font-size:clamp(28px,4vw,40px)}
 .rk-q-feedback.bad{color:#ffb089}
+.rk-q-layout{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;min-width:0;box-sizing:border-box}
+.rk-q-layout>.rk-q-card{min-width:0}
+.rk-q-layout>.rk-scratch{flex:0 0 280px;width:280px;max-width:100%}
+@media (max-width:1000px){
+  #rk-learn-quiz.rk-with-scratch{padding:12px}
+  .rk-q-layout{flex-direction:column;align-items:center}
+  .rk-q-layout>.rk-scratch{flex:0 0 auto;width:min(640px,100%);max-width:640px}
+}
 `;
 
 /** Frågeruta och nivåknapp. Ingen innerHTML: allt sätts med textContent. */
@@ -60,7 +71,9 @@ export class LearnOverlay {
   readonly root: HTMLDivElement;
   private readonly style: HTMLStyleElement;
   private readonly quiz: HTMLDivElement;
+  private readonly layout: HTMLDivElement;
   private readonly card: HTMLDivElement;
+  private readonly scratch: Scratchpad;
   private readonly progress: HTMLDivElement;
   private readonly passage: HTMLDivElement;
   private readonly prompt: HTMLDivElement;
@@ -165,13 +178,19 @@ export class LearnOverlay {
     this.feedback = document.createElement('div');
     this.feedback.className = 'rk-q-feedback bad hidden';
     this.card.append(this.progress, this.passage, head, this.engWord, this.choiceRow, this.submitBtn, this.feedback);
-    this.quiz.append(this.card);
+    this.layout = document.createElement('div');
+    this.layout.className = 'rk-q-layout';
+    this.scratch = new Scratchpad();
+    this.scratch.setVisible(false);
+    this.layout.append(this.card, this.scratch.root);
+    this.quiz.append(this.layout);
     this.root.append(levelBtn, this.settingsPanel, this.quiz);
     document.body.append(this.root);
   }
 
   dispose(): void {
     cancel();
+    this.scratch.dispose();
     this.root.remove();
     this.style.remove();
   }
@@ -215,6 +234,10 @@ export class LearnOverlay {
       btn.setAttribute('aria-pressed', 'false');
     });
     if (readAloudOf(this.settings)) this.readQuestion(q);
+    const hard = isHardQuestion(q);
+    this.scratch.clear();
+    this.scratch.setVisible(hard);
+    this.quiz.classList.toggle('rk-with-scratch', hard);
   }
 
   /** Fel svar: valen stannar kvar, rätt alternativ blir grönt, och svaret läses upp (inte vid rättstavning). */
