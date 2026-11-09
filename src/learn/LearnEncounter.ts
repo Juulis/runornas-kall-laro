@@ -1,11 +1,19 @@
 import type { Monster } from '../entities/Monster';
 import type { Hero } from '../entities/Hero';
+import type { KeyValueStore } from '../core/storage';
+import { LocalStore, MemoryStore } from '../core/storage';
 import type { CombatSystem } from '../systems/CombatSystem';
 import type { MonsterAI } from '../systems/MonsterAI';
 import type { World } from '../systems/World';
 import { LearnOverlay } from '../ui/LearnOverlay';
+import { ParentView } from '../ui/ParentView';
+import { RewardHud } from '../ui/RewardHud';
+import { RewardToast } from '../ui/RewardToast';
+import { StickerAlbum } from '../ui/StickerAlbum';
 import { applyWrongAnswer } from './damage';
 import { questionsForEncounter } from './questions';
+import { loadRewards } from './rewards';
+import { recordLearnAnswer } from './rewardEvents';
 import { encounterKindOf, type LearnSettings } from './types';
 
 const FIGHT_S = 1.25;
@@ -35,6 +43,17 @@ export class LearnEncounter {
   private shake = 0;
   /** Sprite-x före skak. Sätts vid första skak och används som position.x = bas + offset. */
   private shakeBaseX: number | null = null;
+  private readonly store: KeyValueStore;
+  private readonly hud: RewardHud;
+  private readonly toast: RewardToast;
+  private album: StickerAlbum | null = null;
+  private parentView: ParentView | null = null;
+  private albumOpen = false;
+  private parentOpen = false;
+  /** performance.now() när frågan visades. */
+  private shownAt = 0;
+  /** Rätt i det pågående mötet. Champion och boss räknas på sista frågan. */
+  private encounterCorrect = 0;
 
   constructor(
     private readonly w: () => World,
@@ -48,6 +67,16 @@ export class LearnEncounter {
     this.overlay = new LearnOverlay(initial);
     this.overlay.onAnswer = (i) => this.answer(i);
     this.overlay.onToggleSettings = () => this.toggleSettings();
+    this.store = browserStore();
+    this.hud = new RewardHud(this.overlay.root);
+    this.toast = new RewardToast();
+    this.overlay.onOpenAlbum = () => this.openAlbum();
+    this.overlay.onOpenParent = () => this.openParent();
+    try {
+      this.hud.render(loadRewards(this.store));
+    } catch (err) {
+      console.warn('Belöningar kunde inte läsas', err);
+    }
   }
 
   get overlaySettings(): LearnOverlay {
@@ -55,7 +84,13 @@ export class LearnEncounter {
   }
 
   dispose(): void {
+    this.albumOpen = false;
+    this.parentOpen = false;
     this.cancel();
+    this.album?.dispose();
+    this.parentView?.dispose();
+    this.toast.dispose();
+    this.hud.dispose();
     this.overlay.dispose();
   }
 
@@ -69,7 +104,7 @@ export class LearnEncounter {
   }
 
   blocksMovement(): boolean {
-    return this.busy() || this.settingsOpen;
+    return this.busy() || this.settingsOpen || this.albumOpen || this.parentOpen;
   }
 
   blocksInput(): boolean {
@@ -82,6 +117,14 @@ export class LearnEncounter {
 
   toggleSettings(): void {
     if (this.busy()) return;
+    if (this.parentView?.isOpen()) {
+      this.parentView.close();
+      return;
+    }
+    if (this.album?.isOpen()) {
+      this.album.close();
+      return;
+    }
     this.settingsOpen = !this.settingsOpen;
     this.overlay.setSettingsOpen(this.settingsOpen);
     this.ai.paused = this.blocksMovement();
@@ -108,7 +151,9 @@ export class LearnEncounter {
     if (this.phase !== 'ask') return;
     const q = this.questions[this.index];
     if (!q || choice < 0 || choice > 3) return;
-    if (choice === q.correctIndex) {
+    const correct = choice === q.correctIndex;
+    this.noteAnswer(q, correct);
+    if (correct) {
       this.overlay.hideQuiz();
       this.w().fb.flash('Rätt!', '#7dff9a');
       this.beginFight();
@@ -143,7 +188,7 @@ export class LearnEncounter {
   }
 
   private tryStart(): void {
-    if (this.phase !== 'idle' || this.settingsOpen || this.blocked()) return;
+    if (this.blocksMovement() || this.blocked()) return;
     const w = this.w();
     const h = w.hero;
     if (!h.s.playing) return;
@@ -179,6 +224,7 @@ export class LearnEncounter {
     this.monster = m;
     this.questions = questions;
     this.index = 0;
+    this.encounterCorrect = 0;
     w.hero.moveTarget = null;
     w.hero.clearAttack();
     this.face();
@@ -192,8 +238,89 @@ export class LearnEncounter {
       return;
     }
     this.phase = 'ask';
+    this.shownAt = this.clockMs();
     this.overlay.showQuestion(q, this.index, this.questions.length);
     this.ai.paused = true;
+  }
+
+  private noteAnswer(q: (typeof this.questions)[number], correct: boolean): void {
+    try {
+      const durationMs = Math.max(0, Math.round(this.clockMs() - this.shownAt));
+      if (correct) this.encounterCorrect += 1;
+      const kind = this.monster ? encounterKindOf(this.monster) : 'normal';
+      const last = this.index >= this.questions.length - 1;
+      const result = recordLearnAnswer(
+        {
+          correct,
+          kind,
+          grade: q.grade,
+          subject: q.subject,
+          rule: q.rule,
+          durationMs,
+          settingsSubject: this.settings.subject,
+          encounterDone: last && kind !== 'normal',
+          encounterCorrect: this.encounterCorrect,
+        },
+        this.store,
+      );
+      this.hud.render(result.rewards);
+      this.toast.pushAll(result.toasts);
+      if (result.statsWarning) this.toast.push(result.statsWarning, true);
+    } catch (err) {
+      console.warn('Belöning kunde inte sparas', err);
+    }
+  }
+
+  private clockMs(): number {
+    const perf = globalThis.performance;
+    if (perf && typeof perf.now === 'function') return perf.now();
+    return Date.now();
+  }
+
+  private refreshHud(): void {
+    try {
+      this.hud.render(loadRewards(this.store));
+    } catch (err) {
+      console.warn('Belöningar kunde inte läsas', err);
+    }
+  }
+
+  private openAlbum(): void {
+    if (this.parentView?.isOpen()) this.parentView.close();
+    this.albumOpen = true;
+    this.ai.paused = true;
+    this.ensureAlbum().open();
+  }
+
+  private openParent(): void {
+    if (this.album?.isOpen()) this.album.close();
+    this.parentOpen = true;
+    this.ai.paused = true;
+    this.ensureParent().open();
+  }
+
+  private ensureAlbum(): StickerAlbum {
+    this.album ??= new StickerAlbum(this.store, {
+      onDirty: () => this.refreshHud(),
+      onClose: () => {
+        this.albumOpen = false;
+        this.ai.paused = this.blocksMovement();
+        this.refreshHud();
+      },
+    });
+    return this.album;
+  }
+
+  private ensureParent(): ParentView {
+    this.parentView ??= new ParentView(this.store, {
+      onDirty: () => this.refreshHud(),
+      onClose: () => {
+        this.parentOpen = false;
+        this.ai.paused = this.blocksMovement();
+        this.refreshHud();
+      },
+    });
+    return this.parentView;
   }
 
   private beginFight(): void {
@@ -328,6 +455,17 @@ export class LearnEncounter {
     this.overlay.hideQuiz();
     this.ai.paused = this.settingsOpen;
   }
+}
+
+function browserStore(): KeyValueStore {
+  try {
+    if (typeof globalThis.localStorage !== 'undefined' && globalThis.localStorage) {
+      return new LocalStore(globalThis.localStorage);
+    }
+  } catch {
+    /* test utan localStorage */
+  }
+  return new MemoryStore();
 }
 
 function inLearnRange(h: Hero, m: Monster, d: number): boolean {

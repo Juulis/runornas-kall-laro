@@ -12,6 +12,10 @@ const CSS = `
 #rk-learn-settings .learn-setup label.learn-read{flex-direction:row;align-items:center;gap:8px;font-size:18px}
 #rk-learn-settings .learn-setup label.learn-read input{width:22px;height:22px;accent-color:#e0b060}
 #rk-learn-settings select{font:20px Cinzel,serif;padding:8px 12px;background:#1a1612;color:#efe7d2;border:2px solid #c7a35a;border-radius:8px}
+#rk-learn-settings .learn-links{display:flex;gap:8px;margin-top:12px}
+#rk-learn-settings .learn-links button{min-height:44px;font:15px Cinzel,serif;color:#cbb994;background:transparent;border:1px solid #6b5a3e;border-radius:8px;padding:6px 12px;cursor:pointer}
+#rk-learn-settings .learn-links button:hover{border-color:#c7a35a;color:#efe7d2}
+#rk-learn-settings .learn-links button:focus-visible{outline:3px solid #c7a35a;outline-offset:2px}
 #rk-learn-quiz{position:fixed;inset:0;z-index:35;display:flex;align-items:center;justify-content:center;background:rgba(12,8,6,.72);padding:24px}
 #rk-learn-quiz.hidden,#rk-learn-settings.hidden{display:none}
 #rk-learn.quiz-open #rk-learn-level,#rk-learn.quiz-open #rk-learn-settings{display:none}
@@ -63,6 +67,8 @@ export class LearnOverlay {
   onAnswer: (index: number) => void = () => undefined;
   onToggleSettings: () => void = () => undefined;
   onSettings: (settings: LearnSettings) => void = () => undefined;
+  onOpenAlbum: () => void = () => undefined;
+  onOpenParent: () => void = () => undefined;
 
   constructor(initial: LearnSettings) {
     this.settings = { grade: initial.grade, subject: initial.subject, readAloud: readAloudOf(initial) };
@@ -85,7 +91,18 @@ export class LearnOverlay {
     });
     const hint = document.createElement('p');
     hint.textContent = 'Gäller nästa monster.';
-    this.settingsPanel.append(this.fields, hint);
+    const links = document.createElement('div');
+    links.className = 'learn-links';
+    const albumBtn = document.createElement('button');
+    albumBtn.type = 'button';
+    albumBtn.textContent = 'Samling';
+    albumBtn.addEventListener('click', () => this.onOpenAlbum());
+    const parentBtn = document.createElement('button');
+    parentBtn.type = 'button';
+    parentBtn.textContent = 'Förälder';
+    parentBtn.addEventListener('click', () => this.onOpenParent());
+    links.append(albumBtn, parentBtn);
+    this.settingsPanel.append(this.fields, hint, links);
     this.quiz = document.createElement('div');
     this.quiz.id = 'rk-learn-quiz';
     this.quiz.classList.add('hidden');
