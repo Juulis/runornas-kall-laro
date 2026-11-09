@@ -117,10 +117,20 @@ function forskola(rng: Rng, index: number, idPrefix: string): LearnQuestion {
     const n = intBetween(rng, 1, 5);
     const emoji = rng.pick(EMOJI);
     const mc = numberChoices(rng, n, [1, 2, 3, 4, 5]);
-    return pack('forskola', 'forskola-rakna', index, idPrefix, `Hur många ser du? ${emoji.repeat(n)}`, mc.answerText, mc.choices, mc.correctIndex, {
-      n,
-      result: n,
-    });
+    return pack(
+      'forskola',
+      'forskola-rakna',
+      index,
+      idPrefix,
+      `Hur många ser du? ${emoji.repeat(n)}`,
+      mc.answerText,
+      mc.choices,
+      mc.correctIndex,
+      {
+        n,
+        result: n,
+      },
+    );
   }
   const a = intBetween(rng, 0, 5);
   const b = intBetween(rng, 0, 5 - a);
@@ -153,18 +163,38 @@ function ak2(rng: Rng, index: number, idPrefix: string): LearnQuestion {
   if (roll < 0.75) {
     const n = intBetween(rng, 0, 10);
     const answer = 10 - n;
-    return numeric(rng, 'ak2', 'ak2-tiokamrat', index, idPrefix, `Vilket tal är tiokamrat till ${n}? (tillsammans blir de 10)`, answer, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], {
-      n,
-      a: n,
-      b: answer,
-    });
+    return numeric(
+      rng,
+      'ak2',
+      'ak2-tiokamrat',
+      index,
+      idPrefix,
+      `Vilket tal är tiokamrat till ${n}? (tillsammans blir de 10)`,
+      answer,
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      {
+        n,
+        a: n,
+        b: answer,
+      },
+    );
   }
   const table = rng.pick([2, 5, 10] as const);
   const b = intBetween(rng, 1, 10);
-  return numeric(rng, 'ak2', 'ak2-tabell', index, idPrefix, `${table} × ${b} = ?`, table * b, [table * (b + 1), table * Math.max(0, b - 1), table + b, b], {
-    a: table,
-    b,
-  });
+  return numeric(
+    rng,
+    'ak2',
+    'ak2-tabell',
+    index,
+    idPrefix,
+    `${table} × ${b} = ?`,
+    table * b,
+    [table * (b + 1), table * Math.max(0, b - 1), table + b, b],
+    {
+      a: table,
+      b,
+    },
+  );
 }
 
 function ak3(rng: Rng, index: number, idPrefix: string): LearnQuestion {
@@ -172,16 +202,29 @@ function ak3(rng: Rng, index: number, idPrefix: string): LearnQuestion {
   if (roll < 0.35) {
     const a = intBetween(rng, 1, 10);
     const b = intBetween(rng, 1, 10);
-    return numeric(rng, 'ak3', 'ak3-tabell', index, idPrefix, `${a} × ${b} = ?`, a * b, [a * (b + 1), (a + 1) * b, a + b, a * b + a], { a, b });
+    return numeric(rng, 'ak3', 'ak3-tabell', index, idPrefix, `${a} × ${b} = ?`, a * b, [a * (b + 1), (a + 1) * b, a + b, a * b + a], {
+      a,
+      b,
+    });
   }
   if (roll < 0.6) {
     const divisor = intBetween(rng, 1, 10);
     const quot = intBetween(rng, 1, 10);
     const dividend = divisor * quot;
-    return numeric(rng, 'ak3', 'ak3-division', index, idPrefix, `${dividend} ÷ ${divisor} = ?`, quot, [quot + 1, Math.max(0, quot - 1), divisor, dividend], {
-      a: dividend,
-      b: divisor,
-    });
+    return numeric(
+      rng,
+      'ak3',
+      'ak3-division',
+      index,
+      idPrefix,
+      `${dividend} ÷ ${divisor} = ?`,
+      quot,
+      [quot + 1, Math.max(0, quot - 1), divisor, dividend],
+      {
+        a: dividend,
+        b: divisor,
+      },
+    );
   }
   if (roll < 0.8) {
     const a = intBetween(rng, 0, 1000);
@@ -190,7 +233,10 @@ function ak3(rng: Rng, index: number, idPrefix: string): LearnQuestion {
   }
   const a = intBetween(rng, 0, 1000);
   const b = intBetween(rng, 0, a);
-  return numeric(rng, 'ak3', 'ak3-minus', index, idPrefix, `${a} − ${b} = ?`, a - b, [a - b + 10, b > a ? b - a : a - b + 1, a, b], { a, b });
+  return numeric(rng, 'ak3', 'ak3-minus', index, idPrefix, `${a} − ${b} = ?`, a - b, [a - b + 10, b > a ? b - a : a - b + 1, a, b], {
+    a,
+    b,
+  });
 }
 
 function decimalText(tenthsA: number, tenthsB: number): { prompt: string; answer: string; wrong: string[] } {
@@ -238,10 +284,20 @@ function ak46(rng: Rng, index: number, idPrefix: string): LearnQuestion {
     pct = 25;
     answer = 10;
   }
-  return numeric(rng, 'ak4_6', 'ak46-procent', index, idPrefix, `Vad är ${pct} % av ${base}?`, answer, [base, pct, answer + pct, Math.max(0, base - answer)], {
-    a: pct,
-    b: base,
-  });
+  return numeric(
+    rng,
+    'ak4_6',
+    'ak46-procent',
+    index,
+    idPrefix,
+    `Vad är ${pct} % av ${base}?`,
+    answer,
+    [base, pct, answer + pct, Math.max(0, base - answer)],
+    {
+      a: pct,
+      b: base,
+    },
+  );
 }
 
 function ak79(rng: Rng, index: number, idPrefix: string): LearnQuestion {
@@ -264,10 +320,20 @@ function ak79(rng: Rng, index: number, idPrefix: string): LearnQuestion {
     return numeric(rng, 'ak7_9', 'ak79-ekvation', index, idPrefix, prompt, x, [a, b, x + 1, x - 1, -x], { a, b, result: x });
   }
   const [base, exp, value] = rng.pick(POWERS);
-  return numeric(rng, 'ak7_9', 'ak79-potens', index, idPrefix, `${base}${sup(exp)} = ?`, value, [base * exp, base + exp, value + base, value - base, base ** Math.max(1, exp - 1)], {
-    a: base,
-    b: exp,
-  });
+  return numeric(
+    rng,
+    'ak7_9',
+    'ak79-potens',
+    index,
+    idPrefix,
+    `${base}${sup(exp)} = ?`,
+    value,
+    [base * exp, base + exp, value + base, value - base, base ** Math.max(1, exp - 1)],
+    {
+      a: base,
+      b: exp,
+    },
+  );
 }
 
 function quadAnswer(p: number, q: number): string {
@@ -328,15 +394,24 @@ function gym(rng: Rng, grade: GradeId, index: number, idPrefix: string): LearnQu
     const prompt = up
       ? `En sak kostar ${price} kr och blir ${pct} % dyrare. Vad kostar den då?`
       : `En sak kostar ${price} kr och blir ${pct} % billigare. Vad kostar den då?`;
-    return numeric(rng, grade, 'gym-procent', index, idPrefix, prompt, answer, [price, price + pct, price - pct, answer + price / 10], { a: price, b: pct });
+    return numeric(rng, grade, 'gym-procent', index, idPrefix, prompt, answer, [price, price + pct, price - pct, answer + price / 10], {
+      a: price,
+      b: pct,
+    });
   }
   if (rng.chance(0.4)) {
     const n = rng.pick([12, 13, 14, 15, 16, 20, 25]);
-    return numeric(rng, grade, 'gym-huvudrakning', index, idPrefix, `${n}² = ?`, n * n, [n * (n + 1), n * 2, n * n + n, n * n - n], { a: n, b: 2 });
+    return numeric(rng, grade, 'gym-huvudrakning', index, idPrefix, `${n}² = ?`, n * n, [n * (n + 1), n * 2, n * n + n, n * n - n], {
+      a: n,
+      b: 2,
+    });
   }
   const a = intBetween(rng, 12, 30);
   const b = intBetween(rng, 6, 15);
-  return numeric(rng, grade, 'gym-huvudrakning', index, idPrefix, `${a} × ${b} = ?`, a * b, [a * (b + 1), (a + 1) * b, a * b + 10, a + b], { a, b });
+  return numeric(rng, grade, 'gym-huvudrakning', index, idPrefix, `${a} × ${b} = ?`, a * b, [a * (b + 1), (a + 1) * b, a * b + 10, a + b], {
+    a,
+    b,
+  });
 }
 
 /** En mattefråga för nivån. Deterministisk givet rng-läget. */

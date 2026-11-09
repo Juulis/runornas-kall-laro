@@ -444,7 +444,15 @@ export class Game {
   }
 
   private learnBlocked(): boolean {
-    return this.menuOpen || this.dead || this.switching || this.npcDialog.isOpen || this.invUI.isOpen() || this.questLog.isOpen || isLoreBookOpen();
+    return (
+      this.menuOpen ||
+      this.dead ||
+      this.switching ||
+      this.npcDialog.isOpen ||
+      this.invUI.isOpen() ||
+      this.questLog.isOpen ||
+      isLoreBookOpen()
+    );
   }
 
   /** Nytt game (D2): ny seed, tomma killed, runor nollställs, start i skogen. Hjälte och utrustning behålls. */

@@ -46,7 +46,14 @@ export function bankCount(subject: 'svenska' | 'engelska', grade: GradeId): numb
 }
 
 /** Plockar en bankfråga och blandar alternativen. */
-export function nextBankQuestion(rng: Rng, subject: 'svenska' | 'engelska', grade: GradeId, index: number, idPrefix: string, avoid: Set<string>): LearnQuestion {
+export function nextBankQuestion(
+  rng: Rng,
+  subject: 'svenska' | 'engelska',
+  grade: GradeId,
+  index: number,
+  idPrefix: string,
+  avoid: Set<string>,
+): LearnQuestion {
   const pool = bankQuestions(subject, grade);
   if (!pool.length) throw new Error(`Ingen ${subject}-fråga för ${grade}`);
   const fresh = pool.filter((row) => !avoid.has(row.id));

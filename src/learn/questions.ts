@@ -1,7 +1,15 @@
 import { Rng } from '../core/Rng';
 import { nextBankQuestion } from './bank';
 import { nextMathQuestion } from './mathQuestions';
-import { isValidQuestion, questionCount, type EncounterKind, type GradeId, type LearnQuestion, type QuestionSubject, type SubjectId } from './types';
+import {
+  isValidQuestion,
+  questionCount,
+  type EncounterKind,
+  type GradeId,
+  type LearnQuestion,
+  type QuestionSubject,
+  type SubjectId,
+} from './types';
 
 function subjectFor(rng: Rng, subject: SubjectId): QuestionSubject {
   if (subject === 'blandat') return rng.pick(['matte', 'svenska', 'engelska'] as const);
@@ -13,7 +21,8 @@ function oneQuestion(rng: Rng, grade: GradeId, subject: SubjectId, index: number
   let last: unknown;
   for (let attempt = 0; attempt < 8; attempt++) {
     try {
-      const q = picked === 'matte' ? nextMathQuestion(rng, grade, index, idPrefix) : nextBankQuestion(rng, picked, grade, index, idPrefix, avoid);
+      const q =
+        picked === 'matte' ? nextMathQuestion(rng, grade, index, idPrefix) : nextBankQuestion(rng, picked, grade, index, idPrefix, avoid);
       if (!isValidQuestion(q) || q.grade !== grade || q.subject !== picked) throw new Error(`ogiltig fråga ${q.id}`);
       return q;
     } catch (err) {
@@ -24,7 +33,13 @@ function oneQuestion(rng: Rng, grade: GradeId, subject: SubjectId, index: number
 }
 
 /** count frågor för nivå och ämne. Samma seed ger samma frågor. */
-export function generateQuestions(opts: { count: number; grade: GradeId; subject: SubjectId; seed: number; idPrefix: string }): LearnQuestion[] {
+export function generateQuestions(opts: {
+  count: number;
+  grade: GradeId;
+  subject: SubjectId;
+  seed: number;
+  idPrefix: string;
+}): LearnQuestion[] {
   const rng = new Rng(opts.seed >>> 0);
   const avoid = new Set<string>();
   const out: LearnQuestion[] = [];
