@@ -287,6 +287,10 @@ try {
   scratch.querySelector('button')?.dispatchEvent(new Event('click'));
   assert.equal(answered, -1, 'kladdknappar ska inte räknas som svar');
   choice.click();
+  assert.equal(answered, -1, 'klick väljer bara, SVARA skickar');
+  const svara = overlay.root.querySelector('.rk-q-submit');
+  assert.ok(svara instanceof HTMLButtonElement);
+  svara.click();
   assert.equal(answered, 0);
   assert.equal(choice.disabled, true);
 
@@ -298,12 +302,13 @@ try {
   overlay.showQuestion(question({ rule: 'gym-huvudrakning', grade: 'gymnasiet' }), 0, 1);
   assert.equal(scratch.hidden, true);
 
-  overlay.showQuestion(question({ rule: 'ak79-potens', needsScratchpad: true }), 0, 1);
+  const potens = question({ rule: 'ak79-potens', needsScratchpad: true });
+  overlay.showQuestion(potens, 0, 1);
   assert.equal(scratch.hidden, false);
   note.value = '2⁵';
-  overlay.showWrong('32');
+  overlay.showWrong({ ...potens, answer: '32' }, potens.correctIndex === 0 ? 1 : 0);
   assert.equal(scratch.hidden, false);
-  assert.equal(choices.classList.contains('hidden'), true);
+  assert.equal(choices.classList.contains('hidden'), false, 'valen står kvar så rätt svar syns');
   assert.match(overlay.root.querySelector('.rk-q-feedback')?.textContent ?? '', /Rätt svar var: 32/);
   assert.equal(note.value, '2⁵', 'fel svar ska inte sudda kladdet');
 
