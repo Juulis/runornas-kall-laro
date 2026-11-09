@@ -4,7 +4,7 @@ import type { GradeId, LearnQuestion, QuestionMeta } from './types';
 
 /** Vilka matte-regler som hör till varje nivå. Gymnasiet och vuxen delar spår. */
 export const MATH_RULES: Record<GradeId, readonly string[]> = {
-  forskola: ['forskola-rakna', 'forskola-plus'],
+  forskola: ['forskola-plus', 'forskola-minus'],
   ak1: ['ak1-plus', 'ak1-minus'],
   ak2: ['ak2-plus', 'ak2-minus', 'ak2-tiokamrat', 'ak2-tabell'],
   ak3: ['ak3-tabell', 'ak3-division', 'ak3-plus', 'ak3-minus'],
@@ -14,8 +14,12 @@ export const MATH_RULES: Record<GradeId, readonly string[]> = {
   vuxen: ['gym-andragrads', 'gym-procent', 'gym-huvudrakning'],
 };
 
-const EMOJI = ['🍎', '⭐', '🐶', '🌸', '🐟'] as const;
 const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const TAL = ['noll', 'ett', 'två', 'tre', 'fyra', 'fem', 'sex', 'sju', 'åtta', 'nio', 'tio'] as const;
+
+function svTal(n: number): string {
+  return TAL[n] ?? String(n);
+}
 
 const POWERS: readonly [number, number, number][] = [
   [2, 2, 4],
@@ -112,29 +116,19 @@ function textQ(
   return pack(grade, rule, index, idPrefix, prompt, answer, mc.choices, mc.correctIndex, meta);
 }
 
+/** Bara plus och minus. Enkelsiffror, svaret blir aldrig negativt, och plus stannar på högst 10. */
 function forskola(rng: Rng, index: number, idPrefix: string): LearnQuestion {
+  const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   if (rng.chance(0.5)) {
-    const n = intBetween(rng, 1, 5);
-    const emoji = rng.pick(EMOJI);
-    const mc = numberChoices(rng, n, [1, 2, 3, 4, 5]);
-    return pack(
-      'forskola',
-      'forskola-rakna',
-      index,
-      idPrefix,
-      `Hur många ser du? ${emoji.repeat(n)}`,
-      mc.answerText,
-      mc.choices,
-      mc.correctIndex,
-      {
-        n,
-        result: n,
-      },
-    );
+    const a = intBetween(rng, 0, 9);
+    const b = intBetween(rng, 0, Math.min(9, 10 - a));
+    const q = numeric(rng, 'forskola', 'forskola-plus', index, idPrefix, `${a} + ${b} = ?`, a + b, digits, { a, b });
+    return { ...q, speakText: `${svTal(a)} plus ${svTal(b)}`, speakLang: 'sv-SE' };
   }
-  const a = intBetween(rng, 0, 5);
-  const b = intBetween(rng, 0, 5 - a);
-  return numeric(rng, 'forskola', 'forskola-plus', index, idPrefix, `${a} + ${b} = ?`, a + b, [0, 1, 2, 3, 4, 5], { a, b });
+  const a = intBetween(rng, 0, 9);
+  const b = intBetween(rng, 0, a);
+  const q = numeric(rng, 'forskola', 'forskola-minus', index, idPrefix, `${a} − ${b} = ?`, a - b, digits.slice(0, 10), { a, b });
+  return { ...q, speakText: `${svTal(a)} minus ${svTal(b)}`, speakLang: 'sv-SE' };
 }
 
 function ak1(rng: Rng, index: number, idPrefix: string): LearnQuestion {

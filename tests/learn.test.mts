@@ -56,13 +56,25 @@ function assertMath(q: LearnQuestion): void {
   const b = m.b;
   const res = m.result;
   switch (q.rule) {
-    case 'forskola-rakna':
-      assert.ok(m.n !== undefined && m.n >= 1 && m.n <= 5);
-      assert.equal(res, m.n);
-      break;
     case 'forskola-plus':
-      assert.ok(a !== undefined && b !== undefined && a >= 0 && b >= 0 && a + b <= 5);
+      assert.ok(a !== undefined && b !== undefined && a >= 0 && a <= 9 && b >= 0 && b <= 9 && a + b <= 10);
       assert.equal(res, a + b);
+      assert.ok(res !== undefined && res >= 0);
+      for (const c of q.choices) {
+        const n = Number(c);
+        assert.equal(Number.isInteger(n), true, c);
+        assert.ok(n >= 0 && n <= 10, c);
+      }
+      break;
+    case 'forskola-minus':
+      assert.ok(a !== undefined && b !== undefined && a >= 0 && a <= 9 && b >= 0 && b <= a);
+      assert.equal(res, a - b);
+      assert.ok(res !== undefined && res >= 0);
+      for (const c of q.choices) {
+        const n = Number(c);
+        assert.equal(Number.isInteger(n), true, c);
+        assert.ok(n >= 0 && n <= 10, c);
+      }
       break;
     case 'ak1-plus':
       assert.ok(a !== undefined && b !== undefined && a >= 0 && b >= 0 && a + b <= 20);
@@ -151,7 +163,7 @@ assert.ok(indexes.size > 1, 'rätt svar ska inte alltid ligga först');
 
 const grades: GradeId[] = GRADES.map((g) => g.id);
 for (const grade of grades) {
-  const minSv = grade === 'ak1' || grade === 'ak2' || grade === 'ak3' ? 40 : 15;
+  const minSv = grade === 'forskola' || grade === 'ak1' || grade === 'ak2' || grade === 'ak3' ? 40 : 15;
   const minEn = minSv;
   assert.ok(bankCount('svenska', grade) >= minSv, `svenska ${grade} ${bankCount('svenska', grade)}`);
   assert.ok(bankCount('engelska', grade) >= minEn, `engelska ${grade} ${bankCount('engelska', grade)}`);
