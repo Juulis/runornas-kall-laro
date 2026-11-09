@@ -1,5 +1,5 @@
 /**
- * Loadingskärm (#132): progress 0..1, rk-done, CSS-fallback, BASE_URL /rpg-demo/.
+ * Loadingskärm (#132): progress 0..1, rk-done, CSS-fallback, BASE_URL /runornas-kall-laro/.
  * Kör: npx -y node@22 --import tsx --test tests/loading-screen.test.mts
  */
 import assert from 'node:assert/strict';
@@ -18,7 +18,7 @@ function read(rel: string): string {
 const OVERLAY = `
   <div id="rk-loading" class="rk-has-art" style="--rk-p:0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Laddar">
     <div class="rk-frame">
-      <img class="rk-title-img" src="/rpg-demo/assets/ui/loading/titel.webp" width="360" height="172" alt="Runornas kall" />
+      <img class="rk-title-img" src="/runornas-kall-laro/assets/ui/loading/titel.webp" width="360" height="172" alt="Runornas kall" />
       <h1 class="rk-title">Runornas kall</h1>
       <p class="rk-sub" data-i18n="loading.hint">Världen vaknar</p>
       <div class="rk-runsten" aria-hidden="true"><div class="rk-runsten-fill"></div></div>
@@ -31,7 +31,7 @@ const OVERLAY = `
 
 function mount(html = OVERLAY): { dom: JSDOM; loading: HTMLElement } {
   const dom = new JSDOM(`<!doctype html><body style="background:#0d0f12">${html}</body>`, {
-    url: 'https://user.github.io/rpg-demo/',
+    url: 'https://user.github.io/runornas-kall-laro/',
     pretendToBeVisual: true,
   });
   const g = globalThis as unknown as Record<string, unknown>;
@@ -69,15 +69,15 @@ test('index.html lägger overlay före app/fade och CSS i head, med Pages-bas', 
   assert.match(html, /data-i18n="loading\.hint">Världen vaknar/);
   assert.match(read('src/style.css'), /background:\s*#0d0f12/);
 
-  const pages = html.replaceAll('%BASE_URL%', '/rpg-demo/');
-  assert.match(pages, /href="\/rpg-demo\/assets\/ui\/loading\/loading\.css"/);
-  assert.match(pages, /src="\/rpg-demo\/assets\/ui\/loading\/titel\.webp"/);
-  const dom = new JSDOM(pages, { url: 'https://user.github.io/rpg-demo/index.html' });
+  const pages = html.replaceAll('%BASE_URL%', '/runornas-kall-laro/');
+  assert.match(pages, /href="\/runornas-kall-laro\/assets\/ui\/loading\/loading\.css"/);
+  assert.match(pages, /src="\/runornas-kall-laro\/assets\/ui\/loading\/titel\.webp"/);
+  const dom = new JSDOM(pages, { url: 'https://user.github.io/runornas-kall-laro/index.html' });
   const { loadingArtDirectory, loadingAssetUrl } = await import('../src/ui/loadingScreen');
-  assert.equal(loadingArtDirectory(dom.window.document), '/rpg-demo/assets/ui/loading/');
-  assert.equal(loadingAssetUrl('runa.webp', '/rpg-demo/'), '/rpg-demo/assets/ui/loading/runa.webp');
-  assert.equal(loadingAssetUrl('titel.webp', '/rpg-demo'), '/rpg-demo/assets/ui/loading/titel.webp');
-  assert.equal(`${loadingArtDirectory(dom.window.document)}runsten.webp`, '/rpg-demo/assets/ui/loading/runsten.webp');
+  assert.equal(loadingArtDirectory(dom.window.document), '/runornas-kall-laro/assets/ui/loading/');
+  assert.equal(loadingAssetUrl('runa.webp', '/runornas-kall-laro/'), '/runornas-kall-laro/assets/ui/loading/runa.webp');
+  assert.equal(loadingAssetUrl('titel.webp', '/runornas-kall-laro'), '/runornas-kall-laro/assets/ui/loading/titel.webp');
+  assert.equal(`${loadingArtDirectory(dom.window.document)}runsten.webp`, '/runornas-kall-laro/assets/ui/loading/runsten.webp');
 });
 
 test('CSS-list och runsten delar --rk-p', () => {
@@ -257,7 +257,7 @@ test('trasig grafik tar bort rk-has-art så Cinzel och CSS-listen används', asy
   const probes: HTMLImageElement[] = [];
   bindLoadingArtFallback(
     loading,
-    (file) => `/rpg-demo/assets/ui/loading/${file}`,
+    (file) => `/runornas-kall-laro/assets/ui/loading/${file}`,
     () => {
       const img = document.createElement('img');
       probes.push(img);
@@ -266,7 +266,7 @@ test('trasig grafik tar bort rk-has-art så Cinzel och CSS-listen används', asy
   );
   assert.deepEqual(
     probes.map((img) => img.getAttribute('src')),
-    LOADING_ART_FILES.map((file) => `/rpg-demo/assets/ui/loading/${file}`),
+    LOADING_ART_FILES.map((file) => `/runornas-kall-laro/assets/ui/loading/${file}`),
   );
   assert.equal(loading.classList.contains('rk-has-art'), true);
   probes[1]?.dispatchEvent(new Event('error'));
@@ -278,7 +278,7 @@ test('trasig grafik tar bort rk-has-art så Cinzel och CSS-listen används', asy
   Object.defineProperty(title2, 'complete', { configurable: true, get: () => false });
   bindLoadingArtFallback(
     restored.loading,
-    (file) => `/rpg-demo/assets/ui/loading/${file}`,
+    (file) => `/runornas-kall-laro/assets/ui/loading/${file}`,
     () => document.createElement('img'),
   );
   assert.equal(restored.loading.classList.contains('rk-has-art'), true);

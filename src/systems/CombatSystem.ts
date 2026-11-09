@@ -34,6 +34,8 @@ export class CombatSystem {
   onPatrolAidKill: () => void = () => undefined;
   /** Lärversionen: monster ska inte döda hjälten före frågan. Quiz-skada går inte genom hurt. */
   suppressHeroHurt = true;
+  /** Lärversionen: vapen, färdigheter och projektiler gör ingen skada. Bara frågan får fälla. */
+  suppressHeroMonsterDamage = true;
 
   constructor(
     private readonly w: () => World,
@@ -66,6 +68,7 @@ export class CombatSystem {
   }
 
   damageMonster(m: Monster, mult = 1, opts: HitOpts = {}): void {
+    if (this.suppressHeroMonsterDamage) return;
     const w = this.w();
     const h = w.hero;
     const st = h.stats;
@@ -132,7 +135,12 @@ export class CombatSystem {
     }
   }
 
-  kill(m: Monster): void {
+  /**
+   * Fäller monstret och delar ut XP och byte.
+   * fromLearn krävs i lärversionen: anrop från träff, färdighet eller taggar ignoreras.
+   */
+  kill(m: Monster, fromLearn = false): void {
+    if (this.suppressHeroMonsterDamage && !fromLearn) return;
     const w = this.w();
     m.dead = 0.001;
     m.view.play('dod');
@@ -199,8 +207,7 @@ export class CombatSystem {
     if (m?.es?.lifeSteal && !m.dead) m.hp = Math.min(m.max, m.hp + d * m.es.lifeSteal);
     if (m?.es?.curse) h.curse = 4;
     if (st.thorns && m && !m.dead) {
-      m.hp -= st.thorns;
-      if (m.hp <= 0) this.kill(m);
+      m.hp = Math.max(1, m.hp - st.thorns);
     }
     w.fb.float(h.pos, '-' + d, 'hurt', 100);
     h.view.sprite.tint = 0xff8080;

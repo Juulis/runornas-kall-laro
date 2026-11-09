@@ -11,8 +11,10 @@ import { encounterKindOf, type LearnSettings } from './types';
 const FIGHT_S = 1.25;
 const HIT_AT = [0.12, 0.48, 0.86];
 const WRONG_S = 1.1;
+/** Andning mellan frågor i boss- och championpack. Vanlig strid med en fråga hoppar över den. */
+export const LEARN_PACK_PAUSE_S = 0.5;
 
-type Phase = 'idle' | 'ask' | 'feedback' | 'fight';
+type Phase = 'idle' | 'ask' | 'feedback' | 'fight' | 'pause';
 
 /**
  * Pausar när hjälten möter ett monster, visar en fråga och spelar sedan en kort strid.
@@ -31,6 +33,8 @@ export class LearnEncounter {
   private fightT = 0;
   private nextHit = 0;
   private shake = 0;
+  /** Sprite-x före skak. Sätts vid första skak och används som position.x = bas + offset. */
+  private shakeBaseX: number | null = null;
 
   constructor(
     private readonly w: () => World,
@@ -90,10 +94,10 @@ export class LearnEncounter {
   }
 
   cancel(): void {
+    this.restoreShake();
     this.phase = 'idle';
     this.monster = null;
     this.questions = [];
-    this.shake = 0;
     this.overlay.hideQuiz();
     this.ai.paused = this.settingsOpen;
     const w = this.worldOrNull();
@@ -124,6 +128,7 @@ export class LearnEncounter {
     }
     if (this.phase === 'fight') this.tickFight(dt);
     else if (this.phase === 'feedback') this.tickFeedback(dt);
+    else if (this.phase === 'pause') this.tickPause(dt);
     else if (this.phase === 'ask') this.face();
     else this.tryStart();
     this.applyShake(dt);
@@ -210,11 +215,10 @@ export class LearnEncounter {
     const m = this.monster;
     if (last) {
       this.endQuiet();
-      if (m && !m.dead) this.combat.kill(m);
+      if (m && !m.dead) this.fell(m);
       return;
     }
-    this.index++;
-    this.showCurrent();
+    this.openNextQuestion();
   }
 
   private tickFeedback(dt: number): void {
@@ -229,18 +233,37 @@ export class LearnEncounter {
     const m = this.monster;
     if (dealt.died) {
       h.s.playing = false;
-      if (last && m && !m.dead) this.combat.kill(m);
+      if (last && m && !m.dead) this.fell(m);
       this.endQuiet();
       this.onHeroDied();
       return;
     }
     if (last) {
       this.endQuiet();
-      if (m && !m.dead) this.combat.kill(m);
+      if (m && !m.dead) this.fell(m);
       return;
     }
+    this.openNextQuestion();
+  }
+
+  /** Pack: vänta en kort stund så nästa fråga inte kedjas direkt. */
+  private openNextQuestion(): void {
     this.index++;
+    this.restoreShake();
+    this.phase = 'pause';
+    this.timer = LEARN_PACK_PAUSE_S;
+    this.overlay.hideQuiz();
+    this.ai.paused = true;
+  }
+
+  private tickPause(dt: number): void {
+    this.timer -= dt;
+    if (this.timer > 0) return;
     this.showCurrent();
+  }
+
+  private fell(m: Monster): void {
+    this.combat.kill(m, true);
   }
 
   private cosmeticHit(): void {
@@ -272,18 +295,36 @@ export class LearnEncounter {
 
   private applyShake(dt: number): void {
     const m = this.monster;
-    if (!m || this.shake <= 0) return;
-    this.shake = Math.max(0, this.shake - dt);
+    if (!m) {
+      this.shake = 0;
+      this.shakeBaseX = null;
+      return;
+    }
+    if (this.shake > 0 && this.shakeBaseX === null) this.shakeBaseX = m.view.position.x;
+    if (this.shake > 0) this.shake = Math.max(0, this.shake - dt);
+    if (this.shakeBaseX === null) return;
+    if (this.shake <= 0) {
+      m.view.position.x = this.shakeBaseX;
+      this.shakeBaseX = null;
+      return;
+    }
     const mag = this.shake * 22;
     const flip = Math.floor(this.fightT * 40) % 2 === 0 ? mag : -mag;
-    m.view.position.x += flip;
+    m.view.position.x = this.shakeBaseX + flip;
+  }
+
+  private restoreShake(): void {
+    const m = this.monster;
+    if (m && this.shakeBaseX !== null) m.view.position.x = this.shakeBaseX;
+    this.shake = 0;
+    this.shakeBaseX = null;
   }
 
   private endQuiet(): void {
+    this.restoreShake();
     this.phase = 'idle';
     this.monster = null;
     this.questions = [];
-    this.shake = 0;
     this.overlay.hideQuiz();
     this.ai.paused = this.settingsOpen;
   }
