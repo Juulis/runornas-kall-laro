@@ -44,7 +44,9 @@ await preloadLearnBanks({ subject: 'blandat' });
 assert.equal(await ensureBank('svenska'), svenskaBank, 'preload ska återanvända cache');
 
 assert.equal(GRADES.length, 8);
-assert.equal(SUBJECTS.length, 4);
+assert.equal(SUBJECTS.length, 5);
+assert.equal(SUBJECTS[4]?.id, 'lasforstaelse');
+assert.equal(SUBJECTS[4]?.label, 'Läsförståelse');
 assert.equal(questionCount('boss'), 5);
 assert.equal(questionCount('champion'), 3);
 assert.equal(questionCount('normal'), 1);

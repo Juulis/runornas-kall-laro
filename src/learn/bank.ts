@@ -3,6 +3,8 @@ import type { Rng } from '../core/Rng';
 import { multipleChoice } from './choices';
 import { isGradeId, type GradeId, type LearnQuestion, type LearnSettings, type QuestionSubject, type SpeakLang } from './types';
 
+export type BankSubject = 'svenska' | 'engelska' | 'lasforstaelse';
+
 interface RawQuestion {
   id: string;
   niva: string;
@@ -16,6 +18,10 @@ interface RawQuestion {
   emoji?: unknown;
   /** Emoji i samma ordning som fel, när fel är strängar. */
   fel_emoji?: unknown;
+  /** Läsningstext. Krävs för läsförståelse. */
+  text?: unknown;
+  /** Förskolan ber att texten läses upp. Overlay avgör när det sker. */
+  las_upp?: unknown;
 }
 
 interface RawFile {
@@ -28,12 +34,12 @@ interface WrongPart {
   emoji: string | null;
 }
 
-type BankSubject = 'svenska' | 'engelska';
 type BankImporter = () => Promise<unknown>;
 
 const defaultImporters: Record<BankSubject, BankImporter> = {
   svenska: () => import('../data/fragor_svenska.json'),
   engelska: () => import('../data/fragor_engelska.json'),
+  lasforstaelse: () => import('../data/fragor_lasforstaelse.json'),
 };
 
 const importers: Record<BankSubject, BankImporter> = { ...defaultImporters };
@@ -45,7 +51,7 @@ export function setBankImporterForTests(subject: BankSubject, importer: BankImpo
   importers[subject] = importer ?? defaultImporters[subject];
 }
 
-/** Tömmer cache så ett nytt anrop hämtar igen. Utan ämne töms båda. */
+/** Tömmer cache så ett nytt anrop hämtar igen. Utan ämne töms alla. */
 export function clearBankCache(subject?: BankSubject): void {
   if (!subject) {
     pools.clear();
@@ -58,8 +64,10 @@ export function clearBankCache(subject?: BankSubject): void {
 
 export function bankSubjectsFor(subject: LearnSettings['subject']): BankSubject[] {
   if (subject === 'matte') return [];
-  if (subject === 'blandat') return ['svenska', 'engelska'];
-  return [subject];
+  if (subject === 'blandat') return ['svenska', 'engelska', 'lasforstaelse'];
+  if (subject === 'lasforstaelse') return ['lasforstaelse'];
+  if (subject === 'svenska' || subject === 'engelska') return [subject];
+  return [];
 }
 
 function unwrapModule(mod: unknown): unknown {
@@ -109,7 +117,13 @@ function validRaw(row: RawQuestion): row is RawQuestion & { niva: GradeId } {
   if (row.eng !== undefined && !textOf(row.eng)) return false;
   if (row.emoji !== undefined && typeof row.emoji !== 'string') return false;
   if (row.fel_emoji !== undefined && !Array.isArray(row.fel_emoji)) return false;
+  if (row.las_upp !== undefined && typeof row.las_upp !== 'boolean') return false;
   return wrongParts(row).length >= 3;
+}
+
+/** Läsförståelse kräver en icke-tom läsningstext. */
+function validLas(row: RawQuestion): row is RawQuestion & { niva: GradeId } {
+  return validRaw(row) && textOf(row.text).length > 0;
 }
 
 function poolOf(subject: BankSubject): readonly RawQuestion[] {
@@ -126,7 +140,8 @@ export function ensureBank(subject: BankSubject): Promise<readonly RawQuestion[]
   if (inflight) return inflight;
   const job = importers[subject]()
     .then((mod) => {
-      const rows = asRaw(unwrapModule(mod), subject).filter(validRaw);
+      const filter = subject === 'lasforstaelse' ? validLas : validRaw;
+      const rows = asRaw(unwrapModule(mod), subject).filter(filter);
       pools.set(subject, rows);
       pending.delete(subject);
       return rows;
@@ -179,7 +194,10 @@ export function nextBankQuestion(
   idPrefix: string,
   avoid: Set<string>,
 ): LearnQuestion {
-  const pool = bankQuestions(subject, grade);
+  let pool = bankQuestions(subject, grade);
+  // Läsförståelse finns bara t.o.m. åk 3. Högre nivåer använder åk 3-poolen,
+  // men grade på frågan förblir den valda nivån så att spelet inte kraschar.
+  if (!pool.length && subject === 'lasforstaelse') pool = bankQuestions(subject, 'ak3');
   if (!pool.length) throw new Error(`Ingen ${subject}-fråga för ${grade}`);
   const fresh = pool.filter((row) => !avoid.has(row.id));
   const row = rng.pick(fresh.length ? fresh : pool);
@@ -201,6 +219,7 @@ export function nextBankQuestion(
     return emoji ? `${emoji} ${c}` : c;
   }) as [string, string, string, string];
   const eng = textOf(row.eng) || undefined;
+  const passage = subject === 'lasforstaelse' ? textOf(row.text) : '';
   const base: LearnQuestion = {
     id: `${idPrefix}:${subject}:${row.id}:${index}`,
     prompt: row.fraga,
@@ -210,8 +229,12 @@ export function nextBankQuestion(
     subject,
     grade,
     rule: row.typ,
+    ...(passage ? { passage } : {}),
     ...(hasEmoji ? { choiceEmojis } : {}),
   };
+  if (passage) {
+    return { ...base, speakText: `${passage} ${row.fraga.trim()}`, speakLang: 'sv-SE', speakPrompt: false };
+  }
   if (eng) return withSpeech(base, eng, 'en-US');
   if (row.typ === 'rattstavning') return withSpeech(base, row.ratt, 'sv-SE');
   return base;

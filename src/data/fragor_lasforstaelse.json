@@ -1,0 +1,1701 @@
+{
+  "amne": "lasforstaelse",
+  "fragor": [
+    {
+      "id": "lf-forskola-001",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Elin har en röd hatt.",
+      "fraga": "Vem har en röd hatt?",
+      "ratt": "Elin",
+      "fel": [
+        "Bo",
+        "Mora",
+        "Nisse"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-002",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Björnen sover under trädet.",
+      "fraga": "Var sover björnen?",
+      "ratt": "Under trädet",
+      "fel": [
+        "I båten",
+        "På taket",
+        "I huset"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-003",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Liten räv äter bär.",
+      "fraga": "Vad äter räven?",
+      "ratt": "Bär",
+      "fel": [
+        "Mjölk",
+        "Fisk",
+        "Bröd"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-004",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Sagoön ligger vid sjön.",
+      "fraga": "Vad är Sagoön?",
+      "ratt": "En plats vid sjön",
+      "fel": [
+        "En hatt",
+        "En fisk",
+        "En sten"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-005",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Tor bär en lykta.",
+      "fraga": "Vad bär Tor?",
+      "ratt": "En ljuslykta",
+      "fel": [
+        "En fisk",
+        "En bok",
+        "En sten"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-006",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "Katten jagar en fjäril.",
+      "fraga": "Vad kan man säga om katten?",
+      "ratt": "Den jagar",
+      "fel": [
+        "Den sover",
+        "Den simmar",
+        "Den bakar"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-007",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Mira ler mot solen.",
+      "fraga": "Vad gör Mira?",
+      "ratt": "Ler mot solen",
+      "fel": [
+        "Gråter",
+        "Sover",
+        "Simmar"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-008",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Stenen är varm av solen.",
+      "fraga": "Varför är stenen varm?",
+      "ratt": "Av solen",
+      "fel": [
+        "Av snön",
+        "Av regnet",
+        "Av vinden"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-009",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först tänder de elden. Sen äter de.",
+      "fraga": "Vad gör de först?",
+      "ratt": "Tänder elden",
+      "fel": [
+        "Simmar",
+        "Äter",
+        "Sover"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-010",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Runan lyser blått.",
+      "fraga": "Vad gör runan?",
+      "ratt": "Lyser blått",
+      "fel": [
+        "Hoppar",
+        "Sjunger",
+        "Somnar"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-011",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "Vargen är vänlig mot barnet.",
+      "fraga": "Hur är vargen?",
+      "ratt": "Vänlig",
+      "fel": [
+        "Trött",
+        "Arg",
+        "Hungrig"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-012",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Ordet skog betyder många träd.",
+      "fraga": "Vad betyder skog?",
+      "ratt": "Många träd",
+      "fel": [
+        "En hatt",
+        "En fisk",
+        "En sten"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-013",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Pojken bor i byn.",
+      "fraga": "Var bor pojken?",
+      "ratt": "I byn",
+      "fel": [
+        "I molnet",
+        "I grottan",
+        "I havet"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-014",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Flickan plockar blommor.",
+      "fraga": "Vad plockar flickan?",
+      "ratt": "Blommor",
+      "fel": [
+        "Stenar",
+        "Ägg",
+        "Löv"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-015",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "Ugglan sitter i granen.",
+      "fraga": "Vad gör ugglan just nu?",
+      "ratt": "Den sitter stilla",
+      "fel": [
+        "Den simmar",
+        "Den bakar",
+        "Den gräver"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-016",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Hugo ger äpplet till vännen.",
+      "fraga": "Vem får äpplet?",
+      "ratt": "Vännen",
+      "fel": [
+        "Stenen",
+        "Ugglan",
+        "Kungen"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-017",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Det regnar i skogen.",
+      "fraga": "Var regnar det?",
+      "ratt": "I skogen",
+      "fel": [
+        "I grottan",
+        "I båten",
+        "I huset"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-018",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Hästen springer fort.",
+      "fraga": "Vad gör hästen?",
+      "ratt": "Springer fort",
+      "fel": [
+        "Simmar",
+        "Läser",
+        "Sover"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-019",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först bakar de bröd. Sen äter de.",
+      "fraga": "Vad gör de sen?",
+      "ratt": "Äter",
+      "fel": [
+        "Sover",
+        "Simmar",
+        "Bakar bröd"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-020",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Ljus betyder att det är ljust.",
+      "fraga": "Vad betyder ljus här?",
+      "ratt": "Att det är ljust",
+      "fel": [
+        "Att det är natt",
+        "Att det är kallt",
+        "Att det regnar"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-021",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Räven gömmer sig bakom stubben.",
+      "fraga": "Varför gömmer sig räven bakom stubben?",
+      "ratt": "För att gömma sig",
+      "fel": [
+        "För att simma",
+        "För att baka",
+        "För att sjunga"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-022",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Siv sjunger en sång.",
+      "fraga": "Vem sjunger?",
+      "ratt": "Siv",
+      "fel": [
+        "Björnen",
+        "Stenen",
+        "Båten"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-023",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Barnet ler för att det är glad.",
+      "fraga": "Varför ler barnet?",
+      "ratt": "För att det är glad",
+      "fel": [
+        "För att det är hungrigt",
+        "För att det sover",
+        "För att det är argt"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-024",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Månen lyser över ängen.",
+      "fraga": "Var lyser månen?",
+      "ratt": "Över ängen",
+      "fel": [
+        "I lådan",
+        "Under jorden",
+        "I huset"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-025",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Fisken simmar i ån.",
+      "fraga": "Vad gör fisken?",
+      "ratt": "Simmar i ån",
+      "fel": [
+        "Flyger",
+        "Sjunger",
+        "Springer"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-026",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Alva har blå skor.",
+      "fraga": "Vad har Alva?",
+      "ratt": "Blå skor",
+      "fel": [
+        "Grön kappa",
+        "Gul boll",
+        "Röd hatt"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-027",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Stigen går till byn.",
+      "fraga": "Stigen går till byn. Vad kommer man till om man följer stigen?",
+      "ratt": "Byn",
+      "fel": [
+        "Månen",
+        "Havsbotten",
+        "Molnet"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-028",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först vaknar de. Sen äter de gröt.",
+      "fraga": "Vad gör de först?",
+      "ratt": "Vaknar",
+      "fel": [
+        "Äter gröt",
+        "Sover",
+        "Simmar"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-029",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Vän betyder någon man tycker om.",
+      "fraga": "Vad betyder vän?",
+      "ratt": "Någon man tycker om",
+      "fel": [
+        "En sten",
+        "En storm",
+        "En väg"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-030",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Harald ger honung till björnen.",
+      "fraga": "Vem får honung?",
+      "ratt": "Björnen",
+      "fel": [
+        "Fisken",
+        "Ugglan",
+        "Hästen"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-031",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Elden värmer dem.",
+      "fraga": "Vad gör elden?",
+      "ratt": "Värmer dem",
+      "fel": [
+        "Blåser",
+        "Kyler dem",
+        "Sjunger"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-032",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Det är natt så stjärnor syns.",
+      "fraga": "Varför syns stjärnor?",
+      "ratt": "Det är natt",
+      "fel": [
+        "Det snöar",
+        "Det regnar",
+        "Det är dag"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-ak1-001",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Ida går i skogen. Hon ser en liten älva vid en sten. Älvan vinkar glatt.",
+      "fraga": "Vem vinkar glatt?",
+      "ratt": "Älvan",
+      "fel": [
+        "Skogen",
+        "Ida",
+        "Stenen"
+      ]
+    },
+    {
+      "id": "lf-ak1-002",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Bo och Mira bakar bröd. De sätter brödet vid elden. Sen delar de det.",
+      "fraga": "Vad gör de sist?",
+      "ratt": "Delar brödet",
+      "fel": [
+        "Går hem",
+        "Sätter brödet vid elden",
+        "Bakar bröd"
+      ]
+    },
+    {
+      "id": "lf-ak1-003",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "En räv sitter vid stigen. Den väntar på sin unge. Unge kommer med ett bär i munnen.",
+      "fraga": "Vad har ungen i munnen?",
+      "ratt": "Ett bär",
+      "fel": [
+        "Ett blad",
+        "En fisk",
+        "En sten"
+      ]
+    },
+    {
+      "id": "lf-ak1-004",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Tor bär ved till lägret. Elden behöver mer ved. Tor lägger veden försiktigt.",
+      "fraga": "Varför bär Tor ved?",
+      "ratt": "Elden behöver mer ved",
+      "fel": [
+        "Han vill sova",
+        "Han ska simma",
+        "Han letar efter fisk"
+      ]
+    },
+    {
+      "id": "lf-ak1-005",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Byarna ligger vid ån. Barnen leker på bryggan. En båt glider förbi.",
+      "fraga": "Var leker barnen?",
+      "ratt": "På bryggan",
+      "fel": [
+        "I grottan",
+        "På taket",
+        "I skogen"
+      ]
+    },
+    {
+      "id": "lf-ak1-006",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Runan i stenen lyser mjukt. Den visar vägen hem. Barnet följer ljuset.",
+      "fraga": "Vad hjälper runan barnet med?",
+      "ratt": "Att hitta hem",
+      "fel": [
+        "Att sova",
+        "Att fiska",
+        "Att baka"
+      ]
+    },
+    {
+      "id": "lf-ak1-007",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet glänta betyder en öppen plats i skogen. Där växer gräs och blommor. Solen når marken.",
+      "fraga": "Vad betyder glänta?",
+      "ratt": "En öppen plats i skogen",
+      "fel": [
+        "En mörk grotta",
+        "En djup sjö",
+        "En hög mur"
+      ]
+    },
+    {
+      "id": "lf-ak1-008",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Siv hittar en fjäder. Fjädern är vit och mjuk. Hon ger den till sin vän.",
+      "fraga": "Vem får fjädern?",
+      "ratt": "Sivs vän",
+      "fel": [
+        "Hästen",
+        "Kungen",
+        "Ugglan"
+      ]
+    },
+    {
+      "id": "lf-ak1-009",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Det snöar lätt. Spåren syns i snön. Räven har gått till ån.",
+      "fraga": "Vart har räven gått?",
+      "ratt": "Till ån",
+      "fel": [
+        "Till månen",
+        "Till marknaden",
+        "Till taket"
+      ]
+    },
+    {
+      "id": "lf-ak1-010",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först tvättar de händerna. Sen äter de soppa. Sist diskar de skålarna.",
+      "fraga": "Vad gör de mitt i?",
+      "ratt": "Äter soppa",
+      "fel": [
+        "Diskar skålarna",
+        "Tvättar händerna",
+        "Sover"
+      ]
+    },
+    {
+      "id": "lf-ak1-011",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Hugo är trött efter vandringen. Han sätter sig på en stubbe. Snart somnar han.",
+      "fraga": "Varför somnar Hugo?",
+      "ratt": "Han är trött",
+      "fel": [
+        "Han är hungrig",
+        "Han är arg",
+        "Han är kall"
+      ]
+    },
+    {
+      "id": "lf-ak1-012",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Älgen står stilla. Den lyssnar. Något knäcker i busken.",
+      "fraga": "Vad gör älgen?",
+      "ratt": "Lyssnar",
+      "fel": [
+        "Bygger",
+        "Sjunger",
+        "Simmar"
+      ]
+    },
+    {
+      "id": "lf-ak1-013",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Månen lyser över fjället. Vinden är kall. Lägret har en varm eld.",
+      "fraga": "Var är det varmt?",
+      "ratt": "Vid lägrets eld",
+      "fel": [
+        "I snön",
+        "I vinden",
+        "På fjället utan eld"
+      ]
+    },
+    {
+      "id": "lf-ak1-014",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Alva lär sig en sång. Hon övar varje kväll. Snart kan hon den utantill.",
+      "fraga": "Varför övar Alva?",
+      "ratt": "För att lära sig sången",
+      "fel": [
+        "För att sova",
+        "För att fiska",
+        "För att springa"
+      ]
+    },
+    {
+      "id": "lf-ak1-015",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Stigen delar sig. En väg går till byn. En väg går till berget.",
+      "fraga": "Vart går den ena vägen?",
+      "ratt": "Till byn",
+      "fel": [
+        "Till havsbotten",
+        "Till månen",
+        "Till molnet"
+      ]
+    },
+    {
+      "id": "lf-ak1-016",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet stig betyder en smal väg. Den går mellan träden. Fötterna känner marken.",
+      "fraga": "Vad betyder stig?",
+      "ratt": "En smal väg",
+      "fel": [
+        "En stor stad",
+        "En hög torn",
+        "En djup brunn"
+      ]
+    },
+    {
+      "id": "lf-ak1-017",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Nisse ger vatten till hästen. Hästen dricker lugnt. Sen nickar den.",
+      "fraga": "Vem får vatten?",
+      "ratt": "Hästen",
+      "fel": [
+        "Nisse",
+        "Ugglan",
+        "Stenen"
+      ]
+    },
+    {
+      "id": "lf-ak1-018",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först plockar de bär. Sen tvättar de dem. Sist gör de saft.",
+      "fraga": "Vad gör de först?",
+      "ratt": "Plockar bär",
+      "fel": [
+        "Dricker",
+        "Tvättar bären",
+        "Gör saft"
+      ]
+    },
+    {
+      "id": "lf-ak1-019",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Elden sprakar. Alla sitter runt den. De berättar sagor.",
+      "fraga": "Vad gör de runt elden?",
+      "ratt": "Berättar sagor",
+      "fel": [
+        "Fiskar",
+        "Bygger hus",
+        "Simmar"
+      ]
+    },
+    {
+      "id": "lf-ak1-020",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Det är mörkt i skogen. Tor tänder lykta. Nu ser de stigen igen.",
+      "fraga": "Varför tänder Tor lyktan?",
+      "ratt": "Det är mörkt",
+      "fel": [
+        "Hästen sover",
+        "Han är hungrig",
+        "Det regnar inne"
+      ]
+    },
+    {
+      "id": "lf-ak1-021",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Fågeln bygger bo. Den bär kvistar. Boet sitter högt i trädet.",
+      "fraga": "Var sitter boet?",
+      "ratt": "Högt i trädet",
+      "fel": [
+        "Under stenen",
+        "I sjön",
+        "I båten"
+      ]
+    },
+    {
+      "id": "lf-ak1-022",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Mira ler. Hon har hittat en vän. De leker ihop.",
+      "fraga": "Varför ler Mira?",
+      "ratt": "Hon har hittat en vän",
+      "fel": [
+        "Hon fryser",
+        "Hon är trött",
+        "Hon är arg"
+      ]
+    },
+    {
+      "id": "lf-ak1-023",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet läger betyder en plats att vila. Där finns eld och tält. Natten blir trygg.",
+      "fraga": "Vad betyder läger här?",
+      "ratt": "En plats att vila",
+      "fel": [
+        "En storm",
+        "En stor stad",
+        "En djup brunn"
+      ]
+    },
+    {
+      "id": "lf-ak1-024",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Björnen luktar honung. Den går till bikupan. Bin surrar lugnt.",
+      "fraga": "Vad luktar björnen?",
+      "ratt": "Honung",
+      "fel": [
+        "Rök",
+        "Blomjord",
+        "Fisk"
+      ]
+    },
+    {
+      "id": "lf-ak1-025",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Barnet vinkar från bryggan. Båten svarar med en signal. Far kommer hem.",
+      "fraga": "Vem kommer hem?",
+      "ratt": "Far",
+      "fel": [
+        "Kungen",
+        "Älvan",
+        "Björnen"
+      ]
+    },
+    {
+      "id": "lf-ak1-026",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först öppnar de kartan. Sen pekar de på byn. Sist börjar de gå.",
+      "fraga": "Vad gör de sist?",
+      "ratt": "Börjar gå",
+      "fel": [
+        "Pekar på byn",
+        "Öppnar kartan",
+        "Sover"
+      ]
+    },
+    {
+      "id": "lf-ak1-027",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Snön täcker taken. Rök stiger från husen. Byarna sover lugnt.",
+      "fraga": "Hur är byarna?",
+      "ratt": "Lugna och sovande",
+      "fel": [
+        "Mitt i storm",
+        "Fulla av fest",
+        "Tomma på hus"
+      ]
+    },
+    {
+      "id": "lf-ak1-028",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Siv bär en korg. I korgen ligger ägg. Hon går försiktigt.",
+      "fraga": "Vad ligger i korgen?",
+      "ratt": "Ägg",
+      "fel": [
+        "Böcker",
+        "Stenar",
+        "Yxor"
+      ]
+    },
+    {
+      "id": "lf-ak1-029",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Ån rinner genom dalen. Fiskar simmar där. Barnen sitter och tittar.",
+      "fraga": "Var simmar fiskarna?",
+      "ratt": "I ån",
+      "fel": [
+        "I elden",
+        "I luften",
+        "I snön"
+      ]
+    },
+    {
+      "id": "lf-ak1-030",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet mjuk betyder inte hård. Fjädern är mjuk. Stenen är hård.",
+      "fraga": "Vad betyder mjuk?",
+      "ratt": "Inte hård",
+      "fel": [
+        "Mycket kall",
+        "Mycket hög",
+        "Mycket tung"
+      ]
+    },
+    {
+      "id": "lf-ak1-031",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Harald hjälper till. Han bär vatten. Alla tackar honom.",
+      "fraga": "Vem hjälper till?",
+      "ratt": "Harald",
+      "fel": [
+        "Stenen",
+        "Ugglan",
+        "Månen"
+      ]
+    },
+    {
+      "id": "lf-ak1-032",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Det blåser kallt. De knyter kapperna. Sen går de vidare.",
+      "fraga": "Varför knyter de kapperna?",
+      "ratt": "Det blåser kallt",
+      "fel": [
+        "Det är varmt",
+        "De ska sova",
+        "De ska simma"
+      ]
+    },
+    {
+      "id": "lf-ak2-001",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Elin vandrar längs ån. Hon ser en rund sten med en runa. Runan lyser blekt blått. Elin stannar och lyssnar.",
+      "fraga": "Vad lyser blekt blått?",
+      "ratt": "Runan",
+      "fel": [
+        "Ån",
+        "Stigen",
+        "Skogen"
+      ]
+    },
+    {
+      "id": "lf-ak2-002",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Bo bakar knäckebröd. Mira hämtar vatten. Tor tänder elden. Sen äter alla tillsammans.",
+      "fraga": "Vad händer sist?",
+      "ratt": "Alla äter tillsammans",
+      "fel": [
+        "Mira hämtar vatten",
+        "Tor tänder elden",
+        "Bo bakar"
+      ]
+    },
+    {
+      "id": "lf-ak2-003",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "En liten räv följer stigen. Den luktar rök från lägret. Räven vågar sig närmare. Barnen ger den en bit bröd.",
+      "fraga": "Vem ger räven bröd?",
+      "ratt": "Barnen",
+      "fel": [
+        "Elden",
+        "Räven",
+        "Stenen"
+      ]
+    },
+    {
+      "id": "lf-ak2-004",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Det börjar skymma. Tor tänder lyktan för att se stigen. Vinden är kall. De skyndar mot byn.",
+      "fraga": "Varför tänder Tor lyktan?",
+      "ratt": "För att se stigen",
+      "fel": [
+        "För att sova",
+        "För att laga mat",
+        "För att fiska"
+      ]
+    },
+    {
+      "id": "lf-ak2-005",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Gläntan ligger mellan höga granar. Solen når marken där. Blommor växer runt en gammal stubbe. En älva sitter där och vilar.",
+      "fraga": "Var sitter älvan?",
+      "ratt": "Vid stubben i gläntan",
+      "fel": [
+        "I snön",
+        "På taket",
+        "I båten"
+      ]
+    },
+    {
+      "id": "lf-ak2-006",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Hugo har gått långt. Fötterna värker. Han sätter sig vid en sten. Snart somnar han en stund.",
+      "fraga": "Varför somnar Hugo?",
+      "ratt": "Han är trött efter vandringen",
+      "fel": [
+        "Han fryser av snö",
+        "Han är hungrig på fisk",
+        "Han är arg"
+      ]
+    },
+    {
+      "id": "lf-ak2-007",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet bleka betyder att något blir ljusare eller mattare. Himlen bleknar vid gryning. Mörkret slipper taget.",
+      "fraga": "Vad betyder bleka här?",
+      "ratt": "Bli ljusare eller mattare",
+      "fel": [
+        "Bli kallare",
+        "Bli tyngre",
+        "Bli snabbare"
+      ]
+    },
+    {
+      "id": "lf-ak2-008",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Siv bär honung i en kruka. Hon går försiktigt över bron. En droppe faller. Bin surrar nyfiket.",
+      "fraga": "Vad bär Siv?",
+      "ratt": "Honung i en kruka",
+      "fel": [
+        "Vatten i en hink",
+        "Fisk i ett nät",
+        "Ved i en korg"
+      ]
+    },
+    {
+      "id": "lf-ak2-009",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först ritar de en karta. Sen märker de stigen med stenar. Därefter går de tillbaka till lägret. Sist visar de kartan för de andra.",
+      "fraga": "Vad gör de efter att ha märkt stigen?",
+      "ratt": "Går tillbaka till lägret",
+      "fel": [
+        "Sover",
+        "Ritar kartan",
+        "Visar kartan"
+      ]
+    },
+    {
+      "id": "lf-ak2-010",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Älgen står i dimman. Den rör sig tyst. Barnen håller andan. Älgen går vidare utan att se dem.",
+      "fraga": "Hur rör sig älgen?",
+      "ratt": "Tyst",
+      "fel": [
+        "Högljutt",
+        "Med sång",
+        "Snabbt i språng"
+      ]
+    },
+    {
+      "id": "lf-ak2-011",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Byarna ligger nära fjället. Röken stiger från skorstenarna. En väg slingrar uppför. Där uppe finns en utsikt.",
+      "fraga": "Var finns utsikten?",
+      "ratt": "Uppe vid fjället",
+      "fel": [
+        "Under bron",
+        "I källaren",
+        "I båten"
+      ]
+    },
+    {
+      "id": "lf-ak2-012",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Alva övar på runtecknen. Hon skriver dem i sanden. Vågorna suddar ut dem. Hon övar igen.",
+      "fraga": "Varför övar Alva igen?",
+      "ratt": "Vågorna suddade ut tecknen",
+      "fel": [
+        "Hon är arg",
+        "Hon ska simma",
+        "Hon är hungrig"
+      ]
+    },
+    {
+      "id": "lf-ak2-013",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Nisse hittar en gammal nyckel. Den passar i en liten låda. I lådan ligger en fjäder. Fjädern glänser mjukt.",
+      "fraga": "Vad ligger i lådan?",
+      "ratt": "En fjäder",
+      "fel": [
+        "En yxa",
+        "En sten",
+        "En fisk"
+      ]
+    },
+    {
+      "id": "lf-ak2-014",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet slingra betyder att något går i bågar. Vägen slingrar mellan träden. Den är inte rak.",
+      "fraga": "Vad betyder slingra?",
+      "ratt": "Gå i bågar",
+      "fel": [
+        "Gå baklänges",
+        "Gå rakt",
+        "Gå fort"
+      ]
+    },
+    {
+      "id": "lf-ak2-015",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "Harald ger vatten till hästen. Sen borstar han manen. Hästen står stilla. Den litar på honom.",
+      "fraga": "Vem litar hästen på?",
+      "ratt": "Harald",
+      "fel": [
+        "Björnen",
+        "Ugglan",
+        "Månen"
+      ]
+    },
+    {
+      "id": "lf-ak2-016",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Det regnar lätt. De sätter upp ett tält. Elden skyddas med stenar. Alla håller sig torra.",
+      "fraga": "Varför sätter de upp tält?",
+      "ratt": "Det regnar",
+      "fel": [
+        "Det är soligt",
+        "De ska fiska",
+        "De ska dansa"
+      ]
+    },
+    {
+      "id": "lf-ak2-017",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först samlar de bär. Sen kokar de dem till sylt. Därefter fyller de burkar. Sist ställer de burkarna svalt.",
+      "fraga": "Vad gör de precis innan burkarna ställs svalt?",
+      "ratt": "Fyller burkarna",
+      "fel": [
+        "Äter",
+        "Samlar bär",
+        "Kokar sylt"
+      ]
+    },
+    {
+      "id": "lf-ak2-018",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Månen speglas i sjön. Vinden är svag. En uggla ropar. Natten känns lugn.",
+      "fraga": "Hur känns natten?",
+      "ratt": "Lugn",
+      "fel": [
+        "Högljudd",
+        "Het",
+        "Läskig"
+      ]
+    },
+    {
+      "id": "lf-ak2-019",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Ida följer spår i snön. Spåren leder till en håla. Där inne sover en björnunge. Ida går tyst därifrån.",
+      "fraga": "Var sover björnungen?",
+      "ratt": "I en håla",
+      "fel": [
+        "På taket",
+        "I båten",
+        "I trädet"
+      ]
+    },
+    {
+      "id": "lf-ak2-020",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Tor berättar en saga. Alla lyssnar. Elden sprakar. Sagaordet känns nära.",
+      "fraga": "Vad gör Tor?",
+      "ratt": "Berättar en saga",
+      "fel": [
+        "Fiskar",
+        "Bygger hus",
+        "Sover"
+      ]
+    },
+    {
+      "id": "lf-ak2-021",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet svalt betyder lite kallt. Maten håller sig bättre där. Burkarna står i skuggan.",
+      "fraga": "Vad betyder svalt?",
+      "ratt": "Lite kallt",
+      "fel": [
+        "Mycket blött",
+        "Mycket mörkt",
+        "Mycket hett"
+      ]
+    },
+    {
+      "id": "lf-ak2-022",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "Mira och Bo leker kull. De springer mellan träden. Bo tappar hatten. Mira ger tillbaka den.",
+      "fraga": "Vem tappar hatten?",
+      "ratt": "Bo",
+      "fel": [
+        "Älvan",
+        "Tor",
+        "Mira"
+      ]
+    },
+    {
+      "id": "lf-ak2-023",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Stigen är lerig efter regnet. De går försiktigt. Ingen vill halka. De håller i varandra.",
+      "fraga": "Varför går de försiktigt?",
+      "ratt": "Stigen är lerig",
+      "fel": [
+        "Stigen är torr",
+        "De är hungriga",
+        "De ska sova"
+      ]
+    },
+    {
+      "id": "lf-ak2-024",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först öppnar de porten. Sen går de in i gården. Där möter dem en vänlig hund. Sist får de soppa.",
+      "fraga": "Vad möter dem i gården?",
+      "ratt": "En vänlig hund",
+      "fel": [
+        "En storm",
+        "En båt",
+        "En björn"
+      ]
+    },
+    {
+      "id": "lf-ak2-025",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Fåglarna flyger söderut. Det börjar bli kallt. Löven faller. Vintern närmar sig.",
+      "fraga": "Vilken årstid närmar sig?",
+      "ratt": "Vintern",
+      "fel": [
+        "Våren",
+        "Sommaren",
+        "Högsommar"
+      ]
+    },
+    {
+      "id": "lf-ak2-026",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Siv lägger en sten på stigen. Den visar vägen tillbaka. Andra vandrare kan följa den. Stenen är målad blå.",
+      "fraga": "Vad visar den blå stenen?",
+      "ratt": "Vägen tillbaka",
+      "fel": [
+        "Vägen till månen",
+        "Vägen till havsbotten",
+        "Vägen till taket"
+      ]
+    },
+    {
+      "id": "lf-ak2-027",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Ån rinner kraftigare efter regnet. Bron darrar lite. De går en och en. Alla kommer säkert över.",
+      "fraga": "Var går de en och en?",
+      "ratt": "Över bron",
+      "fel": [
+        "I båten",
+        "På taket",
+        "I skogen"
+      ]
+    },
+    {
+      "id": "lf-ak2-028",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet darrar betyder att något skakar lite. Bron darrar. De känner det under fötterna.",
+      "fraga": "Vad betyder darrar?",
+      "ratt": "Skakar lite",
+      "fel": [
+        "Sjunger",
+        "Lyser starkt",
+        "Luktar gott"
+      ]
+    },
+    {
+      "id": "lf-ak2-029",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Elin delar sitt bröd. Den hungriga räven tar emot det. Elin ler. De skiljs som vänner.",
+      "fraga": "Hur skiljs Elin och räven?",
+      "ratt": "Som vänner",
+      "fel": [
+        "Som främlingar",
+        "Som grannar",
+        "Som fiender"
+      ]
+    },
+    {
+      "id": "lf-ak2-030",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Hugo räknar stjärnor. Han kommer till tio. Sen somnar han. Drömmen är ljus.",
+      "fraga": "Hur många stjärnor räknar Hugo till?",
+      "ratt": "Tio",
+      "fel": [
+        "Hundra",
+        "Två",
+        "Noll"
+      ]
+    },
+    {
+      "id": "lf-ak2-031",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Byborna samlas vid elden. De delar nyheter. Barnen lyssnar. Kvällen blir lång och varm.",
+      "fraga": "Var samlas byborna?",
+      "ratt": "Vid elden",
+      "fel": [
+        "På taket",
+        "I sjön",
+        "I grottan"
+      ]
+    },
+    {
+      "id": "lf-ak2-032",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Det snöar tätare. De skyndar till stugan. Inne brinner elden. Utanför vitnar världen.",
+      "fraga": "Varför skyndar de till stugan?",
+      "ratt": "Det snöar tätare",
+      "fel": [
+        "De ska simma",
+        "De ska fiska",
+        "Det är sommar"
+      ]
+    },
+    {
+      "id": "lf-ak3-001",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Elin följer ån mot gläntan. Där ligger en sten med tre runor. Den mittersta runan lyser starkare än de andra. Elin ritar av tecknen i sanden. Sen går hon tillbaka till lägret för att visa dem.",
+      "fraga": "Vilken runa lyser starkast?",
+      "ratt": "Den mittersta",
+      "fel": [
+        "Den första",
+        "Ingen av dem",
+        "Den sista"
+      ]
+    },
+    {
+      "id": "lf-ak3-002",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Bo, Mira och Tor delar på uppgifterna. Bo bakar, Mira hämtar vatten och Tor tänder elden. När maten är klar sätter de sig i en ring. De turas om att berätta korta sagor. Natten blir lugn.",
+      "fraga": "Vad händer efter att maten är klar?",
+      "ratt": "De sätter sig i en ring",
+      "fel": [
+        "Mira hämtar vatten",
+        "Bo bakar",
+        "Tor tänder elden"
+      ]
+    },
+    {
+      "id": "lf-ak3-003",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "En rävunge har tappat bort sin mamma. Den snusar längs stigen och hittar doften av rök. Vid lägret får den en bit bröd av barnen. Mamma-räven dyker upp strax efter. De lämnar lägret tillsammans.",
+      "fraga": "Vem ger rävungen bröd?",
+      "ratt": "Barnen",
+      "fel": [
+        "Ugglan",
+        "Mamma-räven",
+        "Tor ensam"
+      ]
+    },
+    {
+      "id": "lf-ak3-004",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Skymningen kommer snabbt mellan granarna. Tor tänder lyktan så att stigen syns. Vinden tar i och kapperna fladdrar. De håller i varandra för att inte tappa bort någon. Snart syns byns ljus.",
+      "fraga": "Varför tänder Tor lyktan?",
+      "ratt": "Så att stigen syns",
+      "fel": [
+        "För att skrämma djur",
+        "För att laga mat",
+        "För att sova"
+      ]
+    },
+    {
+      "id": "lf-ak3-005",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Gläntan öppnar sig som ett litet rum i skogen. Solen når marken och värmer stenarna. Blommor växer runt en stubbe där en älva vilar. Älvan ger barnen en fjäder som tack. De lovar att vårda platsen.",
+      "fraga": "Var vilar älvan?",
+      "ratt": "På stubben i gläntan",
+      "fel": [
+        "I båten",
+        "På byns tak",
+        "I snön"
+      ]
+    },
+    {
+      "id": "lf-ak3-006",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Hugo har vandrat från gryning till skymning. Fötterna värker och ryggsäcken känns tung. Han sätter sig vid en varm sten i solen. Ögonlocken blir tunga. Snart sover han en kort stund.",
+      "fraga": "Varför somnar Hugo?",
+      "ratt": "Han är uttröttad efter vandringen",
+      "fel": [
+        "Han är arg på vännerna",
+        "Han fryser av snö",
+        "Han är hungrig på fisk"
+      ]
+    },
+    {
+      "id": "lf-ak3-007",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet blekna betyder att färgen eller ljuset blir svagare. Himlen bleknar när solen går ner. Runans sken bleknar också när molnen kommer. Då tänder vandrarna sina lyktor.",
+      "fraga": "Vad betyder blekna?",
+      "ratt": "Bli svagare i färg eller ljus",
+      "fel": [
+        "Bli tyngre",
+        "Bli högre",
+        "Bli snabbare"
+      ]
+    },
+    {
+      "id": "lf-ak3-008",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Siv bär en kruka med honung över den smala bron. Hon går sakta för att inte spilla. En droppe faller i ån och fiskarna nyfiket tittar upp. På andra sidan väntar byborna. De ska baka sötbröd till festen.",
+      "fraga": "Vad ska byborna baka?",
+      "ratt": "Sötbröd",
+      "fel": [
+        "Knäckebröd utan smak",
+        "Bara fisk",
+        "En sten"
+      ]
+    },
+    {
+      "id": "lf-ak3-009",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först ritar de kartan på bark. Sen märker de stigen med blå stenar. Därefter går de tillbaka samma väg för att kontrollera märkena. När allt stämmer visar de kartan för de andra i lägret. Sist lägger de undan barken torrt.",
+      "fraga": "Vad gör de precis innan de visar kartan?",
+      "ratt": "Kontrollerar märkena på vägen tillbaka",
+      "fel": [
+        "Sover",
+        "Lägger undan barken",
+        "Ritar kartan"
+      ]
+    },
+    {
+      "id": "lf-ak3-010",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Älgen står stilla i morgondimman. Den vänder örat mot ett knak i busken. Barnen håller andan bakom en gran. Älgen bestämmer sig för att gå vidare. Dimman sluter sig om den.",
+      "fraga": "Varför håller barnen andan?",
+      "ratt": "De vill inte skrämma älgen",
+      "fel": [
+        "De är hungriga",
+        "De ska sjunga",
+        "De fryser"
+      ]
+    },
+    {
+      "id": "lf-ak3-011",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Byarna klättrar längs fjällsidan. Röken från skorstenarna syns långt. En slingrande stig leder till en utsiktsplats. Därifrån ser man både ån och skogen. Många vandrare stannar där en stund.",
+      "fraga": "Varifrån ser man både ån och skogen?",
+      "ratt": "Från utsiktsplatsen",
+      "fel": [
+        "Från båten",
+        "Från källaren",
+        "Från grottan"
+      ]
+    },
+    {
+      "id": "lf-ak3-012",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Alva övar runtecknen i sanden vid stranden. Hon skriver tre tecken och går bakåt för att se dem. En våg sveper in och suddar ut allt. Alva skrattar och börjar om. Hon säger att övning är viktigare än perfekta tecken.",
+      "fraga": "Varför börjar Alva om?",
+      "ratt": "Vågen suddade ut tecknen",
+      "fel": [
+        "Hon är arg",
+        "Hon är hungrig",
+        "Hon ska simma"
+      ]
+    },
+    {
+      "id": "lf-ak3-013",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Nisse hittar en gammal nyckel under en rot. Den passar i en liten låda gömd i stubben. I lådan ligger en vit fjäder och en lapp. Lappen säger: ge fjädern till den som hjälper dig. Nisse stoppar fjädern säkert undan.",
+      "fraga": "Vad säger lappen att Nisse ska göra?",
+      "ratt": "Ge fjädern till den som hjälper honom",
+      "fel": [
+        "Kasta fjädern i ån",
+        "Gömma nyckeln igen",
+        "Äta fjädern"
+      ]
+    },
+    {
+      "id": "lf-ak3-014",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet slingrande betyder att något går i mjuka bågar. Stigen är slingrande mellan stenarna. Den tar längre tid än en rak väg. Men den är säkrare när det är brant.",
+      "fraga": "Vad betyder slingrande?",
+      "ratt": "Gående i mjuka bågar",
+      "fel": [
+        "Gående baklänges",
+        "Gående rakt",
+        "Gående under jorden"
+      ]
+    },
+    {
+      "id": "lf-ak3-015",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "Harald ger hästen vatten och borstar manen. Hästen står stilla och litar på honom. Sen lastar de ryggsäckarna. De går i jämn takt längs ån. Ingen lämnas efter.",
+      "fraga": "Vem litar hästen på?",
+      "ratt": "Harald",
+      "fel": [
+        "Björnen",
+        "Ugglan",
+        "Månen"
+      ]
+    },
+    {
+      "id": "lf-ak3-016",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Regnet kommer plötsligt. De sätter upp tältet mellan två granar. Elden skyddas med en ring av stenar. Kapperna hängs att torka. Inne i tältet blir det snart varmt.",
+      "fraga": "Varför sätter de upp tältet?",
+      "ratt": "Det börjar regna",
+      "fel": [
+        "De ska fiska",
+        "Det är soligt",
+        "De ska dansa"
+      ]
+    },
+    {
+      "id": "lf-ak3-017",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först samlar de blåbär i korgar. Sen kokar de dem sakta till sylt. Därefter fyller de rena burkar. Burkarna märks med namn och dag. Sist ställs de svalt i skafferiet.",
+      "fraga": "Vad gör de efter att sylten kokat?",
+      "ratt": "Fyller rena burkar",
+      "fel": [
+        "Ställer burkar svalt",
+        "Äter upp allt",
+        "Samlar blåbär"
+      ]
+    },
+    {
+      "id": "lf-ak3-018",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Månen speglas blank i sjön. Vinden är nästan stilla. En uggla ropar långt bort. Lägret har bara en liten eld. Natten känns trygg och stor.",
+      "fraga": "Hur beskrivs natten?",
+      "ratt": "Trygg och stor",
+      "fel": [
+        "Högljudd och het",
+        "Tom och arg",
+        "Läskig och kall"
+      ]
+    },
+    {
+      "id": "lf-ak3-019",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Ida följer små spår i snön. Spåren leder till en håla under en rot. Därinne sover en björnunge med runda öron. Ida backar tyst. Hon berättar senare för de andra utan att störa ungen.",
+      "fraga": "Var sover björnungen?",
+      "ratt": "I en håla under en rot",
+      "fel": [
+        "På byns tak",
+        "I båten",
+        "I trädet"
+      ]
+    },
+    {
+      "id": "lf-ak3-020",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Tor berättar en saga om en runa som visade vägen. Alla lyssnar nära elden. När sagan tar slut är det tyst en stund. Sen ställer barnen frågor. Tor svarar lugnt.",
+      "fraga": "Vad handlar sagan om?",
+      "ratt": "En runa som visade vägen",
+      "fel": [
+        "En hatt som sjöng",
+        "En sten som åt",
+        "En fisk som flög"
+      ]
+    },
+    {
+      "id": "lf-ak3-021",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet svalt betyder svalare än vanligt rum, men inte isande kallt. Sylten håller sig bättre svalt. Därför ställs burkarna i skafferiet. Solen når inte dit.",
+      "fraga": "Vad betyder svalt?",
+      "ratt": "Lite kallt men inte isande",
+      "fel": [
+        "Mycket mörkt",
+        "Mycket blött",
+        "Mycket hett"
+      ]
+    },
+    {
+      "id": "lf-ak3-022",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "Mira och Bo leker kull mellan björkarna. Bo tappar hatten när han svänger. Mira plockar upp den och ger tillbaka den. De skrattar och fortsätter. Ingen blir sur.",
+      "fraga": "Vem tappar hatten?",
+      "ratt": "Bo",
+      "fel": [
+        "Tor",
+        "Mira",
+        "Älvan"
+      ]
+    },
+    {
+      "id": "lf-ak3-023",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Efter regnet är stigen lerig och halt. De går sakta och håller i varandra. Ingen vill halka ner i diket. När de når stenbron andas de ut. Bron är torrare.",
+      "fraga": "Varför går de sakta?",
+      "ratt": "Stigen är lerig och halt",
+      "fel": [
+        "De är hungriga",
+        "Stigen är torr",
+        "De ska sova"
+      ]
+    },
+    {
+      "id": "lf-ak3-024",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först öppnar de den låga porten. Sen går de in i gården där en hund viftar på svansen. De hälsar på husfolket. Sist får de varm soppa vid bordet. Det känns som hemma.",
+      "fraga": "Vad händer precis innan de får soppa?",
+      "ratt": "De hälsar på husfolket",
+      "fel": [
+        "Går in i gården",
+        "Sover",
+        "Öppnar porten"
+      ]
+    },
+    {
+      "id": "lf-ak3-025",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Fåglarna samlas på ledstänger och tak. Det börjar bli kallt om nätterna. Löven faller i gula högar. Vinden tar från norr. Allt tyder på att vintern snart är här.",
+      "fraga": "Vilken årstid närmar sig enligt texten?",
+      "ratt": "Vintern",
+      "fel": [
+        "Högsommar",
+        "Sommaren",
+        "Våren"
+      ]
+    },
+    {
+      "id": "lf-ak3-026",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Siv lägger blå stenar längs stigen. Stenarna visar vägen tillbaka till lägret. Andra vandrare kan följa dem även i skymning. En sten är större och markerar vägskälet. Där skiljs två stigar.",
+      "fraga": "Vad markerar den större stenen?",
+      "ratt": "Vägskälet",
+      "fel": [
+        "Ån",
+        "Månen",
+        "Taket"
+      ]
+    },
+    {
+      "id": "lf-ak3-027",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Ån sväller efter flera dagars regn. Bron darrar när de går över. De går en i taget och håller i räcket. På andra sidan väntar torr mark. Alla andas ut.",
+      "fraga": "Var går de en i taget?",
+      "ratt": "Över bron",
+      "fel": [
+        "I skogen",
+        "I båten",
+        "På taket"
+      ]
+    },
+    {
+      "id": "lf-ak3-028",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet darrar betyder att något skakar smått. Bron darrar under fötterna. Det känns i benen. Därför går de försiktigt.",
+      "fraga": "Vad betyder darrar?",
+      "ratt": "Skakar smått",
+      "fel": [
+        "Sjunger högt",
+        "Lyser starkt",
+        "Luktar gott"
+      ]
+    },
+    {
+      "id": "lf-ak3-029",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Elin delar sitt sista bröd med den hungriga räven. Räven tar emot det och sätter sig en bit bort. Elin ler utan att gå närmare. De skiljs utan rädsla. Skogen känns vänligare efteråt.",
+      "fraga": "Hur förändras känslan i skogen?",
+      "ratt": "Den känns vänligare",
+      "fel": [
+        "Den försvinner",
+        "Den blir tyst av ilska",
+        "Den känns läskigare"
+      ]
+    },
+    {
+      "id": "lf-ak3-030",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Hugo räknar stjärnor och kommer till tio innan ögonen faller igen. Drömmen är ljus och varm. Han vaknar när gryningen kommer. Dagg ligger på tältet. Det luktar rök från den nya elden.",
+      "fraga": "Hur långt räknar Hugo innan han somnar?",
+      "ratt": "Till tio",
+      "fel": [
+        "Till hundra",
+        "Till två",
+        "Till noll"
+      ]
+    },
+    {
+      "id": "lf-ak3-031",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Byborna samlas vid den stora elden varje lördag. De delar nyheter och små gåvor. Barnen lyssnar tills de somnar mot någons axel. Kvällen blir lång men trygg. Ingen behöver gå hem ensam i mörkret.",
+      "fraga": "Var samlas byborna på lördagar?",
+      "ratt": "Vid den stora elden",
+      "fel": [
+        "I sjön",
+        "På taket",
+        "I grottan"
+      ]
+    },
+    {
+      "id": "lf-ak3-032",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Snön faller tätare och tätare. De skyndar mot stugan längst in i dalen. Inne brinner redan en eld. Utanför vitnar stigar och tak. Världen blir tyst och mjuk.",
+      "fraga": "Varför skyndar de till stugan?",
+      "ratt": "Snön faller tätare",
+      "fel": [
+        "De ska simma",
+        "Det är sommarhett",
+        "De ska fiska"
+      ]
+    }
+  ]
+}
