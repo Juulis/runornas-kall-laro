@@ -4,218 +4,846 @@
     {
       "id": "en-forskola-001",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter röd på engelska?",
-      "ratt": "red",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "hund",
       "fel": [
-        "blue",
-        "green",
-        "yellow"
+        "katt",
+        "sol",
+        "röd"
+      ],
+      "eng": "dog",
+      "emoji": "🐶",
+      "fel_emoji": [
+        "🐱",
+        "☀️",
+        "🔴"
       ]
     },
     {
       "id": "en-forskola-002",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter blå på engelska?",
-      "ratt": "blue",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "katt",
       "fel": [
-        "red",
-        "green",
-        "yellow"
+        "sol",
+        "röd",
+        "blå"
+      ],
+      "eng": "cat",
+      "emoji": "🐱",
+      "fel_emoji": [
+        "☀️",
+        "🔴",
+        "🔵"
       ]
     },
     {
       "id": "en-forskola-003",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter grön på engelska?",
-      "ratt": "green",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "sol",
       "fel": [
-        "red",
-        "blue",
-        "yellow"
+        "röd",
+        "blå",
+        "ett"
+      ],
+      "eng": "sun",
+      "emoji": "☀️",
+      "fel_emoji": [
+        "🔴",
+        "🔵",
+        "1️⃣"
       ]
     },
     {
       "id": "en-forskola-004",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter gul på engelska?",
-      "ratt": "yellow",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "röd",
       "fel": [
-        "red",
-        "blue",
-        "green"
+        "blå",
+        "ett",
+        "två"
+      ],
+      "eng": "red",
+      "emoji": "🔴",
+      "fel_emoji": [
+        "🔵",
+        "1️⃣",
+        "2️⃣"
       ]
     },
     {
       "id": "en-forskola-005",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter svart på engelska?",
-      "ratt": "black",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "blå",
       "fel": [
-        "red",
-        "blue",
-        "green"
+        "ett",
+        "två",
+        "äpple"
+      ],
+      "eng": "blue",
+      "emoji": "🔵",
+      "fel_emoji": [
+        "1️⃣",
+        "2️⃣",
+        "🍎"
       ]
     },
     {
       "id": "en-forskola-006",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter vit på engelska?",
-      "ratt": "white",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "ett",
       "fel": [
-        "red",
-        "blue",
-        "green"
+        "två",
+        "äpple",
+        "boll"
+      ],
+      "eng": "one",
+      "emoji": "1️⃣",
+      "fel_emoji": [
+        "2️⃣",
+        "🍎",
+        "⚽"
       ]
     },
     {
       "id": "en-forskola-007",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter brun på engelska?",
-      "ratt": "brown",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "två",
       "fel": [
-        "red",
-        "blue",
-        "green"
+        "äpple",
+        "boll",
+        "hus"
+      ],
+      "eng": "two",
+      "emoji": "2️⃣",
+      "fel_emoji": [
+        "🍎",
+        "⚽",
+        "🏠"
       ]
     },
     {
       "id": "en-forskola-008",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter rosa på engelska?",
-      "ratt": "pink",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "äpple",
       "fel": [
-        "red",
-        "blue",
-        "green"
+        "boll",
+        "hus",
+        "fisk"
+      ],
+      "eng": "apple",
+      "emoji": "🍎",
+      "fel_emoji": [
+        "⚽",
+        "🏠",
+        "🐟"
       ]
     },
     {
       "id": "en-forskola-009",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter hund på engelska?",
-      "ratt": "dog",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "boll",
       "fel": [
-        "cat",
-        "bird",
-        "fish"
+        "hus",
+        "fisk",
+        "ko"
+      ],
+      "eng": "ball",
+      "emoji": "⚽",
+      "fel_emoji": [
+        "🏠",
+        "🐟",
+        "🐄"
       ]
     },
     {
       "id": "en-forskola-010",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter katt på engelska?",
-      "ratt": "cat",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "hus",
       "fel": [
-        "dog",
-        "bird",
-        "fish"
+        "fisk",
+        "ko",
+        "gris"
+      ],
+      "eng": "house",
+      "emoji": "🏠",
+      "fel_emoji": [
+        "🐟",
+        "🐄",
+        "🐷"
       ]
     },
     {
       "id": "en-forskola-011",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter fågel på engelska?",
-      "ratt": "bird",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "fisk",
       "fel": [
-        "dog",
-        "cat",
-        "fish"
+        "ko",
+        "gris",
+        "båt"
+      ],
+      "eng": "fish",
+      "emoji": "🐟",
+      "fel_emoji": [
+        "🐄",
+        "🐷",
+        "⛵"
       ]
     },
     {
       "id": "en-forskola-012",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter fisk på engelska?",
-      "ratt": "fish",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "ko",
       "fel": [
-        "dog",
-        "cat",
-        "bird"
+        "gris",
+        "båt",
+        "mjölk"
+      ],
+      "eng": "cow",
+      "emoji": "🐄",
+      "fel_emoji": [
+        "🐷",
+        "⛵",
+        "🥛"
       ]
     },
     {
       "id": "en-forskola-013",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter häst på engelska?",
-      "ratt": "horse",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "gris",
       "fel": [
-        "dog",
-        "cat",
-        "bird"
+        "båt",
+        "mjölk",
+        "bröd"
+      ],
+      "eng": "pig",
+      "emoji": "🐷",
+      "fel_emoji": [
+        "⛵",
+        "🥛",
+        "🍞"
       ]
     },
     {
       "id": "en-forskola-014",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter siffran 1 på engelska?",
-      "ratt": "one",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "båt",
       "fel": [
-        "two",
-        "three",
-        "four"
+        "mjölk",
+        "bröd",
+        "bok"
+      ],
+      "eng": "boat",
+      "emoji": "⛵",
+      "fel_emoji": [
+        "🥛",
+        "🍞",
+        "📖"
       ]
     },
     {
       "id": "en-forskola-015",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter siffran 2 på engelska?",
-      "ratt": "two",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "mjölk",
       "fel": [
-        "one",
-        "three",
-        "four"
+        "bröd",
+        "bok",
+        "träd"
+      ],
+      "eng": "milk",
+      "emoji": "🥛",
+      "fel_emoji": [
+        "🍞",
+        "📖",
+        "🌳"
       ]
     },
     {
       "id": "en-forskola-016",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter siffran 3 på engelska?",
-      "ratt": "three",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "bröd",
       "fel": [
-        "one",
-        "two",
-        "four"
+        "bok",
+        "träd",
+        "fågel"
+      ],
+      "eng": "bread",
+      "emoji": "🍞",
+      "fel_emoji": [
+        "📖",
+        "🌳",
+        "🐦"
       ]
     },
     {
       "id": "en-forskola-017",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter siffran 4 på engelska?",
-      "ratt": "four",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "bok",
       "fel": [
-        "one",
-        "two",
-        "three"
+        "träd",
+        "fågel",
+        "häst"
+      ],
+      "eng": "book",
+      "emoji": "📖",
+      "fel_emoji": [
+        "🌳",
+        "🐦",
+        "🐴"
       ]
     },
     {
       "id": "en-forskola-018",
       "niva": "forskola",
-      "typ": "glosa",
-      "fraga": "Vad heter siffran 5 på engelska?",
-      "ratt": "five",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "träd",
       "fel": [
-        "one",
-        "two",
-        "three"
+        "fågel",
+        "häst",
+        "bil"
+      ],
+      "eng": "tree",
+      "emoji": "🌳",
+      "fel_emoji": [
+        "🐦",
+        "🐴",
+        "🚗"
       ]
+    },
+    {
+      "id": "en-forskola-019",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "fågel",
+      "fel": [
+        "häst",
+        "bil",
+        "mamma"
+      ],
+      "eng": "bird",
+      "emoji": "🐦",
+      "fel_emoji": [
+        "🐴",
+        "🚗",
+        "👩"
+      ]
+    },
+    {
+      "id": "en-forskola-020",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "häst",
+      "fel": [
+        "bil",
+        "mamma",
+        "pappa"
+      ],
+      "eng": "horse",
+      "emoji": "🐴",
+      "fel_emoji": [
+        "🚗",
+        "👩",
+        "👨"
+      ]
+    },
+    {
+      "id": "en-forskola-021",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "bil",
+      "fel": [
+        "mamma",
+        "pappa",
+        "säng"
+      ],
+      "eng": "car",
+      "emoji": "🚗",
+      "fel_emoji": [
+        "👩",
+        "👨",
+        "🛏️"
+      ]
+    },
+    {
+      "id": "en-forskola-022",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "mamma",
+      "fel": [
+        "pappa",
+        "säng",
+        "dörr"
+      ],
+      "eng": "mom",
+      "emoji": "👩",
+      "fel_emoji": [
+        "👨",
+        "🛏️",
+        "🚪"
+      ]
+    },
+    {
+      "id": "en-forskola-023",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "pappa",
+      "fel": [
+        "säng",
+        "dörr",
+        "öga"
+      ],
+      "eng": "dad",
+      "emoji": "👨",
+      "fel_emoji": [
+        "🛏️",
+        "🚪",
+        "👁️"
+      ]
+    },
+    {
+      "id": "en-forskola-024",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "säng",
+      "fel": [
+        "dörr",
+        "öga",
+        "hand"
+      ],
+      "eng": "bed",
+      "emoji": "🛏️",
+      "fel_emoji": [
+        "🚪",
+        "👁️",
+        "✋"
+      ]
+    },
+    {
+      "id": "en-forskola-025",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "dörr",
+      "fel": [
+        "öga",
+        "hand",
+        "fot"
+      ],
+      "eng": "door",
+      "emoji": "🚪",
+      "fel_emoji": [
+        "👁️",
+        "✋",
+        "🦶"
+      ]
+    },
+    {
+      "id": "en-forskola-026",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "öga",
+      "fel": [
+        "hand",
+        "fot",
+        "näsa"
+      ],
+      "eng": "eye",
+      "emoji": "👁️",
+      "fel_emoji": [
+        "✋",
+        "🦶",
+        "👃"
+      ]
+    },
+    {
+      "id": "en-forskola-027",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "hand",
+      "fel": [
+        "fot",
+        "näsa",
+        "mun"
+      ],
+      "eng": "hand",
+      "emoji": "✋",
+      "fel_emoji": [
+        "🦶",
+        "👃",
+        "👄"
+      ]
+    },
+    {
+      "id": "en-forskola-028",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "fot",
+      "fel": [
+        "näsa",
+        "mun",
+        "grön"
+      ],
+      "eng": "foot",
+      "emoji": "🦶",
+      "fel_emoji": [
+        "👃",
+        "👄",
+        "🟢"
+      ]
+    },
+    {
+      "id": "en-forskola-029",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "näsa",
+      "fel": [
+        "mun",
+        "grön",
+        "gul"
+      ],
+      "eng": "nose",
+      "emoji": "👃",
+      "fel_emoji": [
+        "👄",
+        "🟢",
+        "🟡"
+      ]
+    },
+    {
+      "id": "en-forskola-030",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "mun",
+      "fel": [
+        "grön",
+        "gul",
+        "svart"
+      ],
+      "eng": "mouth",
+      "emoji": "👄",
+      "fel_emoji": [
+        "🟢",
+        "🟡",
+        "⚫"
+      ]
+    },
+    {
+      "id": "en-forskola-031",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "grön",
+      "fel": [
+        "gul",
+        "svart",
+        "vit"
+      ],
+      "eng": "green",
+      "emoji": "🟢",
+      "fel_emoji": [
+        "🟡",
+        "⚫",
+        "⚪"
+      ]
+    },
+    {
+      "id": "en-forskola-032",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "gul",
+      "fel": [
+        "svart",
+        "vit",
+        "tre"
+      ],
+      "eng": "yellow",
+      "emoji": "🟡",
+      "fel_emoji": [
+        "⚫",
+        "⚪",
+        "3️⃣"
+      ]
+    },
+    {
+      "id": "en-forskola-033",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "svart",
+      "fel": [
+        "vit",
+        "tre",
+        "fyra"
+      ],
+      "eng": "black",
+      "emoji": "⚫",
+      "fel_emoji": [
+        "⚪",
+        "3️⃣",
+        "4️⃣"
+      ]
+    },
+    {
+      "id": "en-forskola-034",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "vit",
+      "fel": [
+        "tre",
+        "fyra",
+        "fem"
+      ],
+      "eng": "white",
+      "emoji": "⚪",
+      "fel_emoji": [
+        "3️⃣",
+        "4️⃣",
+        "5️⃣"
+      ]
+    },
+    {
+      "id": "en-forskola-035",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "tre",
+      "fel": [
+        "fyra",
+        "fem",
+        "vatten"
+      ],
+      "eng": "three",
+      "emoji": "3️⃣",
+      "fel_emoji": [
+        "4️⃣",
+        "5️⃣",
+        "💧"
+      ]
+    },
+    {
+      "id": "en-forskola-036",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "fyra",
+      "fel": [
+        "fem",
+        "vatten",
+        "ost"
+      ],
+      "eng": "four",
+      "emoji": "4️⃣",
+      "fel_emoji": [
+        "5️⃣",
+        "💧",
+        "🧀"
+      ]
+    },
+    {
+      "id": "en-forskola-037",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "fem",
+      "fel": [
+        "vatten",
+        "ost",
+        "blomma"
+      ],
+      "eng": "five",
+      "emoji": "5️⃣",
+      "fel_emoji": [
+        "💧",
+        "🧀",
+        "🌸"
+      ]
+    },
+    {
+      "id": "en-forskola-038",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "vatten",
+      "fel": [
+        "ost",
+        "blomma",
+        "stjärna"
+      ],
+      "eng": "water",
+      "emoji": "💧",
+      "fel_emoji": [
+        "🧀",
+        "🌸",
+        "⭐"
+      ]
+    },
+    {
+      "id": "en-forskola-039",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "ost",
+      "fel": [
+        "blomma",
+        "stjärna",
+        "måne"
+      ],
+      "eng": "cheese",
+      "emoji": "🧀",
+      "fel_emoji": [
+        "🌸",
+        "⭐",
+        "🌙"
+      ]
+    },
+    {
+      "id": "en-forskola-040",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "blomma",
+      "fel": [
+        "stjärna",
+        "måne",
+        "regn"
+      ],
+      "eng": "flower",
+      "emoji": "🌸",
+      "fel_emoji": [
+        "⭐",
+        "🌙",
+        "🌧️"
+      ]
+    },
+    {
+      "id": "en-forskola-041",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "stjärna",
+      "fel": [
+        "måne",
+        "regn",
+        "snö"
+      ],
+      "eng": "star",
+      "emoji": "⭐",
+      "fel_emoji": [
+        "🌙",
+        "🌧️",
+        "❄️"
+      ]
+    },
+    {
+      "id": "en-forskola-042",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "måne",
+      "fel": [
+        "regn",
+        "snö",
+        "hund"
+      ],
+      "eng": "moon",
+      "emoji": "🌙",
+      "fel_emoji": [
+        "🌧️",
+        "❄️",
+        "🐶"
+      ]
+    },
+    {
+      "id": "en-forskola-043",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "regn",
+      "fel": [
+        {
+          "ord": "snö",
+          "emoji": "❄️"
+        },
+        {
+          "ord": "hund",
+          "emoji": "🐶"
+        },
+        {
+          "ord": "katt",
+          "emoji": "🐱"
+        }
+      ],
+      "eng": "rain",
+      "emoji": "🌧️"
+    },
+    {
+      "id": "en-forskola-044",
+      "niva": "forskola",
+      "typ": "oversattning",
+      "fraga": "Vad betyder det här ordet?",
+      "ratt": "snö",
+      "fel": [
+        {
+          "ord": "hund",
+          "emoji": "🐶"
+        },
+        {
+          "ord": "katt",
+          "emoji": "🐱"
+        },
+        {
+          "ord": "sol",
+          "emoji": "☀️"
+        }
+      ],
+      "eng": "snow",
+      "emoji": "❄️"
     },
     {
       "id": "en-ak1-019",
@@ -2483,18 +3111,6 @@
         "significent",
         "significiant",
         "significantt"
-      ]
-    },
-    {
-      "id": "en-forskola-208",
-      "niva": "forskola",
-      "typ": "djur",
-      "fraga": "Vad heter hund på engelska?",
-      "ratt": "dog",
-      "fel": [
-        "cat",
-        "bird",
-        "fish"
       ]
     },
     {

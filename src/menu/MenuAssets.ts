@@ -55,6 +55,8 @@ export class MenuAssets {
 .sfx-ctl{display:inline-flex;align-items:center;gap:4px}.sfx-ctl button{font-size:12px;padding:2px 6px;border-color:#6b5a3e;background:#2a2420}.sfx-ctl input{width:70px;accent-color:#f2c46b}
 .hero-menu .learn-setup{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:flex-end;margin-top:8px}
 .hero-menu .learn-setup label{display:flex;flex-direction:column;gap:4px;color:#e6dfcc;font:16px Cinzel,serif}
+.hero-menu .learn-setup label.learn-read{flex-direction:row;align-items:center;gap:8px;font-size:18px}
+.hero-menu .learn-setup label.learn-read input{width:22px;height:22px;accent-color:#e0b060}
 .hero-menu .learn-setup select{font:20px Cinzel,serif;padding:8px 12px;background:#1a1612;color:#efe7d2;border:2px solid #c7a35a;border-radius:8px;min-width:180px}`;
   }
 }

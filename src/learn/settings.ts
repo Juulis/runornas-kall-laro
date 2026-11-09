@@ -1,14 +1,23 @@
 import { isRecord } from '../core/json';
 import type { KeyValueStore } from '../core/storage';
-import { DEFAULT_LEARN_SETTINGS, isGradeId, isSubjectId, type LearnSettings } from './types';
+import { DEFAULT_LEARN_SETTINGS, isGradeId, isSubjectId, type GradeId, type LearnSettings, type SubjectId } from './types';
 
 /** Global inställning (localStorage). Sparfilen har samma fält per hjälte. */
 export const LEARN_STORAGE_KEY = 'rk_laro';
 
+/** På för förskola när värdet saknas, annars av. Ett sparat booleskt värde vinner. */
+export function readAloudOf(settings: Pick<LearnSettings, 'grade' | 'readAloud'>): boolean {
+  return typeof settings.readAloud === 'boolean' ? settings.readAloud : settings.grade === 'forskola';
+}
+
+function normalize(grade: GradeId, subject: SubjectId, readAloud: unknown): LearnSettings {
+  return { grade, subject, readAloud: typeof readAloud === 'boolean' ? readAloud : grade === 'forskola' };
+}
+
 export function parseLearnSettings(raw: unknown): LearnSettings | null {
   if (!isRecord(raw)) return null;
   if (!isGradeId(raw.grade) || !isSubjectId(raw.subject)) return null;
-  return { grade: raw.grade, subject: raw.subject };
+  return normalize(raw.grade, raw.subject, raw.readAloud);
 }
 
 export function readLearnSettings(store: KeyValueStore): LearnSettings {

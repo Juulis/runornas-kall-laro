@@ -30,6 +30,8 @@ export interface QuestionMeta {
   r2?: number;
 }
 
+export type SpeakLang = 'sv-SE' | 'en-US' | 'en-GB';
+
 /** Flervalsfråga: exakt fyra unika alternativ och ett rätt svar. */
 export interface LearnQuestion {
   id: string;
@@ -41,11 +43,20 @@ export interface LearnQuestion {
   grade: GradeId;
   rule: string;
   meta?: QuestionMeta;
+  /** Text som läses upp. Saknas: prompten, utom rättstavning som läser svaret. */
+  speakText?: string;
+  speakLang?: SpeakLang;
+  /** Emoji i samma ordning som choices. null om alternativet saknar bild. */
+  choiceEmojis?: readonly (string | null)[];
+  /** Läs prompten tillsammans med ordet som ska sägas. */
+  speakPrompt?: boolean;
 }
 
 export interface LearnSettings {
   grade: GradeId;
   subject: SubjectId;
+  /** Läs upp frågan. Saknas: på i förskolan, av annars. */
+  readAloud?: boolean;
 }
 
 export type EncounterKind = 'normal' | 'champion' | 'boss';
@@ -61,7 +72,13 @@ export function isSubjectId(v: unknown): v is SubjectId {
   return typeof v === 'string' && SUBJECT_IDS.has(v);
 }
 
-export const DEFAULT_LEARN_SETTINGS: LearnSettings = { grade: 'ak1', subject: 'blandat' };
+export const DEFAULT_LEARN_SETTINGS: LearnSettings = { grade: 'ak1', subject: 'blandat', readAloud: false };
+
+/** Sant när alternativet är svaret, även om det visas som «🐶 hund». */
+export function choiceMatchesAnswer(choice: string, answer: string): boolean {
+  if (choice === answer) return true;
+  return choice.endsWith(` ${answer}`);
+}
 
 export function questionCount(kind: EncounterKind): number {
   if (kind === 'boss') return 5;
@@ -80,6 +97,7 @@ export function isValidQuestion(q: LearnQuestion): boolean {
   if (q.choices.length !== 4) return false;
   if (new Set(q.choices).size !== 4) return false;
   if (q.correctIndex < 0 || q.correctIndex > 3) return false;
-  if (q.choices[q.correctIndex] !== q.answer) return false;
-  return q.choices.filter((c) => c === q.answer).length === 1;
+  const chosen = q.choices[q.correctIndex];
+  if (chosen === undefined || !choiceMatchesAnswer(chosen, q.answer)) return false;
+  return q.choices.filter((c) => choiceMatchesAnswer(c, q.answer)).length === 1;
 }

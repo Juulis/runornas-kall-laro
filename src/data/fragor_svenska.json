@@ -206,6 +206,450 @@
       ]
     },
     {
+      "id": "sv-forskola-018",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "pappa",
+      "fel": [
+        "papa",
+        "papppa",
+        "papaa"
+      ]
+    },
+    {
+      "id": "sv-forskola-019",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "fisk",
+      "fel": [
+        "fiskk",
+        "fiisk",
+        "fesk"
+      ]
+    },
+    {
+      "id": "sv-forskola-020",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "ko",
+      "fel": [
+        "koo",
+        "kå",
+        "kao"
+      ]
+    },
+    {
+      "id": "sv-forskola-021",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "gris",
+      "fel": [
+        "griss",
+        "griis",
+        "gres"
+      ]
+    },
+    {
+      "id": "sv-forskola-022",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "båt",
+      "fel": [
+        "bat",
+        "bått",
+        "bååt"
+      ]
+    },
+    {
+      "id": "sv-forskola-023",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "äpple",
+      "fel": [
+        "apple",
+        "äple",
+        "äpplle"
+      ]
+    },
+    {
+      "id": "sv-forskola-024",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "glass",
+      "fel": [
+        "glas",
+        "glaas",
+        "glasss"
+      ]
+    },
+    {
+      "id": "sv-forskola-025",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mjölk",
+      "fel": [
+        "mjolk",
+        "mjölkk",
+        "mjölke"
+      ]
+    },
+    {
+      "id": "sv-forskola-026",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "ost",
+      "fel": [
+        "ostt",
+        "åst",
+        "oost"
+      ]
+    },
+    {
+      "id": "sv-forskola-027",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bröd",
+      "fel": [
+        "brod",
+        "brödd",
+        "brööd"
+      ]
+    },
+    {
+      "id": "sv-forskola-028",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "penna",
+      "fel": [
+        "pena",
+        "pennaa",
+        "pennna"
+      ]
+    },
+    {
+      "id": "sv-forskola-029",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "stol",
+      "fel": [
+        "stoll",
+        "ståol",
+        "sstol"
+      ]
+    },
+    {
+      "id": "sv-forskola-030",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bord",
+      "fel": [
+        "bordd",
+        "boord",
+        "bård"
+      ]
+    },
+    {
+      "id": "sv-forskola-031",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "säng",
+      "fel": [
+        "seng",
+        "sängg",
+        "sääng"
+      ]
+    },
+    {
+      "id": "sv-forskola-032",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "dörr",
+      "fel": [
+        "dorr",
+        "dörrr",
+        "döör"
+      ]
+    },
+    {
+      "id": "sv-forskola-033",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "fönster",
+      "fel": [
+        "fonster",
+        "fönsterr",
+        "fönnster"
+      ]
+    },
+    {
+      "id": "sv-forskola-034",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "träd",
+      "fel": [
+        "trad",
+        "trädd",
+        "trääd"
+      ]
+    },
+    {
+      "id": "sv-forskola-035",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "blomma",
+      "fel": [
+        "bloma",
+        "blommma",
+        "blommaa"
+      ]
+    },
+    {
+      "id": "sv-forskola-036",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "fågel",
+      "fel": [
+        "fagel",
+        "fågell",
+        "fåågel"
+      ]
+    },
+    {
+      "id": "sv-forskola-037",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "häst",
+      "fel": [
+        "hast",
+        "hästt",
+        "hääst"
+      ]
+    },
+    {
+      "id": "sv-forskola-038",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "får",
+      "fel": [
+        "fårr",
+        "fåår",
+        "färr"
+      ]
+    },
+    {
+      "id": "sv-forskola-039",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "anka",
+      "fel": [
+        "ankaa",
+        "annka",
+        "ancka"
+      ]
+    },
+    {
+      "id": "sv-forskola-040",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mus",
+      "fel": [
+        "muss",
+        "muus",
+        "muzz"
+      ]
+    },
+    {
+      "id": "sv-forskola-041",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "björn",
+      "fel": [
+        "bjorn",
+        "björnn",
+        "björön"
+      ]
+    },
+    {
+      "id": "sv-forskola-042",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "lejon",
+      "fel": [
+        "lejjon",
+        "lejån",
+        "lejoon"
+      ]
+    },
+    {
+      "id": "sv-forskola-043",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "tiger",
+      "fel": [
+        "tigerr",
+        "tiiger",
+        "teger"
+      ]
+    },
+    {
+      "id": "sv-forskola-044",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "apa",
+      "fel": [
+        "apaa",
+        "appa",
+        "aapa"
+      ]
+    },
+    {
+      "id": "sv-forskola-045",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "öga",
+      "fel": [
+        "oga",
+        "ögaa",
+        "ögga"
+      ]
+    },
+    {
+      "id": "sv-forskola-046",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "öra",
+      "fel": [
+        "ora",
+        "öraa",
+        "ööra"
+      ]
+    },
+    {
+      "id": "sv-forskola-047",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "näsa",
+      "fel": [
+        "nasa",
+        "näsaa",
+        "nässa"
+      ]
+    },
+    {
+      "id": "sv-forskola-048",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mun",
+      "fel": [
+        "munn",
+        "muun",
+        "månn"
+      ]
+    },
+    {
+      "id": "sv-forskola-049",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hand",
+      "fel": [
+        "hannd",
+        "handd",
+        "hnad"
+      ]
+    },
+    {
+      "id": "sv-forskola-050",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "fot",
+      "fel": [
+        "fott",
+        "fooot",
+        "fåt"
+      ]
+    },
+    {
+      "id": "sv-forskola-051",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "sko",
+      "fel": [
+        "skoo",
+        "skå",
+        "scko"
+      ]
+    },
+    {
+      "id": "sv-forskola-052",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hatt",
+      "fel": [
+        "hat",
+        "hattt",
+        "haatt"
+      ]
+    },
+    {
+      "id": "sv-forskola-053",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "nalle",
+      "fel": [
+        "nale",
+        "nallle",
+        "nallee"
+      ]
+    },
+    {
+      "id": "sv-forskola-054",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "vatten",
+      "fel": [
+        "vaten",
+        "vattenn",
+        "vatteen"
+      ]
+    },
+    {
       "id": "sv-ak1-018",
       "niva": "ak1",
       "typ": "rattstavning",
