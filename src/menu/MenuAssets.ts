@@ -52,6 +52,9 @@ export class MenuAssets {
 .hero-name{width:400px;height:56px;box-sizing:border-box;border-style:solid;border-width:16px 44px;border-image:${u('textfalt')} 20 55 fill / 16px 44px stretch;background:none;color:#e6dfcc;font:18px Cinzel,serif;text-align:center;outline:none}
 .lang-picker{display:flex;gap:6px;margin-top:6px}.hero-menu .lang-picker button.lang{min-width:0;border-width:10px 20px;font-size:14px;opacity:.6}.hero-menu .lang-picker button.lang.sel{opacity:1;color:#e0b060}.slots-free{color:#a89a80;font-size:13px}
 .hero-err{color:#e06060;min-height:18px;font-size:14px;text-shadow:0 1px 2px #000}
-.sfx-ctl{display:inline-flex;align-items:center;gap:4px}.sfx-ctl button{font-size:12px;padding:2px 6px;border-color:#6b5a3e;background:#2a2420}.sfx-ctl input{width:70px;accent-color:#f2c46b}`;
+.sfx-ctl{display:inline-flex;align-items:center;gap:4px}.sfx-ctl button{font-size:12px;padding:2px 6px;border-color:#6b5a3e;background:#2a2420}.sfx-ctl input{width:70px;accent-color:#f2c46b}
+.hero-menu .learn-setup{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:flex-end;margin-top:8px}
+.hero-menu .learn-setup label{display:flex;flex-direction:column;gap:4px;color:#e6dfcc;font:16px Cinzel,serif}
+.hero-menu .learn-setup select{font:20px Cinzel,serif;padding:8px 12px;background:#1a1612;color:#efe7d2;border:2px solid #c7a35a;border-radius:8px;min-width:180px}`;
   }
 }

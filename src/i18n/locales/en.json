@@ -104,7 +104,7 @@
     "hp": "Life",
     "stamina": "Stamina",
     "proviant": "{count} left",
-    "help": "Click: move/attack · F: talk · J: quests · Right-click/Q: skill · E: rune · B/I: gear · Alt/Z: items · 1–4: skills · Alt+3/4: provisions"
+    "help": "Click: move · A question when you meet a monster · F: talk · J: quests · Right-click/Q: skill · E: rune · B/I: gear · Level button: difficulty · Alt/Z: items · 1–4: skills · Alt+3/4: provisions"
   },
   "msg": {
     "rune_awake": "The rune awakens! ({n}/3)",
@@ -127,7 +127,8 @@
     "court": "The court of the dead is summoned!",
     "boss_dead": "{name} is defeated! The village is free.",
     "died": "You have fallen. Click to restart at the portal.",
-    "gold": "+{amount} gold"
+    "gold": "+{amount} gold",
+    "new_gear": "New gear: {name}"
   },
   "fx": {
     "miss": "Miss",

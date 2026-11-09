@@ -1,7 +1,7 @@
 # Arkitektur – Runornas kall (2D, TypeScript)
 
 Huvudspåret är en isometrisk 2D-motor i **PixiJS v8**, byggd med **Vite + TypeScript (strict)**.
-2D-motorn (Vite, `src/`) publiceras på **roten** (`/rpg-demo/`, `dist/`). `/next/` och `/legacy-3d/` omdirigerar till roten. Källan till det gamla 3D-spelet finns kvar i `legacy-3d/` i repot men deployas inte.
+2D-motorn (Vite, `src/`) publiceras på **`/runornas-kall-laro/`** (`dist/`). `/next/` och `/legacy-3d/` omdirigerar till roten. Källan till det gamla 3D-spelet finns kvar i `legacy-3d/` i repot men deployas inte.
 `scripts/assemble-pages.mjs` lägger 3D-filerna på roten av `dist/`; `scripts/smoke.mjs` (Playwright) kräver i CI och Pages att roten är spelbar och att `next/` laddar.
 
 ## Regler (permanenta)

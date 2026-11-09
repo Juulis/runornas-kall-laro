@@ -1,0 +1,2417 @@
+{
+  "amne": "svenska",
+  "fragor": [
+    {
+      "id": "sv-forskola-001",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "sol",
+      "fel": [
+        "sål",
+        "soll",
+        "sool"
+      ]
+    },
+    {
+      "id": "sv-forskola-002",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hus",
+      "fel": [
+        "huss",
+        "huus",
+        "huzz"
+      ]
+    },
+    {
+      "id": "sv-forskola-003",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bil",
+      "fel": [
+        "biil",
+        "bill",
+        "byl"
+      ]
+    },
+    {
+      "id": "sv-forskola-004",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bok",
+      "fel": [
+        "bokk",
+        "boook",
+        "båck"
+      ]
+    },
+    {
+      "id": "sv-forskola-005",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "katt",
+      "fel": [
+        "kat",
+        "kaat",
+        "kattt"
+      ]
+    },
+    {
+      "id": "sv-forskola-006",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hund",
+      "fel": [
+        "hun",
+        "hunnd",
+        "hond"
+      ]
+    },
+    {
+      "id": "sv-forskola-007",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mamma",
+      "fel": [
+        "mama",
+        "mammma",
+        "mammaa"
+      ]
+    },
+    {
+      "id": "sv-forskola-008",
+      "niva": "forskola",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "boll",
+      "fel": [
+        "bol",
+        "båll",
+        "bolll"
+      ]
+    },
+    {
+      "id": "sv-forskola-009",
+      "niva": "forskola",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till stor?",
+      "ratt": "liten",
+      "fel": [
+        "hög",
+        "bred",
+        "tung"
+      ]
+    },
+    {
+      "id": "sv-forskola-010",
+      "niva": "forskola",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till varm?",
+      "ratt": "kall",
+      "fel": [
+        "het",
+        "mjuk",
+        "ljus"
+      ]
+    },
+    {
+      "id": "sv-forskola-011",
+      "niva": "forskola",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till glad?",
+      "ratt": "ledsen",
+      "fel": [
+        "arg",
+        "trött",
+        "hungrig"
+      ]
+    },
+    {
+      "id": "sv-forskola-012",
+      "niva": "forskola",
+      "typ": "ord",
+      "fraga": "Vilket ord är ett djur?",
+      "ratt": "katt",
+      "fel": [
+        "stol",
+        "bok",
+        "sol"
+      ]
+    },
+    {
+      "id": "sv-forskola-013",
+      "niva": "forskola",
+      "typ": "ord",
+      "fraga": "Vilket ord är ett djur?",
+      "ratt": "hund",
+      "fel": [
+        "hus",
+        "bil",
+        "bord"
+      ]
+    },
+    {
+      "id": "sv-forskola-014",
+      "niva": "forskola",
+      "typ": "ord",
+      "fraga": "Vilket ord är ett djur?",
+      "ratt": "fisk",
+      "fel": [
+        "sten",
+        "sko",
+        "bok"
+      ]
+    },
+    {
+      "id": "sv-forskola-015",
+      "niva": "forskola",
+      "typ": "ord",
+      "fraga": "Vilket ord är en färg?",
+      "ratt": "röd",
+      "fel": [
+        "stol",
+        "hus",
+        "bil"
+      ]
+    },
+    {
+      "id": "sv-forskola-016",
+      "niva": "forskola",
+      "typ": "ord",
+      "fraga": "Vilket ord är en färg?",
+      "ratt": "blå",
+      "fel": [
+        "bok",
+        "boll",
+        "bord"
+      ]
+    },
+    {
+      "id": "sv-forskola-017",
+      "niva": "forskola",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "sjö",
+      "fel": [
+        "sol",
+        "bok",
+        "katt"
+      ]
+    },
+    {
+      "id": "sv-ak1-018",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "katt",
+      "fel": [
+        "kat",
+        "kaat",
+        "kattt"
+      ]
+    },
+    {
+      "id": "sv-ak1-019",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hund",
+      "fel": [
+        "hunnd",
+        "hond",
+        "hun"
+      ]
+    },
+    {
+      "id": "sv-ak1-020",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "sol",
+      "fel": [
+        "soll",
+        "såll",
+        "sool"
+      ]
+    },
+    {
+      "id": "sv-ak1-021",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bok",
+      "fel": [
+        "boook",
+        "bokk",
+        "båck"
+      ]
+    },
+    {
+      "id": "sv-ak1-022",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hus",
+      "fel": [
+        "huss",
+        "huus",
+        "huzz"
+      ]
+    },
+    {
+      "id": "sv-ak1-023",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bil",
+      "fel": [
+        "biil",
+        "bill",
+        "byl"
+      ]
+    },
+    {
+      "id": "sv-ak1-024",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mamma",
+      "fel": [
+        "mama",
+        "mammma",
+        "mammaa"
+      ]
+    },
+    {
+      "id": "sv-ak1-025",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "pappa",
+      "fel": [
+        "papa",
+        "papppa",
+        "papaa"
+      ]
+    },
+    {
+      "id": "sv-ak1-026",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "skola",
+      "fel": [
+        "skolla",
+        "skåla",
+        "skolaa"
+      ]
+    },
+    {
+      "id": "sv-ak1-027",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "äpple",
+      "fel": [
+        "äple",
+        "äpplle",
+        "äppple"
+      ]
+    },
+    {
+      "id": "sv-ak1-028",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "boll",
+      "fel": [
+        "bol",
+        "båll",
+        "bolll"
+      ]
+    },
+    {
+      "id": "sv-ak1-029",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "fisk",
+      "fel": [
+        "fiskk",
+        "fesk",
+        "fiisk"
+      ]
+    },
+    {
+      "id": "sv-ak1-030",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "blomma",
+      "fel": [
+        "bloma",
+        "blommma",
+        "blåma"
+      ]
+    },
+    {
+      "id": "sv-ak1-031",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "vatten",
+      "fel": [
+        "vaten",
+        "vattenn",
+        "vatn"
+      ]
+    },
+    {
+      "id": "sv-ak1-032",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "ost",
+      "fel": [
+        "osst",
+        "oost",
+        "åst"
+      ]
+    },
+    {
+      "id": "sv-ak1-033",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mjölk",
+      "fel": [
+        "mjolk",
+        "mjölkk",
+        "mjöölk"
+      ]
+    },
+    {
+      "id": "sv-ak1-034",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "bröd",
+      "fel": [
+        "brod",
+        "brödd",
+        "brööd"
+      ]
+    },
+    {
+      "id": "sv-ak1-035",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "stol",
+      "fel": [
+        "stoll",
+        "stål",
+        "ståol"
+      ]
+    },
+    {
+      "id": "sv-ak1-036",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "dörr",
+      "fel": [
+        "dorr",
+        "dörrr",
+        "döör"
+      ]
+    },
+    {
+      "id": "sv-ak1-037",
+      "niva": "ak1",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "fönster",
+      "fel": [
+        "fonster",
+        "fönsterr",
+        "fönnster"
+      ]
+    },
+    {
+      "id": "sv-ak1-038",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till stor?",
+      "ratt": "liten",
+      "fel": [
+        "hög",
+        "bred",
+        "tung"
+      ]
+    },
+    {
+      "id": "sv-ak1-039",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till varm?",
+      "ratt": "kall",
+      "fel": [
+        "het",
+        "ljummen",
+        "mjuk"
+      ]
+    },
+    {
+      "id": "sv-ak1-040",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till glad?",
+      "ratt": "ledsen",
+      "fel": [
+        "arg",
+        "trött",
+        "hungrig"
+      ]
+    },
+    {
+      "id": "sv-ak1-041",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till dag?",
+      "ratt": "natt",
+      "fel": [
+        "morgon",
+        "kväll",
+        "sol"
+      ]
+    },
+    {
+      "id": "sv-ak1-042",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till upp?",
+      "ratt": "ner",
+      "fel": [
+        "fram",
+        "bak",
+        "höger"
+      ]
+    },
+    {
+      "id": "sv-ak1-043",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till mjuk?",
+      "ratt": "hård",
+      "fel": [
+        "len",
+        "slät",
+        "tung"
+      ]
+    },
+    {
+      "id": "sv-ak1-044",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till ljus?",
+      "ratt": "mörk",
+      "fel": [
+        "gul",
+        "vit",
+        "blank"
+      ]
+    },
+    {
+      "id": "sv-ak1-045",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till snabb?",
+      "ratt": "långsam",
+      "fel": [
+        "stark",
+        "hög",
+        "stor"
+      ]
+    },
+    {
+      "id": "sv-ak1-046",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till full?",
+      "ratt": "tom",
+      "fel": [
+        "tung",
+        "stor",
+        "liten"
+      ]
+    },
+    {
+      "id": "sv-ak1-047",
+      "niva": "ak1",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till öppen?",
+      "ratt": "stängd",
+      "fel": [
+        "vid",
+        "stor",
+        "hög"
+      ]
+    },
+    {
+      "id": "sv-ak1-048",
+      "niva": "ak1",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "sjö",
+      "fel": [
+        "sol",
+        "bok",
+        "katt"
+      ]
+    },
+    {
+      "id": "sv-ak1-049",
+      "niva": "ak1",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "sju",
+      "fel": [
+        "sex",
+        "två",
+        "åtta"
+      ]
+    },
+    {
+      "id": "sv-ak1-050",
+      "niva": "ak1",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "stjärna",
+      "fel": [
+        "stol",
+        "sten",
+        "sol"
+      ]
+    },
+    {
+      "id": "sv-ak1-051",
+      "niva": "ak1",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord har tj-ljud?",
+      "ratt": "tjej",
+      "fel": [
+        "tårta",
+        "tavla",
+        "tiger"
+      ]
+    },
+    {
+      "id": "sv-ak1-052",
+      "niva": "ak1",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord har tj-ljud?",
+      "ratt": "kjol",
+      "fel": [
+        "katt",
+        "ko",
+        "kaka"
+      ]
+    },
+    {
+      "id": "sv-ak1-053",
+      "niva": "ak1",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord har tj-ljud?",
+      "ratt": "tjock",
+      "fel": [
+        "tack",
+        "tolv",
+        "tavla"
+      ]
+    },
+    {
+      "id": "sv-ak1-054",
+      "niva": "ak1",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord har k-ljud i början?",
+      "ratt": "katt",
+      "fel": [
+        "kjol",
+        "tjej",
+        "sjö"
+      ]
+    },
+    {
+      "id": "sv-ak1-055",
+      "niva": "ak1",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord har k-ljud i början?",
+      "ratt": "ko",
+      "fel": [
+        "kjol",
+        "kedja",
+        "kyrka"
+      ]
+    },
+    {
+      "id": "sv-ak1-056",
+      "niva": "ak1",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord har k-ljud i början?",
+      "ratt": "kaka",
+      "fel": [
+        "kjol",
+        "tjej",
+        "tjock"
+      ]
+    },
+    {
+      "id": "sv-ak1-057",
+      "niva": "ak1",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord har k-ljud i början?",
+      "ratt": "kula",
+      "fel": [
+        "kjol",
+        "sjö",
+        "tjej"
+      ]
+    },
+    {
+      "id": "sv-ak2-058",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "katt",
+      "fel": [
+        "sol",
+        "bil",
+        "hus"
+      ]
+    },
+    {
+      "id": "sv-ak2-059",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "boll",
+      "fel": [
+        "bok",
+        "bil",
+        "sol"
+      ]
+    },
+    {
+      "id": "sv-ak2-060",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "glass",
+      "fel": [
+        "gul",
+        "grön",
+        "god"
+      ]
+    },
+    {
+      "id": "sv-ak2-061",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "vatten",
+      "fel": [
+        "vante",
+        "vila",
+        "vas"
+      ]
+    },
+    {
+      "id": "sv-ak2-062",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "mamma",
+      "fel": [
+        "mat",
+        "mus",
+        "maj"
+      ]
+    },
+    {
+      "id": "sv-ak2-063",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "pappa",
+      "fel": [
+        "pil",
+        "par",
+        "päron"
+      ]
+    },
+    {
+      "id": "sv-ak2-064",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "natt",
+      "fel": [
+        "nål",
+        "nos",
+        "ny"
+      ]
+    },
+    {
+      "id": "sv-ak2-065",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "docka",
+      "fel": [
+        "dag",
+        "du",
+        "dig"
+      ]
+    },
+    {
+      "id": "sv-ak2-066",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "gubbe",
+      "fel": [
+        "gul",
+        "god",
+        "gåva"
+      ]
+    },
+    {
+      "id": "sv-ak2-067",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "hoppa",
+      "fel": [
+        "hus",
+        "häst",
+        "hand"
+      ]
+    },
+    {
+      "id": "sv-ak2-068",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "titta",
+      "fel": [
+        "tid",
+        "tak",
+        "te"
+      ]
+    },
+    {
+      "id": "sv-ak2-069",
+      "niva": "ak2",
+      "typ": "dubbelteckning",
+      "fraga": "Vilket ord har dubbel konsonant?",
+      "ratt": "rulla",
+      "fel": [
+        "ros",
+        "ris",
+        "ruva"
+      ]
+    },
+    {
+      "id": "sv-ak2-070",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "docka",
+      "fel": [
+        "doka",
+        "dockka",
+        "dåcka"
+      ]
+    },
+    {
+      "id": "sv-ak2-071",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "gubbe",
+      "fel": [
+        "gube",
+        "gubbbe",
+        "gåbbe"
+      ]
+    },
+    {
+      "id": "sv-ak2-072",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "gumma",
+      "fel": [
+        "guma",
+        "gummma",
+        "gåmma"
+      ]
+    },
+    {
+      "id": "sv-ak2-073",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "hoppa",
+      "fel": [
+        "hopa",
+        "hopppa",
+        "håppa"
+      ]
+    },
+    {
+      "id": "sv-ak2-074",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "titta",
+      "fel": [
+        "tita",
+        "tittta",
+        "tittaa"
+      ]
+    },
+    {
+      "id": "sv-ak2-075",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "pojke",
+      "fel": [
+        "påjke",
+        "pojkee",
+        "poike"
+      ]
+    },
+    {
+      "id": "sv-ak2-076",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "flicka",
+      "fel": [
+        "flika",
+        "flickka",
+        "fliccka"
+      ]
+    },
+    {
+      "id": "sv-ak2-077",
+      "niva": "ak2",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "cykel",
+      "fel": [
+        "sykel",
+        "cykell",
+        "cyckel"
+      ]
+    },
+    {
+      "id": "sv-ak2-078",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "säng",
+      "fel": [
+        "sol",
+        "katt",
+        "bok"
+      ]
+    },
+    {
+      "id": "sv-ak2-079",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "lång",
+      "fel": [
+        "lås",
+        "lag",
+        "lök"
+      ]
+    },
+    {
+      "id": "sv-ak2-080",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "sång",
+      "fel": [
+        "sol",
+        "sova",
+        "sot"
+      ]
+    },
+    {
+      "id": "sv-ak2-081",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "tunga",
+      "fel": [
+        "tavla",
+        "tiger",
+        "te"
+      ]
+    },
+    {
+      "id": "sv-ak2-082",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "pengar",
+      "fel": [
+        "päron",
+        "pil",
+        "par"
+      ]
+    },
+    {
+      "id": "sv-ak2-083",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "finger",
+      "fel": [
+        "fisk",
+        "fot",
+        "fågel"
+      ]
+    },
+    {
+      "id": "sv-ak2-084",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "ring",
+      "fel": [
+        "ris",
+        "ros",
+        "ruva"
+      ]
+    },
+    {
+      "id": "sv-ak2-085",
+      "niva": "ak2",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "stång",
+      "fel": [
+        "stol",
+        "sten",
+        "stav"
+      ]
+    },
+    {
+      "id": "sv-ak2-086",
+      "niva": "ak2",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "bank",
+      "fel": [
+        "boll",
+        "bok",
+        "bil"
+      ]
+    },
+    {
+      "id": "sv-ak2-087",
+      "niva": "ak2",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "vinka",
+      "fel": [
+        "vila",
+        "vas",
+        "vante"
+      ]
+    },
+    {
+      "id": "sv-ak2-088",
+      "niva": "ak2",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "skinka",
+      "fel": [
+        "skola",
+        "sko",
+        "skata"
+      ]
+    },
+    {
+      "id": "sv-ak2-089",
+      "niva": "ak2",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "tanke",
+      "fel": [
+        "tavla",
+        "tiger",
+        "tak"
+      ]
+    },
+    {
+      "id": "sv-ak2-090",
+      "niva": "ak2",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "anka",
+      "fel": [
+        "apa",
+        "ask",
+        "al"
+      ]
+    },
+    {
+      "id": "sv-ak2-091",
+      "niva": "ak2",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "onkel",
+      "fel": [
+        "orm",
+        "ost",
+        "ok"
+      ]
+    },
+    {
+      "id": "sv-ak2-092",
+      "niva": "ak2",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till tung?",
+      "ratt": "lätt",
+      "fel": [
+        "stor",
+        "mörk",
+        "långsam"
+      ]
+    },
+    {
+      "id": "sv-ak2-093",
+      "niva": "ak2",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till bred?",
+      "ratt": "smal",
+      "fel": [
+        "hög",
+        "tjock",
+        "stor"
+      ]
+    },
+    {
+      "id": "sv-ak2-094",
+      "niva": "ak2",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till gammal?",
+      "ratt": "ung",
+      "fel": [
+        "ny",
+        "liten",
+        "kort"
+      ]
+    },
+    {
+      "id": "sv-ak2-095",
+      "niva": "ak2",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till rik?",
+      "ratt": "fattig",
+      "fel": [
+        "glad",
+        "snäll",
+        "stark"
+      ]
+    },
+    {
+      "id": "sv-ak2-096",
+      "niva": "ak2",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till ren?",
+      "ratt": "smutsig",
+      "fel": [
+        "blöt",
+        "kall",
+        "mörk"
+      ]
+    },
+    {
+      "id": "sv-ak2-097",
+      "niva": "ak2",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till våt?",
+      "ratt": "torr",
+      "fel": [
+        "kall",
+        "varm",
+        "mjuk"
+      ]
+    },
+    {
+      "id": "sv-ak3-098",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "sked",
+      "fel": [
+        "sko",
+        "sol",
+        "sten"
+      ]
+    },
+    {
+      "id": "sv-ak3-099",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "skjorta",
+      "fel": [
+        "sko",
+        "skata",
+        "skola"
+      ]
+    },
+    {
+      "id": "sv-ak3-100",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "stjärna",
+      "fel": [
+        "stol",
+        "sten",
+        "stav"
+      ]
+    },
+    {
+      "id": "sv-ak3-101",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "sjö",
+      "fel": [
+        "sova",
+        "sol",
+        "sot"
+      ]
+    },
+    {
+      "id": "sv-ak3-102",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "dusch",
+      "fel": [
+        "duk",
+        "dörr",
+        "dag"
+      ]
+    },
+    {
+      "id": "sv-ak3-103",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "skön",
+      "fel": [
+        "sko",
+        "skog",
+        "skata"
+      ]
+    },
+    {
+      "id": "sv-ak3-104",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "skina",
+      "fel": [
+        "skata",
+        "sko",
+        "skola"
+      ]
+    },
+    {
+      "id": "sv-ak3-105",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "skärm",
+      "fel": [
+        "sko",
+        "skata",
+        "skog"
+      ]
+    },
+    {
+      "id": "sv-ak3-106",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "skjuta",
+      "fel": [
+        "sko",
+        "skotta",
+        "skala"
+      ]
+    },
+    {
+      "id": "sv-ak3-107",
+      "niva": "ak3",
+      "typ": "sj-ljud",
+      "fraga": "Vilket ord har sj-ljud?",
+      "ratt": "stjäla",
+      "fel": [
+        "stol",
+        "stega",
+        "stanna"
+      ]
+    },
+    {
+      "id": "sv-ak3-108",
+      "niva": "ak3",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord börjar med tj-ljud?",
+      "ratt": "kjol",
+      "fel": [
+        "katt",
+        "ko",
+        "kaka"
+      ]
+    },
+    {
+      "id": "sv-ak3-109",
+      "niva": "ak3",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord börjar med tj-ljud?",
+      "ratt": "kedja",
+      "fel": [
+        "katt",
+        "ko",
+        "kula"
+      ]
+    },
+    {
+      "id": "sv-ak3-110",
+      "niva": "ak3",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord börjar med tj-ljud?",
+      "ratt": "kyrka",
+      "fel": [
+        "kaka",
+        "ko",
+        "korg"
+      ]
+    },
+    {
+      "id": "sv-ak3-111",
+      "niva": "ak3",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord börjar med tj-ljud?",
+      "ratt": "käke",
+      "fel": [
+        "kål",
+        "ko",
+        "kasse"
+      ]
+    },
+    {
+      "id": "sv-ak3-112",
+      "niva": "ak3",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord börjar med tj-ljud?",
+      "ratt": "köra",
+      "fel": [
+        "ko",
+        "korg",
+        "kaka"
+      ]
+    },
+    {
+      "id": "sv-ak3-113",
+      "niva": "ak3",
+      "typ": "tj-ljud",
+      "fraga": "Vilket ord börjar med tj-ljud?",
+      "ratt": "kille",
+      "fel": [
+        "katt",
+        "ko",
+        "kula"
+      ]
+    },
+    {
+      "id": "sv-ak3-114",
+      "niva": "ak3",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord börjar med k-ljud?",
+      "ratt": "katt",
+      "fel": [
+        "kjol",
+        "kedja",
+        "kyrka"
+      ]
+    },
+    {
+      "id": "sv-ak3-115",
+      "niva": "ak3",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord börjar med k-ljud?",
+      "ratt": "ko",
+      "fel": [
+        "kjol",
+        "tjej",
+        "kedja"
+      ]
+    },
+    {
+      "id": "sv-ak3-116",
+      "niva": "ak3",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord börjar med k-ljud?",
+      "ratt": "kaka",
+      "fel": [
+        "kyrka",
+        "käke",
+        "köra"
+      ]
+    },
+    {
+      "id": "sv-ak3-117",
+      "niva": "ak3",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord börjar med k-ljud?",
+      "ratt": "kula",
+      "fel": [
+        "kille",
+        "kjol",
+        "tjej"
+      ]
+    },
+    {
+      "id": "sv-ak3-118",
+      "niva": "ak3",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord börjar med k-ljud?",
+      "ratt": "kål",
+      "fel": [
+        "käke",
+        "kedja",
+        "kyrka"
+      ]
+    },
+    {
+      "id": "sv-ak3-119",
+      "niva": "ak3",
+      "typ": "k-ljud",
+      "fraga": "Vilket ord börjar med k-ljud?",
+      "ratt": "korg",
+      "fel": [
+        "köra",
+        "kille",
+        "kjol"
+      ]
+    },
+    {
+      "id": "sv-ak3-120",
+      "niva": "ak3",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "sång",
+      "fel": [
+        "sol",
+        "sot",
+        "sova"
+      ]
+    },
+    {
+      "id": "sv-ak3-121",
+      "niva": "ak3",
+      "typ": "ng-ljud",
+      "fraga": "Vilket ord har ng-ljud?",
+      "ratt": "finger",
+      "fel": [
+        "fisk",
+        "fot",
+        "fågel"
+      ]
+    },
+    {
+      "id": "sv-ak3-122",
+      "niva": "ak3",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "bank",
+      "fel": [
+        "boll",
+        "bok",
+        "säng"
+      ]
+    },
+    {
+      "id": "sv-ak3-123",
+      "niva": "ak3",
+      "typ": "nk-ljud",
+      "fraga": "Vilket ord har nk-ljud?",
+      "ratt": "vinka",
+      "fel": [
+        "säng",
+        "lång",
+        "boll"
+      ]
+    },
+    {
+      "id": "sv-ak3-124",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "kompis",
+      "fel": [
+        "komppis",
+        "kåmpis",
+        "kompiss"
+      ]
+    },
+    {
+      "id": "sv-ak3-125",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "springer",
+      "fel": [
+        "springar",
+        "spriner",
+        "springerr"
+      ]
+    },
+    {
+      "id": "sv-ak3-126",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "kanske",
+      "fel": [
+        "kånse",
+        "kanskje",
+        "kanskee"
+      ]
+    },
+    {
+      "id": "sv-ak3-127",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "därför",
+      "fel": [
+        "derför",
+        "därfor",
+        "därförr"
+      ]
+    },
+    {
+      "id": "sv-ak3-128",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mellan",
+      "fel": [
+        "melan",
+        "melllan",
+        "mellann"
+      ]
+    },
+    {
+      "id": "sv-ak3-129",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "också",
+      "fel": [
+        "ocksåå",
+        "åckså",
+        "ocksåa"
+      ]
+    },
+    {
+      "id": "sv-ak3-130",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "någon",
+      "fel": [
+        "någan",
+        "nagon",
+        "någonn"
+      ]
+    },
+    {
+      "id": "sv-ak3-131",
+      "niva": "ak3",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "trädet",
+      "fel": [
+        "trädett",
+        "trådet",
+        "träde"
+      ]
+    },
+    {
+      "id": "sv-ak3-132",
+      "niva": "ak3",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till modig?",
+      "ratt": "rädd",
+      "fel": [
+        "stark",
+        "arg",
+        "tyst"
+      ]
+    },
+    {
+      "id": "sv-ak3-133",
+      "niva": "ak3",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till tidig?",
+      "ratt": "sen",
+      "fel": [
+        "morgon",
+        "kväll",
+        "natt"
+      ]
+    },
+    {
+      "id": "sv-ak3-134",
+      "niva": "ak3",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till början?",
+      "ratt": "slut",
+      "fel": [
+        "mitt",
+        "start",
+        "topp"
+      ]
+    },
+    {
+      "id": "sv-ak3-135",
+      "niva": "ak3",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till sant?",
+      "ratt": "falskt",
+      "fel": [
+        "roligt",
+        "konstigt",
+        "nytt"
+      ]
+    },
+    {
+      "id": "sv-ak3-136",
+      "niva": "ak3",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till vänlig?",
+      "ratt": "elak",
+      "fel": [
+        "tyst",
+        "liten",
+        "kall"
+      ]
+    },
+    {
+      "id": "sv-ak3-137",
+      "niva": "ak3",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till tyst?",
+      "ratt": "högljudd",
+      "fel": [
+        "långsam",
+        "mörk",
+        "kall"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-138",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «springer»?",
+      "ratt": "verb",
+      "fel": [
+        "substantiv",
+        "adjektiv",
+        "räkneord"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-139",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «hund»?",
+      "ratt": "substantiv",
+      "fel": [
+        "verb",
+        "adjektiv",
+        "preposition"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-140",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «blå»?",
+      "ratt": "adjektiv",
+      "fel": [
+        "verb",
+        "substantiv",
+        "pronomen"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-141",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «snabb»?",
+      "ratt": "adjektiv",
+      "fel": [
+        "verb",
+        "substantiv",
+        "konjunktion"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-142",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «jag»?",
+      "ratt": "pronomen",
+      "fel": [
+        "substantiv",
+        "verb",
+        "adjektiv"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-143",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «och»?",
+      "ratt": "konjunktion",
+      "fel": [
+        "verb",
+        "preposition",
+        "substantiv"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-144",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «tre»?",
+      "ratt": "räkneord",
+      "fel": [
+        "verb",
+        "adjektiv",
+        "pronomen"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-145",
+      "niva": "ak4_6",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «under»?",
+      "ratt": "preposition",
+      "fel": [
+        "verb",
+        "substantiv",
+        "adjektiv"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-146",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "därför",
+      "fel": [
+        "derför",
+        "därfor",
+        "därförr"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-147",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "mellan",
+      "fel": [
+        "melan",
+        "melllan",
+        "mellann"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-148",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "också",
+      "fel": [
+        "ocksåå",
+        "åckså",
+        "ocksåa"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-149",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "kanske",
+      "fel": [
+        "kånse",
+        "kanskje",
+        "kanskee"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-150",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "någon",
+      "fel": [
+        "någan",
+        "nagon",
+        "någonn"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-151",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "skrivit",
+      "fel": [
+        "skrivi",
+        "skrivitt",
+        "skrivat"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-152",
+      "niva": "ak4_6",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "trädet",
+      "fel": [
+        "trädett",
+        "trådet",
+        "träde"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-153",
+      "niva": "ak4_6",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till modig?",
+      "ratt": "feg",
+      "fel": [
+        "stark",
+        "arg",
+        "tyst"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-154",
+      "niva": "ak4_6",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till vanlig?",
+      "ratt": "ovanlig",
+      "fel": [
+        "stor",
+        "ny",
+        "rund"
+      ]
+    },
+    {
+      "id": "sv-ak4_6-155",
+      "niva": "ak4_6",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till möjlig?",
+      "ratt": "omöjlig",
+      "fel": [
+        "svår",
+        "lätt",
+        "rolig"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-156",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «under»?",
+      "ratt": "preposition",
+      "fel": [
+        "verb",
+        "substantiv",
+        "adverb"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-157",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «hon»?",
+      "ratt": "pronomen",
+      "fel": [
+        "substantiv",
+        "verb",
+        "adjektiv"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-158",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «snabbt»?",
+      "ratt": "adverb",
+      "fel": [
+        "adjektiv",
+        "verb",
+        "substantiv"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-159",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «men»?",
+      "ratt": "konjunktion",
+      "fel": [
+        "preposition",
+        "pronomen",
+        "verb"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-160",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «oj»?",
+      "ratt": "interjektion",
+      "fel": [
+        "verb",
+        "substantiv",
+        "pronomen"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-161",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «springer»?",
+      "ratt": "verb",
+      "fel": [
+        "substantiv",
+        "adjektiv",
+        "adverb"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-162",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "intressant",
+      "fel": [
+        "intresant",
+        "intressent",
+        "intressantt"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-163",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "dessutom",
+      "fel": [
+        "desutom",
+        "dessutomm",
+        "desutomt"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-164",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "eftersom",
+      "fel": [
+        "eftersomm",
+        "eftersåm",
+        "efterssom"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-165",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "nödvändigt",
+      "fel": [
+        "nödvändit",
+        "nödvänditgt",
+        "nödvändight"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-166",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "tillfälle",
+      "fel": [
+        "tillfelle",
+        "tilfälle",
+        "tillfäle"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-167",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "ursprungligen",
+      "fel": [
+        "ursprungligenn",
+        "ursprungligt",
+        "ursprungeligen"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-168",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilket ord är ett verb i presens?",
+      "ratt": "springer",
+      "fel": [
+        "sprang",
+        "sprungit",
+        "springa"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-169",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilket ord är ett substantiv?",
+      "ratt": "frihet",
+      "fel": [
+        "fri",
+        "fritt",
+        "befria"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-170",
+      "niva": "ak7_9",
+      "typ": "ordklass",
+      "fraga": "Vilket ord är ett adjektiv?",
+      "ratt": "noggrann",
+      "fel": [
+        "noggrant",
+        "noggrannhet",
+        "göra"
+      ]
+    },
+    {
+      "id": "sv-ak7_9-171",
+      "niva": "ak7_9",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "överens",
+      "fel": [
+        "överenss",
+        "överäns",
+        "överensss"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-172",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "iakttagelse",
+      "fel": [
+        "iakttagelsee",
+        "iakttaagelse",
+        "jaktagelse"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-173",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "överraskning",
+      "fel": [
+        "överaskning",
+        "överraskningg",
+        "öferraskning"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-174",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "självständig",
+      "fel": [
+        "självständing",
+        "självstandig",
+        "självständigg"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-175",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "företeelse",
+      "fel": [
+        "företeelsee",
+        "förteelse",
+        "företeelsse"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-176",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "nödvändighet",
+      "fel": [
+        "nödvändigheet",
+        "nödvändikeet",
+        "nödvändighett"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-177",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "tillgänglig",
+      "fel": [
+        "tilgänglig",
+        "tillgängelig",
+        "tillgängligg"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-178",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "demokrati",
+      "fel": [
+        "demokrattii",
+        "demokrasie",
+        "demokratti"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-179",
+      "niva": "gymnasiet",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «att»?",
+      "ratt": "infinitivmärke",
+      "fel": [
+        "substantiv",
+        "adjektiv",
+        "preposition"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-180",
+      "niva": "gymnasiet",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «vars»?",
+      "ratt": "pronomen",
+      "fel": [
+        "verb",
+        "adverb",
+        "konjunktion"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-181",
+      "niva": "gymnasiet",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «trots»?",
+      "ratt": "preposition",
+      "fel": [
+        "verb",
+        "adverb",
+        "substantiv"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-182",
+      "niva": "gymnasiet",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är «att» i «hon lär sig att läsa»?",
+      "ratt": "infinitivmärke",
+      "fel": [
+        "substantiv",
+        "adjektiv",
+        "preposition"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-183",
+      "niva": "gymnasiet",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till abstrakt?",
+      "ratt": "konkret",
+      "fel": [
+        "svår",
+        "lång",
+        "tyst"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-184",
+      "niva": "gymnasiet",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till objektiv?",
+      "ratt": "subjektiv",
+      "fel": [
+        "neutral",
+        "formell",
+        "kort"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-185",
+      "niva": "gymnasiet",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till explicit?",
+      "ratt": "implicit",
+      "fel": [
+        "tydlig",
+        "vanlig",
+        "kort"
+      ]
+    },
+    {
+      "id": "sv-gymnasiet-186",
+      "niva": "gymnasiet",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "företeelse",
+      "fel": [
+        "förteelse",
+        "företeelsee",
+        "företeels"
+      ]
+    },
+    {
+      "id": "sv-vuxen-187",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "förekomst",
+      "fel": [
+        "förekomstt",
+        "förekåmst",
+        "förekomnst"
+      ]
+    },
+    {
+      "id": "sv-vuxen-188",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "rekommendation",
+      "fel": [
+        "rekomendation",
+        "rekommendattion",
+        "rekommandation"
+      ]
+    },
+    {
+      "id": "sv-vuxen-189",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "ansvarstagande",
+      "fel": [
+        "ansvarstagandee",
+        "ansvarstagand",
+        "ansvarsstagande"
+      ]
+    },
+    {
+      "id": "sv-vuxen-190",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "tillgänglig",
+      "fel": [
+        "tilgänglig",
+        "tillgängelig",
+        "tillgängligg"
+      ]
+    },
+    {
+      "id": "sv-vuxen-191",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "förfarande",
+      "fel": [
+        "förfarandee",
+        "förfarnde",
+        "förfarandde"
+      ]
+    },
+    {
+      "id": "sv-vuxen-192",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "förebyggande",
+      "fel": [
+        "förebygande",
+        "förebyggandee",
+        "förrebyggande"
+      ]
+    },
+    {
+      "id": "sv-vuxen-193",
+      "niva": "vuxen",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «emellertid»?",
+      "ratt": "adverb",
+      "fel": [
+        "preposition",
+        "konjunktion",
+        "pronomen"
+      ]
+    },
+    {
+      "id": "sv-vuxen-194",
+      "niva": "vuxen",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «vilkas»?",
+      "ratt": "pronomen",
+      "fel": [
+        "verb",
+        "substantiv",
+        "adverb"
+      ]
+    },
+    {
+      "id": "sv-vuxen-195",
+      "niva": "vuxen",
+      "typ": "ordklass",
+      "fraga": "Vilken ordklass är ordet «gentemot»?",
+      "ratt": "preposition",
+      "fel": [
+        "verb",
+        "adverb",
+        "substantiv"
+      ]
+    },
+    {
+      "id": "sv-vuxen-196",
+      "niva": "vuxen",
+      "typ": "ordklass",
+      "fraga": "Vilket ord är ett substantiv?",
+      "ratt": "analys",
+      "fel": [
+        "analysera",
+        "analytisk",
+        "analytiskt"
+      ]
+    },
+    {
+      "id": "sv-vuxen-197",
+      "niva": "vuxen",
+      "typ": "ordklass",
+      "fraga": "Vilket ord är ett verb?",
+      "ratt": "argumentera",
+      "fel": [
+        "argument",
+        "argumenterande",
+        "argumentation"
+      ]
+    },
+    {
+      "id": "sv-vuxen-198",
+      "niva": "vuxen",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till formell?",
+      "ratt": "informell",
+      "fel": [
+        "kort",
+        "vanlig",
+        "ny"
+      ]
+    },
+    {
+      "id": "sv-vuxen-199",
+      "niva": "vuxen",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till tillfällig?",
+      "ratt": "varaktig",
+      "fel": [
+        "snabb",
+        "liten",
+        "tyst"
+      ]
+    },
+    {
+      "id": "sv-vuxen-200",
+      "niva": "vuxen",
+      "typ": "motsatsord",
+      "fraga": "Vad är motsatsen till relevant?",
+      "ratt": "irrelevant",
+      "fel": [
+        "viktig",
+        "ny",
+        "svår"
+      ]
+    },
+    {
+      "id": "sv-vuxen-201",
+      "niva": "vuxen",
+      "typ": "rattstavning",
+      "fraga": "Vilket ord är rätt stavat?",
+      "ratt": "rekommendation",
+      "fel": [
+        "rekomendation",
+        "rekommendattion",
+        "rekommandation"
+      ]
+    }
+  ]
+}

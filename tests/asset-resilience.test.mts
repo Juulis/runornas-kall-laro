@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 
 const im = import.meta as ImportMeta & { env?: { BASE_URL?: string } };
-im.env = { ...im.env, BASE_URL: im.env?.BASE_URL ?? '/rpg-demo/' };
+im.env = { ...im.env, BASE_URL: im.env?.BASE_URL ?? '/runornas-kall-laro/' };
 
 const { withRetries, fetchJsonResilient } = await import('../src/render/resilientAssets');
 

@@ -10,7 +10,7 @@ export const SV = {
     hp: 'Liv',
     stamina: 'Uthållighet',
     proviant: '{count} st',
-    help: 'Klick: gå/anfall · F: prata · J: uppdrag · Högerklick/Q: färdighet · E: runa · B/I: utrustning · Alt/Z: föremål · 1–4: färdigheter · Alt+3/4: proviant',
+    help: 'Klick: gå · Fråga när du möter ett monster · F: prata · J: uppdrag · Högerklick/Q: färdighet · E: runa · B/I: utrustning · Nivå-knappen: svårighet · Alt/Z: föremål · 1–4: färdigheter · Alt+3/4: proviant',
   },
   rumor: {
     unknown_item: 'ett legendariskt föremål',
@@ -50,6 +50,7 @@ export const SV = {
     boss_dead: '{name} är besegrad! Byn är fri.',
     died: 'Du har fallit. Klicka för att börja om vid portalen.',
     gold: '+{amount} guld',
+    new_gear: 'Ny utrustning: {name}',
     too_far: 'Gå närmare för att prata.',
     patrol_aid: 'Du hjälpte en patrull — byborna minns det.',
     save_failed: 'Kunde inte spara spelet.',

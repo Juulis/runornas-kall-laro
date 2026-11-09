@@ -32,6 +32,10 @@ export class CombatSystem {
   onHeroDied: () => void = () => undefined;
   /** Spelaren hjälpte en patrull att fälla monstret. */
   onPatrolAidKill: () => void = () => undefined;
+  /** Lärversionen: monster ska inte döda hjälten före frågan. Quiz-skada går inte genom hurt. */
+  suppressHeroHurt = true;
+  /** Lärversionen: vapen, färdigheter och projektiler gör ingen skada. Bara frågan får fälla. */
+  suppressHeroMonsterDamage = true;
 
   constructor(
     private readonly w: () => World,
@@ -64,6 +68,7 @@ export class CombatSystem {
   }
 
   damageMonster(m: Monster, mult = 1, opts: HitOpts = {}): void {
+    if (this.suppressHeroMonsterDamage) return;
     const w = this.w();
     const h = w.hero;
     const st = h.stats;
@@ -130,7 +135,12 @@ export class CombatSystem {
     }
   }
 
-  kill(m: Monster): void {
+  /**
+   * Fäller monstret och delar ut XP och byte.
+   * fromLearn krävs i lärversionen: anrop från träff, färdighet eller taggar ignoreras.
+   */
+  kill(m: Monster, fromLearn = false): void {
+    if (this.suppressHeroMonsterDamage && !fromLearn) return;
     const w = this.w();
     m.dead = 0.001;
     m.view.play('dod');
@@ -149,11 +159,12 @@ export class CombatSystem {
       qualityMult: lo?.quality_mult ?? 1,
     });
     const ups = w.hero.gainXp(reward.xp);
+    const equipped = this.loot.grantAuto(reward.drops);
     if (ups) {
       w.fb.flash(w.text.t('msg.level_up', { level: w.hero.level }));
       w.bus.emit('level_up', { level: w.hero.level });
     }
-    this.loot.scatter(m.pos, reward.drops);
+    for (const name of equipped) w.fb.flash(w.text.t('msg.new_gear', { name }));
     w.bus.emit('kill', {
       id: m.uid ?? m.id,
       area: w.zone.areaId,
@@ -169,6 +180,7 @@ export class CombatSystem {
 
   /** Hjälten tar skada. from = varifrån slaget kom (för block), m = anfallaren. */
   hurt(raw: number, from: Vec2 | null, m: Monster | null): void {
+    if (this.suppressHeroHurt) return;
     const w = this.w();
     const h = w.hero;
     const st = { ...h.stats, defense: h.effectiveDefense() };
@@ -195,8 +207,7 @@ export class CombatSystem {
     if (m?.es?.lifeSteal && !m.dead) m.hp = Math.min(m.max, m.hp + d * m.es.lifeSteal);
     if (m?.es?.curse) h.curse = 4;
     if (st.thorns && m && !m.dead) {
-      m.hp -= st.thorns;
-      if (m.hp <= 0) this.kill(m);
+      m.hp = Math.max(1, m.hp - st.thorns);
     }
     w.fb.float(h.pos, '-' + d, 'hurt', 100);
     h.view.sprite.tint = 0xff8080;

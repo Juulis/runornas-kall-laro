@@ -10,6 +10,10 @@ import type { CreateHeroDialog } from './CreateHeroDialog';
 import { button, el } from './dom';
 import type { LocalePicker } from './LocalePicker';
 import type { MenuAssets } from './MenuAssets';
+import { buildLearnFields } from '../ui/learnDom';
+import { readLearnSettings, writeLearnSettings } from '../learn/settings';
+import type { LearnSettings } from '../learn/types';
+import { LocalStore } from '../core/storage';
 
 /** Hjälteval: 8 platser, Fortsätt / Nytt game / Ny hjälte / Radera (med bekräftelse). Dubbelklick startar. */
 export class HeroSelectMenu {
@@ -20,6 +24,7 @@ export class HeroSelectMenu {
   private view: 'list' | 'create' = 'list';
   /** Håller raderingsbekräftelsen vid språkbyte. */
   private deleteConfirmHeroId: string | null = null;
+  private learnDraft: LearnSettings = readLearnSettings(new LocalStore());
   private readonly offLocale: () => void;
 
   constructor(
@@ -78,6 +83,8 @@ export class HeroSelectMenu {
 
   private start(d: SaveFile, resume: boolean): void {
     this.deleteConfirmHeroId = null;
+    d.learn = { ...this.learnDraft };
+    writeLearnSettings(new LocalStore(), this.learnDraft);
     this.hide();
     void this.deps.loader.start(d, resume);
   }
@@ -89,6 +96,7 @@ export class HeroSelectMenu {
     const hs = roster.list();
     if (!hs.some((h) => h.id === this.selected)) this.selected = roster.defaultSelection();
     const d = this.selected ? roster.load(this.selected) : null;
+    this.learnDraft = d?.learn ?? readLearnSettings(new LocalStore());
     const slots = el('div', { class: 'hero-slots' });
     for (let i = 0; i < MAX_HEROES; i++) {
       const h = hs[i];
@@ -150,11 +158,20 @@ export class HeroSelectMenu {
       ),
     );
     const actionRow = this.deleteConfirmHeroId && d?.hero.id === this.deleteConfirmHeroId ? this.confirmDelete(d) : btns;
+    const learn = buildLearnFields(this.learnDraft, (next) => {
+      this.learnDraft = next;
+      writeLearnSettings(new LocalStore(), next);
+      if (!d) return;
+      d.learn = { ...next };
+      void roster.store(d);
+    });
     this.root.replaceChildren(
       assets.title(),
       el('div', { class: 'rubrik', text: t('menu.choose_hero') }),
       el('small', { class: 'slots-free', text: t('menu.slots_free', { count: MAX_HEROES - hs.length }) }),
       slots,
+      learn,
+      el('small', { class: 'slots-free', text: 'Frågorna följer nivå och ämne.' }),
       actionRow,
       this.deps.picker.render(),
     );

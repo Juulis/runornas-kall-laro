@@ -4,6 +4,7 @@ import { parseFogMap } from './fog';
 import { parseFoundItemsMap } from './foundItems';
 import { hydrateWorldStateFromLegacy, parseWorldState } from '../world/worldStateTypes';
 import { BIG_WORLD_COORD_EPOCH } from '../world/bigWorld/saveCoordMigrate';
+import { parseLearnSettings } from '../learn/settings';
 import { SAVE_VERSION, type GameRecord, type HeroRecord, type SaveFile } from './types';
 
 const num = (v: unknown, d: number): number => (typeof v === 'number' && Number.isFinite(v) ? v : d);
@@ -66,6 +67,8 @@ export class SaveMigrator {
     if (typeof d.savedAt === 'number') out.savedAt = d.savedAt;
     const ws = parseWorldState(d.worldState);
     out.worldState = ws ?? hydrateWorldStateFromLegacy(out.game, out.foundItems);
+    const learn = parseLearnSettings(d.learn);
+    if (learn) out.learn = learn;
     return out;
   }
 

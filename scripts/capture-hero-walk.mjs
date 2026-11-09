@@ -9,15 +9,15 @@ const out = resolve('/opt/cursor/artifacts/hero-walk-run.png');
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png' };
 const server = createServer((req, res) => {
   const url = decodeURIComponent((req.url ?? '/').split('?')[0]);
-  if (!url.startsWith('/rpg-demo/')) return void res.writeHead(404).end();
-  let p = join(dist, url.slice('/rpg-demo/'.length));
+  if (!url.startsWith('/runornas-kall-laro/')) return void res.writeHead(404).end();
+  let p = join(dist, url.slice('/runornas-kall-laro/'.length));
   if (existsSync(p) && statSync(p).isDirectory()) p = join(p, 'index.html');
   if (!existsSync(p)) return void res.writeHead(404).end();
   res.writeHead(200, { 'content-type': TYPES[extname(p)] ?? 'application/octet-stream' });
   createReadStream(p).pipe(res);
 });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const base = `http://127.0.0.1:${server.address().port}/rpg-demo/`;
+const base = `http://127.0.0.1:${server.address().port}/runornas-kall-laro/`;
 const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 await page.goto(base, { waitUntil: 'load' });

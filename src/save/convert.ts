@@ -26,6 +26,7 @@ export function toHeroSave(d: SaveFile): HeroSave {
       : null,
     ...(d.foundItems ? { foundItems: d.foundItems } : {}),
     ...(d.worldState ? { worldState: d.worldState } : {}),
+    ...(d.learn ? { learn: d.learn } : {}),
   };
 }
 
@@ -67,6 +68,7 @@ export function fromHeroSave(s: HeroSave, foundItems?: Record<string, FoundEntry
     out.found = Object.keys(items).length;
   }
   if (s.worldState) out.worldState = structuredClone(s.worldState);
+  if (s.learn) out.learn = { ...s.learn };
   return out;
 }
 

@@ -30,15 +30,15 @@ if (!existsSync(join(dist, 'index.html'))) {
 
 const server = createServer((req, res) => {
   const url = decodeURIComponent((req.url ?? '/').split('?')[0]);
-  if (!url.startsWith('/rpg-demo/')) return void res.writeHead(404).end();
-  let p = join(dist, url.slice('/rpg-demo/'.length));
+  if (!url.startsWith('/runornas-kall-laro/')) return void res.writeHead(404).end();
+  let p = join(dist, url.slice('/runornas-kall-laro/'.length));
   if (existsSync(p) && statSync(p).isDirectory()) p = join(p, 'index.html');
   if (!existsSync(p)) return void res.writeHead(404).end();
   res.writeHead(200, { 'content-type': TYPES[extname(p)] ?? 'application/octet-stream' });
   createReadStream(p).pipe(res);
 });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const base = `http://127.0.0.1:${server.address().port}/rpg-demo/`;
+const base = `http://127.0.0.1:${server.address().port}/runornas-kall-laro/`;
 
 const browser = await chromium.launch({
   args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],

@@ -3,6 +3,7 @@ import type { Vec2 } from '../core/GameContext';
 import type { FoundRegistry } from '../core/SaveBackend';
 import type { AssetStore } from '../render/Assets';
 import { Iso } from '../render/Iso';
+import { autoEquipItem } from '../learn/gearScore';
 import type { Drop, Item } from '../logic/loot/types';
 import type { GroundDrop, World } from './World';
 
@@ -72,6 +73,40 @@ export class LootSystem {
     view.zIndex = pos.x + pos.y - 0.5;
     w.objects.addChild(view);
     w.drops.push({ pos: { ...pos }, data: d, view, t: w.rng.next() * 6 });
+  }
+
+  /**
+   * Plockar upp droppar direkt. Bättre utrustning tas på (gamla läggs i väskan).
+   * Returnerar namn på det som togs på, så anroparen kan visa toasten efter nivå-upp.
+   */
+  grantAuto(drops: Drop[]): string[] {
+    const w = this.w();
+    const h = w.hero;
+    const equipped: string[] = [];
+    for (const d of drops) {
+      if (d.gold) {
+        h.s.gold += d.gold;
+        w.bus.emit('gold', { amount: d.gold });
+        w.fb.float(h.pos, w.text.t('msg.gold', { amount: d.gold }), 'gold');
+        continue;
+      }
+      const it = d.item;
+      if (!it) continue;
+      void this.recordFound(it).catch((e) => console.warn('LootSystem: fyndregistrering misslyckades', e));
+      const name = this.label(d);
+      const foundId = w.L.foundId(it);
+      if (autoEquipItem(w.L, h, it)) {
+        equipped.push(name);
+        w.bus.emit('pickup', { itemId: foundId, first: false, quality: it.quality });
+        continue;
+      }
+      if (h.inv.add(it)) {
+        w.bus.emit('pickup', { itemId: foundId, first: false, quality: it.quality });
+        continue;
+      }
+      this.spawn(h.pos, { item: it });
+    }
+    return equipped;
   }
 
   /** Slängt föremål från väskan hamnar på marken nära hjälten. */
