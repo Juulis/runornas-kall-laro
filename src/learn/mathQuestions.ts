@@ -1,5 +1,6 @@
 import type { Rng } from '../core/Rng';
 import { multipleChoice, numberChoices } from './choices';
+import { isHardMathRule } from './hardQuestion';
 import type { GradeId, LearnQuestion, QuestionMeta } from './types';
 
 /** Vilka matte-regler som hör till varje nivå. Gymnasiet och vuxen delar spår. */
@@ -83,6 +84,7 @@ function pack(
     grade,
     rule,
     ...(meta ? { meta } : {}),
+    ...(isHardMathRule(rule) ? { needsScratchpad: true } : {}),
   };
 }
 

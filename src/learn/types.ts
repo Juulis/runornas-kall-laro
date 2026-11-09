@@ -53,6 +53,8 @@ export interface LearnQuestion {
   choiceEmojis?: readonly (string | null)[];
   /** Läs prompten tillsammans med ordet som ska sägas. */
   speakPrompt?: boolean;
+  /** Sant när frågan ska visa kladdruta. Saknas: avgörs av rule. */
+  needsScratchpad?: boolean;
 }
 
 export interface LearnSettings {

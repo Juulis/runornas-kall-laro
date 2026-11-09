@@ -42,8 +42,8 @@ function chunkName(id: string): string | null {
   if (id.includes('node_modules/pixi.js') || id.includes('node_modules/@pixi/')) return 'pixi';
   if (id.includes('/fragor_svenska.json')) return 'learn-data-svenska';
   if (id.includes('/fragor_engelska.json')) return 'learn-data-engelska';
-  if (/\/src\/learn\/(LearnEncounter|questions|bank|mathQuestions|damage|speech|choices)\.ts$/.test(id)) return 'learn';
-  if (id.includes('/src/ui/LearnOverlay.ts')) return 'learn';
+  if (/\/src\/learn\/(LearnEncounter|questions|bank|mathQuestions|hardQuestion|damage|speech|choices)\.ts$/.test(id)) return 'learn';
+  if (/\/src\/ui\/(LearnOverlay|Scratchpad)\.ts$/.test(id)) return 'learn';
   if (isWorldChunk(id)) return 'world';
   if (id.includes('/src/data/') && id.endsWith('.json')) return 'game-data';
   return null;
