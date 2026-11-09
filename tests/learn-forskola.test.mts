@@ -146,7 +146,7 @@ interface LearnSettingsSnap {
 const fields = buildLearnFields({ grade: 'ak1', subject: 'matte', readAloud: false }, (s) => {
   saved = s;
 });
-assert.match(fields.textContent ?? '', /Läs upp frågor/);
+assert.match(fields.textContent ?? '', /Visa ljudknapp/);
 const box = fields.querySelector('input[type="checkbox"]');
 assert.ok(box instanceof HTMLInputElement);
 assert.equal(box.checked, false);
@@ -247,10 +247,7 @@ forskola.onAnswer = (i) => {
 try {
   spoken.length = 0;
   forskola.showQuestion(svQ, 0, 1);
-  assert.equal(lastSpoken().lang, 'sv-SE');
-  assert.equal(lastSpoken().text, svQ.prompt);
-  assert.equal(lastSpoken().voice, 'Alva');
-  assert.notEqual(lastSpoken().text, svQ.answer);
+  assert.equal(spoken.length, 0, '#24: frågan läses inte upp automatiskt');
   assert.ok(forskola.root.querySelector('.rk-q-card')?.classList.contains('forskola'));
   const speaker = forskola.root.querySelector('.rk-q-speak');
   assert.ok(speaker instanceof HTMLButtonElement);
@@ -265,6 +262,7 @@ try {
   assert.equal(spoken.length, before + 1);
   assert.equal(lastSpoken().lang, 'sv-SE');
   assert.equal(lastSpoken().text, svQ.prompt);
+  assert.equal(lastSpoken().voice, 'Alva');
   assert.notEqual(lastSpoken().text, svQ.answer);
 
   const spellChoice = forskola.root.querySelector('.rk-q-choices button');
@@ -288,6 +286,8 @@ try {
   forskola.showQuestion(enQ, 0, 1);
   assert.equal(svara.disabled, true, 'ny fråga rensar valet');
   assert.equal(forskola.root.querySelector('.rk-q-choices button.selected'), null);
+  assert.equal(spoken.length, 0, '#24: ordet läses inte upp automatiskt');
+  (forskola.root.querySelector('.rk-q-speak') as HTMLButtonElement).click();
   assert.equal(lastSpoken().lang, 'en-US');
   assert.equal(lastSpoken().text, enQ.speakText);
   assert.equal(lastSpoken().voice, 'Sam');
@@ -310,6 +310,8 @@ try {
   spoken.length = 0;
   forskola.setSettings({ grade: 'forskola', subject: 'matte', readAloud: true });
   forskola.showQuestion(mathQ, 0, 1);
+  assert.equal(spoken.length, 0, '#24: inte ens med ljudknappen på läses frågan själv');
+  (forskola.root.querySelector('.rk-q-speak') as HTMLButtonElement).click();
   assert.equal(lastSpoken().lang, 'sv-SE');
   assert.equal(lastSpoken().text, mathQ.speakText);
   assert.equal(svara.disabled, true);
@@ -380,9 +382,12 @@ try {
   assert.equal(speaker.hidden, true);
   ak1.setSettings({ grade: 'ak1', subject: 'matte', readAloud: true });
   ak1.showQuestion(ak1q, 1, 2);
+  assert.equal(spoken.length, 0, '#24: ingen automatisk uppläsning i åk 1');
+  const ak1Speaker = ak1.root.querySelector('.rk-q-speak') as HTMLButtonElement;
+  assert.equal(ak1Speaker.hidden, false);
+  ak1Speaker.click();
   assert.equal(lastSpoken().lang, 'sv-SE');
   assert.equal(lastSpoken().text, ak1q.prompt);
-  assert.equal((ak1.root.querySelector('.rk-q-speak') as HTMLButtonElement).hidden, false);
 } finally {
   ak1.dispose();
 }

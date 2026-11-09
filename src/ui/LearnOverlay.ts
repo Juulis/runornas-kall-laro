@@ -233,7 +233,7 @@ export class LearnOverlay {
       btn.classList.remove('selected', 'correct', 'wrong');
       btn.setAttribute('aria-pressed', 'false');
     });
-    if (readAloudOf(this.settings)) this.readQuestion(q);
+    // Frågan läses aldrig upp av sig själv (#24). Bara högtalarknappen läser frågan eller ordet.
     const hard = isHardQuestion(q);
     this.scratch.clear();
     this.scratch.setVisible(hard);
