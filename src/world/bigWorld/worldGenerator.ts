@@ -15,7 +15,7 @@ import {
   spawnTileNearRoad,
   subtypeSpawnWeight,
 } from './spawnDensity';
-import { isLegacyOnlySpawnChunk } from './heroRegion';
+import { isLegacyOnlySpawnChunk } from './startskogenFootprint';
 import { regionMonsterPerGame } from './regionSpawnBudget';
 
 export interface BigWorldSpawnRoll {

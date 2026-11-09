@@ -2,7 +2,7 @@ import type { Vec2 } from '../../core/GameContext';
 import type { SpawnSpec } from '../../systems/SpawnSystem';
 import type { World } from '../../systems/World';
 import { worldToChunk } from './bigWorldCoords';
-import { isLegacyOnlySpawnChunk, runglantanWorldCenter } from './heroRegion';
+import { isLegacyOnlySpawnChunk, runglantanWorldCenter } from './startskogenFootprint';
 
 /** Legacy spawnzoner är i Rungläntans lokala koordinater (origo = värld 0,0). */
 export function startskogenLegacyAnchor(): Vec2 {

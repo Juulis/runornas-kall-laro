@@ -1,7 +1,7 @@
 import type { BigWorldDataFile, BigWorldRegion } from '../../data/bigWorldTypes';
 import { Rng } from '../../core/Rng';
 import { chebyshevChunkDist } from './ringZone';
-import { isLegacyOnlySpawnChunk } from './heroRegion';
+import { isLegacyOnlySpawnChunk } from './startskogenFootprint';
 import { resolveRegionAtChunk } from './regionIndex';
 
 export type RegionTathet = number | readonly [number, number] | { monster_per_game?: number; kalla?: string };

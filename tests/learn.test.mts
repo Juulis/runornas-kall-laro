@@ -16,7 +16,7 @@ import { Text } from '../src/text/Text';
 import { applyWrongAnswer } from '../src/learn/damage';
 import { autoEquipItem, chooseAutoEquipSlot, gearScore } from '../src/learn/gearScore';
 import { MATH_RULES } from '../src/learn/mathQuestions';
-import { bankCount } from '../src/learn/bank';
+import { bankCount, clearBankCache, ensureBank, preloadLearnBanks, setBankImporterForTests } from '../src/learn/bank';
 import { LEARN_PACK_PAUSE_S, LearnEncounter } from '../src/learn/LearnEncounter';
 import { generateQuestions, questionsForEncounter } from '../src/learn/questions';
 import {
@@ -33,6 +33,15 @@ import { CombatSystem } from '../src/systems/CombatSystem';
 import type { LootSystem } from '../src/systems/LootSystem';
 import type { MonsterAI } from '../src/systems/MonsterAI';
 import type { Projectile, World } from '../src/systems/World';
+
+const svenskaBank = await ensureBank('svenska');
+const svenskaAgain = await ensureBank('svenska');
+assert.equal(svenskaAgain, svenskaBank, 'ensureBank ska cacha samma rader');
+assert.ok(svenskaBank.length >= 40);
+await ensureBank('engelska');
+await preloadLearnBanks({ subject: 'matte' });
+await preloadLearnBanks({ subject: 'blandat' });
+assert.equal(await ensureBank('svenska'), svenskaBank, 'preload ska återanvända cache');
 
 assert.equal(GRADES.length, 8);
 assert.equal(SUBJECTS.length, 4);
@@ -635,3 +644,17 @@ try {
 }
 
 console.log('learn encounter ok');
+
+clearBankCache('svenska');
+let svenskaLoads = 0;
+setBankImporterForTests('svenska', () => {
+  svenskaLoads += 1;
+  if (svenskaLoads === 1) return Promise.reject(new Error('nät'));
+  return import('../src/data/fragor_svenska.json');
+});
+await assert.rejects(() => ensureBank('svenska'));
+const retried = await ensureBank('svenska');
+assert.equal(await ensureBank('svenska'), retried, 'lyckad laddning ska cachas efter fel');
+assert.equal(svenskaLoads, 2);
+assert.ok(bankCount('svenska', 'ak1') >= 15);
+setBankImporterForTests('svenska', null);
