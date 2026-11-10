@@ -229,8 +229,42 @@ try {
   pad.clear();
   assert.equal(note.value, '');
   assert.ok(ink.clears >= 1);
+
+  const bigger = [...pad.root.querySelectorAll('button')].find((b) => b.textContent === 'Större');
+  assert.ok(bigger instanceof HTMLButtonElement);
+  assert.equal(bigger.type, 'button');
+  assert.equal(bigger.parentElement?.classList.contains('rk-scratch-row'), true);
+  assert.equal(bigger.getAttribute('aria-label'), 'Gör kladdrutan större');
+  assert.equal(bigger.getAttribute('aria-pressed'), 'false');
+  assert.equal(pad.root.classList.contains('rk-scratch-expanded'), false);
+  bigger.click();
+  assert.equal(pad.root.classList.contains('rk-scratch-expanded'), true);
+  assert.equal(bigger.getAttribute('aria-pressed'), 'true');
+  assert.equal(bigger.textContent, 'Mindre');
+  assert.equal(bigger.getAttribute('aria-label'), 'Gör kladdrutan mindre');
+  note.value = 'kvarstår';
+  bigger.click();
+  assert.equal(pad.root.classList.contains('rk-scratch-expanded'), false);
+  assert.equal(bigger.textContent, 'Större');
+  assert.equal(bigger.getAttribute('aria-pressed'), 'false');
+  assert.equal(note.value, 'kvarstår', 'växling ska behålla texten');
+
+  textBtn.click();
+  bigger.click();
+  sudda.click();
+  assert.equal(note.value, '');
+  assert.equal(textPane.hidden, false, 'Sudda behåller textläge');
+  assert.equal(pad.root.classList.contains('rk-scratch-expanded'), true, 'Sudda lämnar den stora vyn');
+  pad.clear();
+  assert.equal(pad.root.classList.contains('rk-scratch-expanded'), false, 'clear stänger stor vy');
+  assert.equal(bigger.textContent, 'Större');
+  assert.equal(drawPane.hidden, false);
+
+  bigger.click();
   pad.setVisible(false);
   assert.equal(pad.root.hidden, true);
+  assert.equal(pad.root.classList.contains('rk-scratch-expanded'), false, 'gömd ruta lämnar stor vy');
+  assert.equal(bigger.textContent, 'Större');
 } finally {
   pad.dispose();
 }
@@ -253,6 +287,18 @@ try {
   assert.match(css, /max-width:\s*1000px/);
   assert.match(css, /flex-direction:\s*column/);
   assert.match(css, /rk-with-scratch/);
+  assert.match(css, /rk-scratch-expanded/);
+  assert.match(css, /position:\s*fixed/);
+  assert.match(css, /min-height:\s*50vh/);
+  assert.match(css, /calc\(100vh\s*-\s*2\s*\*\s*var\(--rk-quiz-pad\)\)/);
+  assert.match(css, /\.rk-scratch-frame\{[^}]*flex:\s*1/);
+  assert.match(css, /\.rk-scratch-canvas\{[^}]*height:\s*100%/);
+  assert.match(css, /\.rk-scratch-note\{[^}]*height:\s*100%/);
+  assert.doesNotMatch(css, /280px/);
+  assert.doesNotMatch(css, /height:\s*220px/);
+  assert.doesNotMatch(css, /height:\s*120px/);
+  assert.match(css, /overflow:\s*visible/);
+  assert.match(css, /width:\s*100%/);
 
   const layout = overlay.root.querySelector('.rk-q-layout');
   const card = overlay.root.querySelector('.rk-q-card');
@@ -294,9 +340,15 @@ try {
   assert.equal(answered, 0);
   assert.equal(choice.disabled, true);
 
+  const bigger = [...scratch.querySelectorAll('button')].find((b) => b.textContent === 'Större');
+  assert.ok(bigger instanceof HTMLButtonElement);
+  bigger.click();
+  assert.equal(scratch.classList.contains('rk-scratch-expanded'), true);
   overlay.showQuestion(question({ rule: 'gym-andragrads', grade: 'gymnasiet' }), 1, 2);
   assert.equal(note.value, '', 'nästa svåra fråga rensar anteckningen');
   assert.equal(scratch.hidden, false);
+  assert.equal(scratch.classList.contains('rk-scratch-expanded'), false, 'ny fråga stänger stor vy');
+  assert.equal(bigger.textContent, 'Större');
   assert.equal(scratch.querySelector('.rk-scratch-pane')?.hasAttribute('hidden') ?? false, false);
 
   overlay.showQuestion(question({ rule: 'gym-huvudrakning', grade: 'gymnasiet' }), 0, 1);
@@ -318,5 +370,108 @@ try {
 } finally {
   overlay.dispose();
 }
+
+function rectOf(width: number, height: number): DOMRect {
+  return {
+    x: 0,
+    y: 0,
+    left: 0,
+    top: 0,
+    right: width,
+    bottom: height,
+    width,
+    height,
+    toJSON() {
+      return {};
+    },
+  } as DOMRect;
+}
+
+let observed: Element | null = null;
+let disconnects = 0;
+class FakeResizeObserver {
+  readonly cb: ResizeObserverCallback;
+  constructor(cb: ResizeObserverCallback) {
+    this.cb = cb;
+  }
+  observe(el: Element): void {
+    observed = el;
+  }
+  unobserve(): void {}
+  disconnect(): void {
+    disconnects += 1;
+  }
+}
+Object.defineProperty(window, 'ResizeObserver', {
+  configurable: true,
+  writable: true,
+  value: FakeResizeObserver,
+});
+
+const sized = new Scratchpad();
+document.body.append(sized.root);
+try {
+  const frame = sized.root.querySelector('.rk-scratch-frame');
+  assert.equal(observed, frame, 'ResizeObserver sitter på ramen');
+  const canvas = sized.root.querySelector('canvas');
+  assert.ok(canvas instanceof HTMLCanvasElement);
+  let fromLive = 0;
+  let ontoNew = 0;
+  const ctx = {
+    setTransform() {},
+    save() {},
+    restore() {},
+    beginPath() {},
+    moveTo() {},
+    lineTo() {},
+    stroke() {},
+    clearRect() {},
+    drawImage(src: CanvasImageSource) {
+      if (src instanceof HTMLCanvasElement && src.classList.contains('rk-scratch-canvas')) fromLive += 1;
+      else ontoNew += 1;
+    },
+    globalCompositeOperation: 'source-over',
+    lineWidth: 1,
+    strokeStyle: '',
+    lineCap: 'round',
+    lineJoin: 'round',
+  };
+  const proto = HTMLCanvasElement.prototype;
+  const prevGet = proto.getContext;
+  proto.getContext = ((kind: string) => (kind === '2d' ? ctx : null)) as HTMLCanvasElement['getContext'];
+  try {
+    canvas.getBoundingClientRect = () => rectOf(640, 600);
+    sized.setVisible(true);
+    const dpr = Math.min(Math.max(window.devicePixelRatio || 1, 1), 3);
+    assert.equal(canvas.width, Math.round(640 * dpr));
+    assert.equal(canvas.height, Math.round(600 * dpr));
+    assert.ok(canvas.height > 220, 'ritytan följer den nya höjden');
+    const afterFirst = ontoNew;
+    assert.ok(fromLive >= 1, 'gammal bitmap kopieras');
+    assert.ok(afterFirst >= 1);
+    canvas.getBoundingClientRect = () => rectOf(800, 720);
+    window.dispatchEvent(new Event('resize'));
+    assert.equal(canvas.height, Math.round(720 * dpr));
+    assert.ok(fromLive >= 2, 'förstoring kopierar strecken');
+    assert.ok(ontoNew > afterFirst);
+    const frozenW = canvas.width;
+    const frozenH = canvas.height;
+    const copies = fromLive;
+    canvas.getBoundingClientRect = () => rectOf(0, 0);
+    window.dispatchEvent(new Event('resize'));
+    assert.equal(canvas.width, frozenW, 'nollstorlek får inte slänga ritningen');
+    assert.equal(canvas.height, frozenH);
+    assert.equal(fromLive, copies);
+    canvas.getBoundingClientRect = () => rectOf(800, 720);
+    const beforeSame = fromLive;
+    window.dispatchEvent(new Event('resize'));
+    assert.equal(fromLive, beforeSame, 'samma storlek ritas inte om');
+  } finally {
+    proto.getContext = prevGet;
+  }
+} finally {
+  sized.dispose();
+}
+assert.ok(disconnects >= 1, 'dispose kopplar loss ResizeObserver');
 
 console.log('learn scratchpad ok');
