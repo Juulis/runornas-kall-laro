@@ -140,7 +140,11 @@
         "sprickvasen",
         "jarnbroder",
         "sprickpilgrim",
-        "vriden_jatte"
+        "vriden_jatte",
+        "kattflickan_monster",
+        "gnistan_monster",
+        "valpen_monster",
+        "grisan_monster"
       ],
       "underbossar": [
         "jarnmunken",
@@ -1908,6 +1912,102 @@
         }
       },
       "dark_magic": true
+    },
+    {
+      "id": "kattflickan_monster",
+      "name": "Elaka kattflickan",
+      "family": "forvridna",
+      "level": 1,
+      "hp": 48,
+      "damage": 10,
+      "defense": 0,
+      "speed": 4,
+      "attack_cd": 1,
+      "attacks_per_s": 1,
+      "xp": 10,
+      "aggro_range": 10,
+      "behavior": "Springer fram och klöser.",
+      "weapon_type": null,
+      "zones": [
+        "startskogen"
+      ],
+      "boss": false,
+      "design_source": {
+        "from": "smittad_bybo",
+        "ref_level": 1
+      }
+    },
+    {
+      "id": "gnistan_monster",
+      "name": "Elaka Gnistan",
+      "family": "forvridna",
+      "level": 1,
+      "hp": 44,
+      "damage": 11,
+      "defense": 0,
+      "speed": 3.8,
+      "attack_cd": 1,
+      "attacks_per_s": 1,
+      "xp": 10,
+      "aggro_range": 10,
+      "behavior": "Hoppar fram och nafsar.",
+      "weapon_type": null,
+      "zones": [
+        "startskogen"
+      ],
+      "boss": false,
+      "design_source": {
+        "from": "smittad_bybo",
+        "ref_level": 1
+      }
+    },
+    {
+      "id": "valpen_monster",
+      "name": "Elaka valpen",
+      "family": "forvridna",
+      "level": 1,
+      "hp": 52,
+      "damage": 9,
+      "defense": 0,
+      "speed": 3.5,
+      "attack_cd": 1,
+      "attacks_per_s": 1,
+      "xp": 10,
+      "aggro_range": 10,
+      "behavior": "Skäller och biter.",
+      "weapon_type": null,
+      "zones": [
+        "startskogen"
+      ],
+      "boss": false,
+      "design_source": {
+        "from": "smittad_bybo",
+        "ref_level": 1
+      }
+    },
+    {
+      "id": "grisan_monster",
+      "name": "Elaka Grisan",
+      "family": "forvridna",
+      "level": 2,
+      "hp": 58,
+      "damage": 11,
+      "defense": 1,
+      "speed": 3.2,
+      "attack_cd": 1,
+      "attacks_per_s": 1,
+      "xp": 10,
+      "aggro_range": 10,
+      "behavior": "Rusar fram och stångas.",
+      "weapon_type": null,
+      "zones": [
+        "startskogen"
+      ],
+      "boss": false,
+      "design_source": {
+        "from": "smittad_bybo",
+        "ref_level": 1
+      }
     }
   ],
   "monsters_xp_regel": "xp är monstrets RÅA bas (xp_ref) i spelets formel: kill-XP = round(xp/10 × 3 × L^1,5 × avdrag × elit × bossfaktor), se monster_niva.json meta.xp_regel. Ingen boss_xp_faktor eller underbossfaktor är inräknad. Omräkning 2026-11-05 (#124 D1): xp = tidigare platta XP × 10 / (3 × L^1,5), avrundat; vanliga monster på nivå 7 och uppåt × 0,65 för den tätare mellanmarken (D3). Bossar och underbossar: aktens huvudbosss råa bas (underbossen samma bas som sin källboss, 0,4 tillämpas i koden)."

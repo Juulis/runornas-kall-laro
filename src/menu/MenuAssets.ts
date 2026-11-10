@@ -7,7 +7,22 @@ import { el } from './dom';
 export class MenuAssets {
   constructor(private readonly i18n: LocaleManager) {}
 
-  static readonly FILES = ['bg', 'titel', 'plats', 'tom', 'knapp', 'textfalt', 'save', 'amazonkrigare', 'barbar', 'riddare'] as const;
+  static readonly FILES = [
+    'bg',
+    'titel',
+    'plats',
+    'tom',
+    'knapp',
+    'textfalt',
+    'save',
+    'amazonkrigare',
+    'barbar',
+    'riddare',
+    'kattflickan',
+    'gnistan',
+    'valpen',
+    'grisan',
+  ] as const;
 
   url(name: (typeof MenuAssets.FILES)[number] | string): string {
     return assetUrl(`ui/${name}.webp`);
@@ -46,9 +61,15 @@ export class MenuAssets {
 .hero-menu .btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:8px;color:#e6dfcc}
 .hero-menu button{border-style:solid;border-width:16px 44px;border-image:${u('knapp')} 20 60 fill / 16px 44px stretch;background:none;color:#e6dfcc;font:18px Cinzel,serif;padding:0 6px;min-width:170px;cursor:pointer;text-shadow:0 1px 2px #000}
 .hero-menu button:hover:not(:disabled){color:#fff;filter:brightness(1.25) drop-shadow(0 0 6px rgba(199,163,90,.5))}.hero-menu button:disabled{opacity:.4;cursor:default}
-.hero-new{display:flex;flex-direction:column;gap:10px;align-items:center}.hero-new .clsrow{display:flex;gap:22px}
-.hero-new .clsbtn{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;opacity:.6;color:#cbb994;font:18px Cinzel,serif}
-.hero-new .clsbtn .portrait{width:120px;height:120px;border:3px solid #3a3f45}.hero-new .clsbtn.sel{opacity:1;color:#e0b060}.hero-new .clsbtn.sel .portrait{border-color:#c7a35a;box-shadow:0 0 24px 4px rgba(199,163,90,.5)}
+.hero-new{display:flex;flex-direction:column;gap:10px;align-items:center;width:min(1040px,96vw)}
+.hero-menu .underrubrik{font:20px Cinzel,serif;color:#e6dfcc;letter-spacing:1px;margin:10px 0 2px;text-align:center}
+.hero-menu .figure-pick{display:flex;flex-direction:column;align-items:center;width:min(1040px,96vw)}
+.hero-menu .hero-class-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px 14px;width:min(980px,96vw);margin:0 auto}
+.hero-menu .hero-class-grid .clsbtn{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;opacity:.65;color:#cbb994;font:16px Cinzel,serif;min-width:0}
+.hero-menu .hero-class-grid .clsbtn span{text-align:center;line-height:1.15;max-width:100%}
+.hero-menu .hero-class-grid .clsbtn .portrait{width:100%;height:auto;aspect-ratio:1;min-width:80px;min-height:80px;max-width:128px;border:3px solid #3a3f45}
+.hero-menu .hero-class-grid .clsbtn.sel{opacity:1;color:#e0b060}
+.hero-menu .hero-class-grid .clsbtn.sel .portrait{border-color:#c7a35a;box-shadow:0 0 24px 4px rgba(199,163,90,.5)}
 .hero-name{width:400px;height:56px;box-sizing:border-box;border-style:solid;border-width:16px 44px;border-image:${u('textfalt')} 20 55 fill / 16px 44px stretch;background:none;color:#e6dfcc;font:18px Cinzel,serif;text-align:center;outline:none}
 .lang-picker{display:flex;gap:6px;margin-top:6px}.hero-menu .lang-picker button.lang{min-width:0;border-width:10px 20px;font-size:14px;opacity:.6}.hero-menu .lang-picker button.lang.sel{opacity:1;color:#e0b060}.slots-free{color:#a89a80;font-size:13px}
 .hero-err{color:#e06060;min-height:18px;font-size:14px;text-shadow:0 1px 2px #000}

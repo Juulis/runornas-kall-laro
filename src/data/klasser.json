@@ -49,7 +49,7 @@
   "classes": [
     {
       "id": "amazonkrigare",
-      "name": "Amazonkrigare",
+      "name": "Amazonen",
       "role": "Snabb, stick och räckvidd",
       "base": {
         "hp": 90,
@@ -158,7 +158,7 @@
     },
     {
       "id": "barbar",
-      "name": "Barbar",
+      "name": "Barbaren",
       "role": "Rå styrka, kross och hugg",
       "base": {
         "hp": 120,
@@ -267,7 +267,7 @@
     },
     {
       "id": "riddare",
-      "name": "Riddare",
+      "name": "Riddaren",
       "role": "Försvar, balans, hugg",
       "base": {
         "hp": 110,
@@ -373,6 +373,418 @@
         "hits_vs_varg_lvl1": 3.8,
         "note": "Varg nivå 1: 50 HP, försvar 0."
       }
+    },
+    {
+      "id": "kattflickan",
+      "name": "Kattflickan",
+      "role": "Smidig och nyfiken",
+      "base": {
+        "hp": 110,
+        "stamina": 100,
+        "damage": 8,
+        "defense": 5,
+        "speed": 5.2,
+        "crit_chance": 0.05
+      },
+      "growth": {
+        "hp": 15,
+        "stamina": 5,
+        "damage": 3,
+        "defense": 1,
+        "crit_chance": 0.003
+      },
+      "main_damage_type": "hugg",
+      "start_gear": [
+        {
+          "item": "rostig_kortsvard",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "skold_ek",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "laderharnesk",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "torkat_kott",
+          "count": 2,
+          "quality": "normal",
+          "affixes": []
+        }
+      ],
+      "skills": [
+        {
+          "id": "skoldblock",
+          "name": "Sköldblock",
+          "type": "aktiv",
+          "unlock_level": 1,
+          "stamina_cost": 5,
+          "cooldown_s": 0,
+          "effect": "Håll: blockerar 70 % skada framifrån, kostar 5 uthållighet per träff."
+        },
+        {
+          "id": "skoldslag",
+          "name": "Sköldslag",
+          "type": "aktiv",
+          "unlock_level": 2,
+          "stamina_cost": 15,
+          "cooldown_s": 6,
+          "effect": "80 % skada, avbryter fiendens attack eller besvärjelse, omkull 1,5 s."
+        },
+        {
+          "id": "framstot",
+          "name": "Framstöt",
+          "type": "aktiv",
+          "unlock_level": 3,
+          "stamina_cost": 20,
+          "cooldown_s": 8,
+          "effect": "Rusar 6 enheter, 130 % skada på första fienden."
+        },
+        {
+          "id": "jarnvilja",
+          "name": "Järnvilja",
+          "type": "passiv",
+          "unlock_level": 5,
+          "stamina_cost": 0,
+          "cooldown_s": 0,
+          "effect": "Passiv: under 30 % HP får du +5 försvar."
+        },
+        {
+          "id": "motattack",
+          "name": "Motattack",
+          "type": "aktiv",
+          "unlock_level": 7,
+          "stamina_cost": 10,
+          "cooldown_s": 5,
+          "effect": "Perfekt block (0,3 s) ger motslag 180 % skada."
+        },
+        {
+          "id": "fanbararens_rop",
+          "name": "Fanbärarens rop",
+          "type": "aktiv",
+          "unlock_level": 9,
+          "stamina_cost": 30,
+          "cooldown_s": 40,
+          "effect": "Läker 25 % HP och ger +3 försvar i 10 s."
+        }
+      ]
+    },
+    {
+      "id": "gnistan",
+      "name": "Gnistan",
+      "role": "Liten gnista med stort mod",
+      "base": {
+        "hp": 110,
+        "stamina": 100,
+        "damage": 8,
+        "defense": 5,
+        "speed": 5.2,
+        "crit_chance": 0.05
+      },
+      "growth": {
+        "hp": 15,
+        "stamina": 5,
+        "damage": 3,
+        "defense": 1,
+        "crit_chance": 0.003
+      },
+      "main_damage_type": "hugg",
+      "start_gear": [
+        {
+          "item": "rostig_kortsvard",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "skold_ek",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "laderharnesk",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "torkat_kott",
+          "count": 2,
+          "quality": "normal",
+          "affixes": []
+        }
+      ],
+      "skills": [
+        {
+          "id": "skoldblock",
+          "name": "Sköldblock",
+          "type": "aktiv",
+          "unlock_level": 1,
+          "stamina_cost": 5,
+          "cooldown_s": 0,
+          "effect": "Håll: blockerar 70 % skada framifrån, kostar 5 uthållighet per träff."
+        },
+        {
+          "id": "skoldslag",
+          "name": "Sköldslag",
+          "type": "aktiv",
+          "unlock_level": 2,
+          "stamina_cost": 15,
+          "cooldown_s": 6,
+          "effect": "80 % skada, avbryter fiendens attack eller besvärjelse, omkull 1,5 s."
+        },
+        {
+          "id": "framstot",
+          "name": "Framstöt",
+          "type": "aktiv",
+          "unlock_level": 3,
+          "stamina_cost": 20,
+          "cooldown_s": 8,
+          "effect": "Rusar 6 enheter, 130 % skada på första fienden."
+        },
+        {
+          "id": "jarnvilja",
+          "name": "Järnvilja",
+          "type": "passiv",
+          "unlock_level": 5,
+          "stamina_cost": 0,
+          "cooldown_s": 0,
+          "effect": "Passiv: under 30 % HP får du +5 försvar."
+        },
+        {
+          "id": "motattack",
+          "name": "Motattack",
+          "type": "aktiv",
+          "unlock_level": 7,
+          "stamina_cost": 10,
+          "cooldown_s": 5,
+          "effect": "Perfekt block (0,3 s) ger motslag 180 % skada."
+        },
+        {
+          "id": "fanbararens_rop",
+          "name": "Fanbärarens rop",
+          "type": "aktiv",
+          "unlock_level": 9,
+          "stamina_cost": 30,
+          "cooldown_s": 40,
+          "effect": "Läker 25 % HP och ger +3 försvar i 10 s."
+        }
+      ]
+    },
+    {
+      "id": "valpen",
+      "name": "Valpen",
+      "role": "Glad kompis som står upp för vänner",
+      "base": {
+        "hp": 110,
+        "stamina": 100,
+        "damage": 8,
+        "defense": 5,
+        "speed": 5.2,
+        "crit_chance": 0.05
+      },
+      "growth": {
+        "hp": 15,
+        "stamina": 5,
+        "damage": 3,
+        "defense": 1,
+        "crit_chance": 0.003
+      },
+      "main_damage_type": "hugg",
+      "start_gear": [
+        {
+          "item": "rostig_kortsvard",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "skold_ek",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "laderharnesk",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "torkat_kott",
+          "count": 2,
+          "quality": "normal",
+          "affixes": []
+        }
+      ],
+      "skills": [
+        {
+          "id": "skoldblock",
+          "name": "Sköldblock",
+          "type": "aktiv",
+          "unlock_level": 1,
+          "stamina_cost": 5,
+          "cooldown_s": 0,
+          "effect": "Håll: blockerar 70 % skada framifrån, kostar 5 uthållighet per träff."
+        },
+        {
+          "id": "skoldslag",
+          "name": "Sköldslag",
+          "type": "aktiv",
+          "unlock_level": 2,
+          "stamina_cost": 15,
+          "cooldown_s": 6,
+          "effect": "80 % skada, avbryter fiendens attack eller besvärjelse, omkull 1,5 s."
+        },
+        {
+          "id": "framstot",
+          "name": "Framstöt",
+          "type": "aktiv",
+          "unlock_level": 3,
+          "stamina_cost": 20,
+          "cooldown_s": 8,
+          "effect": "Rusar 6 enheter, 130 % skada på första fienden."
+        },
+        {
+          "id": "jarnvilja",
+          "name": "Järnvilja",
+          "type": "passiv",
+          "unlock_level": 5,
+          "stamina_cost": 0,
+          "cooldown_s": 0,
+          "effect": "Passiv: under 30 % HP får du +5 försvar."
+        },
+        {
+          "id": "motattack",
+          "name": "Motattack",
+          "type": "aktiv",
+          "unlock_level": 7,
+          "stamina_cost": 10,
+          "cooldown_s": 5,
+          "effect": "Perfekt block (0,3 s) ger motslag 180 % skada."
+        },
+        {
+          "id": "fanbararens_rop",
+          "name": "Fanbärarens rop",
+          "type": "aktiv",
+          "unlock_level": 9,
+          "stamina_cost": 30,
+          "cooldown_s": 40,
+          "effect": "Läker 25 % HP och ger +3 försvar i 10 s."
+        }
+      ]
+    },
+    {
+      "id": "grisan",
+      "name": "Grisan",
+      "role": "Stark, snäll och envis",
+      "base": {
+        "hp": 110,
+        "stamina": 100,
+        "damage": 8,
+        "defense": 5,
+        "speed": 5.2,
+        "crit_chance": 0.05
+      },
+      "growth": {
+        "hp": 15,
+        "stamina": 5,
+        "damage": 3,
+        "defense": 1,
+        "crit_chance": 0.003
+      },
+      "main_damage_type": "hugg",
+      "start_gear": [
+        {
+          "item": "rostig_kortsvard",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "skold_ek",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "laderharnesk",
+          "count": 1,
+          "quality": "normal",
+          "affixes": []
+        },
+        {
+          "item": "torkat_kott",
+          "count": 2,
+          "quality": "normal",
+          "affixes": []
+        }
+      ],
+      "skills": [
+        {
+          "id": "skoldblock",
+          "name": "Sköldblock",
+          "type": "aktiv",
+          "unlock_level": 1,
+          "stamina_cost": 5,
+          "cooldown_s": 0,
+          "effect": "Håll: blockerar 70 % skada framifrån, kostar 5 uthållighet per träff."
+        },
+        {
+          "id": "skoldslag",
+          "name": "Sköldslag",
+          "type": "aktiv",
+          "unlock_level": 2,
+          "stamina_cost": 15,
+          "cooldown_s": 6,
+          "effect": "80 % skada, avbryter fiendens attack eller besvärjelse, omkull 1,5 s."
+        },
+        {
+          "id": "framstot",
+          "name": "Framstöt",
+          "type": "aktiv",
+          "unlock_level": 3,
+          "stamina_cost": 20,
+          "cooldown_s": 8,
+          "effect": "Rusar 6 enheter, 130 % skada på första fienden."
+        },
+        {
+          "id": "jarnvilja",
+          "name": "Järnvilja",
+          "type": "passiv",
+          "unlock_level": 5,
+          "stamina_cost": 0,
+          "cooldown_s": 0,
+          "effect": "Passiv: under 30 % HP får du +5 försvar."
+        },
+        {
+          "id": "motattack",
+          "name": "Motattack",
+          "type": "aktiv",
+          "unlock_level": 7,
+          "stamina_cost": 10,
+          "cooldown_s": 5,
+          "effect": "Perfekt block (0,3 s) ger motslag 180 % skada."
+        },
+        {
+          "id": "fanbararens_rop",
+          "name": "Fanbärarens rop",
+          "type": "aktiv",
+          "unlock_level": 9,
+          "stamina_cost": 30,
+          "cooldown_s": 40,
+          "effect": "Läker 25 % HP och ger +3 försvar i 10 s."
+        }
+      ]
     }
   ],
   "items_ref": "foremal_bas.json (start_gear id:n finns där)"

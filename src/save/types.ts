@@ -3,6 +3,7 @@ import type { FoundEntry } from '../core/SaveBackend';
 import type { Equipment, ItemInstance } from '../core/GameContext';
 import type { WorldState } from '../world/worldStateTypes';
 import { BIG_WORLD_COORD_EPOCH } from '../world/bigWorld/saveCoordMigrate';
+import { HERO_APPEARANCES } from './heroRegistry';
 
 export const SAVE_VERSION = 3;
 export const MAX_HEROES = 8;
@@ -69,11 +70,12 @@ export interface HeroClass {
   icon: string;
 }
 
-export const HERO_CLASSES: readonly HeroClass[] = [
-  { id: 'amazonkrigare', name: 'Amazonkrigare', icon: '🔱' },
-  { id: 'barbar', name: 'Barbar', icon: '💥' },
-  { id: 'riddare', name: 'Riddare', icon: '🛡️' },
-];
+/** Byggs från hjälteregistret så menyn och sparningen inte har en egen lista. */
+export const HERO_CLASSES: readonly HeroClass[] = HERO_APPEARANCES.map((h) => ({
+  id: h.id,
+  name: h.labelSv,
+  icon: h.icon,
+}));
 export const classById = (id: string): HeroClass | undefined => HERO_CLASSES.find((c) => c.id === id);
 
 export const newGameRecord = (seed: number): GameRecord => ({

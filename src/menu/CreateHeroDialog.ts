@@ -1,16 +1,18 @@
 import type { LocaleManager } from '../i18n/LocaleManager';
-import type { Key } from '../i18n/types';
+import { LocalStore } from '../core/storage';
 import type { HeroRoster } from '../save/HeroRoster';
-import { HERO_CLASSES, type SaveFile } from '../save/types';
+import { readLastHeroClass, writeLastHeroClass, type HeroClassId } from '../save/heroRegistry';
+import type { SaveFile } from '../save/types';
 import { button, el } from './dom';
+import { renderHeroClassGrid } from './heroClassGrid';
 import type { MenuAssets } from './MenuAssets';
 
 const NAME_MIN = 2;
 const NAME_MAX = 16;
 
-/** Ny hjälte: välj klass, namn med validering i realtid, Enter skapar. */
+/** Ny hjälte: välj figur med förhandsbild, namn med validering i realtid, Enter skapar. */
 export class CreateHeroDialog {
-  private cls = 'riddare';
+  private cls: HeroClassId = readLastHeroClass(new LocalStore());
   private nameDraft = '';
 
   constructor(
@@ -29,26 +31,20 @@ export class CreateHeroDialog {
   }
 
   resetDraft(): void {
-    this.cls = 'riddare';
+    this.cls = readLastHeroClass(new LocalStore());
     this.nameDraft = '';
   }
 
   render(onCreated: (d: SaveFile) => void, onBack: () => void): { root: HTMLElement; focus: () => void } {
-    const row = el('div', { class: 'clsrow' });
-    const btns = HERO_CLASSES.map((c) => {
-      const b = el(
-        'div',
-        { class: `clsbtn${c.id === this.cls ? ' sel' : ''}`, 'data-c': c.id },
-        this.assets.portrait(c.id),
-        el('span', { text: this.i18n.t(`classes.${c.id}` as Key) }),
-      );
-      b.addEventListener('click', () => {
-        this.cls = c.id;
-        btns.forEach((x) => x.classList.toggle('sel', x === b));
-      });
-      return b;
+    const grid = renderHeroClassGrid({
+      selected: this.cls,
+      i18n: this.i18n,
+      assets: this.assets,
+      onPick: (id) => {
+        this.cls = id;
+        writeLastHeroClass(new LocalStore(), id);
+      },
     });
-    row.append(...btns);
     const input = el('input', {
       class: 'hero-name',
       maxlength: String(NAME_MAX),
@@ -67,6 +63,7 @@ export class CreateHeroDialog {
         err.textContent = this.rosterMsg(e);
         return;
       }
+      writeLastHeroClass(new LocalStore(), this.cls);
       this.roster.create(input.value, this.cls).then(
         (d) => {
           this.resetDraft();
@@ -83,7 +80,7 @@ export class CreateHeroDialog {
     const root = el(
       'div',
       { class: 'hero-new' },
-      row,
+      grid,
       input,
       err,
       el(

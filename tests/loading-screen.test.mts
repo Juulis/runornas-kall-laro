@@ -134,7 +134,7 @@ test('startup-vikter följer riktiga steg och varje setPhase-fas har vikt', asyn
   assert.equal(weights.tiles, TILES.length);
   assert.equal(weights.decor, DECOR.length + 2);
   assert.equal(weights.hero, HERO_SHEET_STEPS + KNIGHT_EQUIP_INDEX_STEPS + KNIGHT_EQUIP_SHEET_STEPS);
-  assert.equal(HERO_SHEET_STEPS, 15);
+  assert.equal(HERO_SHEET_STEPS, 0);
   assert.equal(weights.worldFigures, worldFigureLoadSteps());
   assert.equal(worldFigureLoadSteps(), 24);
   assert.equal(weights.bg, 7);

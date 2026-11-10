@@ -101,6 +101,7 @@ const EFFECT_FILES = ['glod_rare', 'glod_set', 'glod_legendary'] as const;
  * Vikter för startladdningen. tiles/decor/hero/worldFigures/bg/icons är antal riktiga
  * steg (textur, ark eller manifest). monsters är tyngre (8-dir-ark) än en markplatta.
  * npcs = manifest + en post per npc i npc.json (13 idag; testet låser antalet).
+ * hero räknar riddarens utrustning. Klassark laddas senare, en figur i taget.
  */
 export function startupLoadWeights(): Record<'tiles' | 'decor' | 'hero' | 'worldFigures' | 'monsters' | 'npcs' | 'bg' | 'icons', number> {
   return {
@@ -234,6 +235,11 @@ export class AssetStore {
       console.warn('[AssetStore] hjältesprites:', e);
     }
     this.loadProgress?.setPhase('hero', 1);
+  }
+
+  /** Laddar spriteark för den valda figuren. Redan laddad klass hoppas över. */
+  async loadHeroClass(cls: string): Promise<void> {
+    await this.heroes.loadClass(cls, (p) => tex(p));
   }
   private async loadWorldFigures(): Promise<void> {
     const total = worldFigureLoadSteps();

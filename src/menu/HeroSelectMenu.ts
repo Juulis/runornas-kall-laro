@@ -5,9 +5,11 @@ import type { HeroRoster } from '../save/HeroRoster';
 import type { LocaleManager } from '../i18n/LocaleManager';
 import type { Key } from '../i18n/types';
 import { MAX_HEROES, classById, type SaveFile } from '../save/types';
+import { writeLastHeroClass, type HeroClassId } from '../save/heroRegistry';
 import type { ConfirmDialog } from './ConfirmDialog';
 import type { CreateHeroDialog } from './CreateHeroDialog';
 import { button, el } from './dom';
+import { renderHeroClassGrid } from './heroClassGrid';
 import type { LocalePicker } from './LocalePicker';
 import type { MenuAssets } from './MenuAssets';
 import { buildLearnFields } from '../ui/learnDom';
@@ -27,6 +29,7 @@ export class HeroSelectMenu {
   private deleteConfirmHeroId: string | null = null;
   private learnDraft: LearnSettings = readLearnSettings(new LocalStore());
   private starting = false;
+  private startError = '';
   private readonly offLocale: () => void;
 
   constructor(
@@ -40,6 +43,8 @@ export class HeroSelectMenu {
       confirm: ConfirmDialog;
       i18n: LocaleManager;
       picker: LocalePicker;
+      /** Spriteark för vald figur, innan världen skapas. */
+      loadHeroClass: (cls: string) => Promise<void>;
     },
   ) {
     this.root = el('div', { class: 'hero-menu overlay hidden' });
@@ -87,15 +92,34 @@ export class HeroSelectMenu {
   private start(d: SaveFile, resume: boolean): void {
     if (this.starting) return;
     this.starting = true;
+    this.startError = '';
     this.deleteConfirmHeroId = null;
     d.learn = { ...this.learnDraft };
     writeLearnSettings(new LocalStore(), this.learnDraft);
+    writeLastHeroClass(new LocalStore(), d.hero.cls);
     const settings = this.learnDraft;
-    void preloadLearnForPlay(settings).then(() => {
+    const note = el('div', { class: 'slots-free', text: this.deps.i18n.t('menu.loading_figure') });
+    this.root.append(note);
+    void this.play(d, resume, settings, note);
+  }
+
+  /** Laddar vald figur innan spelet byggs, så världen och striden får rätt sprites. */
+  private async play(d: SaveFile, resume: boolean, settings: LearnSettings, note: HTMLElement): Promise<void> {
+    try {
+      await preloadLearnForPlay(settings);
       if (!this.starting) return;
+      await this.deps.loadHeroClass(d.hero.cls);
+      if (!this.starting) return;
+      note.remove();
       this.hide();
-      void this.deps.loader.start(d, resume);
-    });
+      await this.deps.loader.start(d, resume);
+    } catch (e) {
+      console.warn('[meny] kunde inte starta', e);
+      note.remove();
+      this.starting = false;
+      this.startError = this.deps.i18n.t('menu.figure_load_failed');
+      this.show();
+    }
   }
 
   renderList(): void {
@@ -167,6 +191,7 @@ export class HeroSelectMenu {
       ),
     );
     const actionRow = this.deleteConfirmHeroId && d?.hero.id === this.deleteConfirmHeroId ? this.confirmDelete(d) : btns;
+    const figures = d ? this.figurePicker(d) : null;
     const learn = buildLearnFields(this.learnDraft, (next) => {
       this.learnDraft = next;
       writeLearnSettings(new LocalStore(), next);
@@ -180,10 +205,43 @@ export class HeroSelectMenu {
       el('div', { class: 'rubrik', text: t('menu.choose_hero') }),
       el('small', { class: 'slots-free', text: t('menu.slots_free', { count: MAX_HEROES - hs.length }) }),
       slots,
+      ...(figures ? [figures] : []),
       learn,
       el('small', { class: 'slots-free', text: 'Frågorna följer nivå och ämne.' }),
+      ...(this.startError ? [el('div', { class: 'hero-err', text: this.startError })] : []),
       actionRow,
       this.deps.picker.render(),
+    );
+  }
+
+  /** Byt utseende på vald hjälte utan att skapa en ny. */
+  private figurePicker(d: SaveFile): HTMLElement {
+    const t = this.deps.i18n.t.bind(this.deps.i18n);
+    const grid = renderHeroClassGrid({
+      selected: d.hero.cls,
+      i18n: this.deps.i18n,
+      assets: this.deps.assets,
+      onPick: (id) => this.pickFigure(d, id),
+    });
+    return el('div', { class: 'figure-pick' }, el('div', { class: 'underrubrik', text: t('menu.choose_figure') }), grid);
+  }
+
+  private pickFigure(d: SaveFile, id: HeroClassId): void {
+    if (this.starting || d.hero.cls === id) return;
+    const prev = d.hero.cls;
+    d.hero.cls = id;
+    writeLastHeroClass(new LocalStore(), id);
+    this.startError = '';
+    void this.deps.roster.store(d).then(
+      () => {
+        if (this.open && this.view === 'list' && this.selected === d.hero.id) this.renderList();
+      },
+      (e: unknown) => {
+        d.hero.cls = prev;
+        console.warn('[meny] kunde inte byta figur', e);
+        this.startError = this.deps.i18n.t('menu.figure_save_failed');
+        if (this.open && this.view === 'list') this.renderList();
+      },
     );
   }
 

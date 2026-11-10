@@ -59,6 +59,10 @@ const MONSTER_PROFILE: Record<string, FigureHeightProfile> = {
   gruvspindel: 'spider',
   smittad_bybo: 'corrupted_human',
   forvriden_jagare: 'corrupted_human',
+  kattflickan_monster: 'corrupted_human',
+  gnistan_monster: 'corrupted_human',
+  valpen_monster: 'corrupted_human',
+  grisan_monster: 'corrupted_human',
   ruttnande_lik: 'corrupted_human',
   gravgast: 'ghost',
 };

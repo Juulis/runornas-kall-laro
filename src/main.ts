@@ -31,11 +31,18 @@ const save = new SaveModule(
   cryptoSeed,
   i18n,
 );
+let loadHeroClass: (cls: string) => Promise<void> = async () => {};
 const modules: GameModule[] = [
   new WorldStateModule(),
   i18n,
   save,
-  new MenuModule(save, i18n),
+  new MenuModule(
+    save,
+    i18n,
+    () => document.body,
+    true,
+    (cls) => loadHeroClass(cls),
+  ),
   new AudioModule(save),
   deferredModule('Laddar karta…', async () => {
     const { MapModule } = await import('./map/MapModule');
@@ -50,6 +57,7 @@ const modules: GameModule[] = [
 const host = document.getElementById('app');
 if (!host) throw new Error('#app saknas');
 const game = new Game(modules);
+loadHeroClass = (cls) => game.assets.loadHeroClass(cls);
 i18n.attachText(game.text);
 if (import.meta.env.DEV || import.meta.env.VITE_CAPTURE_HOOK === 'true' || smokeMetricsEnabled()) {
   (window as unknown as { __game?: Game }).__game = game;

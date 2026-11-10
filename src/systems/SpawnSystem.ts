@@ -3,6 +3,7 @@ import type { Session } from '../core/Session';
 import { DATA, monsterDef } from '../data';
 import { expandStartskogenArea } from '../data/startskogenExpand';
 import type { EliteKind, EnemyRow, MonsterLevels, SpawnArea, SpawnPoint } from '../data/types';
+import { DEFAULT_ENEMY_THEME_ID, enemyThemeById, mergeEnemyTable } from '../entities/enemyThemes';
 
 /** Ett genererat monster (i områdets egna koordinater). */
 export interface SpawnSpec {
@@ -83,8 +84,10 @@ export class SpawnSystem {
       const d = Math.sqrt(r.next()) * radius;
       return [p.pos[0] + Math.cos(a) * d, p.pos[1] + Math.sin(a) * d];
     };
+    // Extras från fiendetemat blandas in. Antal punkter och gruppstorlek är oförändrade.
+    const theme = enemyThemeById(DEFAULT_ENEMY_THEME_ID);
     const table = (p: SpawnPoint): EnemyRow[] =>
-      p.enemy_table ?? (p.zone ? area.zone_tables?.[p.zone] : undefined) ?? area.enemy_table ?? [];
+      mergeEnemyTable(p.enemy_table ?? (p.zone ? area.zone_tables?.[p.zone] : undefined) ?? area.enemy_table ?? [], theme);
 
     // Grupper per aktiv punkt; champion per grupp tills max.
     let champions = 0;
