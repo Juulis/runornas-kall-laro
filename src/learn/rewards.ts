@@ -10,8 +10,8 @@ export const REWARD_BACKUP_KEY = 'rk_laro_beloning_bak';
 export const DAILY_GOAL = 10;
 export const DAILY_BONUS = 3;
 
-/** Ämnen som räknas i belöningar (inkl. lasforstaelse från fragor_lasforstaelse.json). */
-export const REWARD_SUBJECTS = ['matte', 'svenska', 'engelska', 'lasforstaelse'] as const;
+/** Ämnen som räknas i belöningar (inkl. läs- och hörförståelse). */
+export const REWARD_SUBJECTS = ['matte', 'svenska', 'engelska', 'lasforstaelse', 'horforstaelse'] as const;
 export type RewardSubject = (typeof REWARD_SUBJECTS)[number];
 
 export function isRewardSubject(v: unknown): v is RewardSubject {
@@ -426,7 +426,7 @@ function uniqueDates(v: unknown): string[] {
   return out;
 }
 
-const BUCKET_RE = /^(matte|svenska|engelska|lasforstaelse):(forskola|ak1|ak2|ak3|ak4_6|ak7_9|gymnasiet|vuxen)$/;
+const BUCKET_RE = /^(matte|svenska|engelska|lasforstaelse|horforstaelse):(forskola|ak1|ak2|ak3|ak4_6|ak7_9|gymnasiet|vuxen)$/;
 
 function parseBuckets(v: unknown): Record<string, SubjectCorrect> {
   if (!isRecord(v)) return {};

@@ -1,6 +1,6 @@
 import { isHardQuestion } from '../learn/hardQuestion';
 import { readAloudOf } from '../learn/settings';
-import { answerSpeech, choiceSpeech, questionUtterance, speak, cancel } from '../learn/speech';
+import { answerSpeech, canSpeak, choiceSpeech, questionUtterance, speak, cancel } from '../learn/speech';
 import type { LearnQuestion, LearnSettings } from '../learn/types';
 import { buildLearnFields, setLearnFieldValues } from './learnDom';
 import { Scratchpad } from './Scratchpad';
@@ -27,12 +27,20 @@ const CSS = `
 .rk-q-progress{font-size:18px;color:#e0b060}
 .rk-q-passage{font-size:clamp(20px,3vw,28px);color:#e8dcc0;line-height:1.35;margin:12px 0 8px}
 .rk-q-card.forskola .rk-q-passage{font-size:clamp(26px,4vw,40px)}
+.rk-q-listen{display:block;width:100%;box-sizing:border-box;margin:8px 0 12px;min-height:56px;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:.04em;padding:12px 16px;border-radius:16px;border:4px solid #c7a35a;background:#3a2e18;color:#fff8e8;cursor:pointer}
+.rk-q-card.forskola .rk-q-listen{min-height:88px;font-size:clamp(30px,4.4vw,46px);padding:18px;border-radius:18px}
+.rk-q-listen:hover:not(:disabled){border-color:#e0b060}
+.rk-q-listen:focus-visible{outline:3px solid #e0b060;outline-offset:2px}
+.rk-q-listen:disabled{opacity:.55;cursor:default}
+.rk-q-listen-hint{margin:8px 0 4px;font-size:clamp(18px,2.4vw,22px);line-height:1.3;color:#e0b060}
+.rk-q-card.forskola .rk-q-listen-hint{font-size:clamp(22px,3vw,30px)}
+.rk-q-listen-note{margin:8px 0;font-size:clamp(16px,2.2vw,20px);line-height:1.35;color:#cbb994}
 .rk-q-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0 20px}
 .rk-q-prompt{font-size:clamp(26px,4vw,40px);color:#fff8e8;margin:0;line-height:1.25}
 .rk-q-card.forskola .rk-q-prompt{font-size:clamp(34px,5.2vw,56px)}
 .rk-q-eng{display:block;text-align:center;font-size:clamp(40px,6vw,68px);color:#ffe08a;margin:0 0 16px;line-height:1.1}
 .rk-q-card.forskola .rk-q-eng{font-size:clamp(48px,7vw,80px)}
-.rk-q-eng[hidden],.rk-q-speak[hidden],.rk-q-passage[hidden]{display:none}
+.rk-q-eng[hidden],.rk-q-speak[hidden],.rk-q-passage[hidden],.rk-q-listen[hidden],.rk-q-listen-hint[hidden],.rk-q-listen-note[hidden]{display:none}
 .rk-q-speak{flex:0 0 auto;font-size:36px;min-width:72px;min-height:72px;border-radius:18px;border:3px solid #c7a35a;background:#3a2e18;color:#fff8e8;cursor:pointer}
 .rk-q-card.forskola .rk-q-speak{font-size:48px;min-width:88px;min-height:88px}
 .rk-q-speak:hover{border-color:#e0b060}
@@ -66,6 +74,18 @@ const CSS = `
 }
 `;
 
+const NO_AUDIO_NOTE = 'Din webbläsare kan inte läsa upp ljud, så texten visas i stället.';
+const LISTEN_HINT = 'Lyssna på texten och svara på frågan.';
+
+function hidesPassage(q: LearnQuestion): boolean {
+  return q.subject === 'horforstaelse' || q.hidePassageUntilAnswered === true;
+}
+
+function passageLang(q: LearnQuestion): 'sv' | 'en' {
+  if (q.speakLang === 'en-US' || q.speakLang === 'en-GB') return 'en';
+  return 'sv';
+}
+
 /** Frågeruta och nivåknapp. Ingen innerHTML: allt sätts med textContent. */
 export class LearnOverlay {
   readonly root: HTMLDivElement;
@@ -76,6 +96,9 @@ export class LearnOverlay {
   private readonly scratch: Scratchpad;
   private readonly progress: HTMLDivElement;
   private readonly passage: HTMLDivElement;
+  private readonly listenHint: HTMLParagraphElement;
+  private readonly listenNote: HTMLParagraphElement;
+  private readonly listenBtn: HTMLButtonElement;
   private readonly prompt: HTMLDivElement;
   private readonly engWord: HTMLDivElement;
   private readonly feedback: HTMLDivElement;
@@ -137,6 +160,18 @@ export class LearnOverlay {
     this.passage = document.createElement('div');
     this.passage.className = 'rk-q-passage';
     this.passage.hidden = true;
+    this.listenHint = document.createElement('p');
+    this.listenHint.className = 'rk-q-listen-hint';
+    this.listenHint.hidden = true;
+    this.listenNote = document.createElement('p');
+    this.listenNote.className = 'rk-q-listen-note';
+    this.listenNote.hidden = true;
+    this.listenBtn = document.createElement('button');
+    this.listenBtn.type = 'button';
+    this.listenBtn.className = 'rk-q-listen';
+    this.listenBtn.hidden = true;
+    this.setListenLabel('Lyssna');
+    this.listenBtn.addEventListener('click', () => this.onListen());
     const head = document.createElement('div');
     head.className = 'rk-q-head';
     this.prompt = document.createElement('div');
@@ -177,7 +212,18 @@ export class LearnOverlay {
     });
     this.feedback = document.createElement('div');
     this.feedback.className = 'rk-q-feedback bad hidden';
-    this.card.append(this.progress, this.passage, head, this.engWord, this.choiceRow, this.submitBtn, this.feedback);
+    this.card.append(
+      this.progress,
+      this.listenHint,
+      this.listenNote,
+      this.listenBtn,
+      this.passage,
+      head,
+      this.engWord,
+      this.choiceRow,
+      this.submitBtn,
+      this.feedback,
+    );
     this.layout = document.createElement('div');
     this.layout.className = 'rk-q-layout';
     this.scratch = new Scratchpad();
@@ -211,11 +257,38 @@ export class LearnOverlay {
     this.quiz.classList.remove('hidden');
     this.card.classList.toggle('forskola', q.grade === 'forskola');
     this.progress.textContent = `Fråga ${index + 1} av ${total}`;
+    const listening = hidesPassage(q);
     const passage = q.passage?.trim() ?? '';
-    this.passage.textContent = passage;
-    this.passage.hidden = passage.length === 0;
+    if (listening && !canSpeak()) {
+      this.fillPassage(q, passage);
+      this.listenHint.hidden = true;
+      this.listenHint.textContent = '';
+      this.listenNote.hidden = false;
+      this.listenNote.textContent = NO_AUDIO_NOTE;
+      this.listenBtn.hidden = true;
+      this.listenBtn.disabled = true;
+    } else if (listening) {
+      this.fillPassage(q, '');
+      this.listenHint.hidden = false;
+      this.listenHint.textContent = LISTEN_HINT;
+      this.listenNote.hidden = true;
+      this.listenNote.textContent = '';
+      this.listenBtn.hidden = false;
+      this.listenBtn.disabled = false;
+      this.setListenLabel('Lyssna');
+    } else {
+      this.fillPassage(q, passage);
+      this.listenHint.hidden = true;
+      this.listenHint.textContent = '';
+      this.listenNote.hidden = true;
+      this.listenNote.textContent = '';
+      this.listenBtn.hidden = true;
+      this.listenBtn.disabled = false;
+      this.setListenLabel('Lyssna');
+    }
     this.prompt.textContent = q.prompt;
-    const eng = q.speakLang === 'en-US' || q.speakLang === 'en-GB' ? (q.speakText ?? '') : '';
+    const showEng = !listening && (q.speakLang === 'en-US' || q.speakLang === 'en-GB');
+    const eng = showEng ? (q.speakText ?? '') : '';
     this.engWord.textContent = eng;
     this.engWord.hidden = !eng;
     this.feedback.textContent = '';
@@ -223,7 +296,7 @@ export class LearnOverlay {
     this.choiceRow.classList.remove('hidden');
     this.submitBtn.classList.remove('hidden');
     this.submitBtn.disabled = true;
-    const showSpeaker = q.grade === 'forskola' || readAloudOf(this.settings);
+    const showSpeaker = !listening && (q.grade === 'forskola' || readAloudOf(this.settings));
     this.speakBtn.hidden = !showSpeaker;
     q.choices.forEach((choice, i) => {
       const btn = this.choices[i];
@@ -233,16 +306,38 @@ export class LearnOverlay {
       btn.classList.remove('selected', 'correct', 'wrong');
       btn.setAttribute('aria-pressed', 'false');
     });
-    // Frågan läses aldrig upp av sig själv (#24). Bara högtalarknappen läser frågan eller ordet.
+    // Frågan läses aldrig upp av sig själv (#24). Lyssna-knappen eller högtalaren läser när barnet trycker.
     const hard = isHardQuestion(q);
     this.scratch.clear();
     this.scratch.setVisible(hard);
     this.quiz.classList.toggle('rk-with-scratch', hard);
   }
 
+  /** Visar lyssningstexten efter svar. Hjälptexten tas bort så den inte ligger kvar bredvid texten. */
+  revealPassage(): void {
+    const q = this.current;
+    if (!q) return;
+    this.fillPassage(q, q.passage?.trim() ?? '');
+    this.listenHint.hidden = true;
+    this.listenHint.textContent = '';
+  }
+
+  /** Rätt svar på hörförståelse: texten visas och det rätta valet markeras innan striden. */
+  showCorrect(q: LearnQuestion): void {
+    this.current = q;
+    this.disableChoices();
+    this.choices.forEach((btn, i) => {
+      btn.classList.toggle('correct', i === q.correctIndex);
+      btn.classList.remove('selected', 'wrong');
+    });
+    this.revealPassage();
+  }
+
   /** Fel svar: valen stannar kvar, rätt alternativ blir grönt, och svaret läses upp (inte vid rättstavning). */
   showWrong(q: LearnQuestion, chosenIndex: number): void {
+    this.current = q;
     this.disableChoices();
+    this.revealPassage();
     this.feedback.classList.remove('hidden');
     this.feedback.textContent = `Rätt svar var: ${q.answer}`;
     this.choices.forEach((btn, i) => {
@@ -276,6 +371,25 @@ export class LearnOverlay {
     this.selectedIndex = -1;
     this.quiz.classList.add('hidden');
     this.root.classList.remove('quiz-open');
+  }
+
+  private fillPassage(q: LearnQuestion, passage: string): void {
+    this.passage.textContent = passage;
+    this.passage.hidden = passage.length === 0;
+    if (passage) this.passage.lang = passageLang(q);
+    else this.passage.removeAttribute('lang');
+  }
+
+  private setListenLabel(label: 'Lyssna' | 'Lyssna igen'): void {
+    this.listenBtn.textContent = label;
+    this.listenBtn.setAttribute('aria-label', label);
+  }
+
+  private onListen(): void {
+    const q = this.current;
+    if (!q || this.listenBtn.disabled || this.listenBtn.hidden) return;
+    this.readQuestion(q);
+    this.setListenLabel('Lyssna igen');
   }
 
   private readQuestion(q: LearnQuestion): void {

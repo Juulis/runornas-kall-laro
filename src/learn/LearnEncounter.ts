@@ -15,7 +15,7 @@ import { applyWrongAnswer } from './damage';
 import { questionsForEncounter } from './questions';
 import { loadRewards } from './rewards';
 import { recordLearnAnswer } from './rewardEvents';
-import { encounterKindOf, type LearnSettings } from './types';
+import { encounterKindOf, type LearnQuestion, type LearnSettings } from './types';
 
 /** Rätt svar: kort glad hjälte-attack. */
 export const FIGHT_S = 1.25;
@@ -31,10 +31,12 @@ export const LEARN_PACK_PAUSE_S = 0.5;
 export const LEARN_WRONG_PAUSE_S = 0.9;
 /** Hur länge hjälten skakar när träffen landar. */
 export const HERO_HURT_SHAKE_S = 0.65;
+/** Hörförståelse: texten syns efter rätt svar innan striden börjar. */
+export const LISTEN_REVEAL_S = 1.4;
 /** Mjuk röd blink efter träffen. Ingen blod, bara färgen. */
 export const HERO_HURT_FLASH_S = 1.1;
 
-type Phase = 'idle' | 'ask' | 'feedback' | 'fight' | 'pause';
+type Phase = 'idle' | 'ask' | 'feedback' | 'reveal' | 'fight' | 'pause';
 
 /**
  * Pausar när hjälten möter ett monster, visar frågor och spelar sedan striden.
@@ -186,15 +188,14 @@ export class LearnEncounter {
     const correct = choice === q.correctIndex;
     this.noteAnswer(q, correct);
     if (correct) {
-      const spot = this.overlay.celebratePoint();
-      const info: StarFlyInfo = { x: spot.x, y: spot.y, starsHint: 1 };
-      const phrase = celebrateCorrect(info);
-      this.onCorrectCelebrate(info);
-      this.overlay.hideQuiz();
-      this.w().fb.flash(phrase, '#7dff9a');
-      this.packPause = LEARN_PACK_PAUSE_S;
-      this.beginHeroBounce();
-      this.beginFight();
+      if (keepsListenText(q)) {
+        this.overlay.showCorrect(q);
+        this.phase = 'reveal';
+        this.timer = LISTEN_REVEAL_S;
+        this.ai.paused = true;
+        return;
+      }
+      this.startCorrectFight();
       return;
     }
     this.packPause = LEARN_WRONG_PAUSE_S;
@@ -216,6 +217,7 @@ export class LearnEncounter {
     }
     if (this.phase === 'fight') this.tickFight(dt);
     else if (this.phase === 'feedback') this.tickFeedback(dt);
+    else if (this.phase === 'reveal') this.tickReveal(dt);
     else if (this.phase === 'pause') this.tickPause(dt);
     else if (this.phase === 'ask') this.face();
     else this.tryStart();
@@ -365,6 +367,25 @@ export class LearnEncounter {
       },
     });
     return this.parentView;
+  }
+
+  /** Rätt svar: göm frågan och spela den korta striden. Hörförståelse väntar först. */
+  private startCorrectFight(): void {
+    const spot = this.overlay.celebratePoint();
+    const info: StarFlyInfo = { x: spot.x, y: spot.y, starsHint: 1 };
+    const phrase = celebrateCorrect(info);
+    this.onCorrectCelebrate(info);
+    this.overlay.hideQuiz();
+    this.w().fb.flash(phrase, '#7dff9a');
+    this.packPause = LEARN_PACK_PAUSE_S;
+    this.beginHeroBounce();
+    this.beginFight();
+  }
+
+  private tickReveal(dt: number): void {
+    this.timer -= dt;
+    if (this.timer > 0) return;
+    this.startCorrectFight();
   }
 
   private beginFight(): void {
@@ -638,6 +659,10 @@ function browserStore(): KeyValueStore {
     /* test utan localStorage */
   }
   return new MemoryStore();
+}
+
+function keepsListenText(q: LearnQuestion): boolean {
+  return q.subject === 'horforstaelse' || q.hidePassageUntilAnswered === true;
 }
 
 function inLearnRange(h: Hero, m: Monster, d: number): boolean {

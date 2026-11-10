@@ -3,7 +3,7 @@ import type { Rng } from '../core/Rng';
 import { multipleChoice } from './choices';
 import { isGradeId, type GradeId, type LearnQuestion, type LearnSettings, type QuestionSubject, type SpeakLang } from './types';
 
-export type BankSubject = 'svenska' | 'engelska' | 'lasforstaelse';
+export type BankSubject = 'svenska' | 'engelska' | 'lasforstaelse' | 'horforstaelse';
 
 interface RawQuestion {
   id: string;
@@ -18,8 +18,10 @@ interface RawQuestion {
   emoji?: unknown;
   /** Emoji i samma ordning som fel, när fel är strängar. */
   fel_emoji?: unknown;
-  /** Läsningstext. Krävs för läsförståelse. */
+  /** Läs- eller lyssningstext. Krävs för läs- och hörförståelse. */
   text?: unknown;
+  /** Hörförståelse: sv eller en. Svenska och engelska blandas i samma ämne. */
+  sprak?: unknown;
   /** Förskolan ber att texten läses upp. Overlay avgör när det sker. */
   las_upp?: unknown;
 }
@@ -40,6 +42,7 @@ const defaultImporters: Record<BankSubject, BankImporter> = {
   svenska: () => import('../data/fragor_svenska.json'),
   engelska: () => import('../data/fragor_engelska.json'),
   lasforstaelse: () => import('../data/fragor_lasforstaelse.json'),
+  horforstaelse: () => import('../data/fragor_horforstaelse.json'),
 };
 
 const importers: Record<BankSubject, BankImporter> = { ...defaultImporters };
@@ -64,8 +67,9 @@ export function clearBankCache(subject?: BankSubject): void {
 
 export function bankSubjectsFor(subject: LearnSettings['subject']): BankSubject[] {
   if (subject === 'matte') return [];
-  if (subject === 'blandat') return ['svenska', 'engelska', 'lasforstaelse'];
+  if (subject === 'blandat') return ['svenska', 'engelska', 'lasforstaelse', 'horforstaelse'];
   if (subject === 'lasforstaelse') return ['lasforstaelse'];
+  if (subject === 'horforstaelse') return ['horforstaelse'];
   if (subject === 'svenska' || subject === 'engelska') return [subject];
   return [];
 }
@@ -126,6 +130,17 @@ function validLas(row: RawQuestion): row is RawQuestion & { niva: GradeId } {
   return validRaw(row) && textOf(row.text).length > 0;
 }
 
+/** Hörförståelse kräver text och språk sv eller en. */
+function validHor(row: RawQuestion): row is RawQuestion & { niva: GradeId } {
+  return validLas(row) && (row.sprak === 'sv' || row.sprak === 'en');
+}
+
+function acceptRow(subject: BankSubject, row: RawQuestion): boolean {
+  if (subject === 'horforstaelse') return validHor(row);
+  if (subject === 'lasforstaelse') return validLas(row);
+  return validRaw(row);
+}
+
 function poolOf(subject: BankSubject): readonly RawQuestion[] {
   const pool = pools.get(subject);
   if (!pool) throw new Error(`Frågebanken för ${subject} är inte laddad`);
@@ -140,8 +155,7 @@ export function ensureBank(subject: BankSubject): Promise<readonly RawQuestion[]
   if (inflight) return inflight;
   const job = importers[subject]()
     .then((mod) => {
-      const filter = subject === 'lasforstaelse' ? validLas : validRaw;
-      const rows = asRaw(unwrapModule(mod), subject).filter(filter);
+      const rows = asRaw(unwrapModule(mod), subject).filter((row) => acceptRow(subject, row));
       pools.set(subject, rows);
       pending.delete(subject);
       return rows;
@@ -197,6 +211,7 @@ export function nextBankQuestion(
   let pool = bankQuestions(subject, grade);
   // Läsförståelse finns bara t.o.m. åk 3. Högre nivåer använder åk 3-poolen,
   // men grade på frågan förblir den valda nivån så att spelet inte kraschar.
+  // Hörförståelse har frågor på varje nivå och faller inte tillbaka.
   if (!pool.length && subject === 'lasforstaelse') pool = bankQuestions(subject, 'ak3');
   if (!pool.length) throw new Error(`Ingen ${subject}-fråga för ${grade}`);
   const fresh = pool.filter((row) => !avoid.has(row.id));
@@ -219,7 +234,7 @@ export function nextBankQuestion(
     return emoji ? `${emoji} ${c}` : c;
   }) as [string, string, string, string];
   const eng = textOf(row.eng) || undefined;
-  const passage = subject === 'lasforstaelse' ? textOf(row.text) : '';
+  const passage = subject === 'lasforstaelse' || subject === 'horforstaelse' ? textOf(row.text) : '';
   const base: LearnQuestion = {
     id: `${idPrefix}:${subject}:${row.id}:${index}`,
     prompt: row.fraga,
@@ -232,6 +247,16 @@ export function nextBankQuestion(
     ...(passage ? { passage } : {}),
     ...(hasEmoji ? { choiceEmojis } : {}),
   };
+  if (subject === 'horforstaelse') {
+    const lang: SpeakLang = row.sprak === 'en' ? 'en-US' : 'sv-SE';
+    return {
+      ...base,
+      speakText: `${passage} ${row.fraga.trim()}`,
+      speakLang: lang,
+      speakPrompt: false,
+      hidePassageUntilAnswered: true,
+    };
+  }
   if (passage) {
     return { ...base, speakText: `${passage} ${row.fraga.trim()}`, speakLang: 'sv-SE', speakPrompt: false };
   }

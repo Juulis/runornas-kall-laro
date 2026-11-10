@@ -27,7 +27,7 @@ const rows = (lasforstaelse as { fragor: LasRow[] }).fragor;
 const byId = new Map(rows.map((row) => [row.id, row]));
 
 assert.deepEqual(bankSubjectsFor('lasforstaelse'), ['lasforstaelse']);
-assert.deepEqual(bankSubjectsFor('blandat'), ['svenska', 'engelska', 'lasforstaelse']);
+assert.deepEqual(bankSubjectsFor('blandat'), ['svenska', 'engelska', 'lasforstaelse', 'horforstaelse']);
 assert.deepEqual(bankSubjectsFor('matte'), []);
 
 await ensureBank('lasforstaelse');

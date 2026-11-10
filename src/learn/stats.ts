@@ -262,7 +262,7 @@ export function formatLearnTime(ms: number): string {
 }
 
 const TYPE_RE = /^[\p{L}\p{N}_-]+$/u;
-const LEVEL_RE = /^(matte|svenska|engelska|lasforstaelse):(forskola|ak1|ak2|ak3|ak4_6|ak7_9|gymnasiet|vuxen)$/;
+const LEVEL_RE = /^(matte|svenska|engelska|lasforstaelse|horforstaelse):(forskola|ak1|ak2|ak3|ak4_6|ak7_9|gymnasiet|vuxen)$/;
 
 function parseTypeMap(v: unknown): Record<string, TypeCount> {
   if (!isRecord(v)) return {};

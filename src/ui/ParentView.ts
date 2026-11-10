@@ -73,6 +73,7 @@ const SUBJECT_COLOR: Record<RewardSubject, string> = {
   svenska: '#c46a3a',
   engelska: '#4a6a7a',
   lasforstaelse: '#7a5ca8',
+  horforstaelse: '#2a7a7a',
 };
 
 const GRADE_ORDER = new Map<string, number>(GRADES.map((g, i) => [g.id, i]));
@@ -88,6 +89,7 @@ function unref(timer: ReturnType<typeof setInterval>): void {
 }
 
 function subjectLabel(id: string): string {
+  if (id === 'horforstaelse') return 'Hörförståelse';
   if (id === 'lasforstaelse') return 'Läsförståelse';
   if (id === 'matte') return 'Matte';
   if (id === 'svenska') return 'Svenska';

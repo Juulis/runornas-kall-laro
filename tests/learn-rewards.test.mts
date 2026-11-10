@@ -465,6 +465,7 @@ earned(
       'engelska:gymnasiet': { ratt: 10 },
       'lasforstaelse:ak3': { ratt: 9 },
       'lasforstaelse:ak1': { ratt: 1 },
+      'horforstaelse:ak1': { ratt: 10 },
     };
   },
   'alla_amnen',
