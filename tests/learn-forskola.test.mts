@@ -10,7 +10,7 @@ import { MemoryStore } from '../src/core/storage';
 import { bankCount, ensureBank } from '../src/learn/bank';
 import { generateQuestions } from '../src/learn/questions';
 import { parseLearnSettings, readLearnSettings, writeLearnSettings } from '../src/learn/settings';
-import { answerSpeech, canSpeak, choiceSpeech, pickSpeakVoice, questionUtterance, speak } from '../src/learn/speech';
+import { canSpeak, pickSpeakVoice, questionUtterance, speak } from '../src/learn/speech';
 import { isValidQuestion, type LearnQuestion } from '../src/learn/types';
 import { LearnOverlay } from '../src/ui/LearnOverlay';
 import { buildLearnFields } from '../src/ui/learnDom';
@@ -220,24 +220,9 @@ assert.ok(mathQ);
 assert.equal(questionUtterance(svQ).text, svQ.prompt);
 assert.notEqual(questionUtterance(svQ).text, svQ.answer);
 assert.equal(questionUtterance(svQ).lang, 'sv-SE');
-assert.equal(choiceSpeech(svQ, svQ.correctIndex), null);
-assert.equal(answerSpeech(svQ), null, 'rättstavning ska inte läsa svaret');
-assert.notEqual(enQ.answer, enQ.speakText);
-const enAnswer = answerSpeech(enQ);
-assert.ok(enAnswer);
-assert.equal(enAnswer.text, enQ.answer);
-assert.equal(enAnswer.lang, 'sv-SE');
-const mathAnswer = answerSpeech(mathQ);
-assert.ok(mathAnswer);
-assert.equal(mathAnswer.text, mathQ.answer);
-assert.equal(mathAnswer.lang, 'sv-SE');
 assert.equal(questionUtterance(enQ).text, enQ.speakText);
 assert.equal(questionUtterance(enQ).lang, 'en-US');
-const enSaid = choiceSpeech(enQ, 0);
-assert.ok(enSaid);
-assert.equal(enSaid.lang, 'sv-SE');
-assert.equal(EMOJI.test(enSaid.text), false);
-assert.equal(choiceSpeech(mathQ, 0)?.text, mathQ.choices[0]);
+assert.equal(questionUtterance(mathQ).lang, 'sv-SE');
 
 const forskola = new LearnOverlay({ grade: 'forskola', subject: 'svenska' });
 let answered: number | null = null;
@@ -272,6 +257,7 @@ try {
   Object.defineProperty(hover, 'pointerType', { value: 'mouse' });
   spellChoice.dispatchEvent(hover);
   spellChoice.dispatchEvent(new Event('pointerdown'));
+  spellChoice.dispatchEvent(new Event('focus'));
   assert.equal(spoken.length, 0, 'hover och långtryck ska inte läsa');
   spellChoice.click();
   assert.equal(answered, null, 'klick väljer, det svarar inte');
@@ -296,12 +282,13 @@ try {
   assert.ok(choice instanceof HTMLButtonElement);
   spoken.length = 0;
   choice.dispatchEvent(hover);
+  choice.dispatchEvent(new Event('pointerdown'));
+  choice.dispatchEvent(new Event('focus'));
   assert.equal(spoken.length, 0, 'hover ska inte läsa valet');
   choice.click();
   assert.equal(answered, null);
   assert.equal(choice.classList.contains('selected'), true);
-  assert.equal(lastSpoken().lang, 'sv-SE');
-  assert.equal(EMOJI.test(lastSpoken().text), false);
+  assert.equal(spoken.length, 0, 'klick på valet ska vara tyst');
   assert.equal(svara.disabled, false);
   svara.click();
   assert.equal(answered, 0);
@@ -319,8 +306,9 @@ try {
   assert.ok(mathChoice instanceof HTMLButtonElement);
   spoken.length = 0;
   mathChoice.click();
-  assert.equal(lastSpoken().text, mathQ.choices[1]);
-  spoken.length = 0;
+  assert.equal(mathChoice.classList.contains('selected'), true);
+  assert.equal(svara.disabled, false);
+  assert.equal(spoken.length, 0, 'klick på valet ska vara tyst');
   forskola.showWrong(mathQ, 1);
   assert.equal(svara.disabled, true);
   assert.equal(forskola.root.querySelector('.rk-q-feedback')?.textContent, `Rätt svar var: ${mathQ.answer}`);
@@ -328,8 +316,7 @@ try {
   const mathButtons = [...forskola.root.querySelectorAll('.rk-q-choices button')];
   assert.equal(mathButtons[mathQ.correctIndex]?.classList.contains('correct'), true);
   if (mathQ.correctIndex !== 1) assert.equal(mathButtons[1]?.classList.contains('wrong'), true);
-  assert.equal(lastSpoken().text, mathQ.answer);
-  assert.equal(lastSpoken().lang, 'sv-SE');
+  assert.equal(spoken.length, 0, 'fel svar läses inte upp');
   assert.match(document.head.textContent ?? '', /\.rk-q-choices button\.correct/);
 
   spoken.length = 0;
@@ -347,10 +334,13 @@ try {
   spoken.length = 0;
   forskola.showQuestion(enQ, 0, 1);
   spoken.length = 0;
-  forskola.showWrong(enQ, enQ.correctIndex === 0 ? 1 : 0);
-  assert.equal(lastSpoken().text, enQ.answer);
-  assert.equal(lastSpoken().lang, 'sv-SE');
-  assert.equal(EMOJI.test(lastSpoken().text), false);
+  const enWrong = enQ.correctIndex === 0 ? 1 : 0;
+  forskola.showWrong(enQ, enWrong);
+  assert.equal(spoken.length, 0, 'fel svar läses inte upp');
+  assert.equal(forskola.root.querySelector('.rk-q-feedback')?.textContent, `Rätt svar var: ${enQ.answer}`);
+  const enButtons = [...forskola.root.querySelectorAll('.rk-q-choices button')];
+  assert.equal(enButtons[enQ.correctIndex]?.classList.contains('correct'), true);
+  assert.equal(enButtons[enWrong]?.classList.contains('wrong'), true);
 } finally {
   forskola.dispose();
 }
@@ -366,6 +356,17 @@ try {
   speaker.click();
   assert.equal(lastSpoken().lang, 'en-US');
   assert.equal(lastSpoken().text, enQ.speakText);
+  spoken.length = 0;
+  const quietChoice = quiet.root.querySelector('.rk-q-choices button');
+  assert.ok(quietChoice instanceof HTMLButtonElement);
+  quietChoice.dispatchEvent(new Event('pointerenter'));
+  quietChoice.dispatchEvent(new Event('focus'));
+  quietChoice.click();
+  assert.equal(quietChoice.classList.contains('selected'), true);
+  assert.equal(spoken.length, 0, 'val är tyst när uppläsning är av');
+  quiet.showWrong(enQ, enQ.correctIndex === 0 ? 1 : 0);
+  assert.equal(spoken.length, 0, 'fel svar är tyst när uppläsning är av');
+  assert.equal(quiet.root.querySelector('.rk-q-feedback')?.textContent, `Rätt svar var: ${enQ.answer}`);
 } finally {
   quiet.dispose();
 }
@@ -380,6 +381,22 @@ try {
   const speaker = ak1.root.querySelector('.rk-q-speak');
   assert.ok(speaker instanceof HTMLButtonElement);
   assert.equal(speaker.hidden, true);
+  const ak1ChoiceOff = ak1.root.querySelector('.rk-q-choices button');
+  assert.ok(ak1ChoiceOff instanceof HTMLButtonElement);
+  ak1ChoiceOff.dispatchEvent(new Event('pointerenter'));
+  ak1ChoiceOff.dispatchEvent(new Event('pointerdown'));
+  ak1ChoiceOff.dispatchEvent(new Event('focus'));
+  ak1ChoiceOff.click();
+  assert.equal(ak1ChoiceOff.classList.contains('selected'), true);
+  const ak1SubmitOff = ak1.root.querySelector('.rk-q-submit');
+  assert.ok(ak1SubmitOff instanceof HTMLButtonElement);
+  assert.equal(ak1SubmitOff.disabled, false);
+  assert.equal(spoken.length, 0, 'åk 1 med ljud av: valet är tyst');
+  ak1.showWrong(ak1q, ak1q.correctIndex === 0 ? 1 : 0);
+  assert.equal(spoken.length, 0, 'åk 1 med ljud av: fel svar är tyst');
+  assert.equal(ak1.root.querySelector('.rk-q-feedback')?.textContent, `Rätt svar var: ${ak1q.answer}`);
+
+  spoken.length = 0;
   ak1.setSettings({ grade: 'ak1', subject: 'matte', readAloud: true });
   ak1.showQuestion(ak1q, 1, 2);
   assert.equal(spoken.length, 0, '#24: ingen automatisk uppläsning i åk 1');
@@ -388,6 +405,23 @@ try {
   ak1Speaker.click();
   assert.equal(lastSpoken().lang, 'sv-SE');
   assert.equal(lastSpoken().text, ak1q.prompt);
+  spoken.length = 0;
+  const ak1Choice = ak1.root.querySelector('.rk-q-choices button');
+  assert.ok(ak1Choice instanceof HTMLButtonElement);
+  ak1Choice.click();
+  assert.equal(ak1Choice.classList.contains('selected'), true);
+  const ak1Submit = ak1.root.querySelector('.rk-q-submit');
+  assert.ok(ak1Submit instanceof HTMLButtonElement);
+  assert.equal(ak1Submit.disabled, false);
+  assert.equal(spoken.length, 0, 'åk 1 med ljud på: valet är tyst');
+  ak1.showWrong(ak1q, ak1q.correctIndex === 0 ? 1 : 0);
+  assert.equal(spoken.length, 0, 'åk 1 med ljud på: fel svar är tyst');
+  assert.equal(ak1.root.querySelector('.rk-q-feedback')?.textContent, `Rätt svar var: ${ak1q.answer}`);
+  spoken.length = 0;
+  ak1Speaker.click();
+  assert.equal(spoken.length, 1, 'högtalaren läser fortfarande');
+  assert.equal(lastSpoken().text, ak1q.prompt);
+  assert.equal(lastSpoken().lang, 'sv-SE');
 } finally {
   ak1.dispose();
 }
