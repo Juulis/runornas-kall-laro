@@ -8,6 +8,7 @@ import type { GameAuthority } from './GameAuthority';
 import type { FoundRegistry, SaveBackend } from './SaveBackend';
 import { NoOpFoundRegistry } from './NoOpFoundRegistry';
 import { CombatRules } from '../logic/CombatRules';
+import { heroWorldSpeed, moveWithCollision } from '../logic/heroMovement';
 import { LocalAuthority } from '../logic/LocalAuthority';
 import { DATA, validateData } from '../data';
 import { Hero } from '../entities/Hero';
@@ -1261,21 +1262,22 @@ export class Game {
       if (wantSprint) sprinting = true;
       if (h.moving) {
         const runMult = sprinting && sprintCfg ? sprintCfg.speed_mult : 1;
-        const sp = h.stats.speed * h.moveSpeedMult() * runMult * (h.blocking ? 0.4 : 1) * (h.curse > 0 ? 0.8 : 1);
+        const sp = heroWorldSpeed({
+          baseSpeed: h.stats.speed,
+          moveSpeedMult: h.moveSpeedMult(),
+          runMult,
+          blocking: h.blocking,
+          cursed: h.curse > 0,
+        });
         const step = Math.min(
           sp * dt,
           h.moveTarget && !this.targetMonster ? Math.hypot(h.moveTarget.x - h.pos.x, h.moveTarget.y - h.pos.y) : Infinity,
         );
-        const start = { x: h.pos.x, y: h.pos.y };
-        h.pos.x += (vx / len) * step;
-        h.pos.y += (vy / len) * step;
+        const move = moveWithCollision(h.pos, vx, vy, step, 0.5, (p, r) => w.zone.collide(p, r));
         s.facing = Math.atan2(vx, vy);
-        const before = { ...h.pos };
-        w.zone.collide(h.pos, 0.5);
-        if (h.moveTarget && Math.hypot(before.x - h.pos.x, before.y - h.pos.y) > step * 0.9) h.moveTarget = null;
+        if (h.moveTarget && move.pushedHard) h.moveTarget = null;
         // står hjälten i praktiken still (fast mot hinder eller framme) ska gånganimationen inte spelas
-        const moved = Math.hypot(h.pos.x - start.x, h.pos.y - start.y);
-        if (moved < Math.max(step * 0.25, 1e-4)) {
+        if (move.stalled) {
           h.moving = false;
           if (!this.targetMonster) h.moveTarget = null;
         }
@@ -1294,7 +1296,13 @@ export class Game {
       if (h.moving) {
         const sprintMeta = DATA.classes.meta.sprint;
         const runMult = sprinting && sprintMeta ? sprintMeta.speed_mult : 1;
-        const moveSp = h.stats.speed * h.moveSpeedMult() * runMult * (h.blocking ? 0.4 : 1) * (h.curse > 0 ? 0.8 : 1);
+        const moveSp = heroWorldSpeed({
+          baseSpeed: h.stats.speed,
+          moveSpeedMult: h.moveSpeedMult(),
+          runMult,
+          blocking: h.blocking,
+          cursed: h.curse > 0,
+        });
         const locomote = sprinting && v.hasAnim('run') ? 'run' : 'gang';
         v.playbackRate = locomotionPlaybackRate(v.getAnim(locomote), moveSp);
       } else v.playbackRate = 1;

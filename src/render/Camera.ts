@@ -2,6 +2,9 @@ import type { Container } from 'pixi.js';
 import type { Vec2 } from '../core/GameContext';
 import { Iso } from './Iso';
 
+/** Hur snabbt kameran följer efter. Höjd så den hänger med den snabbare hjälten. */
+export const CAMERA_FOLLOW_RATE = 11;
+
 /** Följer en punkt mjukt och översätter mellan skärm och värld. */
 export class Camera {
   readonly pos: Vec2 = { x: 0, y: 0 };
@@ -24,7 +27,7 @@ export class Camera {
   }
 
   follow(p: Vec2, dt: number): void {
-    const k = Math.min(1, dt * 6);
+    const k = Math.min(1, dt * CAMERA_FOLLOW_RATE);
     this.pos.x += (p.x - this.pos.x) * k;
     this.pos.y += (p.y - this.pos.y) * k;
     this.apply();
