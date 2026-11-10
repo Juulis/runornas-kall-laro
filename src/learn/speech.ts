@@ -148,6 +148,12 @@ export function questionUtterance(q: LearnQuestion): { text: string; lang: Speak
   return { text, lang };
 }
 
+/** Språk för hörförståelse. Andra ämnen läser alternativ och svar på svenska. */
+function choiceLang(q: LearnQuestion): SpeakLang {
+  if (q.subject === 'horforstaelse') return q.speakLang ?? 'sv-SE';
+  return 'sv-SE';
+}
+
 /** Uppläsning av ett valt alternativ. Rättstavning är tyst så stavningen inte avslöjas. */
 export function choiceSpeech(q: LearnQuestion, index: number): { text: string; lang: SpeakLang } | null {
   if (q.rule === 'rattstavning') return null;
@@ -156,7 +162,7 @@ export function choiceSpeech(q: LearnQuestion, index: number): { text: string; l
   const emoji = q.choiceEmojis?.[index];
   const text = (emoji && choice.startsWith(emoji) ? choice.slice(emoji.length) : choice).trim();
   if (!text) return null;
-  return { text, lang: 'sv-SE' };
+  return { text, lang: choiceLang(q) };
 }
 
 /**
@@ -164,11 +170,13 @@ export function choiceSpeech(q: LearnQuestion, index: number): { text: string; l
  * Rättstavning är tyst: att säga ordet avslöjar stavningen.
  * Svaret är svenska även när frågan är ett engelskt ord, så språket är sv-SE.
  * Engelskt speakLang används bara om själva svaret är det upplästa ordet.
+ * Hörförståelse följer frågans speakLang, så ett engelskt svar läses på en-US.
  */
 export function answerSpeech(q: LearnQuestion): { text: string; lang: SpeakLang } | null {
   if (q.rule === 'rattstavning') return null;
   const text = q.answer.trim();
   if (!text) return null;
+  if (q.subject === 'horforstaelse') return { text, lang: q.speakLang ?? 'sv-SE' };
   const spoken = q.speakText?.trim();
   const lang: SpeakLang = spoken && spoken === text && q.speakLang ? q.speakLang : 'sv-SE';
   return { text, lang };

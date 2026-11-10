@@ -1,0 +1,1349 @@
+{
+  "amne": "horforstaelse",
+  "fragor": [
+    {
+      "id": "hf-sv-forskola-001",
+      "niva": "forskola",
+      "sprak": "sv",
+      "typ": "vem",
+      "text": "Elin har en röd hatt.",
+      "fraga": "Vem har en röd hatt?",
+      "ratt": "Elin",
+      "fel": [
+        "Bo",
+        "Mora",
+        "Nisse"
+      ]
+    },
+    {
+      "id": "hf-sv-forskola-002",
+      "niva": "forskola",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "Katten sitter på en blå matta.",
+      "fraga": "Vad sitter katten på?",
+      "ratt": "En blå matta",
+      "fel": [
+        "En röd säng",
+        "En grön stol",
+        "En brun låda"
+      ]
+    },
+    {
+      "id": "hf-sv-forskola-003",
+      "niva": "forskola",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Björnen sover under trädet.",
+      "fraga": "Var sover björnen?",
+      "ratt": "Under trädet",
+      "fel": [
+        "I båten",
+        "På taket",
+        "I huset"
+      ]
+    },
+    {
+      "id": "hf-sv-forskola-004",
+      "niva": "forskola",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "Hunden är glad för sin boll.",
+      "fraga": "Varför är hunden glad?",
+      "ratt": "För sin boll",
+      "fel": [
+        "För regnet",
+        "För stenen",
+        "För hatten"
+      ]
+    },
+    {
+      "id": "hf-sv-forskola-005",
+      "niva": "forskola",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "En räv är ett djur.",
+      "fraga": "Vad är en räv?",
+      "ratt": "Ett djur",
+      "fel": [
+        "En hatt",
+        "En sten",
+        "En båt"
+      ]
+    },
+    {
+      "id": "hf-sv-forskola-006",
+      "niva": "forskola",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Mira hittar nallen och ler.",
+      "fraga": "Hur är Mira?",
+      "ratt": "Glad",
+      "fel": [
+        "Ledsen",
+        "Arg",
+        "Rädd"
+      ]
+    },
+    {
+      "id": "hf-en-forskola-001",
+      "niva": "forskola",
+      "sprak": "en",
+      "typ": "vad",
+      "text": "The cat sits on a blue mat.",
+      "fraga": "What does the cat sit on?",
+      "ratt": "A blue mat",
+      "fel": [
+        "A red bed",
+        "A green chair",
+        "A brown box"
+      ]
+    },
+    {
+      "id": "hf-en-forskola-002",
+      "niva": "forskola",
+      "sprak": "en",
+      "typ": "vem",
+      "text": "Anna has a yellow cup.",
+      "fraga": "Who has a yellow cup?",
+      "ratt": "Anna",
+      "fel": [
+        "Sam",
+        "Bo",
+        "Lee"
+      ]
+    },
+    {
+      "id": "hf-en-forskola-003",
+      "niva": "forskola",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The bird sits in the nest.",
+      "fraga": "Where does the bird sit?",
+      "ratt": "In the nest",
+      "fel": [
+        "On the boat",
+        "Under the bed",
+        "In the box"
+      ]
+    },
+    {
+      "id": "hf-en-forskola-004",
+      "niva": "forskola",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "The pup is happy about the bone.",
+      "fraga": "Why is the pup happy?",
+      "ratt": "Because of the bone",
+      "fel": [
+        "Because of the rain",
+        "Because of the hat",
+        "Because of the stone"
+      ]
+    },
+    {
+      "id": "hf-en-forskola-005",
+      "niva": "forskola",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "First the hen pecks, then she sits.",
+      "fraga": "What does the hen do first?",
+      "ratt": "Pecks",
+      "fel": [
+        "Sits",
+        "Swims",
+        "Reads"
+      ]
+    },
+    {
+      "id": "hf-en-forskola-006",
+      "niva": "forskola",
+      "sprak": "en",
+      "typ": "slutsats",
+      "text": "Leo claps and jumps.",
+      "fraga": "How does Leo feel?",
+      "ratt": "Happy",
+      "fel": [
+        "Sad",
+        "Angry",
+        "Scared"
+      ]
+    },
+    {
+      "id": "hf-sv-ak1-001",
+      "niva": "ak1",
+      "sprak": "sv",
+      "typ": "vem",
+      "text": "Elin och Bo går till sjön. Elin har med en håv.",
+      "fraga": "Vem har en håv?",
+      "ratt": "Elin",
+      "fel": [
+        "Bo",
+        "Katten",
+        "Läraren"
+      ]
+    },
+    {
+      "id": "hf-sv-ak1-002",
+      "niva": "ak1",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "Tor lägger en röd sten i fickan. Stenen är slät.",
+      "fraga": "Vad lägger Tor i fickan?",
+      "ratt": "En röd sten",
+      "fel": [
+        "En blå bok",
+        "En grön hatt",
+        "En gul kaka"
+      ]
+    },
+    {
+      "id": "hf-sv-ak1-003",
+      "niva": "ak1",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Räven sitter vid bäcken. Vattnet är kallt.",
+      "fraga": "Var sitter räven?",
+      "ratt": "Vid bäcken",
+      "fel": [
+        "I huset",
+        "På taket",
+        "I båten"
+      ]
+    },
+    {
+      "id": "hf-sv-ak1-004",
+      "niva": "ak1",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "Mira tar på sig jackan. Det är för att det blåser kallt.",
+      "fraga": "Varför tar Mira på sig jackan?",
+      "ratt": "Det blåser kallt",
+      "fel": [
+        "Hon ska sova",
+        "Hon ska bada",
+        "Solen är het"
+      ]
+    },
+    {
+      "id": "hf-sv-ak1-005",
+      "niva": "ak1",
+      "sprak": "sv",
+      "typ": "ordning",
+      "text": "Först plockar Nisse bär. Sedan äter han dem.",
+      "fraga": "Vad händer först?",
+      "ratt": "Nisse plockar bär",
+      "fel": [
+        "Han äter bären",
+        "Han sover",
+        "Han ritar"
+      ]
+    },
+    {
+      "id": "hf-sv-ak1-006",
+      "niva": "ak1",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Lina vinkar och springer mot kompisen. Hon ler hela vägen.",
+      "fraga": "Hur är Lina?",
+      "ratt": "Glad",
+      "fel": [
+        "Ledsen",
+        "Arg",
+        "Rädd"
+      ]
+    },
+    {
+      "id": "hf-en-ak1-001",
+      "niva": "ak1",
+      "sprak": "en",
+      "typ": "ord",
+      "text": "The word kite means a toy. Joy holds a red kite.",
+      "fraga": "What does kite mean?",
+      "ratt": "A toy",
+      "fel": [
+        "A fruit",
+        "A shoe",
+        "A map"
+      ]
+    },
+    {
+      "id": "hf-en-ak1-002",
+      "niva": "ak1",
+      "sprak": "en",
+      "typ": "vad",
+      "text": "Ben puts a green apple in the bag. The apple is sweet.",
+      "fraga": "What does Ben put in the bag?",
+      "ratt": "A green apple",
+      "fel": [
+        "A blue book",
+        "A red hat",
+        "A yellow ball"
+      ]
+    },
+    {
+      "id": "hf-en-ak1-003",
+      "niva": "ak1",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The duck swims on the pond. The water is calm.",
+      "fraga": "Where does the duck swim?",
+      "ratt": "On the pond",
+      "fel": [
+        "In the house",
+        "On the roof",
+        "In the box"
+      ]
+    },
+    {
+      "id": "hf-en-ak1-004",
+      "niva": "ak1",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "Amy takes an umbrella. She takes it because rain falls on the path.",
+      "fraga": "Why does Amy take an umbrella?",
+      "ratt": "Rain falls on the path",
+      "fel": [
+        "She wants to sleep",
+        "The sun is hot",
+        "She is going to swim"
+      ]
+    },
+    {
+      "id": "hf-en-ak1-005",
+      "niva": "ak1",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "First Rosa draws a sun. Then she colors it yellow.",
+      "fraga": "What happens first?",
+      "ratt": "Rosa draws a sun",
+      "fel": [
+        "She colors it yellow",
+        "She eats lunch",
+        "She reads a book"
+      ]
+    },
+    {
+      "id": "hf-en-ak1-006",
+      "niva": "ak1",
+      "sprak": "en",
+      "typ": "slutsats",
+      "text": "Owen waves and runs to his friend. He laughs the whole way.",
+      "fraga": "How does Owen feel?",
+      "ratt": "Happy",
+      "fel": [
+        "Sad",
+        "Angry",
+        "Scared"
+      ]
+    },
+    {
+      "id": "hf-sv-ak2-001",
+      "niva": "ak2",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "Klassen har en utflykt i skogen. De ser en ekorre i en tall. Ekorren har en yvig svans.",
+      "fraga": "Vad ser klassen i tallen?",
+      "ratt": "En ekorre",
+      "fel": [
+        "En björn",
+        "En båt",
+        "En hatt"
+      ]
+    },
+    {
+      "id": "hf-sv-ak2-002",
+      "niva": "ak2",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Bo och Mira bygger en koja. De lägger grenar mot en stor sten. Kojan står bakom skolan.",
+      "fraga": "Var står kojan?",
+      "ratt": "Bakom skolan",
+      "fel": [
+        "På sjön",
+        "I köket",
+        "På taket"
+      ]
+    },
+    {
+      "id": "hf-sv-ak2-003",
+      "niva": "ak2",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "Elin vattnar blommorna varje morgon. Hon gör det för att jorden är torr. Bladen har börjat sloka.",
+      "fraga": "Varför vattnar Elin blommorna?",
+      "ratt": "Jorden är torr",
+      "fel": [
+        "Det snöar",
+        "Blommorna är av plast",
+        "Hon ska flytta"
+      ]
+    },
+    {
+      "id": "hf-sv-ak2-004",
+      "niva": "ak2",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "Läraren säger att ordet dunge betyder en liten grupp träd. Barnen ser en dunge vid stigen.",
+      "fraga": "Vad betyder dunge?",
+      "ratt": "En liten grupp träd",
+      "fel": [
+        "En stor sjö",
+        "En röd hatt",
+        "En varm soppa"
+      ]
+    },
+    {
+      "id": "hf-sv-ak2-005",
+      "niva": "ak2",
+      "sprak": "sv",
+      "typ": "ordning",
+      "text": "Först läser de kartan. Sedan går de över bron. Till sist vilar de vid eken.",
+      "fraga": "Vad gör de sist?",
+      "ratt": "Vilar vid eken",
+      "fel": [
+        "Läser kartan",
+        "Går över bron",
+        "Simmar i ån"
+      ]
+    },
+    {
+      "id": "hf-sv-ak2-006",
+      "niva": "ak2",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Nisse glömmer mössan hemma. Det blåser och han huttrar. Han önskar att han hade mössan på sig.",
+      "fraga": "Vad saknar Nisse?",
+      "ratt": "Mössan",
+      "fel": [
+        "Skorna",
+        "Boken",
+        "Bollen"
+      ]
+    },
+    {
+      "id": "hf-en-ak2-001",
+      "niva": "ak2",
+      "sprak": "en",
+      "typ": "vad",
+      "text": "The club meets by the lake. They spot a heron in the reeds. The heron has long legs.",
+      "fraga": "What do they spot in the reeds?",
+      "ratt": "A heron",
+      "fel": [
+        "A bear",
+        "A bus",
+        "A hat"
+      ]
+    },
+    {
+      "id": "hf-en-ak2-002",
+      "niva": "ak2",
+      "sprak": "en",
+      "typ": "var",
+      "text": "Ada and Cole plant beans. They set the pots on a sunny shelf. The shelf is in the classroom.",
+      "fraga": "Where is the shelf?",
+      "ratt": "In the classroom",
+      "fel": [
+        "On the lake",
+        "In the kitchen at home",
+        "On the roof"
+      ]
+    },
+    {
+      "id": "hf-en-ak2-003",
+      "niva": "ak2",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "Noah fills the birdbath each morning. He does it because the water was gone. The birds waited on the rim.",
+      "fraga": "Why does Noah fill the birdbath?",
+      "ratt": "The water was gone",
+      "fel": [
+        "It is snowing hard",
+        "The bath is already full",
+        "He is moving away"
+      ]
+    },
+    {
+      "id": "hf-en-ak2-004",
+      "niva": "ak2",
+      "sprak": "en",
+      "typ": "ord",
+      "text": "The guide says a burrow is a hole an animal digs. The children see a burrow by the path.",
+      "fraga": "What is a burrow?",
+      "ratt": "A hole an animal digs",
+      "fel": [
+        "A large lake",
+        "A red hat",
+        "A warm soup"
+      ]
+    },
+    {
+      "id": "hf-en-ak2-005",
+      "niva": "ak2",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "First they check the list. Then they cross the little bridge. Last they sit by the birch.",
+      "fraga": "What do they do last?",
+      "ratt": "Sit by the birch",
+      "fel": [
+        "Check the list",
+        "Cross the bridge",
+        "Swim in the river"
+      ]
+    },
+    {
+      "id": "hf-en-ak2-006",
+      "niva": "ak2",
+      "sprak": "en",
+      "typ": "vem",
+      "text": "The club meets by the oak. Cole carries the snack bag. Ada holds the map.",
+      "fraga": "Who carries the snack bag?",
+      "ratt": "Cole",
+      "fel": [
+        "Ada",
+        "The teacher",
+        "The heron"
+      ]
+    },
+    {
+      "id": "hf-sv-ak3-001",
+      "niva": "ak3",
+      "sprak": "sv",
+      "typ": "vem",
+      "text": "Tre vänner letar efter en borttappad kompass. Mira hittar den under bänken. Bo håller i kartan. Elin pekar mot stigen.",
+      "fraga": "Vem hittar kompassen?",
+      "ratt": "Mira",
+      "fel": [
+        "Bo",
+        "Elin",
+        "Läraren"
+      ]
+    },
+    {
+      "id": "hf-sv-ak3-002",
+      "niva": "ak3",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "De ristar en enkel runa i en träbit. Runan ser ut som ett R. De lägger träbiten i en ask. Asken ställs på hyllan i klassrummet.",
+      "fraga": "Vad ristar de i träbiten?",
+      "ratt": "En runa",
+      "fel": [
+        "En båt",
+        "En karta",
+        "En hatt"
+      ]
+    },
+    {
+      "id": "hf-sv-ak3-003",
+      "niva": "ak3",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Gruppen går längs bäcken tills de når en glänta. Där står ett bord och två stubbar. De äter mellanmål i gläntan. Sedan går de tillbaka samma väg.",
+      "fraga": "Var äter de mellanmål?",
+      "ratt": "I gläntan",
+      "fel": [
+        "I klassrummet",
+        "På bron",
+        "I båten"
+      ]
+    },
+    {
+      "id": "hf-sv-ak3-004",
+      "niva": "ak3",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "Texten säger att stigen är knagglig. Knagglig betyder att marken är ojämn. Barnen går långsamt. Ingen snubblar.",
+      "fraga": "Vad betyder knagglig?",
+      "ratt": "Ojämn",
+      "fel": [
+        "Alldeles slät",
+        "Alldeles blå",
+        "Alldeles tyst"
+      ]
+    },
+    {
+      "id": "hf-sv-ak3-005",
+      "niva": "ak3",
+      "sprak": "sv",
+      "typ": "ordning",
+      "text": "Först packar de ryggsäckarna. Sedan tar de bussen till skogen. Där samlar de löv. Till sist limmar de löven på ett papper i skolan.",
+      "fraga": "Vad gör de direkt efter bussresan?",
+      "ratt": "Samlar löv",
+      "fel": [
+        "Packar ryggsäckarna",
+        "Limmar löven",
+        "Åker hem"
+      ]
+    },
+    {
+      "id": "hf-sv-ak3-006",
+      "niva": "ak3",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Himlen är grå och dropparna blir fler. De tar fram regnjackor innan de går ut. Marken blir mörk och blöt. De skyndar mot dörren men är fortfarande glada.",
+      "fraga": "Vad kan man säga om vädret?",
+      "ratt": "Det regnar",
+      "fel": [
+        "Det är soligt",
+        "Det snöar",
+        "Det är torrt och stilla"
+      ]
+    },
+    {
+      "id": "hf-en-ak3-001",
+      "niva": "ak3",
+      "sprak": "en",
+      "typ": "vem",
+      "text": "Four friends search for a lost whistle. Caleb finds it in the grass. Nia holds the map. Owen points to the trail.",
+      "fraga": "Who finds the whistle?",
+      "ratt": "Caleb",
+      "fel": [
+        "Nia",
+        "Owen",
+        "The teacher"
+      ]
+    },
+    {
+      "id": "hf-en-ak3-002",
+      "niva": "ak3",
+      "sprak": "en",
+      "typ": "vad",
+      "text": "They press a leaf into a lump of clay. The print shows every vein. They set the clay on a tray. The tray stays on the art table.",
+      "fraga": "What do they press into the clay?",
+      "ratt": "A leaf",
+      "fel": [
+        "A boat",
+        "A map",
+        "A hat"
+      ]
+    },
+    {
+      "id": "hf-en-ak3-003",
+      "niva": "ak3",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The group follows the creek to a sunny gap in the trees. A log and two stumps sit there. They eat apples in that gap. Then they walk back the same way.",
+      "fraga": "Where do they eat the apples?",
+      "ratt": "In the sunny gap",
+      "fel": [
+        "In the classroom",
+        "On the bridge",
+        "In the boat"
+      ]
+    },
+    {
+      "id": "hf-en-ak3-004",
+      "niva": "ak3",
+      "sprak": "en",
+      "typ": "ord",
+      "text": "The page says the trail is narrow. Narrow means there is little room to walk side by side. The children go in a line. Nobody steps off the trail.",
+      "fraga": "What does narrow mean here?",
+      "ratt": "There is little room side by side",
+      "fel": [
+        "The trail is very wide",
+        "The trail is bright blue",
+        "The trail is silent"
+      ]
+    },
+    {
+      "id": "hf-en-ak3-005",
+      "niva": "ak3",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "First they zip their packs. Then they ride the bus to the park. There they pick up acorns. Last they glue the acorns on a board at school.",
+      "fraga": "What do they do right after the bus ride?",
+      "ratt": "Pick up acorns",
+      "fel": [
+        "Zip their packs",
+        "Glue the acorns",
+        "Ride home"
+      ]
+    },
+    {
+      "id": "hf-en-ak3-006",
+      "niva": "ak3",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "Clouds pile up and drops hit the path. They pull on raincoats because the rain starts. The dirt turns dark and wet. They jog to the door and still smile.",
+      "fraga": "Why do they pull on raincoats?",
+      "ratt": "The rain starts",
+      "fel": [
+        "The sun is hot",
+        "They want to swim",
+        "The path is dry"
+      ]
+    },
+    {
+      "id": "hf-sv-ak4_6-001",
+      "niva": "ak4_6",
+      "sprak": "sv",
+      "typ": "vem",
+      "text": "Projektgruppen ska visa hur en kompass fungerar. Mira skriver texten. Bo ritar pilarna. Elin håller i visningen för klassen. Läraren bara lyssnar.",
+      "fraga": "Vem visar kompassen för klassen?",
+      "ratt": "Elin",
+      "fel": [
+        "Mira",
+        "Bo",
+        "Läraren"
+      ]
+    },
+    {
+      "id": "hf-sv-ak4_6-002",
+      "niva": "ak4_6",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "Bäcken har stigit efter nattens regn. Den vanliga stenen att kliva på ligger under vatten. Gruppen väljer den längre stigen över bron. De vill inte bli blöta om fötterna. Bron tar några minuter extra.",
+      "fraga": "Varför väljer de bron?",
+      "ratt": "De vill inte bli blöta om fötterna",
+      "fel": [
+        "Bron är kortare",
+        "De ska fiska",
+        "Stenen är torr"
+      ]
+    },
+    {
+      "id": "hf-sv-ak4_6-003",
+      "niva": "ak4_6",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "I anteckningen står ordet väderstreck. Ett väderstreck visar en riktning, som norr eller söder. Eleverna märker norr på kartan. De jämför med kompassen. Alla fyra väderstreck får en färg.",
+      "fraga": "Vad är ett väderstreck enligt texten?",
+      "ratt": "En riktning",
+      "fel": [
+        "En sorts mat",
+        "En röd hatt",
+        "En busstid"
+      ]
+    },
+    {
+      "id": "hf-sv-ak4_6-004",
+      "niva": "ak4_6",
+      "sprak": "sv",
+      "typ": "ordning",
+      "text": "På morgonen mäter de temperaturen. Före lunch samlar de löv och skriver artnamn. Efter lunch ritar de ett diagram. Sist redovisar de för klassen. De är ute i skogen hela dagen, utom under redovisningen.",
+      "fraga": "Vad gör de direkt efter lunch?",
+      "ratt": "Ritar ett diagram",
+      "fel": [
+        "Mäter temperaturen",
+        "Samlar löv",
+        "Redovisar för klassen"
+      ]
+    },
+    {
+      "id": "hf-sv-ak4_6-005",
+      "niva": "ak4_6",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Alla grupper hittar minst fem trädslag. En grupp hittar sju. De skriver namnen utan att gissa. Läraren säger att listan stämmer. Ingen art saknas i deras rutor.",
+      "fraga": "Vad stämmer om trädlistan?",
+      "ratt": "Den stämmer med verkligheten",
+      "fel": [
+        "Den är påhittad",
+        "Den saknar alla arter",
+        "Den handlar om fiskar"
+      ]
+    },
+    {
+      "id": "hf-sv-ak4_6-006",
+      "niva": "ak4_6",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "Eleverna bygger en enkel solvisare av en pinne och en pappskiva. Skuggan flyttar sig under dagen. De markerar skuggan klockan nio, tolv och tre. På eftermiddagen är strecket längst till höger. Pinnen står kvar i mitten.",
+      "fraga": "Vad bygger eleverna?",
+      "ratt": "En solvisare",
+      "fel": [
+        "En båt",
+        "En kompass av metall",
+        "En fågelholk"
+      ]
+    },
+    {
+      "id": "hf-en-ak4_6-001",
+      "niva": "ak4_6",
+      "sprak": "en",
+      "typ": "vem",
+      "text": "The team will explain a simple map scale. Luis writes the script. Amina draws the bar. Priya speaks to the class. The teacher only keeps time.",
+      "fraga": "Who speaks to the class?",
+      "ratt": "Priya",
+      "fel": [
+        "Luis",
+        "Amina",
+        "The teacher"
+      ]
+    },
+    {
+      "id": "hf-en-ak4_6-002",
+      "niva": "ak4_6",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "The footbridge is icy after the night frost. The usual stepping stones are slick. The group takes the longer path beside the fence. They do not want to slip. The fence path takes a few extra minutes.",
+      "fraga": "Why do they take the fence path?",
+      "ratt": "They do not want to slip",
+      "fel": [
+        "The path is shorter",
+        "They want to fish",
+        "The stones are dry"
+      ]
+    },
+    {
+      "id": "hf-en-ak4_6-003",
+      "niva": "ak4_6",
+      "sprak": "en",
+      "typ": "ord",
+      "text": "The notes use the word habitat. A habitat is the place a living thing uses for food and shelter. The students mark two habitats on the map. They compare the pond with the meadow. Each habitat gets a color.",
+      "fraga": "What is a habitat in this text?",
+      "ratt": "A place for food and shelter",
+      "fel": [
+        "A kind of snack",
+        "A red hat",
+        "A bus schedule"
+      ]
+    },
+    {
+      "id": "hf-en-ak4_6-004",
+      "niva": "ak4_6",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "At dawn they read the thermometer. Before lunch they sketch three birds. After lunch they make a bar graph. Last they tell the class what they saw. Only the talk happens indoors.",
+      "fraga": "What do they do right after lunch?",
+      "ratt": "Make a bar graph",
+      "fel": [
+        "Read the thermometer",
+        "Sketch three birds",
+        "Tell the class"
+      ]
+    },
+    {
+      "id": "hf-en-ak4_6-005",
+      "niva": "ak4_6",
+      "sprak": "en",
+      "typ": "slutsats",
+      "text": "Each pair finds at least four kinds of birds. One pair finds six. They write the names only when they are sure. The guide says the list is right. No bird is missing from their notes.",
+      "fraga": "What is true about the bird list?",
+      "ratt": "It matches what they saw",
+      "fel": [
+        "It is made up",
+        "It is about fish",
+        "It has no birds at all"
+      ]
+    },
+    {
+      "id": "hf-en-ak4_6-006",
+      "niva": "ak4_6",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The students set a rain gauge in the open yard. They leave it there all day. They do not put it under the roof. The water line rises by afternoon. The jar stays in the yard.",
+      "fraga": "Where does the jar stay?",
+      "ratt": "In the yard",
+      "fel": [
+        "Under the roof",
+        "In the classroom",
+        "On the bus"
+      ]
+    },
+    {
+      "id": "hf-sv-ak7_9-001",
+      "niva": "ak7_9",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Fältstudien pågår i en blandskog nära skolan. Eleverna lägger provrutor om tio gånger tio meter. De räknar arter bara inuti rutorna. En ruta hamnar vid bäcken och en på torrare mark. Jämförelsen gäller de två platserna.",
+      "fraga": "Var räknar de arter?",
+      "ratt": "Inuti provrutorna",
+      "fel": [
+        "Bara i klassrummet",
+        "På hela berget",
+        "I sjön"
+      ]
+    },
+    {
+      "id": "hf-sv-ak7_9-002",
+      "niva": "ak7_9",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "Gruppen mäter ljudnivån både vid vägen och inne i skogen. Vid vägen ligger värdet högre. De vill visa hur trafik påverkar platsen. Därför gör de båda mätningarna samma timme. Annars kan tiden på dagen störa jämförelsen.",
+      "fraga": "Varför mäter de samma timme?",
+      "ratt": "Så att tiden inte stör jämförelsen",
+      "fel": [
+        "För att vägen ska vara tyst",
+        "För att de ska slippa skogen",
+        "För att det ska regna"
+      ]
+    },
+    {
+      "id": "hf-sv-ak7_9-003",
+      "niva": "ak7_9",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "Rapporten använder ordet biologisk mångfald. Det betyder att många olika arter finns på samma plats. Eleverna räknar både växter och småkryp. Ett högt antal arter tyder på större mångfald. De skriver definitionen i marginalen.",
+      "fraga": "Vad betyder biologisk mångfald i texten?",
+      "ratt": "Att många olika arter finns på samma plats",
+      "fel": [
+        "Att bara en art finns",
+        "Att alla djur är lika stora",
+        "Att skogen saknar växter"
+      ]
+    },
+    {
+      "id": "hf-sv-ak7_9-004",
+      "niva": "ak7_9",
+      "sprak": "sv",
+      "typ": "ordning",
+      "text": "Först formulerar de en fråga. Därefter samlar de data i skogen. Sedan sammanställer de tabellen. Till sist drar de en försiktig slutsats. De publicerar inget förrän läraren har läst.",
+      "fraga": "Vad gör de direkt efter att de samlat data?",
+      "ratt": "Sammanställer tabellen",
+      "fel": [
+        "Formulerar frågan",
+        "Drar slutsatsen",
+        "Publicerar rapporten"
+      ]
+    },
+    {
+      "id": "hf-sv-ak7_9-005",
+      "niva": "ak7_9",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "I den torra rutan finns färre mossor än i rutan vid bäcken. Båda rutorna har lika många träd. Eleverna skriver att fukten kan förklara skillnaden i mossor. De påstår inte att träden påverkas. Slutsatsen gäller bara mossorna.",
+      "fraga": "Vad kan förklara skillnaden i mossor enligt texten?",
+      "ratt": "Fukten",
+      "fel": [
+        "Antalet träd",
+        "Färgen på jackorna",
+        "Skolans schema"
+      ]
+    },
+    {
+      "id": "hf-sv-ak7_9-006",
+      "niva": "ak7_9",
+      "sprak": "sv",
+      "typ": "vem",
+      "text": "Två elever ansvarar för mätningen. Noor läser av termometern. Leo skriver ner talen. Handledaren kontrollerar bara att de följer mallen. Ingen annan rör instrumenten.",
+      "fraga": "Vem läser av termometern?",
+      "ratt": "Noor",
+      "fel": [
+        "Leo",
+        "Handledaren",
+        "En förälder"
+      ]
+    },
+    {
+      "id": "hf-en-ak7_9-001",
+      "niva": "ak7_9",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The survey happens in a city park near the school. The students mark squares of ten by ten meters. They count plants only inside the squares. One square is by the pond and one is on the lawn. The comparison is about those two spots.",
+      "fraga": "Where do they count plants?",
+      "ratt": "Inside the squares",
+      "fel": [
+        "Only in the classroom",
+        "Across the whole city",
+        "In the lake"
+      ]
+    },
+    {
+      "id": "hf-en-ak7_9-002",
+      "niva": "ak7_9",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "The group records light both under the trees and in the open. In the open the reading is higher. They want to show how shade changes the spot. That is why both readings happen at the same time. Otherwise clouds could throw off the comparison.",
+      "fraga": "Why do they record at the same time?",
+      "ratt": "So clouds do not throw off the comparison",
+      "fel": [
+        "To make the trees darker",
+        "To skip the open spot",
+        "To make it rain"
+      ]
+    },
+    {
+      "id": "hf-en-ak7_9-003",
+      "niva": "ak7_9",
+      "sprak": "en",
+      "typ": "ord",
+      "text": "The report uses the word sample. A sample is a small part chosen to stand for a larger place. The students take samples from two squares. They do not claim the samples are the whole park. They write the meaning in the margin.",
+      "fraga": "What does sample mean in the text?",
+      "ratt": "A small part that stands for a larger place",
+      "fel": [
+        "The entire park",
+        "A guess with no plants",
+        "A tool for cutting wood"
+      ]
+    },
+    {
+      "id": "hf-en-ak7_9-004",
+      "niva": "ak7_9",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "First they state a question. Next they record counts in the park. Then they enter the counts in a table. Last they write a careful conclusion. They share nothing until the teacher has read it.",
+      "fraga": "What do they do right after recording the counts?",
+      "ratt": "Enter the counts in a table",
+      "fel": [
+        "State the question",
+        "Write the conclusion",
+        "Share the report"
+      ]
+    },
+    {
+      "id": "hf-en-ak7_9-005",
+      "niva": "ak7_9",
+      "sprak": "en",
+      "typ": "slutsats",
+      "text": "The lawn square has fewer ferns than the square by the pond. Both squares have the same number of benches. The students write that moisture may explain the ferns. They do not claim the benches matter. The conclusion is only about the ferns.",
+      "fraga": "What may explain the difference in ferns?",
+      "ratt": "The moisture",
+      "fel": [
+        "The number of benches",
+        "The color of their jackets",
+        "The school schedule"
+      ]
+    },
+    {
+      "id": "hf-en-ak7_9-006",
+      "niva": "ak7_9",
+      "sprak": "en",
+      "typ": "vad",
+      "text": "The students use a light meter on the lawn. The meter shows brightness as a number. Hana reads the number aloud. Omar writes it down. They store the meter in a blue case.",
+      "fraga": "What shows the brightness?",
+      "ratt": "A light meter",
+      "fel": [
+        "A thermometer",
+        "A compass",
+        "A rain gauge"
+      ]
+    },
+    {
+      "id": "hf-sv-gymnasiet-001",
+      "niva": "gymnasiet",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "En kort text i läroboken beskriver hur runor användes i Norden. Runorna ristades i trä, ben och sten. De kunde ange namn eller korta meddelanden. Texten jämför dem med senare bokstäver. Den säger inte att runor ersatte talat språk.",
+      "fraga": "Vad användes runor till enligt texten?",
+      "ratt": "Namn eller korta meddelanden",
+      "fel": [
+        "Att ersätta talat språk",
+        "Att mäta temperatur",
+        "Att rita kartor i färg"
+      ]
+    },
+    {
+      "id": "hf-sv-gymnasiet-002",
+      "niva": "gymnasiet",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Undersökningen gäller en skolskog, inte en nationalpark. Provytorna ligger inom en kilometer från skolan. En yta är närmast stigen och en längre in. Eleverna lämnar inte skolans mark. Alla koordinater antecknas i protokollet.",
+      "fraga": "Var ligger provytorna?",
+      "ratt": "Inom en kilometer från skolan",
+      "fel": [
+        "I en nationalpark",
+        "I en annan kommun",
+        "På en ö i havet"
+      ]
+    },
+    {
+      "id": "hf-sv-gymnasiet-003",
+      "niva": "gymnasiet",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "De upprepar mätningen tre gånger. Ett enstaka värde kan bli fel av misstag. Medelvärdet blir stadigare när fler värden tas med. Därför kastar de inte det första resultatet. De redovisar både spridning och medel.",
+      "fraga": "Varför upprepar de mätningen?",
+      "ratt": "Ett enstaka värde kan bli fel",
+      "fel": [
+        "De vill få ett lägre tal",
+        "Skogen byter art varje minut",
+        "Läraren har tappat protokollet"
+      ]
+    },
+    {
+      "id": "hf-sv-gymnasiet-004",
+      "niva": "gymnasiet",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "Texten skiljer på observation och slutsats. En observation är det man direkt ser eller mäter. En slutsats är en tolkning av flera observationer. Eleverna markerar de två med olika färger. De blandar inte ihop dem i rapporten.",
+      "fraga": "Vad är en observation enligt texten?",
+      "ratt": "Det man direkt ser eller mäter",
+      "fel": [
+        "En tolkning av flera mätningar",
+        "En gissning utan data",
+        "En karta över skolan"
+      ]
+    },
+    {
+      "id": "hf-sv-gymnasiet-005",
+      "niva": "gymnasiet",
+      "sprak": "sv",
+      "typ": "ordning",
+      "text": "Arbetet börjar med en hypotes. Därefter samlas data. Analysen kommer efter datainsamlingen. Diskussionen skrivs när analysen är klar. Källförteckningen läggs sist.",
+      "fraga": "Vad kommer direkt efter datainsamlingen?",
+      "ratt": "Analysen",
+      "fel": [
+        "Hypotesen",
+        "Diskussionen",
+        "Källförteckningen"
+      ]
+    },
+    {
+      "id": "hf-sv-gymnasiet-006",
+      "niva": "gymnasiet",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Båda grupperna mäter samma stig vid samma tid. Grupp A får 48 decibel och grupp B får 47. Skillnaden är ett decibel. Texten säger att skillnaden är liten. Den räcker inte för att säga att grupperna mätte olika ljud.",
+      "fraga": "Vad kan man säga om de två mätningarna?",
+      "ratt": "De ligger nära varandra",
+      "fel": [
+        "De visar helt olika ljud",
+        "Grupp B mätte tystnad",
+        "Värdena saknas"
+      ]
+    },
+    {
+      "id": "hf-en-gymnasiet-001",
+      "niva": "gymnasiet",
+      "sprak": "en",
+      "typ": "vem",
+      "text": "A short article explains trail signs. Nia writes the summary. Omar checks the examples. Priya reads the draft aloud. The editor only fixes spelling.",
+      "fraga": "Who checks the examples?",
+      "ratt": "Omar",
+      "fel": [
+        "Nia",
+        "Priya",
+        "The editor"
+      ]
+    },
+    {
+      "id": "hf-en-gymnasiet-002",
+      "niva": "gymnasiet",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The project studies a neighborhood park, not a national park. The count spots lie within a kilometer of the campus. One spot is near the gate and one is farther in. The students stay inside the park fence. Every spot is marked on the sheet.",
+      "fraga": "Where are the count spots?",
+      "ratt": "Within a kilometer of the campus",
+      "fel": [
+        "In a national park",
+        "In another state",
+        "On an island"
+      ]
+    },
+    {
+      "id": "hf-en-gymnasiet-003",
+      "niva": "gymnasiet",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "They time the walk three times. One timing can be off if someone pauses. The average is steadier when more timings are kept. That is why they keep the first result. They report both the spread and the average.",
+      "fraga": "Why do they time the walk three times?",
+      "ratt": "One timing can be off",
+      "fel": [
+        "They want a slower park",
+        "The path changes every minute",
+        "The teacher lost the sheet"
+      ]
+    },
+    {
+      "id": "hf-en-gymnasiet-004",
+      "niva": "gymnasiet",
+      "sprak": "en",
+      "typ": "ord",
+      "text": "The article separates a fact and an inference. A fact is something you can check directly. An inference is a reasoned step beyond the facts. The students underline the two in different colors. They do not treat them as the same.",
+      "fraga": "What is a fact, according to the text?",
+      "ratt": "Something you can check directly",
+      "fel": [
+        "A reasoned step beyond the facts",
+        "A guess with no check",
+        "A drawing of the campus"
+      ]
+    },
+    {
+      "id": "hf-en-gymnasiet-005",
+      "niva": "gymnasiet",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "The project opens with a question. Next the counts are made. The summary comes after the counts. The comment is written when the summary is done. The source list is placed last.",
+      "fraga": "What comes right after the counts?",
+      "ratt": "The summary",
+      "fel": [
+        "The question",
+        "The comment",
+        "The source list"
+      ]
+    },
+    {
+      "id": "hf-en-gymnasiet-006",
+      "niva": "gymnasiet",
+      "sprak": "en",
+      "typ": "slutsats",
+      "text": "Both pairs time the same path at the same hour. Pair A gets 12 minutes and pair B gets 13. The gap is one minute. The text calls the gap small. It is not enough to say the pairs walked different paths.",
+      "fraga": "What can you say about the two timings?",
+      "ratt": "They are close",
+      "fel": [
+        "They show different paths",
+        "Pair B stood still",
+        "The times are missing"
+      ]
+    },
+    {
+      "id": "hf-sv-vuxen-001",
+      "niva": "vuxen",
+      "sprak": "sv",
+      "typ": "vem",
+      "text": "En studiegrupp på kvällskursen delar upp ett kapitel. Amir sammanfattar metoden. Sara granskar källorna. Jon skriver frågorna till diskussionen. Läraren leder samtalet men skriver inte texten.",
+      "fraga": "Vem granskar källorna?",
+      "ratt": "Sara",
+      "fel": [
+        "Amir",
+        "Jon",
+        "Läraren"
+      ]
+    },
+    {
+      "id": "hf-sv-vuxen-002",
+      "niva": "vuxen",
+      "sprak": "sv",
+      "typ": "vad",
+      "text": "Deltagarna jämför två korta nyhetsnotiser om samma skolskog. Den första anger antal besökare. Den andra beskriver regler för eld. Ingen av texterna tar upp vädret. Jämförelsen handlar om innehåll, inte om stil.",
+      "fraga": "Vad anger den första notisen?",
+      "ratt": "Antal besökare",
+      "fel": [
+        "Regler för eld",
+        "Väderprognosen",
+        "En bokrecension"
+      ]
+    },
+    {
+      "id": "hf-sv-vuxen-003",
+      "niva": "vuxen",
+      "sprak": "sv",
+      "typ": "var",
+      "text": "Kursen har ett studiebesök i ett kommunalt arkiv. Arkivet ligger i samma hus som biblioteket. Deltagarna får läsa kartor från 1920. De får inte ta med materialet hem. All läsning sker i läsesalen.",
+      "fraga": "Var läser de kartorna?",
+      "ratt": "I läsesalen",
+      "fel": [
+        "Hemma",
+        "I skogen",
+        "På bussen"
+      ]
+    },
+    {
+      "id": "hf-sv-vuxen-004",
+      "niva": "vuxen",
+      "sprak": "sv",
+      "typ": "varfor",
+      "text": "Ledaren ber gruppen att skriva källan bredvid varje påstående. Utan källa går det inte att kontrollera uppgiften. Därför räcker det inte med en minnesbild. Gruppen lägger till författare och år. På så sätt kan en annan läsare följa resonemanget.",
+      "fraga": "Varför ska källan stå bredvid påståendet?",
+      "ratt": "Så att uppgiften går att kontrollera",
+      "fel": [
+        "Så att texten blir kortare",
+        "Så att året kan strykas",
+        "Så att ingen läser vidare"
+      ]
+    },
+    {
+      "id": "hf-sv-vuxen-005",
+      "niva": "vuxen",
+      "sprak": "sv",
+      "typ": "ord",
+      "text": "I materialet används ordet källkritik. Källkritik betyder att man bedömer om en uppgift är tillförlitlig. Man frågar vem som skrivit och varför. Deltagarna övar på två korta texter. De ger inte ett betyg åt skribenten som person.",
+      "fraga": "Vad betyder källkritik i texten?",
+      "ratt": "Att bedöma om en uppgift är tillförlitlig",
+      "fel": [
+        "Att ge skribenten ett betyg",
+        "Att stryka alla källor",
+        "Att skriva utan att läsa"
+      ]
+    },
+    {
+      "id": "hf-sv-vuxen-006",
+      "niva": "vuxen",
+      "sprak": "sv",
+      "typ": "slutsats",
+      "text": "Båda notiserna beskriver samma stig. Den ena säger att stigen är öppen. Den andra säger att ett träd ligger över stigen sedan i går. Uppgifterna kan inte båda stämma just nu. Läsaren behöver en nyare källa.",
+      "fraga": "Vad bör läsaren göra enligt texten?",
+      "ratt": "Söka en nyare källa",
+      "fel": [
+        "Lita på båda notiserna",
+        "Strunta i stigen för alltid",
+        "Ändra gårdagens väder"
+      ]
+    },
+    {
+      "id": "hf-en-vuxen-001",
+      "niva": "vuxen",
+      "sprak": "en",
+      "typ": "vem",
+      "text": "A weekend study circle splits an article. Devin outlines the method. Rosa checks the sources. Malik writes the discussion prompts. The tutor guides the talk but does not draft the page.",
+      "fraga": "Who checks the sources?",
+      "ratt": "Rosa",
+      "fel": [
+        "Devin",
+        "Malik",
+        "The tutor"
+      ]
+    },
+    {
+      "id": "hf-en-vuxen-002",
+      "niva": "vuxen",
+      "sprak": "en",
+      "typ": "vad",
+      "text": "The readers compare two short briefs about the same park. One states the number of visitors. The other lists the rules for campfires. Neither brief mentions the weather. The comparison is about content, not style.",
+      "fraga": "What does the brief that is not about campfires state?",
+      "ratt": "The number of visitors",
+      "fel": [
+        "The campfire rules",
+        "The weather forecast",
+        "A book review"
+      ]
+    },
+    {
+      "id": "hf-en-vuxen-003",
+      "niva": "vuxen",
+      "sprak": "en",
+      "typ": "var",
+      "text": "The course visits a town archive. The archive shares a building with the library. The readers may view maps from 1920. They may not take the maps home. All viewing happens in the reading room.",
+      "fraga": "Where do they view the maps?",
+      "ratt": "In the reading room",
+      "fel": [
+        "At home",
+        "In the woods",
+        "On the bus"
+      ]
+    },
+    {
+      "id": "hf-en-vuxen-004",
+      "niva": "vuxen",
+      "sprak": "en",
+      "typ": "varfor",
+      "text": "The tutor asks them to place the source next to each claim. Without a source the claim cannot be checked. A memory is not enough. They add the author and the year. Another reader can then follow the line of thought.",
+      "fraga": "Why should the source sit next to the claim?",
+      "ratt": "So the claim can be checked",
+      "fel": [
+        "So the page gets shorter",
+        "So the year can be cut",
+        "So nobody reads on"
+      ]
+    },
+    {
+      "id": "hf-en-vuxen-005",
+      "niva": "vuxen",
+      "sprak": "en",
+      "typ": "ordning",
+      "text": "First they read the claim. Next they find a second source. Then they note whether the sources agree. After that they write one sentence. The source list is added last.",
+      "fraga": "What do they do right after they find a second source?",
+      "ratt": "Note whether the sources agree",
+      "fel": [
+        "Read the claim",
+        "Write one sentence",
+        "Add the source list"
+      ]
+    },
+    {
+      "id": "hf-en-vuxen-006",
+      "niva": "vuxen",
+      "sprak": "en",
+      "typ": "slutsats",
+      "text": "Both briefs describe the same gate. One says the gate is open. The other says the gate has been locked since yesterday. Both claims cannot be true right now. The reader needs a newer source.",
+      "fraga": "What should the reader do, according to the text?",
+      "ratt": "Find a newer source",
+      "fel": [
+        "Trust both briefs",
+        "Ignore the gate forever",
+        "Change yesterday's weather"
+      ]
+    }
+  ]
+}

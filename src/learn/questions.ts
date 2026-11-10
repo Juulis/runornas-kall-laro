@@ -13,10 +13,10 @@ import {
 
 const LAS_GRADES: ReadonlySet<GradeId> = new Set(['forskola', 'ak1', 'ak2', 'ak3']);
 
-/** Blandat tar med läsförståelse bara på nivåer som har egna frågor i banken. */
+/** Blandat tar med läsförståelse bara där banken har egna frågor. Hörförståelse finns på alla nivåer. */
 function subjectFor(rng: Rng, subject: SubjectId, grade: GradeId): QuestionSubject {
   if (subject !== 'blandat') return subject;
-  const choices: QuestionSubject[] = ['matte', 'svenska', 'engelska'];
+  const choices: QuestionSubject[] = ['matte', 'svenska', 'engelska', 'horforstaelse'];
   if (LAS_GRADES.has(grade)) choices.push('lasforstaelse');
   return rng.pick(choices);
 }

@@ -16,6 +16,7 @@ export const SUBJECTS = [
   { id: 'svenska', label: 'Svenska' },
   { id: 'engelska', label: 'Engelska' },
   { id: 'lasforstaelse', label: 'Läsförståelse' },
+  { id: 'horforstaelse', label: 'Hörförståelse' },
 ] as const;
 
 export type GradeId = (typeof GRADES)[number]['id'];
@@ -37,7 +38,7 @@ export type SpeakLang = 'sv-SE' | 'en-US' | 'en-GB';
 export interface LearnQuestion {
   id: string;
   prompt: string;
-  /** Läsningstext som visas ovanför frågan. */
+  /** Läs- eller lyssningstext. Läsförståelse visar den direkt. */
   passage?: string;
   choices: readonly [string, string, string, string];
   correctIndex: number;
@@ -55,6 +56,8 @@ export interface LearnQuestion {
   speakPrompt?: boolean;
   /** Sant när frågan ska visa kladdruta. Saknas: avgörs av rule. */
   needsScratchpad?: boolean;
+  /** Hörförståelse: texten visas först efter att man svarat. */
+  hidePassageUntilAnswered?: boolean;
 }
 
 export interface LearnSettings {
