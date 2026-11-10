@@ -72,9 +72,9 @@ function assertLas(q: LearnQuestion, grade: GradeId): LasRow {
 }
 
 for (const grade of ['forskola', 'ak1', 'ak2', 'ak3'] as const) {
-  assert.equal(bankCount('lasforstaelse', grade), 32, grade);
-  const qs = generateQuestions({ count: 32, grade, subject: 'lasforstaelse', seed: 11, idPrefix: 'lf' });
-  assert.equal(qs.length, 32);
+  assert.equal(bankCount('lasforstaelse', grade), 64, grade);
+  const qs = generateQuestions({ count: 64, grade, subject: 'lasforstaelse', seed: 11, idPrefix: 'lf' });
+  assert.equal(qs.length, 64);
   const ids = new Set<string>();
   for (const q of qs) {
     const row = assertLas(q, grade);
@@ -82,7 +82,7 @@ for (const grade of ['forskola', 'ak1', 'ak2', 'ak3'] as const) {
     if (grade === 'forskola') assert.equal(row.las_upp, true);
     ids.add(row.id);
   }
-  assert.equal(ids.size, 32, `${grade} ska ge varje bankrad en gång`);
+  assert.equal(ids.size, 64, `${grade} ska ge varje bankrad en gång`);
 }
 
 const mixed = new Set<string>();

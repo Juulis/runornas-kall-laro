@@ -1,7 +1,7 @@
 import type { LearnQuestion } from './types';
 
 /** Matte-regler där eleven får en kladdruta. Andra ämnen och lättare regler ingår inte. */
-export const HARD_MATH_RULES = ['ak79-ekvation', 'ak79-potens', 'gym-andragrads', 'gym-procent'] as const;
+export const HARD_MATH_RULES = ['ak79-ekvation', 'ak79-potens', 'gym-andragrads', 'gym-procent', 'gym-ekvation'] as const;
 
 const HARD = new Set<string>(HARD_MATH_RULES);
 

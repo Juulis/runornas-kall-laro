@@ -33,7 +33,7 @@
       "id": "lf-forskola-003",
       "niva": "forskola",
       "typ": "vad",
-      "text": "Liten räv äter bär.",
+      "text": "En liten räv äter bär.",
       "fraga": "Vad äter räven?",
       "ratt": "Bär",
       "fel": [
@@ -47,9 +47,9 @@
       "id": "lf-forskola-004",
       "niva": "forskola",
       "typ": "ord",
-      "text": "Sagoön ligger vid sjön.",
+      "text": "Sagoön är en ö i sjön.",
       "fraga": "Vad är Sagoön?",
-      "ratt": "En plats vid sjön",
+      "ratt": "En ö i sjön",
       "fel": [
         "En hatt",
         "En fisk",
@@ -63,7 +63,7 @@
       "typ": "vad",
       "text": "Tor bär en lykta.",
       "fraga": "Vad bär Tor?",
-      "ratt": "En ljuslykta",
+      "ratt": "En lykta",
       "fel": [
         "En fisk",
         "En bok",
@@ -203,7 +203,7 @@
       "typ": "slutsats",
       "text": "Ugglan sitter i granen.",
       "fraga": "Vad gör ugglan just nu?",
-      "ratt": "Den sitter stilla",
+      "ratt": "Den sitter i granen",
       "fel": [
         "Den simmar",
         "Den bakar",
@@ -285,13 +285,13 @@
       "id": "lf-forskola-021",
       "niva": "forskola",
       "typ": "varfor",
-      "text": "Räven gömmer sig bakom stubben.",
-      "fraga": "Varför gömmer sig räven bakom stubben?",
-      "ratt": "För att gömma sig",
+      "text": "Räven gömmer sig bakom stubben för att en hund kommer.",
+      "fraga": "Varför gömmer sig räven?",
+      "ratt": "En hund kommer",
       "fel": [
-        "För att simma",
-        "För att baka",
-        "För att sjunga"
+        "Den vill simma",
+        "Den vill baka",
+        "Den vill sjunga"
       ],
       "las_upp": true
     },
@@ -313,9 +313,9 @@
       "id": "lf-forskola-023",
       "niva": "forskola",
       "typ": "varfor",
-      "text": "Barnet ler för att det är glad.",
+      "text": "Barnet ler för att det är glatt.",
       "fraga": "Varför ler barnet?",
-      "ratt": "För att det är glad",
+      "ratt": "För att det är glatt",
       "fel": [
         "För att det är hungrigt",
         "För att det sover",
@@ -369,8 +369,8 @@
       "id": "lf-forskola-027",
       "niva": "forskola",
       "typ": "ordning",
-      "text": "Stigen går till byn.",
-      "fraga": "Stigen går till byn. Vad kommer man till om man följer stigen?",
+      "text": "Först går de på stigen. Sen kommer de till byn.",
+      "fraga": "Vad kommer de till sen?",
       "ratt": "Byn",
       "fel": [
         "Månen",
@@ -450,6 +450,454 @@
       "las_upp": true
     },
     {
+      "id": "lf-forskola-033",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Lo har en gul mössa.",
+      "fraga": "Vem har en gul mössa?",
+      "ratt": "Lo",
+      "fel": [
+        "Tyra",
+        "Olle",
+        "Siri"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-034",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Ekorren sitter i eken.",
+      "fraga": "Var sitter ekorren?",
+      "ratt": "I eken",
+      "fel": [
+        "I sjön",
+        "På isen",
+        "I båten"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-035",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Noa dricker mjölk.",
+      "fraga": "Vad dricker Noa?",
+      "ratt": "Mjölk",
+      "fel": [
+        "Saft",
+        "Vatten",
+        "Te"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-036",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Ordet vante betyder något man har på handen när det är kallt.",
+      "fraga": "Vad betyder vante?",
+      "ratt": "Något man har på handen när det är kallt",
+      "fel": [
+        "Något man har på foten",
+        "Något man äter",
+        "Något man seglar med"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-037",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "Fågeln har vingar och lyfter från marken.",
+      "fraga": "Vad kan fågeln göra?",
+      "ratt": "Flyga",
+      "fel": [
+        "Simma",
+        "Baka",
+        "Gräva"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-038",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Det är kallt så Meja tar på sig kappan.",
+      "fraga": "Varför tar Meja på sig kappan?",
+      "ratt": "Det är kallt",
+      "fel": [
+        "Det är varmt",
+        "Hon ska sova",
+        "Hon ska bada"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-039",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först tar Vide på sig skorna. Sen går han ut.",
+      "fraga": "Vad gör Vide först?",
+      "ratt": "Tar på sig skorna",
+      "fel": [
+        "Går ut",
+        "Simmar",
+        "Sover"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-040",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Geten äter gräs.",
+      "fraga": "Vad äter geten?",
+      "ratt": "Gräs",
+      "fel": [
+        "Kakor",
+        "Fisk",
+        "Glass"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-041",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Siri ger en morot till kaninen.",
+      "fraga": "Vem får moroten?",
+      "ratt": "Kaninen",
+      "fel": [
+        "Siri",
+        "Hästen",
+        "Katten"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-042",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Ankan simmar i dammen.",
+      "fraga": "Var simmar ankan?",
+      "ratt": "I dammen",
+      "fel": [
+        "I trädets topp",
+        "I ugnen",
+        "På taket"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-043",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Ordet bro betyder en väg över vatten.",
+      "fraga": "Vad betyder bro?",
+      "ratt": "En väg över vatten",
+      "fel": [
+        "En väg under marken",
+        "En fågel",
+        "En kaka"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-044",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "Pojken gäspar och gnuggar ögonen. Han vill lägga sig.",
+      "fraga": "Hur är pojken?",
+      "ratt": "Trött",
+      "fel": [
+        "Hungrig",
+        "Arg",
+        "Glad"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-045",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Blomman vissnar för att den fick inget vatten.",
+      "fraga": "Varför vissnar blomman?",
+      "ratt": "Den fick inget vatten",
+      "fel": [
+        "Den fick mycket vatten",
+        "Den står i regn",
+        "Den är ny och pigg"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-046",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först lägger de ved i elden. Sen blir det varmt.",
+      "fraga": "Vad händer sen?",
+      "ratt": "Det blir varmt",
+      "fel": [
+        "Lägger ved i elden",
+        "De badar",
+        "De springer"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-047",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Tuva ritar en sol.",
+      "fraga": "Vad ritar Tuva?",
+      "ratt": "En sol",
+      "fel": [
+        "En båt",
+        "En hatt",
+        "En fisk"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-048",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Axel ropar på Freja. Freja kommer.",
+      "fraga": "Vem kommer?",
+      "ratt": "Freja",
+      "fel": [
+        "Axel",
+        "Björnen",
+        "Ugglan"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-049",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Katten sover i korgen.",
+      "fraga": "Var sover katten?",
+      "ratt": "I korgen",
+      "fel": [
+        "I sjön",
+        "På isen",
+        "I ugnen"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-050",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Ordet bäck betyder en liten å.",
+      "fraga": "Vad betyder bäck?",
+      "ratt": "En liten å",
+      "fel": [
+        "Ett stort hav",
+        "Ett högt berg",
+        "Ett mörkt rum"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-051",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "Himlen är grå. Regndroppar faller.",
+      "fraga": "Hur är vädret?",
+      "ratt": "Det regnar",
+      "fel": [
+        "Det är soligt",
+        "Det snöar",
+        "Det är bara dimma"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-052",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Fågeln flyger till boet för att ungarna är hungriga.",
+      "fraga": "Varför flyger fågeln till boet?",
+      "ratt": "Ungarna är hungriga",
+      "fel": [
+        "Ungarna är mätta",
+        "Boet är borta",
+        "Den ska bada"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-053",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först hämtar de vatten. Sen vattnar de blomman.",
+      "fraga": "Vad gör de sen?",
+      "ratt": "Vattnar blomman",
+      "fel": [
+        "Hämtar vatten",
+        "Sover",
+        "Springer"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-054",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Igelkotten rullar ihop sig.",
+      "fraga": "Vad gör igelkotten?",
+      "ratt": "Rullar ihop sig",
+      "fel": [
+        "Flyger",
+        "Sjunger",
+        "Läser"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-055",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Brevet ligger på bordet.",
+      "fraga": "Var ligger brevet?",
+      "ratt": "På bordet",
+      "fel": [
+        "I sjön",
+        "Under sängen",
+        "I skorstenen"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-056",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Nora matar hästen med hö.",
+      "fraga": "Vem matar hästen?",
+      "ratt": "Nora",
+      "fel": [
+        "Vide",
+        "Tor",
+        "Elin"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-057",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Snögubben smälter för att solen skiner på den.",
+      "fraga": "Varför smälter snögubben?",
+      "ratt": "Solen skiner på den",
+      "fel": [
+        "Det är natt",
+        "Det snöar mer",
+        "Den står i skuggan"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-058",
+      "niva": "forskola",
+      "typ": "ord",
+      "text": "Ordet bo betyder här ett hem för en fågel.",
+      "fraga": "Vad betyder bo här?",
+      "ratt": "Ett hem för en fågel",
+      "fel": [
+        "En båt",
+        "En kaka",
+        "En mössa"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-059",
+      "niva": "forskola",
+      "typ": "slutsats",
+      "text": "De släcker lampan. Då ser de inget i rummet.",
+      "fraga": "Hur blir rummet?",
+      "ratt": "Mörkt",
+      "fel": [
+        "Ljust",
+        "Fullt av musik",
+        "Varmare"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-060",
+      "niva": "forskola",
+      "typ": "ordning",
+      "text": "Först sätter de på sig vantar. Sen åker de kälke.",
+      "fraga": "Vad gör de sen?",
+      "ratt": "Åker kälke",
+      "fel": [
+        "Sätter på sig vantar",
+        "Badar",
+        "Läser"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-061",
+      "niva": "forskola",
+      "typ": "vad",
+      "text": "Grodan hoppar på näckrosen.",
+      "fraga": "Vad gör grodan?",
+      "ratt": "Hoppar på näckrosen",
+      "fel": [
+        "Flyger",
+        "Sover i sängen",
+        "Bakar bröd"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-062",
+      "niva": "forskola",
+      "typ": "var",
+      "text": "Nyckeln hänger på kroken.",
+      "fraga": "Var hänger nyckeln?",
+      "ratt": "På kroken",
+      "fel": [
+        "I dammen",
+        "Under mattan",
+        "I fickan"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-063",
+      "niva": "forskola",
+      "typ": "vem",
+      "text": "Leo och Tove plockar svamp. Leo hittar en gul svamp.",
+      "fraga": "Vem hittar en gul svamp?",
+      "ratt": "Leo",
+      "fel": [
+        "Tove",
+        "Nisse",
+        "Siv"
+      ],
+      "las_upp": true
+    },
+    {
+      "id": "lf-forskola-064",
+      "niva": "forskola",
+      "typ": "varfor",
+      "text": "Barnen går in för att klockan ringer.",
+      "fraga": "Varför går barnen in?",
+      "ratt": "Klockan ringer",
+      "fel": [
+        "De ska sova ute",
+        "Klockan är tyst",
+        "De vill bada"
+      ],
+      "las_upp": true
+    },
+    {
       "id": "lf-ak1-001",
       "niva": "ak1",
       "typ": "vem",
@@ -479,7 +927,7 @@
       "id": "lf-ak1-003",
       "niva": "ak1",
       "typ": "vad",
-      "text": "En räv sitter vid stigen. Den väntar på sin unge. Unge kommer med ett bär i munnen.",
+      "text": "En räv sitter vid stigen. Den väntar på sin unge. Ungen kommer med ett bär i munnen.",
       "fraga": "Vad har ungen i munnen?",
       "ratt": "Ett bär",
       "fel": [
@@ -597,7 +1045,7 @@
       "niva": "ak1",
       "typ": "vad",
       "text": "Älgen står stilla. Den lyssnar. Något knäcker i busken.",
-      "fraga": "Vad gör älgen?",
+      "fraga": "Vad gör älgen när den står stilla?",
       "ratt": "Lyssnar",
       "fel": [
         "Bygger",
@@ -636,7 +1084,7 @@
       "niva": "ak1",
       "typ": "vad",
       "text": "Stigen delar sig. En väg går till byn. En väg går till berget.",
-      "fraga": "Vart går den ena vägen?",
+      "fraga": "Vart går vägen som nämns först?",
       "ratt": "Till byn",
       "fel": [
         "Till havsbotten",
@@ -653,7 +1101,7 @@
       "ratt": "En smal väg",
       "fel": [
         "En stor stad",
-        "En hög torn",
+        "Ett högt torn",
         "En djup brunn"
       ]
     },
@@ -700,7 +1148,7 @@
       "id": "lf-ak1-020",
       "niva": "ak1",
       "typ": "varfor",
-      "text": "Det är mörkt i skogen. Tor tänder lykta. Nu ser de stigen igen.",
+      "text": "Det är mörkt i skogen. Tor tänder lyktan. Nu ser de stigen igen.",
       "fraga": "Varför tänder Tor lyktan?",
       "ratt": "Det är mörkt",
       "fel": [
@@ -752,12 +1200,12 @@
       "id": "lf-ak1-024",
       "niva": "ak1",
       "typ": "vad",
-      "text": "Björnen luktar honung. Den går till bikupan. Bin surrar lugnt.",
-      "fraga": "Vad luktar björnen?",
+      "text": "Björnen känner doften av honung. Den går till bikupan. Bin surrar lugnt.",
+      "fraga": "Vad känner björnen doften av?",
       "ratt": "Honung",
       "fel": [
         "Rök",
-        "Blomjord",
+        "Jord",
         "Fisk"
       ]
     },
@@ -866,6 +1314,422 @@
       ]
     },
     {
+      "id": "lf-ak1-033",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Tyra ser en hare vid busken. Haren står stilla. Sen hoppar den in i busken.",
+      "fraga": "Vem hoppar in i busken?",
+      "ratt": "Haren",
+      "fel": [
+        "Tyra",
+        "Ekorren",
+        "Hunden"
+      ]
+    },
+    {
+      "id": "lf-ak1-034",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Olle ställer stövlarna i farstun. De är blöta av regn. Golvet inne ska vara torrt.",
+      "fraga": "Var ställer Olle stövlarna?",
+      "ratt": "I farstun",
+      "fel": [
+        "I sängen",
+        "På spisen",
+        "I dammen"
+      ]
+    },
+    {
+      "id": "lf-ak1-035",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Meja öppnar en burk. I burken ligger knappar. Hon ska sy en kappa.",
+      "fraga": "Vad ligger i burken?",
+      "ratt": "Knappar",
+      "fel": [
+        "Äpplen",
+        "Stenar",
+        "Mynt"
+      ]
+    },
+    {
+      "id": "lf-ak1-036",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet farstu betyder det lilla rummet innanför ytterdörren. Där ställer man skor. Det är inte köket.",
+      "fraga": "Vad betyder farstu?",
+      "ratt": "Det lilla rummet innanför ytterdörren",
+      "fel": [
+        "Ett rum högt i tornet",
+        "En sjö",
+        "En ugn"
+      ]
+    },
+    {
+      "id": "lf-ak1-037",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Vide tittar upp. Mörka moln kommer. Han tar fram regnrocken innan de första dropparna faller.",
+      "fraga": "Vad är på väg att hända?",
+      "ratt": "Det ska regna",
+      "fel": [
+        "Solen ska skina",
+        "Det blir snöstorm inomhus",
+        "Molnen försvinner utan regn"
+      ]
+    },
+    {
+      "id": "lf-ak1-038",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Örterna står i en låda. Jorden är torr. Därför vattnar Siri dem.",
+      "fraga": "Varför vattnar Siri örterna?",
+      "ratt": "Jorden är torr",
+      "fel": [
+        "Jorden är redan blöt",
+        "Det regnar på dem",
+        "De står i en sjö"
+      ]
+    },
+    {
+      "id": "lf-ak1-039",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först skär Noa bröd. Sen lägger han ost på. Sist värmer han brödet vid elden.",
+      "fraga": "Vad gör Noa sist?",
+      "ratt": "Värmer brödet vid elden",
+      "fel": [
+        "Skär bröd",
+        "Lägger på ost",
+        "Kyler brödet i snön"
+      ]
+    },
+    {
+      "id": "lf-ak1-040",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "En humla surrar vid lavendeln. Den letar efter söt nektar. Blomman gungar lite.",
+      "fraga": "Vad letar humlan efter?",
+      "ratt": "Söt nektar",
+      "fel": [
+        "Kall snö",
+        "Torr ved",
+        "En nyckel"
+      ]
+    },
+    {
+      "id": "lf-ak1-041",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Farfar läser en saga för Tuva. Tuva lyssnar med täcket på sig. När sagan tar slut säger hon tack.",
+      "fraga": "Vem läser sagan?",
+      "ratt": "Farfar",
+      "fel": [
+        "Tuva",
+        "Hunden",
+        "Grannen"
+      ]
+    },
+    {
+      "id": "lf-ak1-042",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Kompassen ligger i den röda fickan. Kartan ligger i den blå. Axel tar bara kompassen.",
+      "fraga": "Var ligger kompassen?",
+      "ratt": "I den röda fickan",
+      "fel": [
+        "I den blå fickan",
+        "I stöveln",
+        "Under sängen"
+      ]
+    },
+    {
+      "id": "lf-ak1-043",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet dagg betyder små vattendroppar som ligger på gräset om morgonen. Solen får dem att glittra. Det är inte regn.",
+      "fraga": "Vad betyder dagg?",
+      "ratt": "Små vattendroppar på gräset",
+      "fel": [
+        "Snö på taket",
+        "Vågor i sjön",
+        "Rök från elden"
+      ]
+    },
+    {
+      "id": "lf-ak1-044",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Katten sitter vid den tomma skålen. Den jammar och tittar på Lo. Lo hämtar kattmat.",
+      "fraga": "Vad vill katten?",
+      "ratt": "Den vill ha mat",
+      "fel": [
+        "Den vill gå ut i regnet",
+        "Den vill sova i trädet",
+        "Den vill bada"
+      ]
+    },
+    {
+      "id": "lf-ak1-045",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Bron är hal av is. Ebba går långsamt och håller i repet.",
+      "fraga": "Varför går Ebba långsamt?",
+      "ratt": "Bron är hal av is",
+      "fel": [
+        "Bron är torr",
+        "Hon ska springa ikapp en båt",
+        "Solen har smält all is"
+      ]
+    },
+    {
+      "id": "lf-ak1-046",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först matar de hönsen. Sen samlar de äggen. Sist stänger de luckan.",
+      "fraga": "Vad gör de mitt i?",
+      "ratt": "Samlar äggen",
+      "fel": [
+        "Stänger luckan",
+        "Matar hönsen",
+        "Målar ladan"
+      ]
+    },
+    {
+      "id": "lf-ak1-047",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Elias hittar ett fågelbo i äppelträdet. I boet ligger tre blå ägg. Han tittar bara och går sedan.",
+      "fraga": "Vad ligger i boet?",
+      "ratt": "Tre blå ägg",
+      "fel": [
+        "Tre vita stenar",
+        "En nyckel",
+        "Två mynt"
+      ]
+    },
+    {
+      "id": "lf-ak1-048",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Astrid skriver ett brev. Hon ger det till Siv. Siv lägger brevet i väskan och går mot byn.",
+      "fraga": "Vem lägger brevet i väskan?",
+      "ratt": "Siv",
+      "fel": [
+        "Astrid",
+        "Hästen",
+        "Ugglan"
+      ]
+    },
+    {
+      "id": "lf-ak1-049",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Regnbågen står över ängen efter skuren. Barnen pekar från backen. Färgerna syns tydligt.",
+      "fraga": "Var står regnbågen?",
+      "ratt": "Över ängen",
+      "fel": [
+        "Under bron",
+        "I källaren",
+        "I ugnen"
+      ]
+    },
+    {
+      "id": "lf-ak1-050",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet syren betyder en buske med doftande blomklasar. Den blommar på våren. Det är inte ett träd med kottar.",
+      "fraga": "Vad betyder syren?",
+      "ratt": "En buske med doftande blomklasar",
+      "fel": [
+        "Ett träd med kottar",
+        "En fisk",
+        "En sten"
+      ]
+    },
+    {
+      "id": "lf-ak1-051",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Spåren i snön är små och täta. De slutar vid ekens hål. En ekorre tittar ut med en nöt i tassarna. Inga andra spår syns.",
+      "fraga": "Vem har gjort spåren?",
+      "ratt": "Ekorren",
+      "fel": [
+        "En älg",
+        "En björn",
+        "En häst"
+      ]
+    },
+    {
+      "id": "lf-ak1-052",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Mjölken står kallt i källaren. Den håller sig fräsch där. I solen skulle den bli sur.",
+      "fraga": "Varför står mjölken i källaren?",
+      "ratt": "Den håller sig fräsch där",
+      "fel": [
+        "Den ska bli sur",
+        "Källaren är varmare än solen",
+        "Den ska frysa till is"
+      ]
+    },
+    {
+      "id": "lf-ak1-053",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först skär de äpplen i bitar. Sen kokar de dem mjuka. Sist mosar de äppelmos.",
+      "fraga": "Vad gör de precis efter att de har skurit äpplena?",
+      "ratt": "Kokar äpplena mjuka",
+      "fel": [
+        "Mosar äppelmos",
+        "Skär äpplena",
+        "Ställer undan fatet"
+      ]
+    },
+    {
+      "id": "lf-ak1-054",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "Lova hör en hackspett. Fågeln trummar på den torra tallen. Ljudet är kort och hårt.",
+      "fraga": "Vad trummar hackspetten på?",
+      "ratt": "Den torra tallen",
+      "fel": [
+        "En trumma av plåt",
+        "Sjöisen",
+        "Ladans tak"
+      ]
+    },
+    {
+      "id": "lf-ak1-055",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Tälten står på den platta ängen. Ena tältet är grönt och det andra är grått. Eldplatsen ligger en bit bort.",
+      "fraga": "Var står tälten?",
+      "ratt": "På den platta ängen",
+      "fel": [
+        "På sjön",
+        "I grottan",
+        "På bergets topp"
+      ]
+    },
+    {
+      "id": "lf-ak1-056",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Sam håller i repet. Selma klättrar upp i trädet och hämtar pappersdraken. Hon räcker ner den till Sam.",
+      "fraga": "Vem hämtar pappersdraken?",
+      "ratt": "Selma",
+      "fel": [
+        "Sam",
+        "Ugglan",
+        "Farfar"
+      ]
+    },
+    {
+      "id": "lf-ak1-057",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Stearinljuset fladdrar. Det drar från det öppna fönstret. Tove stänger fönstret.",
+      "fraga": "Varför fladdrar ljuset?",
+      "ratt": "Det drar från fönstret",
+      "fel": [
+        "Fönstret är stängt",
+        "Ljuset står i ett skåp",
+        "Det är alldeles vindstilla"
+      ]
+    },
+    {
+      "id": "lf-ak1-058",
+      "niva": "ak1",
+      "typ": "ord",
+      "text": "Ordet vindstilla betyder att det inte blåser. Löven rör sig inte. Röken stiger rakt upp.",
+      "fraga": "Vad betyder vindstilla?",
+      "ratt": "Att det inte blåser",
+      "fel": [
+        "Att det stormar",
+        "Att det regnar hårt",
+        "Att solen slocknar"
+      ]
+    },
+    {
+      "id": "lf-ak1-059",
+      "niva": "ak1",
+      "typ": "slutsats",
+      "text": "Alla fönster i stugan är mörka. Ingen rök kommer ur skorstenen. En lapp säger att de kommer hem i morgon.",
+      "fraga": "Är familjen hemma nu?",
+      "ratt": "Nej, de kommer i morgon",
+      "fel": [
+        "Ja, de är hemma nu",
+        "Ja, de har fest",
+        "Nej, de har flyttat för alltid"
+      ]
+    },
+    {
+      "id": "lf-ak1-060",
+      "niva": "ak1",
+      "typ": "ordning",
+      "text": "Först tar de på sig kapperna. Sen går de ner till bryggan. Sist kliver de i båten.",
+      "fraga": "Vad gör de först?",
+      "ratt": "Tar på sig kapperna",
+      "fel": [
+        "Kliver i båten",
+        "Går ner till bryggan",
+        "Hoppar i ån"
+      ]
+    },
+    {
+      "id": "lf-ak1-061",
+      "niva": "ak1",
+      "typ": "vad",
+      "text": "I paketet ligger en mjuk halsduk. Den är randig i blått och vitt. Nova slår in den igen.",
+      "fraga": "Vad ligger i paketet?",
+      "ratt": "En randig halsduk",
+      "fel": [
+        "En hård sten",
+        "Ett par skridskor",
+        "En tom låda"
+      ]
+    },
+    {
+      "id": "lf-ak1-062",
+      "niva": "ak1",
+      "typ": "var",
+      "text": "Myrorna går i ett led över stigen. Ledet börjar vid en tuva och slutar vid en tall. Barnen kliver försiktigt över.",
+      "fraga": "Var slutar myrornas led?",
+      "ratt": "Vid en tall",
+      "fel": [
+        "Vid en tuva",
+        "I sjön",
+        "På taket"
+      ]
+    },
+    {
+      "id": "lf-ak1-063",
+      "niva": "ak1",
+      "typ": "vem",
+      "text": "Ville håller korgen. Astrid plockar blåbär och lägger dem i den. Korgen blir tung.",
+      "fraga": "Vem plockar blåbären?",
+      "ratt": "Astrid",
+      "fel": [
+        "Ville",
+        "Björnen",
+        "Ekorren"
+      ]
+    },
+    {
+      "id": "lf-ak1-064",
+      "niva": "ak1",
+      "typ": "varfor",
+      "text": "Ugnen är varm. Brödet behöver gräddas. Edvin ställer in formen.",
+      "fraga": "Varför ställer Edvin in formen?",
+      "ratt": "Brödet behöver gräddas",
+      "fel": [
+        "Brödet är redan klart",
+        "Ugnen är kall",
+        "Han ska kyla formen"
+      ]
+    },
+    {
       "id": "lf-ak2-001",
       "niva": "ak2",
       "typ": "vad",
@@ -947,9 +1811,9 @@
       "id": "lf-ak2-007",
       "niva": "ak2",
       "typ": "ord",
-      "text": "Ordet bleka betyder att något blir ljusare eller mattare. Himlen bleknar vid gryning. Mörkret slipper taget.",
-      "fraga": "Vad betyder bleka här?",
-      "ratt": "Bli ljusare eller mattare",
+      "text": "Ordet blekna betyder att något blir ljusare. Himlen bleknar vid gryning. Mörkret slipper taget.",
+      "fraga": "Vad betyder blekna här?",
+      "ratt": "Bli ljusare",
       "fel": [
         "Bli kallare",
         "Bli tyngre",
@@ -974,7 +1838,7 @@
       "niva": "ak2",
       "typ": "ordning",
       "text": "Först ritar de en karta. Sen märker de stigen med stenar. Därefter går de tillbaka till lägret. Sist visar de kartan för de andra.",
-      "fraga": "Vad gör de efter att ha märkt stigen?",
+      "fraga": "Vad gör de precis efter att ha märkt stigen?",
       "ratt": "Går tillbaka till lägret",
       "fel": [
         "Sover",
@@ -1116,7 +1980,7 @@
       "id": "lf-ak2-020",
       "niva": "ak2",
       "typ": "vad",
-      "text": "Tor berättar en saga. Alla lyssnar. Elden sprakar. Sagaordet känns nära.",
+      "text": "Tor berättar en saga. Alla lyssnar. Elden sprakar. Barnen sitter nära.",
       "fraga": "Vad gör Tor?",
       "ratt": "Berättar en saga",
       "fel": [
@@ -1168,13 +2032,13 @@
       "id": "lf-ak2-024",
       "niva": "ak2",
       "typ": "ordning",
-      "text": "Först öppnar de porten. Sen går de in i gården. Där möter dem en vänlig hund. Sist får de soppa.",
-      "fraga": "Vad möter dem i gården?",
-      "ratt": "En vänlig hund",
+      "text": "Först öppnar de porten. Sen går de in i gården. Där möter de en vänlig hund. Sist får de soppa.",
+      "fraga": "Vad händer sist?",
+      "ratt": "De får soppa",
       "fel": [
-        "En storm",
-        "En båt",
-        "En björn"
+        "De öppnar porten",
+        "De går in i gården",
+        "De möter hunden"
       ]
     },
     {
@@ -1282,6 +2146,422 @@
       ]
     },
     {
+      "id": "lf-ak2-033",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "Tove och Edvin bygger en flotte av torra stockar. Tove knyter repet. Edvin testar om flotten flyter vid stranden. Den bär dem båda.",
+      "fraga": "Vem testar om flotten flyter?",
+      "ratt": "Edvin",
+      "fel": [
+        "Tove",
+        "Hästen",
+        "Farfar"
+      ]
+    },
+    {
+      "id": "lf-ak2-034",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Efter leken hänger de våta handdukarna på strecket bakom stugan. Solen når strecket vid middag. På kvällen är handdukarna torra.",
+      "fraga": "Var hänger handdukarna?",
+      "ratt": "På strecket bakom stugan",
+      "fel": [
+        "I sjön",
+        "I ugnen",
+        "Under sängen"
+      ]
+    },
+    {
+      "id": "lf-ak2-035",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "I den gamla burken finns torkade lingon. De ska bli saft till festen. Locket sitter hårt men doften är söt.",
+      "fraga": "Vad finns i burken?",
+      "ratt": "Torkade lingon",
+      "fel": [
+        "Färska äpplen",
+        "Salt sill",
+        "Tomma kottar"
+      ]
+    },
+    {
+      "id": "lf-ak2-036",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet flotte betyder stockar som är bundna så att de flyter. Man kan åka på flotten. Det är inte en båt med köl.",
+      "fraga": "Vad betyder flotte?",
+      "ratt": "Stockar som är bundna så att de flyter",
+      "fel": [
+        "En båt med köl",
+        "En sten som sjunker",
+        "Ett hus på land"
+      ]
+    },
+    {
+      "id": "lf-ak2-037",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Gräset är böjt åt samma håll. Röken från stugan lutar åt samma håll. Löven driver över stigen.",
+      "fraga": "Vad går att säga om vinden?",
+      "ratt": "Det blåser",
+      "fel": [
+        "Det är vindstilla",
+        "Det regnar hårt",
+        "Solen har gått ner"
+      ]
+    },
+    {
+      "id": "lf-ak2-038",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Barnen tar små steg på stigen för att de inte vill halka. De håller i varandra. Bäcken hörs längre ner.",
+      "fraga": "Varför tar barnen små steg?",
+      "ratt": "De vill inte halka",
+      "fel": [
+        "De vill springa fort",
+        "Stigen är torr och jämn",
+        "De letar efter en båt"
+      ]
+    },
+    {
+      "id": "lf-ak2-039",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först sköljer de morötterna. Sen skivar de dem tunt. Därefter steker de skivorna i smör. Sist strör de lite salt.",
+      "fraga": "Vad gör de precis efter att de har skivat morötterna?",
+      "ratt": "Steker skivorna i smör",
+      "fel": [
+        "Strör salt",
+        "Sköljer morötterna",
+        "Lägger morötterna i ån"
+      ]
+    },
+    {
+      "id": "lf-ak2-040",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Noa fäller upp kartan på stubben. Ett rött kryss visar källan. Den blå linjen är bäcken.",
+      "fraga": "Vad visar det röda krysset?",
+      "ratt": "Källan",
+      "fel": [
+        "Bäcken",
+        "Byn",
+        "Berget"
+      ]
+    },
+    {
+      "id": "lf-ak2-041",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "När påsen går sönder ramlar äpplena ut. Leo plockar upp de flesta. Meja tar de två som rullat mot diket.",
+      "fraga": "Vem tar äpplena vid diket?",
+      "ratt": "Meja",
+      "fel": [
+        "Leo",
+        "Tor",
+        "Hästen"
+      ]
+    },
+    {
+      "id": "lf-ak2-042",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "De gömmer skattkartan i en plåtask. Asken ställs under den lösa golvplankan i lekstugan. Bara de två vet om det.",
+      "fraga": "Var ställs plåtasken?",
+      "ratt": "Under den lösa golvplankan",
+      "fel": [
+        "På taket",
+        "I brunnens vatten",
+        "I en båt"
+      ]
+    },
+    {
+      "id": "lf-ak2-043",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet källa betyder här ett ställe där vatten rinner upp ur marken. Vattnet är klart och kallt. Det är inte samma sak som en brunn med lock.",
+      "fraga": "Vad betyder källa här?",
+      "ratt": "Ett ställe där vatten rinner upp ur marken",
+      "fel": [
+        "En brunn med lock",
+        "En bok",
+        "Ett tak"
+      ]
+    },
+    {
+      "id": "lf-ak2-044",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Blomklasarna på syrenen är bruna och torra. Inga bin surrar där. Doften som fanns i maj är borta.",
+      "fraga": "Vad kan man säga om syrenens blomning?",
+      "ratt": "Den är över",
+      "fel": [
+        "Den pågår nu",
+        "Den doftar som mest",
+        "Klasarna är fortfarande knoppar"
+      ]
+    },
+    {
+      "id": "lf-ak2-045",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Ylletröjan kliar mot halsen. Tuva tar på en tunn tröja under. Då slutar det klia.",
+      "fraga": "Varför tar Tuva på en tunn tröja under?",
+      "ratt": "Ylletröjan kliar",
+      "fel": [
+        "Ylletröjan är för kall",
+        "Hon vill bli blöt",
+        "Den tunna tröjan kliar mer"
+      ]
+    },
+    {
+      "id": "lf-ak2-046",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först blötlägger de ärtorna. Sen kokar de dem mjuka. Därefter smakar de av med salt. Sist lägger de ärtorna i skålar.",
+      "fraga": "Vad gör de precis innan de smakar av med salt?",
+      "ratt": "Kokar ärtorna mjuka",
+      "fel": [
+        "Lägger ärtorna i skålar",
+        "Blötlägger ärtorna",
+        "Serverar saft"
+      ]
+    },
+    {
+      "id": "lf-ak2-047",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "En lapp på grinden säger att tjuren går i hagen. Barnen väljer vägen runt ängen. De vinkar till tjuren på avstånd.",
+      "fraga": "Vad säger lappen?",
+      "ratt": "Att tjuren går i hagen",
+      "fel": [
+        "Att hagen är tom",
+        "Att grinden är en bro",
+        "Att barnen ska gå rakt igenom"
+      ]
+    },
+    {
+      "id": "lf-ak2-048",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "Siri hör ett pip från busken. En liten fågelunge sitter där. Hon ropar på Tor, som lyfter ungen försiktigt tillbaka mot boet.",
+      "fraga": "Vem lyfter fågelungen?",
+      "ratt": "Tor",
+      "fel": [
+        "Siri",
+        "Räven",
+        "Katten"
+      ]
+    },
+    {
+      "id": "lf-ak2-049",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "De följer de vita pilarna målade på stenarna. Pilarna leder till en rastplats med bänk och bord. Därifrån syns hela dalen.",
+      "fraga": "Var leder de vita pilarna?",
+      "ratt": "Till en rastplats",
+      "fel": [
+        "Till en mörk källare",
+        "Ut i sjön",
+        "Upp på taket"
+      ]
+    },
+    {
+      "id": "lf-ak2-050",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet sluttning betyder en mark som lutar. Man går uppför eller nedför den. En slätt är däremot plan.",
+      "fraga": "Vad betyder sluttning?",
+      "ratt": "En mark som lutar",
+      "fel": [
+        "En helt plan slätt",
+        "Ett djupt hav",
+        "Ett rakt tak"
+      ]
+    },
+    {
+      "id": "lf-ak2-051",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Vattenkannan har en tunn isskorpa. Andedräkten syns som vit rök. Pölen på stigen har frusit.",
+      "fraga": "Hur är luften ute?",
+      "ratt": "Kall",
+      "fel": [
+        "Het som mitt i sommaren",
+        "Full av åska",
+        "Ljum och somrig"
+      ]
+    },
+    {
+      "id": "lf-ak2-052",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "De målar bänken för att träet ska skyddas mot regn. Penseln är bred och färgen är röd. När de är klara ställer de undan burken.",
+      "fraga": "Varför målar de bänken?",
+      "ratt": "Träet ska skyddas mot regn",
+      "fel": [
+        "Träet ska bli blött",
+        "Bänken ska stå inomhus",
+        "Färgen ska tvättas bort"
+      ]
+    },
+    {
+      "id": "lf-ak2-053",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först läser de receptet högt. Sen mäter de upp mjöl och mjölk. Därefter vispar de smeten. Sist gräddar de plättarna.",
+      "fraga": "Vad gör de precis före de vispar smeten?",
+      "ratt": "Mäter upp mjöl och mjölk",
+      "fel": [
+        "Gräddar plättarna",
+        "Läser receptet",
+        "Äter plättarna"
+      ]
+    },
+    {
+      "id": "lf-ak2-054",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Ugglan vrider huvudet mot ljudet. En kotte faller och studsar på stenen. Ugglan lyfter inte.",
+      "fraga": "Vad är det som faller?",
+      "ratt": "En kotte",
+      "fel": [
+        "En gren",
+        "Ett ägg",
+        "En lykta"
+      ]
+    },
+    {
+      "id": "lf-ak2-055",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Nyckeln till bodan hänger på en spik innanför köksdörren. Reservnyckeln ligger i en burk i skåpet. Idag använder de nyckeln på spiken.",
+      "fraga": "Var hänger nyckeln som de använder idag?",
+      "ratt": "På en spik innanför köksdörren",
+      "fel": [
+        "I en burk i skåpet",
+        "Under mattan",
+        "I bodans tak"
+      ]
+    },
+    {
+      "id": "lf-ak2-056",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "Axel ritar skylten. Nora spikar upp den vid vägskälet. Skylten pekar mot badplatsen.",
+      "fraga": "Vem spikar upp skylten?",
+      "ratt": "Nora",
+      "fel": [
+        "Axel",
+        "Tor",
+        "Bo"
+      ]
+    },
+    {
+      "id": "lf-ak2-057",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Badplatsen vid ån är stängd. En skylt säger att strömmen är stark efter regnet. Därför badar ingen idag.",
+      "fraga": "Varför är badplatsen stängd, enligt skylten?",
+      "ratt": "Strömmen är stark",
+      "fel": [
+        "Vattnet är stilla",
+        "Skylten säger att det är fritt",
+        "Ån är tom"
+      ]
+    },
+    {
+      "id": "lf-ak2-058",
+      "niva": "ak2",
+      "typ": "ord",
+      "text": "Ordet vägskäl betyder en plats där vägar delar sig. Man måste välja håll. Det är inte slutet på en väg.",
+      "fraga": "Vad betyder vägskäl?",
+      "ratt": "En plats där vägar delar sig",
+      "fel": [
+        "Slutet på en väg",
+        "En bro över havet",
+        "Ett hus utan dörr"
+      ]
+    },
+    {
+      "id": "lf-ak2-059",
+      "niva": "ak2",
+      "typ": "slutsats",
+      "text": "Koppen är varm på utsidan. Ånga stiger. Ingen dricker förrän den fått stå en stund.",
+      "fraga": "Hur är drycken just nu?",
+      "ratt": "För varm att dricka",
+      "fel": [
+        "Iskall",
+        "Redan uppdrucken",
+        "Frusen till is"
+      ]
+    },
+    {
+      "id": "lf-ak2-060",
+      "niva": "ak2",
+      "typ": "ordning",
+      "text": "Först sållar de bort småsten ur sanden. Sen fyller de hinken. Därefter vänder de hinken på stranden. Sist lyfter de hinken.",
+      "fraga": "Vad gör de sist?",
+      "ratt": "Lyfter hinken",
+      "fel": [
+        "Sållar bort sten",
+        "Fyller hinken",
+        "Vänder hinken"
+      ]
+    },
+    {
+      "id": "lf-ak2-061",
+      "niva": "ak2",
+      "typ": "vad",
+      "text": "Just nu hänger en stjärna av halm i fönstret. Den påminner om jul. Resten av året ligger den i en låda.",
+      "fraga": "Vad hänger i fönstret just nu?",
+      "ratt": "En stjärna av halm",
+      "fel": [
+        "En låda med halm",
+        "En stjärna av glas",
+        "En lampa av järn"
+      ]
+    },
+    {
+      "id": "lf-ak2-062",
+      "niva": "ak2",
+      "typ": "var",
+      "text": "Ekot hörs när de ropar mot bergväggen. Ljudet kommer tillbaka efter en kort stund. Det låter som om någon svarar.",
+      "fraga": "Varifrån kommer ljudet tillbaka?",
+      "ratt": "Från bergväggen",
+      "fel": [
+        "Från sjöns botten",
+        "Från källaren",
+        "Från en trumma"
+      ]
+    },
+    {
+      "id": "lf-ak2-063",
+      "niva": "ak2",
+      "typ": "vem",
+      "text": "Freja håller stegen. Milo byter den trasiga lyktan i farstun. Sen lyser lyktan igen.",
+      "fraga": "Vem byter lyktan?",
+      "ratt": "Milo",
+      "fel": [
+        "Freja",
+        "Farfar",
+        "Grannen"
+      ]
+    },
+    {
+      "id": "lf-ak2-064",
+      "niva": "ak2",
+      "typ": "varfor",
+      "text": "Hästen stannar vid bäcken. Den är törstig efter den långa vägen. Harald låter den dricka innan de går vidare.",
+      "fraga": "Varför stannar hästen vid bäcken?",
+      "ratt": "Den är törstig",
+      "fel": [
+        "Den är mätt på vatten",
+        "Bäcken är torr",
+        "Harald ber den springa förbi"
+      ]
+    },
+    {
       "id": "lf-ak3-001",
       "niva": "ak3",
       "typ": "vad",
@@ -1299,7 +2579,7 @@
       "niva": "ak3",
       "typ": "ordning",
       "text": "Bo, Mira och Tor delar på uppgifterna. Bo bakar, Mira hämtar vatten och Tor tänder elden. När maten är klar sätter de sig i en ring. De turas om att berätta korta sagor. Natten blir lugn.",
-      "fraga": "Vad händer efter att maten är klar?",
+      "fraga": "Vad gör de precis efter att maten är klar?",
       "ratt": "De sätter sig i en ring",
       "fel": [
         "Mira hämtar vatten",
@@ -1376,7 +2656,7 @@
       "id": "lf-ak3-008",
       "niva": "ak3",
       "typ": "vad",
-      "text": "Siv bär en kruka med honung över den smala bron. Hon går sakta för att inte spilla. En droppe faller i ån och fiskarna nyfiket tittar upp. På andra sidan väntar byborna. De ska baka sötbröd till festen.",
+      "text": "Siv bär en kruka med honung över den smala bron. Hon går sakta för att inte spilla. En droppe faller i ån och fiskarna tittar nyfiket upp. På andra sidan väntar byborna. De ska baka sötbröd till festen.",
       "fraga": "Vad ska byborna baka?",
       "ratt": "Sötbröd",
       "fel": [
@@ -1494,7 +2774,7 @@
       "niva": "ak3",
       "typ": "ordning",
       "text": "Först samlar de blåbär i korgar. Sen kokar de dem sakta till sylt. Därefter fyller de rena burkar. Burkarna märks med namn och dag. Sist ställs de svalt i skafferiet.",
-      "fraga": "Vad gör de efter att sylten kokat?",
+      "fraga": "Vad gör de precis efter att sylten har kokat?",
       "ratt": "Fyller rena burkar",
       "fel": [
         "Ställer burkar svalt",
@@ -1695,6 +2975,422 @@
         "De ska simma",
         "Det är sommarhett",
         "De ska fiska"
+      ]
+    },
+    {
+      "id": "lf-ak3-033",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "När dimman lättar syns två gestalter på sjön. Det är Lo som ror och Tyra som sitter vid fören och spanar. De letar efter tunnan som lossnade i natt. Lo håller en jämn takt så att Tyra kan peka.",
+      "fraga": "Vem spanar efter tunnan?",
+      "ratt": "Tyra",
+      "fel": [
+        "Lo",
+        "Farfar",
+        "En fiskare i en annan båt"
+      ]
+    },
+    {
+      "id": "lf-ak3-034",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Efter översvämningen flyttade myrorna sitt bo. Det nya boet ligger under en torr rot högt ovanför bäcken. Det gamla boet står fortfarande under vatten. Barnen märker ut det nya stället med en pinne så att ingen trampar där.",
+      "fraga": "Var ligger det nya myrboet?",
+      "ratt": "Under en torr rot högt ovanför bäcken",
+      "fel": [
+        "Under vatten vid det gamla stället",
+        "I barnens ficka",
+        "På bottnen av bäcken"
+      ]
+    },
+    {
+      "id": "lf-ak3-035",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "I dagboken från förra sommaren står det att bron var avstängd i tre dagar. Orsaken var en stock som kilat fast sig mot stödet. När stocken drogs loss kunde byborna gå över igen. Längst ner har någon ritat en liten bro och en sol.",
+      "fraga": "Vad var det som kilat fast sig mot brons stöd?",
+      "ratt": "En stock",
+      "fel": [
+        "En båt",
+        "En stenmur",
+        "En nyckel"
+      ]
+    },
+    {
+      "id": "lf-ak3-036",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet stöd betyder här den del som håller upp bron. Utan stöd kan bron inte bära någon. I texten är det inte samma sak som att stödja en vän med ord.",
+      "fraga": "Vad betyder stöd här?",
+      "ratt": "Den del som håller upp bron",
+      "fel": [
+        "Snälla ord till en vän",
+        "Ett segel",
+        "En fågel"
+      ]
+    },
+    {
+      "id": "lf-ak3-037",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Hanna räknar ringarna på stubben. Hon vet att varje ring är ett år och att ringarna närmast barken är de senaste åren. Närmast barken sitter fem ringar mycket tätt. Innanför dem är ringarna breda och ljusa. Täta ringar kommer av år med svag växt. De breda ringarna kommer av goda år.",
+      "fraga": "Hur var trädets senaste fem år?",
+      "ratt": "De var år med svag växt",
+      "fel": [
+        "De var år med stark växt",
+        "De går inte att tolka",
+        "De var trädets bästa år"
+      ]
+    },
+    {
+      "id": "lf-ak3-038",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Det har inte regnat på många veckor. Därför sparar byn på vattnet i brunnen. De vattnar bara örterna, inte gräset. Gräset kan gulna utan att dö, säger trädgårdsmästaren.",
+      "fraga": "Varför sparar byn på vattnet i brunnen?",
+      "ratt": "Det har inte regnat på många veckor",
+      "fel": [
+        "Det regnar varje dag",
+        "Brunnen är överfull",
+        "Örterna behöver inget vatten"
+      ]
+    },
+    {
+      "id": "lf-ak3-039",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först mäter de brunnens vatten med ett snöre och en sten. Sen skriver de talet i boken. Därefter jämför de med förra veckans tal. Sist bestämmer de hur mycket som får användas.",
+      "fraga": "Vad gör de precis innan de jämför med förra veckan?",
+      "ratt": "Skriver talet i boken",
+      "fel": [
+        "Bestämmer hur mycket som får användas",
+        "Mäter med snöre och sten",
+        "Stänger brunnen"
+      ]
+    },
+    {
+      "id": "lf-ak3-040",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "På den gamla kartan är sjön ritad större än den är idag. En notis i kanten säger att en vik grundades upp och blev äng. Korna betar nu där båtarna låg för femtio år sedan.",
+      "fraga": "Vad blev viken när den grundades upp?",
+      "ratt": "En äng",
+      "fel": [
+        "En djupare sjö",
+        "En bro",
+        "Ett berg"
+      ]
+    },
+    {
+      "id": "lf-ak3-041",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "Arvid har lovat att passa lammen. När ett lamm smiter genom glipan är det Arvid som springer efter och bär tillbaka det. Elsa håller grinden öppen så att han kommer in. Tillsammans räknar de sedan alla lammen.",
+      "fraga": "Vem springer efter lammet som smiter?",
+      "ratt": "Arvid",
+      "fel": [
+        "Elsa",
+        "Herden i byn",
+        "Hunden"
+      ]
+    },
+    {
+      "id": "lf-ak3-042",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "De hittar en gammal mjölkkanna i diket. Inuti ligger ett hoprullat brev, torrt trots regnet. Kannan har legat under en plåt som skyddat öppningen. Brevet är adresserat till byskolan.",
+      "fraga": "Var låg brevet?",
+      "ratt": "I mjölkkannan",
+      "fel": [
+        "I byskolan",
+        "Öppet i regnet",
+        "Under en sten i sjön"
+      ]
+    },
+    {
+      "id": "lf-ak3-043",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet glipa betyder en smal öppning. Ett lamm kan ta sig ut genom en glipa i stängslet. En hel grind är en mycket större öppning.",
+      "fraga": "Vad betyder glipa?",
+      "ratt": "En smal öppning",
+      "fel": [
+        "En hel grind",
+        "En stor sjö",
+        "Ett låst rum"
+      ]
+    },
+    {
+      "id": "lf-ak3-044",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Brevet är skrivet med bläck som har bleknat. Pappret är gult och sprött. Avsändaren hälsar till en lärare som slutade för längesedan, enligt en notis på skolans anslagstavla.",
+      "fraga": "Vad kan man säga om brevet?",
+      "ratt": "Det är gammalt",
+      "fel": [
+        "Det skrevs i morse",
+        "Det är tomt",
+        "Det är skrivet med färsk tusch"
+      ]
+    },
+    {
+      "id": "lf-ak3-045",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Barnen går inte nära boet i eken. En skylt ber besökare att hålla avstånd så att fåglarna inte störs. Ungarna är fortfarande kvar i boet. Gruppen stannar vid stigen och tittar med kikare.",
+      "fraga": "Varför ber skylten dem att hålla avstånd?",
+      "ratt": "Så att fåglarna inte störs",
+      "fel": [
+        "Så att ungarna ska lämna boet",
+        "För att boet är tomt",
+        "För att kikaren är trasig"
+      ]
+    },
+    {
+      "id": "lf-ak3-046",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först tar de på handskar. Sen lyfter de försiktigt den trasiga grenen från stigen. Därefter sågar de den i bitar som går att bära. Sist lägger de bitarna i vedboden.",
+      "fraga": "Vad gör de precis efter att grenen lyfts från stigen?",
+      "ratt": "Sågar den i bitar",
+      "fel": [
+        "Lägger bitarna i vedboden",
+        "Tar på handskar",
+        "Kastar den i sjön"
+      ]
+    },
+    {
+      "id": "lf-ak3-047",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Receptet säger tre deciliter mjölk, två ägg och ett äpple. De har mjölken och äggen hemma. Äpplet måste de hämta i förrådet. När allt står på bordet börjar de blanda.",
+      "fraga": "Vad måste de hämta i förrådet?",
+      "ratt": "Äpplet",
+      "fel": [
+        "Mjölken",
+        "Äggen",
+        "En påse salt"
+      ]
+    },
+    {
+      "id": "lf-ak3-048",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "Under utfärden delar de på rollerna. Melvin bär kartan och säger till när stigen delar sig. Tuva räknar att alla är med vid varje stopp. När en handske tappas är det Tuva som märker det först.",
+      "fraga": "Vem märker först att en handske tappas?",
+      "ratt": "Tuva",
+      "fel": [
+        "Melvin",
+        "Tor",
+        "Ekorren"
+      ]
+    },
+    {
+      "id": "lf-ak3-049",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Utsiktsplatsen ligger ovanför trädtopparna. En smal trappa av sten leder dit. Från plattformen ser man både kvarnen och sjöns utlopp. Nedanför trappan är sikten skymd av granar.",
+      "fraga": "Varifrån ser man både kvarnen och sjöns utlopp?",
+      "ratt": "Från plattformen",
+      "fel": [
+        "Nedanför trappan",
+        "Från sjöns botten",
+        "Inifrån kvarnen"
+      ]
+    },
+    {
+      "id": "lf-ak3-050",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet utlopp betyder stället där vattnet rinner ut ur en sjö. Där börjar ofta ett vattendrag. Det är motsatsen till ett inlopp där vatten rinner in.",
+      "fraga": "Vad betyder utlopp här?",
+      "ratt": "Stället där vattnet rinner ut ur en sjö",
+      "fel": [
+        "Stället där vatten rinner in",
+        "En torr stenöken",
+        "En stängd brunn på land"
+      ]
+    },
+    {
+      "id": "lf-ak3-051",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "Kvarnhjulet står stilla fastän ån är full. En bjälke har lagt sig mot skovlarna. När bjälken dras bort börjar hjulet vrida sig igen. Mjölnaren nickar nöjt.",
+      "fraga": "Vad visar det att hjulet börjar vrida sig när bjälken tas bort?",
+      "ratt": "Att bjälken hindrade hjulet",
+      "fel": [
+        "Att ån var tom",
+        "Att hjulet är trasigt för alltid",
+        "Att mjölnaren stoppade ån"
+      ]
+    },
+    {
+      "id": "lf-ak3-052",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "De tar av sig skorna innan de går in i verkstaden. Golvet är nyslipat och ska inte repas. En matta ligger innanför tröskeln för den som glömmer.",
+      "fraga": "Varför tar de av sig skorna?",
+      "ratt": "Golvet ska inte repas",
+      "fel": [
+        "Golvet är redan sönder",
+        "De ska måla skorna",
+        "Mattan är ute i regnet"
+      ]
+    },
+    {
+      "id": "lf-ak3-053",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först blöter de lädret så att det mjuknar. Sen skär de till en rem. Därefter slår de hål med en syl. Sist fäster de spännet.",
+      "fraga": "Vad gör de precis före de slår hål?",
+      "ratt": "Skär till en rem",
+      "fel": [
+        "Fäster spännet",
+        "Blöter lädret",
+        "Målar remmen röd"
+      ]
+    },
+    {
+      "id": "lf-ak3-054",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "På hyllan står tre burkar. Den röda innehåller linolja, den blå innehåller såpa och den gröna innehåller bivax. De tar den gröna när de ska gnida in träskeden.",
+      "fraga": "Vad innehåller den gröna burken?",
+      "ratt": "Bivax",
+      "fel": [
+        "Linolja",
+        "Såpa",
+        "Vatten"
+      ]
+    },
+    {
+      "id": "lf-ak3-055",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Träskeden får torka på en hylla ovanför bänken, inte i solen. Solen skulle göra träet skevt. Hyllan står i skuggan vid nordfönstret.",
+      "fraga": "Var får träskeden torka?",
+      "ratt": "På hyllan vid nordfönstret",
+      "fel": [
+        "I solen",
+        "I ugnen",
+        "Ute i regnet"
+      ]
+    },
+    {
+      "id": "lf-ak3-056",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "När sågen ska sättas undan är det Olle som lägger den högt. Lova når den inte och det är meningen. En lapp på lådan påminner om att en vuxen ska vara med. Olle är den vuxne i rummet.",
+      "fraga": "Vem lägger undan sågen?",
+      "ratt": "Olle",
+      "fel": [
+        "Lova",
+        "Alva",
+        "Besökaren"
+      ]
+    },
+    {
+      "id": "lf-ak3-057",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Lova får vänta med att såga. Sågen är vass och kan skada om den slinter. Hon övar i stället med en såg av trä som inte kan skära. Olle säger att övningen ändå lär henne greppet.",
+      "fraga": "Varför får Lova inte såga med den vassa sågen?",
+      "ratt": "Den kan skada om den slinter",
+      "fel": [
+        "Den är av trä och slö",
+        "Hon har redan sågat klart allt",
+        "Olle hittar inte sågen"
+      ]
+    },
+    {
+      "id": "lf-ak3-058",
+      "niva": "ak3",
+      "typ": "ord",
+      "text": "Ordet slinter betyder att ett verktyg glider fel. Då kan en vass såg träffa fel ställe. Ordet betyder inte att sågen sjunger.",
+      "fraga": "Vad betyder slinter?",
+      "ratt": "Glider fel",
+      "fel": [
+        "Sjunger vackert",
+        "Står helt stilla",
+        "Blir mjuk som tyg"
+      ]
+    },
+    {
+      "id": "lf-ak3-059",
+      "niva": "ak3",
+      "typ": "slutsats",
+      "text": "På morgonen är grinden på glänt. Spår av små klövar korsar grusgången och försvinner mot ängen. Spåren är lika små som getternas klövar. Höet i krubban är orört. På kvällen är alla getter inne igen, och en av dem har kardborrar i pälsen.",
+      "fraga": "Vad har hänt under dagen?",
+      "ratt": "Getterna har varit ute",
+      "fel": [
+        "Getterna har stått inne hela dagen",
+        "Höet är uppätet",
+        "Grinden har varit låst"
+      ]
+    },
+    {
+      "id": "lf-ak3-060",
+      "niva": "ak3",
+      "typ": "ordning",
+      "text": "Först räknar de getterna i hagen. Sen fyller de på vatten i baljan. Därefter borstar de den som har kardborrar. Sist stänger de grinden och drar för haspen.",
+      "fraga": "Vad gör de precis efter att vattnet är påfyllt?",
+      "ratt": "Borstar den som har kardborrar",
+      "fel": [
+        "Stänger grinden",
+        "Räknar getterna",
+        "Öppnar grinden på vid gavel"
+      ]
+    },
+    {
+      "id": "lf-ak3-061",
+      "niva": "ak3",
+      "typ": "vad",
+      "text": "Haspen är en träbit som vrids framför hålet. När den ligger på tvären kan grinden inte öppnas. När den vrids åt sidan går grinden upp. Barnen lämnar den alltid på tvären när de går.",
+      "fraga": "Vad gör haspen när den ligger på tvären?",
+      "ratt": "Håller grinden stängd",
+      "fel": [
+        "Öppnar grinden",
+        "Tar bort grinden",
+        "Låser upp ett fönster"
+      ]
+    },
+    {
+      "id": "lf-ak3-062",
+      "niva": "ak3",
+      "typ": "var",
+      "text": "Kartan över hagarna har ett veck mitt på. Öster om vecket är betet för getterna. Väster om vecket är betet för fåren. Bäcken är ritad som en blå tråd längs vecket.",
+      "fraga": "Var är getternas bete på kartan?",
+      "ratt": "Öster om vecket",
+      "fel": [
+        "Väster om vecket",
+        "Längs den blå tråden bara",
+        "Under kartan"
+      ]
+    },
+    {
+      "id": "lf-ak3-063",
+      "niva": "ak3",
+      "typ": "vem",
+      "text": "När ett får haltar tittar Ebba på klöven. Hon ser en liten sten som kilat fast sig. Ebba plockar bort stenen. Farbror Sven håller fåret stilla under tiden.",
+      "fraga": "Vem plockar bort stenen?",
+      "ratt": "Ebba",
+      "fel": [
+        "Farbror Sven",
+        "Fåret själv",
+        "Herden från grannbyn"
+      ]
+    },
+    {
+      "id": "lf-ak3-064",
+      "niva": "ak3",
+      "typ": "varfor",
+      "text": "Veden under taket är torr. Den utanför är blöt av regnet. De tar den torra för att elden ska ta sig. Den blöta sparas till en annan dag.",
+      "fraga": "Varför tar de den torra veden?",
+      "ratt": "Elden ska ta sig",
+      "fel": [
+        "Elden ska slockna",
+        "Den blöta brinner bäst",
+        "De ska bygga en båt"
       ]
     }
   ]

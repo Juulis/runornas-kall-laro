@@ -179,6 +179,63 @@ function assertMath(q: LearnQuestion): void {
     case 'gym-huvudrakning':
       assert.ok(a !== undefined && b !== undefined && res !== undefined && (res === a * b || res === a ** b));
       break;
+    case 'forskola-rakna':
+      assert.ok(res !== undefined && res >= 1 && res <= 10);
+      assert.equal(q.answer, String(res));
+      assert.match(q.prompt, /^Hur många /u);
+      assert.equal(q.speakLang, 'sv-SE');
+      break;
+    case 'forskola-efter':
+      assert.match(q.prompt, /^Vilket tal kommer efter (\d+)\?$/);
+      assert.equal(q.answer, String(res));
+      assert.equal(res, (a ?? -1) + 1);
+      break;
+    case 'ak1-talfoljd':
+      assert.ok(res !== undefined && res >= 0);
+      assert.equal(q.answer, String(res));
+      break;
+    case 'ak1-jamforelse':
+      assert.match(q.prompt, /^Vilket tal är (?:störst|minst): \d+ eller \d+\?$/);
+      assert.equal(q.answer, String(res));
+      break;
+    case 'ak2-dubbelt':
+      assert.equal(res, (a ?? 0) * 2);
+      break;
+    case 'ak2-halften':
+      assert.ok(a !== undefined && a % 2 === 0);
+      assert.equal(res, (a ?? 0) / 2);
+      break;
+    case 'ak2-klocka':
+      assert.match(q.answer, /^\d{1,2}:(?:00|30)$/);
+      break;
+    case 'ak3-tabell34':
+      assert.ok(a === 3 || a === 4);
+      assert.ok(b !== undefined && b >= 1 && b <= 10);
+      assert.equal(res, (a ?? 0) * (b ?? 0));
+      break;
+    case 'ak3-kronor':
+      assert.ok(res !== undefined && res >= 0);
+      assert.equal(q.answer, String(res));
+      break;
+    case 'ak46-avrundning':
+    case 'ak46-rektangel':
+      assert.equal(q.answer, String(res));
+      break;
+    case 'ak79-prioritet':
+      assert.equal(q.answer, String(res));
+      assert.equal(q.needsScratchpad, undefined);
+      break;
+    case 'ak79-procent':
+      assert.ok(res !== undefined && Number.isInteger(res) && res >= 0);
+      break;
+    case 'ak79-rot':
+      assert.equal(res, a);
+      assert.equal(b, (a ?? 0) ** 2);
+      break;
+    case 'gym-ekvation':
+      assert.equal(q.answer, String(res));
+      assert.equal(q.needsScratchpad, true);
+      break;
     default:
       assert.fail(`okänd matte-regel ${q.rule}`);
   }

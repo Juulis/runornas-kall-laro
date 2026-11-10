@@ -58,21 +58,11 @@ const math = generateQuestions({ count: 40, grade: 'forskola', subject: 'matte',
 const rules = new Set<string>();
 for (const q of math) {
   assert.equal(isValidQuestion(q), true, q.id);
-  assert.ok(q.rule === 'forskola-plus' || q.rule === 'forskola-minus', q.rule);
   rules.add(q.rule);
   const a = q.meta?.a;
   const b = q.meta?.b;
   const res = q.meta?.result;
-  assert.ok(a !== undefined && b !== undefined && res !== undefined);
-  assert.ok(a >= 0 && a <= 9 && b >= 0 && b <= 9, `${a} ${b}`);
-  assert.ok(res >= 0);
-  if (q.rule === 'forskola-plus') {
-    assert.ok(a + b <= 10);
-    assert.equal(res, a + b);
-  } else {
-    assert.ok(b <= a);
-    assert.equal(res, a - b);
-  }
+  assert.ok(res !== undefined && res >= 0);
   assert.equal(new Set(q.choices).size, 4);
   assert.equal(q.choices.filter((c) => c === q.answer).length, 1);
   for (const c of q.choices) {
@@ -81,8 +71,30 @@ for (const q of math) {
     assert.ok(n >= 0 && n <= 10, c);
   }
   assert.equal(q.speakLang, 'sv-SE');
+  assert.ok(q.speakText && q.speakText.length > 0);
+  if (q.rule === 'forskola-plus' || q.rule === 'forskola-minus') {
+    assert.ok(a !== undefined && b !== undefined);
+    assert.ok(a >= 0 && a <= 9 && b >= 0 && b <= 9, `${a} ${b}`);
+    if (q.rule === 'forskola-plus') {
+      assert.ok(a + b <= 10);
+      assert.equal(res, a + b);
+    } else {
+      assert.ok(b <= a);
+      assert.equal(res, a - b);
+    }
+  } else if (q.rule === 'forskola-rakna') {
+    assert.match(q.prompt, /^Hur många /u);
+    assert.ok(res >= 1 && res <= 10);
+    assert.equal(q.answer, String(res));
+  } else if (q.rule === 'forskola-efter') {
+    assert.match(q.prompt, /^Vilket tal kommer efter (\d+)\?$/);
+    assert.equal(res, (a ?? -1) + 1);
+    assert.equal(q.answer, String(res));
+  } else {
+    assert.fail(q.rule);
+  }
 }
-assert.equal(rules.size, 2, 'både plus och minus ska förekomma');
+assert.ok(rules.has('forskola-plus') && rules.has('forskola-minus'), 'både plus och minus ska förekomma');
 
 const enQs = generateQuestions({
   count: bankCount('engelska', 'forskola'),
