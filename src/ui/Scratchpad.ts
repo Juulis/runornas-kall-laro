@@ -9,18 +9,20 @@ const ERASER_PX = 22;
 const INK = '#1c140e';
 
 const CSS = `
-.rk-scratch{display:flex;flex-direction:column;gap:8px;box-sizing:border-box;padding:12px;border:4px solid #c7a35a;border-radius:18px;background:#1c1612;color:#efe7d2;max-width:100%}
+.rk-scratch{display:flex;flex-direction:column;gap:8px;box-sizing:border-box;padding:12px;border:4px solid #c7a35a;border-radius:18px;background:#1c1612;color:#efe7d2;max-width:100%;min-width:0;min-height:0}
 .rk-scratch[hidden]{display:none !important}
-.rk-scratch-title{margin:0;font:700 20px Cinzel,Georgia,serif;color:#e0b060}
-.rk-scratch-row{display:flex;flex-wrap:wrap;gap:6px}
+.rk-scratch-title{margin:0;flex:0 0 auto;font:700 20px Cinzel,Georgia,serif;color:#e0b060}
+.rk-scratch-row{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}
 .rk-scratch-row[hidden]{display:none !important}
 .rk-scratch-row button{flex:1 1 auto;min-height:44px;padding:6px 8px;border-radius:12px;border:2px solid #6b5a3e;background:#2a231c;color:#fff8e8;font:700 16px Cinzel,Georgia,serif;cursor:pointer}
 .rk-scratch-row button[aria-pressed="true"]{border-color:#e0b060;background:#3a2e18}
-.rk-scratch-frame{border:2px solid #6b5a3e;border-radius:12px;overflow:hidden;background:#fff6e4;min-width:0}
+.rk-scratch-frame{position:relative;display:flex;flex:1 1 auto;flex-direction:column;min-height:0;min-width:0;border:2px solid #6b5a3e;border-radius:12px;overflow:hidden;background:#fff6e4}
+.rk-scratch-pane{position:absolute;inset:0;display:flex;flex-direction:column;min-width:0;min-height:0}
 .rk-scratch-pane[hidden]{display:none !important}
-.rk-scratch-canvas{display:block;width:100%;height:220px;touch-action:none;background:#fff6e4;cursor:crosshair;user-select:none}
-.rk-scratch-note{display:block;width:100%;height:220px;box-sizing:border-box;margin:0;padding:10px;border:0;resize:none;background:#fff6e4;color:#1c140e;font:18px Georgia,serif}
-@media (max-width:1000px){.rk-scratch-canvas,.rk-scratch-note{height:120px}}
+.rk-scratch-canvas{display:block;width:100%;height:100%;flex:1 1 auto;min-height:0;touch-action:none;background:#fff6e4;cursor:crosshair;user-select:none}
+.rk-scratch-note{display:block;width:100%;height:100%;flex:1 1 auto;min-height:0;box-sizing:border-box;margin:0;padding:10px;border:0;resize:none;background:#fff6e4;color:#1c140e;font:18px Georgia,serif}
+.rk-scratch.rk-scratch-expanded{position:fixed;inset:12px;z-index:50;margin:0;width:auto !important;height:auto !important;max-width:none !important;max-height:none !important;min-width:0 !important;min-height:0 !important;flex:none !important}
+@media (max-width:1000px){.rk-scratch-frame,.rk-scratch-canvas,.rk-scratch-note{min-height:50vh}}
 `;
 
 type Tool = 'pen' | 'eraser';
@@ -78,6 +80,9 @@ export class Scratchpad {
   private readonly textBtn: HTMLButtonElement;
   private readonly penBtn: HTMLButtonElement;
   private readonly eraseBtn: HTMLButtonElement;
+  private readonly expandBtn: HTMLButtonElement;
+  private readonly frame: HTMLDivElement;
+  private resizeObserver: ResizeObserver | null = null;
   private tool: Tool = 'pen';
   private dpr = 1;
   private activePointer: number | null = null;
@@ -100,9 +105,12 @@ export class Scratchpad {
     this.textBtn.setAttribute('aria-pressed', 'false');
     const clearBtn = button('Sudda', () => this.clearContent());
     clearBtn.setAttribute('aria-label', 'Sudda allt');
+    this.expandBtn = button('Större', () => this.toggleExpanded());
+    this.expandBtn.setAttribute('aria-label', 'Gör kladdrutan större');
+    this.expandBtn.setAttribute('aria-pressed', 'false');
     const modes = document.createElement('div');
     modes.className = 'rk-scratch-row';
-    modes.append(this.drawBtn, this.textBtn, clearBtn);
+    modes.append(this.drawBtn, this.textBtn, clearBtn, this.expandBtn);
 
     this.penBtn = button('Penna', () => this.setTool('pen'));
     this.penBtn.setAttribute('aria-pressed', 'true');
@@ -132,22 +140,24 @@ export class Scratchpad {
     this.textPane.hidden = true;
     this.textPane.append(this.note);
 
-    const frame = document.createElement('div');
-    frame.className = 'rk-scratch-frame';
-    frame.append(this.drawPane, this.textPane);
+    this.frame = document.createElement('div');
+    this.frame.className = 'rk-scratch-frame';
+    this.frame.append(this.drawPane, this.textPane);
 
-    this.root.append(title, modes, this.drawTools, frame);
+    this.root.append(title, modes, this.drawTools, this.frame);
     this.bindPointer();
     this.root.hidden = true;
   }
 
-  /** Tömmer rityta och text. Nästa fråga börjar i ritläge med pennan. */
+  /** Tömmer rityta och text. Nästa fråga börjar i ritläge med pennan och vanlig storlek. */
   clear(): void {
+    this.setExpanded(false);
     this.clearContent();
     this.setMode('draw');
   }
 
   setVisible(visible: boolean): void {
+    if (!visible) this.setExpanded(false);
     this.root.hidden = !visible;
     if (visible) this.fitCanvas();
   }
@@ -159,6 +169,8 @@ export class Scratchpad {
     this.canvas.removeEventListener('pointercancel', this.onUp);
     this.canvas.removeEventListener('lostpointercapture', this.onLostCapture);
     window.removeEventListener('resize', this.onResize);
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
     this.root.remove();
   }
 
@@ -195,6 +207,33 @@ export class Scratchpad {
     this.canvas.addEventListener('contextmenu', (ev) => ev.preventDefault());
     this.canvas.addEventListener('dragstart', (ev) => ev.preventDefault());
     window.addEventListener('resize', this.onResize);
+    this.watchFrame();
+  }
+
+  /** jsdom saknar ResizeObserver. Ritytan följer ramen även när bara layouten ändras. */
+  private watchFrame(): void {
+    const Ctor = window.ResizeObserver;
+    if (typeof Ctor !== 'function') return;
+    this.resizeObserver = new Ctor(() => {
+      if (!this.root.hidden) this.fitCanvas();
+    });
+    this.resizeObserver.observe(this.frame);
+  }
+
+  private toggleExpanded(): void {
+    this.setExpanded(!this.root.classList.contains('rk-scratch-expanded'));
+  }
+
+  private setExpanded(on: boolean): void {
+    const expanded = this.root.classList.contains('rk-scratch-expanded');
+    if (expanded === on) return;
+    this.root.classList.toggle('rk-scratch-expanded', on);
+    this.expandBtn.textContent = on ? 'Mindre' : 'Större';
+    this.expandBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    this.expandBtn.setAttribute('aria-label', on ? 'Gör kladdrutan mindre' : 'Gör kladdrutan större');
+    this.activePointer = null;
+    this.last = null;
+    if (!this.root.hidden) this.fitCanvas();
   }
 
   private readonly onResize = (): void => {
@@ -272,12 +311,13 @@ export class Scratchpad {
     return { x: ev.offsetX, y: ev.offsetY };
   }
 
-  /** Bitmap i CSS-pixlar. Ändrad storlek kopierar det som redan är ritat. */
+  /** Bitmap i CSS-pixlar. Ändrad storlek kopierar det som redan är ritat. Nollstorlek (dold ruta) lämnas ifred. */
   private fitCanvas(): void {
     const canvas = this.canvas;
     const rect = canvas.getBoundingClientRect();
-    const cssW = Math.max(1, Math.round(rect.width || canvas.clientWidth || 280));
-    const cssH = Math.max(1, Math.round(rect.height || canvas.clientHeight || 220));
+    const cssW = Math.round(rect.width || canvas.clientWidth);
+    const cssH = Math.round(rect.height || canvas.clientHeight);
+    if (cssW < 2 || cssH < 2) return;
     const dpr = Math.min(Math.max(window.devicePixelRatio || 1, 1), 3);
     const bw = Math.max(1, Math.round(cssW * dpr));
     const bh = Math.max(1, Math.round(cssH * dpr));

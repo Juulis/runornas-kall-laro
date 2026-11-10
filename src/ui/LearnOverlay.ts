@@ -19,7 +19,7 @@ const CSS = `
 #rk-learn-settings .learn-links button:hover{border-color:#c7a35a;color:#efe7d2}
 #rk-learn-settings .learn-links button:focus-visible{outline:3px solid #c7a35a;outline-offset:2px}
 #rk-learn-quiz{position:fixed;inset:0;z-index:35;display:flex;align-items:center;justify-content:center;background:rgba(12,8,6,.72);padding:24px}
-#rk-learn-quiz.rk-with-scratch{align-items:flex-start;overflow:auto}
+#rk-learn-quiz.rk-with-scratch{--rk-quiz-pad:16px;align-items:stretch;justify-content:center;overflow:visible;padding:var(--rk-quiz-pad)}
 #rk-learn-quiz.hidden,#rk-learn-settings.hidden{display:none}
 #rk-learn.quiz-open #rk-learn-level,#rk-learn.quiz-open #rk-learn-settings{display:none}
 .rk-q-card{width:min(640px,100%);background:#1c1612;border:4px solid #c7a35a;border-radius:18px;padding:28px 24px;box-shadow:0 12px 40px #000}
@@ -66,11 +66,24 @@ const CSS = `
 .rk-q-feedback.bad{color:#ffb089}
 .rk-q-layout{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;min-width:0;box-sizing:border-box}
 .rk-q-layout>.rk-q-card{min-width:0}
-.rk-q-layout>.rk-scratch{flex:0 0 280px;width:280px;max-width:100%}
+#rk-learn-quiz.rk-with-scratch>.rk-q-layout{flex:1 1 auto;align-items:stretch;width:100%;height:calc(100vh - 2 * var(--rk-quiz-pad));max-height:calc(100vh - 2 * var(--rk-quiz-pad));min-height:0}
+#rk-learn-quiz.rk-with-scratch .rk-q-layout>.rk-q-card{box-sizing:border-box;flex:1 1 0;width:auto;max-width:none;min-width:0;height:auto;max-height:100%;align-self:center}
+#rk-learn-quiz.rk-with-scratch .rk-q-layout>.rk-scratch{box-sizing:border-box;flex:1 1 0;width:auto;max-width:none;min-width:0;height:calc(100vh - 2 * var(--rk-quiz-pad));max-height:calc(100vh - 2 * var(--rk-quiz-pad));align-self:stretch}
+@media (min-width:1001px){
+  #rk-learn-quiz.rk-with-scratch .rk-q-card{padding:16px 16px}
+  #rk-learn-quiz.rk-with-scratch .rk-q-head{margin:6px 0 10px}
+  #rk-learn-quiz.rk-with-scratch .rk-q-prompt{font-size:clamp(22px,2.2vw,32px)}
+  #rk-learn-quiz.rk-with-scratch .rk-q-speak{font-size:28px;min-width:52px;min-height:52px}
+  #rk-learn-quiz.rk-with-scratch .rk-q-choices{gap:8px}
+  #rk-learn-quiz.rk-with-scratch .rk-q-choices button{font-size:clamp(18px,2vw,26px);padding:10px 12px}
+  #rk-learn-quiz.rk-with-scratch .rk-q-submit{font-size:clamp(22px,2.6vw,34px);padding:12px 14px;margin-top:10px}
+}
 @media (max-width:1000px){
-  #rk-learn-quiz.rk-with-scratch{padding:12px}
-  .rk-q-layout{flex-direction:column;align-items:center}
-  .rk-q-layout>.rk-scratch{flex:0 0 auto;width:min(640px,100%);max-width:640px}
+  #rk-learn-quiz.rk-with-scratch{align-items:flex-start;justify-content:flex-start;overflow:auto;padding:12px}
+  #rk-learn-quiz.rk-with-scratch>.rk-q-layout{flex:0 0 auto;flex-direction:column;align-items:stretch;height:auto;max-height:none}
+  #rk-learn-quiz.rk-with-scratch .rk-q-layout>.rk-q-card{flex:0 0 auto;width:100%;max-width:100%;max-height:none;align-self:stretch}
+  #rk-learn-quiz.rk-with-scratch .rk-q-layout>.rk-scratch{flex:0 0 auto;width:100%;max-width:100%;height:auto;max-height:none}
+  .rk-q-layout{flex-direction:column;align-items:stretch}
 }
 `;
 
@@ -308,9 +321,9 @@ export class LearnOverlay {
     });
     // Frågan läses aldrig upp av sig själv (#24). Lyssna-knappen eller högtalaren läser när barnet trycker.
     const hard = isHardQuestion(q);
+    this.quiz.classList.toggle('rk-with-scratch', hard);
     this.scratch.clear();
     this.scratch.setVisible(hard);
-    this.quiz.classList.toggle('rk-with-scratch', hard);
   }
 
   /** Visar lyssningstexten efter svar. Hjälptexten tas bort så den inte ligger kvar bredvid texten. */
