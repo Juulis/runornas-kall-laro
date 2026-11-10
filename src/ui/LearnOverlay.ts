@@ -1,6 +1,6 @@
 import { isHardQuestion } from '../learn/hardQuestion';
 import { readAloudOf } from '../learn/settings';
-import { answerSpeech, canSpeak, choiceSpeech, questionUtterance, speak, cancel } from '../learn/speech';
+import { canSpeak, questionUtterance, speak, cancel } from '../learn/speech';
 import type { LearnQuestion, LearnSettings } from '../learn/types';
 import { buildLearnFields, setLearnFieldValues } from './learnDom';
 import { Scratchpad } from './Scratchpad';
@@ -333,7 +333,7 @@ export class LearnOverlay {
     this.revealPassage();
   }
 
-  /** Fel svar: valen stannar kvar, rätt alternativ blir grönt, och svaret läses upp (inte vid rättstavning). */
+  /** Fel svar: valen stannar kvar och rätt alternativ blir grönt. Inget tal, bara ljudknappen eller Lyssna. */
   showWrong(q: LearnQuestion, chosenIndex: number): void {
     this.current = q;
     this.disableChoices();
@@ -346,8 +346,6 @@ export class LearnOverlay {
       btn.classList.toggle('wrong', i === chosenIndex && !correct);
       btn.classList.remove('selected');
     });
-    const uttered = answerSpeech(q);
-    if (uttered) speak(uttered.text, uttered.lang);
   }
 
   /** Punkt nära frågekortet, så en senare stjärna kan flyga därifrån. */
@@ -397,6 +395,7 @@ export class LearnOverlay {
     speak(uttered.text, uttered.lang);
   }
 
+  /** Markerar valet tyst. Tal kommer bara från ljudknappen eller Lyssna. */
   private selectChoice(index: number): void {
     const btn = this.choices[index];
     if (!btn || btn.disabled) return;
@@ -407,10 +406,6 @@ export class LearnOverlay {
       choice.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
     this.submitBtn.disabled = false;
-    const q = this.current;
-    if (!q) return;
-    const uttered = choiceSpeech(q, index);
-    if (uttered) speak(uttered.text, uttered.lang);
   }
 
   private bindChoice(btn: HTMLButtonElement, index: number): void {

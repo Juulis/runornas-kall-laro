@@ -9,7 +9,7 @@ import horforstaelse from '../src/data/fragor_horforstaelse.json';
 import { bankCount, bankSubjectsFor, ensureBank } from '../src/learn/bank';
 import { LISTEN_REVEAL_S, LearnEncounter } from '../src/learn/LearnEncounter';
 import { generateQuestions, questionsForEncounter } from '../src/learn/questions';
-import { answerSpeech, canSpeak, choiceSpeech, questionUtterance } from '../src/learn/speech';
+import { canSpeak, questionUtterance } from '../src/learn/speech';
 import { GRADES, isValidQuestion, type GradeId, type LearnQuestion } from '../src/learn/types';
 import { LearnOverlay } from '../src/ui/LearnOverlay';
 import { buildLearnFields } from '../src/ui/learnDom';
@@ -156,14 +156,7 @@ const svQ = generateQuestions({ count: 12, grade: 'ak1', subject: 'horforstaelse
 assert.ok(enQ);
 assert.ok(svQ);
 assert.equal(questionUtterance(enQ).lang, 'en-US');
-assert.equal(choiceSpeech(enQ, 0)?.lang, 'en-US');
-assert.equal(choiceSpeech(enQ, 0)?.text, enQ.choices[0]);
-const enAnswer = answerSpeech(enQ);
-assert.ok(enAnswer);
-assert.equal(enAnswer.lang, 'en-US');
-assert.equal(enAnswer.text, enQ.answer);
-assert.equal(choiceSpeech(svQ, 1)?.lang, 'sv-SE');
-assert.equal(answerSpeech(svQ)?.lang, 'sv-SE');
+assert.equal(questionUtterance(svQ).lang, 'sv-SE');
 
 let sawHorAk1 = false;
 let sawLasAk1 = false;
@@ -302,13 +295,29 @@ try {
   assert.equal(spoken[0]?.lang, 'sv-SE');
   assert.equal(spoken[0]?.text, svQ.speakText);
   assert.equal(listen.textContent, 'Lyssna igen');
+  const beforeChoice = spoken.length;
+  const horChoice = overlay.root.querySelector('.rk-q-choices button');
+  assert.ok(horChoice instanceof HTMLButtonElement);
+  horChoice.dispatchEvent(new Event('pointerenter'));
+  horChoice.dispatchEvent(new Event('pointerdown'));
+  horChoice.dispatchEvent(new Event('focus'));
+  horChoice.click();
+  assert.equal(horChoice.classList.contains('selected'), true);
+  assert.equal(spoken.length, beforeChoice, 'val i hörförståelse är tyst');
 
+  const beforeWrong = spoken.length;
   overlay.showWrong(svQ, (svQ.correctIndex + 1) % 4);
+  assert.equal(spoken.length, beforeWrong, 'fel svar läses inte upp');
   assert.equal(passageEl.hidden, false);
   assert.equal(passageEl.textContent, svQ.passage);
   assert.equal(passageEl.lang, 'sv');
   assert.equal(hint.hidden, true);
   assert.match(overlay.root.querySelector('.rk-q-feedback')?.textContent ?? '', /Rätt svar var:/);
+  listen.click();
+  assert.equal(spoken.length, beforeWrong + 1, 'Lyssna igen läser fortfarande');
+  assert.equal(spoken[spoken.length - 1]?.text, svQ.speakText);
+  assert.equal(spoken[spoken.length - 1]?.lang, 'sv-SE');
+  assert.equal(listen.textContent, 'Lyssna igen');
 
   overlay.showQuestion(enQ, 0, 1);
   assert.equal(passageEl.textContent, '');
