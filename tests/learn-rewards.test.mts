@@ -25,6 +25,7 @@ import {
   starsPerCorrect,
   streakFlameKind,
   type RewardState,
+  encounterPassThreshold,
 } from '../src/learn/rewards';
 import {
   MAX_ANSWER_MS,
@@ -481,12 +482,12 @@ earned(
       rule: 'ak1-plus',
       durationMs: 10,
       encounterDone: true,
-      encounterCorrect: 1,
+      encounterCorrect: 2,
       now: day1,
     },
     store,
   );
-  assert.equal(loadRewards(store, day1).champions_ok, 0);
+  assert.equal(loadRewards(store, day1).champions_ok, 0, '2 av 4 räcker inte för champion');
   for (let i = 0; i < 2; i++) {
     recordLearnAnswer(
       {
@@ -497,7 +498,7 @@ earned(
         rule: 'ak1-plus',
         durationMs: 10,
         encounterDone: true,
-        encounterCorrect: 2,
+        encounterCorrect: 3,
         now: day1,
       },
       store,
@@ -513,7 +514,7 @@ earned(
       rule: 'ak1-plus',
       durationMs: 10,
       encounterDone: true,
-      encounterCorrect: 2,
+      encounterCorrect: 3,
       now: day1,
     },
     store,
@@ -532,12 +533,12 @@ earned(
       rule: 'ak1-plus',
       durationMs: 10,
       encounterDone: true,
-      encounterCorrect: 3,
+      encounterCorrect: 4,
       now: day1,
     },
     store,
   );
-  assert.equal(loadRewards(store, day1).bossar_ok, 0);
+  assert.equal(loadRewards(store, day1).bossar_ok, 0, '4 av 6 räcker inte för boss');
   recordLearnAnswer(
     {
       correct: true,
@@ -562,7 +563,7 @@ earned(
       rule: 'slutsats',
       durationMs: 1200,
       encounterDone: true,
-      encounterCorrect: 4,
+      encounterCorrect: 5,
       now: day1,
     },
     store,
@@ -925,3 +926,7 @@ installDom();
 }
 
 console.log('learn-rewards.test.mts: ok');
+
+// Trösklarna följer antalet frågor per möte (normal 3, champion 4, boss 6).
+assert.equal(encounterPassThreshold('champion'), 3);
+assert.equal(encounterPassThreshold('boss'), 5);

@@ -11,7 +11,7 @@ export function buildLearnFields(current: LearnSettings, onChange: (s: LearnSett
   const subjectSel = el('select', { 'aria-label': 'Ämne' });
   for (const s of SUBJECTS) subjectSel.append(el('option', { value: s.id, text: s.label }));
   subjectSel.value = current.subject;
-  const readBox = el('input', { type: 'checkbox', 'aria-label': 'Läs upp frågor' });
+  const readBox = el('input', { type: 'checkbox', 'aria-label': 'Visa ljudknapp' });
   readBox.checked = readAloudOf(current);
   const emit = (): void => {
     if (!isGradeId(gradeSel.value) || !isSubjectId(subjectSel.value)) return;
@@ -36,7 +36,7 @@ export function buildLearnFields(current: LearnSettings, onChange: (s: LearnSett
     { class: 'learn-setup' },
     el('label', {}, el('span', { text: 'Nivå' }), gradeSel),
     el('label', {}, el('span', { text: 'Ämne' }), subjectSel),
-    el('label', { class: 'learn-read' }, readBox, el('span', { text: 'Läs upp frågor' })),
+    el('label', { class: 'learn-read' }, readBox, el('span', { text: 'Visa ljudknapp 🔊' })),
   );
 }
 

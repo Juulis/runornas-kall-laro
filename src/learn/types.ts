@@ -85,10 +85,11 @@ export function choiceMatchesAnswer(choice: string, answer: string): boolean {
   return choice.endsWith(` ${answer}`);
 }
 
+/** Antal frågor i mötet. Vanliga möten är en mini-fighter, boss tar längst. */
 export function questionCount(kind: EncounterKind): number {
-  if (kind === 'boss') return 5;
-  if (kind === 'champion') return 3;
-  return 1;
+  if (kind === 'boss') return 6;
+  if (kind === 'champion') return 4;
+  return 3;
 }
 
 export function encounterKindOf(monster: { boss: boolean; elite?: string | null }): EncounterKind {
