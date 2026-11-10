@@ -4,6 +4,7 @@ import type { MonsterAttack } from '../entities/MonsterDefs';
 import type { MonsterFactory } from '../entities/MonsterFactory';
 import { dirIndex } from '../render/Assets';
 import { Iso } from '../render/Iso';
+import { isCampFieldUid, keepOutsideSafeRadius } from '../world/bigWorld/campMonsterField';
 import type { CombatSystem } from './CombatSystem';
 import type { World } from './World';
 
@@ -174,12 +175,10 @@ export class MonsterAI {
       m.kb.x *= decay;
       m.kb.y *= decay;
       w.zone.collide(m.pos, m.radius);
-      if (w.zone.safeRadius && !aggro) {
-        const r = Math.hypot(m.pos.x, m.pos.y);
-        if (r < w.zone.safeRadius && r > 0) {
-          m.pos.x *= w.zone.safeRadius / r;
-          m.pos.y *= w.zone.safeRadius / r;
-        }
+      // Vanliga monster puttas ut bara när de vandrar. Lägerflocken stannar utanför gläntan även i jakt,
+      // annars springer de in till elden och frågerutan täcker lägret innan man hunnit gå.
+      if (w.zone.safeRadius && (!aggro || isCampFieldUid(m.uid ?? ''))) {
+        keepOutsideSafeRadius(m.pos, w.zone.safeCenter, w.zone.safeRadius);
       }
       if (m.boss && !m.active) {
         m.pos.x = m.home.x;

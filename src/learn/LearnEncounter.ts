@@ -16,6 +16,7 @@ import { questionsForEncounter } from './questions';
 import { loadRewards } from './rewards';
 import { recordLearnAnswer } from './rewardEvents';
 import { encounterKindOf, type LearnQuestion, type LearnSettings } from './types';
+import { smokeQueryEnabled } from '../dev/smokeGate';
 
 /** Rätt svar: kort glad hjälte-attack. */
 export const FIGHT_S = 1.25;
@@ -234,6 +235,8 @@ export class LearnEncounter {
   }
 
   private tryStart(): void {
+    // Röktestets chunkbyte går till fots från lägret; utan detta låser vargarna gången i en fråga.
+    if (smokeQueryEnabled()) return;
     if (this.blocksMovement() || this.blocked()) return;
     const w = this.w();
     const h = w.hero;

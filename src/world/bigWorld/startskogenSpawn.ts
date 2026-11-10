@@ -1,6 +1,7 @@
 import type { Vec2 } from '../../core/GameContext';
 import type { SpawnSpec } from '../../systems/SpawnSystem';
 import type { World } from '../../systems/World';
+import { campMonsterSpecs, isCampFieldUid } from './campMonsterField';
 import { worldToChunk } from './bigWorldCoords';
 import { isLegacyOnlySpawnChunk, runglantanWorldCenter } from './startskogenFootprint';
 
@@ -38,12 +39,18 @@ export function mapStartskogenSpecsToQueue(w: World, specs: readonly SpawnSpec[]
 export function ensureStartskogenSpawnQueue(w: World, roll: () => SpawnSpec[]): void {
   if (!w.zone.bigWorldStreaming) return;
   if (w.spawnQueue.length > 0) return;
-  w.spawnQueue = mapStartskogenSpecsToQueue(w, roll());
+  const legacy = mapStartskogenSpecsToQueue(w, roll());
+  const camp = campMonsterSpecs(w.session.seed).map((s) => ({
+    spec: s,
+    pos: { x: s.pos[0], y: s.pos[1] },
+    done: false,
+  }));
+  w.spawnQueue = [...legacy, ...camp];
 }
 
-/** När legacy-monster despawnas (ej dödade) ska spawnkön kunna instansiera igen. */
+/** När legacy- eller läger-monster despawnas (ej dödade) ska spawnkön kunna instansiera igen. */
 export function releaseStartskogenQueueSlot(w: World, uid: string): void {
-  if (!uid.startsWith('startskogen:')) return;
+  if (!uid.startsWith('startskogen:') && !isCampFieldUid(uid)) return;
   if (w.session.killed.has(uid)) return;
   for (const q of w.spawnQueue) {
     if (q.spec.uid === uid) q.done = false;

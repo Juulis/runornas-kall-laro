@@ -10,6 +10,7 @@ import { ForestGroundChunks } from './ForestGroundChunks';
 import { BIG_WORLD_STREAMING_ENABLED } from './bigWorld/bigWorldConfig';
 import { bigWorldCityPortalWorld } from './bigWorld/bigWorldPortals';
 import { bigWorldRuntime } from './bigWorld/runtime';
+import { CAMP_SAFE_RADIUS, campFirePos } from './bigWorld/campMonsterField';
 import { campStartPos } from './bigWorld/startskogenFootprint';
 import { applyStartskogenAnchor } from './bigWorld/startskogenSpawn';
 import {
@@ -144,7 +145,8 @@ export class ZoneFactory {
     const { BigWorldStreamGround } = bigWorldRuntime();
     const zone = new Zone('forest', 'startskogen', 4096, 4096);
     zone.bigWorldStreaming = true;
-    zone.safeRadius = FOREST_SAFE_RADIUS;
+    zone.safeRadius = CAMP_SAFE_RADIUS;
+    zone.safeCenter = campFirePos();
     zone.entry = campStartPos();
     const ground = new BigWorldStreamGround(this.assets);
     const decor: Container[] = [];
