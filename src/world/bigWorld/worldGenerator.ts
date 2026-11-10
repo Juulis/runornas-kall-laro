@@ -175,10 +175,9 @@ function rollChunkSpawns(
   const out: BigWorldSpawnRoll[] = [];
   const fixed = DATA.monsterLevels.fixed_levels ?? {};
   const levelBonus = DATA.monsterLevels.elites.champion.level_bonus;
-  let championUsed = false;
   let guard = 0;
   const place = (id: string, makeChamp: boolean): boolean => {
-    for (let attempt = 0; attempt < 8; attempt++) {
+    for (let attempt = 0; attempt < 40; attempt++) {
       const localX = rng.float(8, tileSize - 8);
       const localY = rng.float(8, tileSize - 8);
       const nearRoad = spawnTileNearRoad(localX, localY, cx, cy, roadIds, hasRoadAtTile);
@@ -196,13 +195,26 @@ function rollChunkSpawns(
     }
     return false;
   };
+  // Mellanmark: en familj, utspridd över chunken. Högst en liten championflock.
+  if (mellanmark) {
+    const enemy = weightedSubtype(rng, allowed);
+    const champs = ring >= champ.minRing && rng.chance(champ.chance) ? Math.min(3, target) : 0;
+    let left = champs;
+    while (out.length < target && guard < target * 24) {
+      guard++;
+      const asChamp = left > 0;
+      if (!place(enemy, asChamp)) continue;
+      if (asChamp) left--;
+    }
+    return out;
+  }
   while (out.length < target && guard < Math.max(target * 16, 16)) {
     guard++;
     const remaining = target - out.length;
-    let size = mellanmark ? remaining : rng.int([1, Math.min(GROUP_MAX, remaining)]);
+    let size = rng.int([1, Math.min(GROUP_MAX, remaining)]);
     const enemy = weightedSubtype(rng, allowed);
     const members: string[] = [];
-    if (!mellanmark && isPackLeader(enemy) && remaining >= GROUP_MAX) {
+    if (isPackLeader(enemy) && remaining >= GROUP_MAX) {
       size = GROUP_MAX;
       const follower = nearestLowerSameFamily(enemy, allowed);
       members.push(enemy);
@@ -210,16 +222,11 @@ function rollChunkSpawns(
     } else {
       for (let i = 0; i < size; i++) members.push(enemy);
     }
-    const canChamp = mellanmark && ring >= champ.minRing && !championUsed;
-    const makeChamp = canChamp && rng.chance(champ.chance);
-    const before = out.length;
     for (const id of members) {
       if (out.length >= target) break;
       let placed = false;
-      for (let t = 0; t < 12 && !placed; t++) placed = place(id, makeChamp);
+      for (let t = 0; t < 12 && !placed; t++) placed = place(id, false);
     }
-    if (makeChamp && out.length > before) championUsed = true;
-    if (mellanmark) break;
   }
   return out;
 }

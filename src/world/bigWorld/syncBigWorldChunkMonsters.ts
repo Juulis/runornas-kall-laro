@@ -6,6 +6,7 @@ import type { SpawnSpec } from '../../systems/SpawnSystem';
 import type { ChunkWorldCache } from './chunkCache';
 import { chunkSpawnToWorld, parseBigWorldSpawnUid, worldToChunk } from './bigWorldCoords';
 import { BIG_WORLD_MONSTER_SPAWN_BUDGET } from './bigWorldConfig';
+import { isCampFieldUid } from './campMonsterField';
 import { releaseStartskogenQueueSlot } from './startskogenSpawn';
 
 function bwSpec(uid: string, enemy: string, level: number, elite: SpawnSpec['elite'] = null): SpawnSpec {
@@ -59,6 +60,7 @@ function refreshLiveUids(w: World): Set<string> {
 function isStreamedMonsterUid(uid: string): boolean {
   if (parseBigWorldSpawnUid(uid)) return true;
   if (uid.startsWith('startskogen:')) return true;
+  if (isCampFieldUid(uid)) return true;
   return false;
 }
 

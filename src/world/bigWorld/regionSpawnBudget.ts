@@ -6,7 +6,13 @@ import { resolveRegionAtChunk } from './regionIndex';
 
 export type RegionTathet = number | readonly [number, number] | { monster_per_game?: number; kalla?: string };
 
-export function regionMonsterPerGame(region: BigWorldRegion, ring: number, data: BigWorldDataFile): number {
+/**
+ * JSON-talen är en total per region, utspridd på chunkar à 128 enheter.
+ * Utan skalfaktor blir det ofta noll eller ett monster i chunkarna runt lägret.
+ */
+export const REGION_SPAWN_SCALE = 4;
+
+function regionMonsterBudgetUnscaled(region: BigWorldRegion, ring: number, data: BigWorldDataFile): number {
   const t = region.tathet as RegionTathet | undefined;
   if (t != null && typeof t === 'object' && !Array.isArray(t) && 'monster_per_game' in t) {
     return Math.max(0, t.monster_per_game ?? 0);
@@ -24,6 +30,12 @@ export function regionMonsterPerGame(region: BigWorldRegion, ring: number, data:
     if (ring >= 3 && regel.vildmark_ring_3_plus != null) return regel.vildmark_ring_3_plus;
   }
   return 2;
+}
+
+export function regionMonsterPerGame(region: BigWorldRegion, ring: number, data: BigWorldDataFile): number {
+  const raw = regionMonsterBudgetUnscaled(region, ring, data);
+  if (raw <= 0 || region.sakert === true) return 0;
+  return raw * REGION_SPAWN_SCALE;
 }
 
 /** Chunkar i regionens radie som kan få regionstäthet (ej legacy-only, ej säker plats). */

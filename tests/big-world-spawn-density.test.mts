@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { DATA } from '../src/data';
 import { buildBigWorldCatalog, generateChunkWorldData } from '../src/world/bigWorld/worldGenerator';
+import { REGION_SPAWN_SCALE, regionMonsterPerGame } from '../src/world/bigWorld/regionSpawnBudget';
 import { mellanmarkSpawnCountRange } from '../src/world/bigWorld/spawnDensity';
 
 const catalog = buildBigWorldCatalog(DATA.varldStor);
@@ -16,9 +17,11 @@ assert.equal(start.spawns.length, 0, 'startskogen-chunk ska inte få genererade 
 const gamla = DATA.varldStor.regioner.find((r) => r.id === 'gamla_byn');
 assert.ok(gamla);
 const near = mellanmarkSpawnCountRange(0);
-assert.deepEqual(near, [1, 3], 'mellanmarken ska vara tätare än det gamla [0, 2]');
-const gamlaBudget = (gamla.tathet as { monster_per_game?: number })?.monster_per_game ?? 2;
-assert.ok(gamlaBudget >= 40, `namngivna regioner ska vara tätare (${gamlaBudget})`);
+assert.deepEqual(near, [18, 28], 'mellanmarken ska vara tät nog för en kort promenad');
+const gamlaRaw = (gamla.tathet as { monster_per_game?: number })?.monster_per_game ?? 2;
+assert.ok(gamlaRaw >= 40, `namngivna regioner ska vara tätare (${gamlaRaw})`);
+const gamlaBudget = regionMonsterPerGame(gamla, gamla.ringzon ?? 0, DATA.varldStor);
+assert.equal(gamlaBudget, gamlaRaw * REGION_SPAWN_SCALE);
 let gamlaSpawns = 0;
 for (let dx = -gamla.radie; dx <= gamla.radie; dx++) {
   for (let dy = -gamla.radie; dy <= gamla.radie; dy++) {
@@ -26,7 +29,7 @@ for (let dx = -gamla.radie; dx <= gamla.radie; dx++) {
     if (d.regionId === 'gamla_byn') gamlaSpawns += d.spawns.length;
   }
 }
-assert.ok(gamlaSpawns <= gamlaBudget, 'region ska följa tathet.monster_per_game, inte mellanmark per chunk');
+assert.ok(gamlaSpawns <= gamlaBudget, 'region ska följa skalad tathet.monster_per_game, inte en rå mellanmark per chunk');
 
 const bonus = DATA.monsterLevels.elites.champion.level_bonus;
 let sawPair = false;
@@ -40,9 +43,8 @@ for (let seed = 1; seed <= 24; seed++) {
       const d = generateChunkWorldData(seed, seed, cx, cy, catalog);
       if (!d.mellanmark) continue;
       assert.ok(d.spawns.length <= mellanmarkSpawnCountRange(d.ring)[1]);
-      assert.ok(d.spawns.length <= 3, 'mellanmarkens budget är högst en grupp');
       const champs = d.spawns.filter((s) => s.elite === 'champion');
-      if (champs.length > 0 && champs.length !== d.spawns.length) mixed++;
+      if (champs.length > 3) mixed++;
       if (d.ring < 2 && champs.length > 0) champEarly++;
       if (d.spawns.length >= 2) sawPair = true;
       if (champs.length >= 2) sawChampGroup = true;
@@ -55,10 +57,10 @@ for (let seed = 1; seed <= 24; seed++) {
     }
   }
 }
-assert.equal(mixed, 0, 'champion gäller hela gruppen, högst en grupp');
+assert.equal(mixed, 0, 'högst tre champions per mellanmarkschunk');
 assert.equal(champEarly, 0, 'ring 0–1 har inga mellanmarkschampions');
 assert.equal(unik, 0, 'inga unika i mellanmark');
 assert.ok(sawPair, 'mellanmark ska kunna spawna mer än ett monster');
-assert.ok(sawChampGroup, 'en championgrupp ska lyfta hela gruppen');
+assert.ok(sawChampGroup, 'en championflock ska ha minst två monster');
 
 console.log('big-world-spawn-density.test.mts: ok');

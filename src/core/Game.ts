@@ -21,6 +21,7 @@ import type { BigWorldStreamGround } from '../world/bigWorld/BigWorldStreamGroun
 import { BIG_WORLD_GROUND_VIEW_MARGIN } from '../world/bigWorld/bigWorldConfig';
 import { syncBigWorldChunkMonsters, resetBigWorldMonsterSync } from '../world/bigWorld/syncBigWorldChunkMonsters';
 import { loadBigWorldRuntime, peekBigWorldRuntime } from '../world/bigWorld/runtime';
+import { armRespawnsForKilled, resetMonsterRespawns, tickMonsterRespawns } from '../world/monsterRespawn';
 import { smokeMetricsEnabled } from '../dev/smokeGate';
 import { worldToChunk } from '../world/bigWorld/bigWorldCoords';
 import { Input } from '../input/Input';
@@ -394,6 +395,7 @@ export class Game {
     this.ctx.session.bwCoordEpoch = s.bwCoordEpoch;
     this.ctx.session.killed.clear();
     for (const id of s.killed) this.ctx.session.killed.add(id);
+    resetMonsterRespawns();
     if (h.id) this.bus.emit('hero_loaded', { heroId: h.id });
     this.gameClock.load(g?.worldTime);
     this.applyLearn(save.learn, false);
@@ -517,6 +519,7 @@ export class Game {
     this.ctx.session.seed = Rng.newSeed();
     this.ctx.session.worldSeed = worldSeed;
     this.ctx.session.killed.clear();
+    resetMonsterRespawns();
     const h = this.heroState;
     h.runes = 0;
     h.stage = 0;
@@ -651,6 +654,7 @@ export class Game {
     const areaId = zone.areaId;
     const citySpawn = this.worldState.get().city_states[areaId] ?? (areaId === 'gamla_byn' ? hs.city : 'besatt');
     this.factory.populate(this.world, citySpawn);
+    armRespawnsForKilled(this.world.session.killed);
     if (zone.bigWorldStreaming && this.isStreamGround(this.forestGround)) {
       resetBigWorldMonsterSync();
       const view = this.camera.viewWorldAabb(BIG_WORLD_GROUND_VIEW_MARGIN);
@@ -1090,6 +1094,7 @@ export class Game {
     const w = this.world;
     if (!w) return;
     w.time += dt;
+    tickMonsterRespawns(w, dt);
     this.gameClock.advance(dt);
     this.worldState.setGameDay(this.gameClock.day);
     this.worldState.tickPending(this.gameClock.day, this.consequenceRuntime());
@@ -1112,10 +1117,8 @@ export class Game {
         view,
       );
       syncBigWorldChunkMonsters(w, this.forestGround.chunkCache, this.factory, w.session.worldSeed, w.session.seed, h.pos);
-      if (peekBigWorldRuntime()?.heroInsideStartskogenRegion(h.pos)) {
-        const citySpawn = this.worldState.get().city_states[w.zone.areaId] ?? (w.zone.areaId === 'gamla_byn' ? h.s.city : 'besatt');
-        syncProximitySpawns(w, this.factory, h.pos, citySpawn);
-      }
+      const citySpawn = this.worldState.get().city_states[w.zone.areaId] ?? (w.zone.areaId === 'gamla_byn' ? h.s.city : 'besatt');
+      syncProximitySpawns(w, this.factory, h.pos, citySpawn);
       const hc = worldToChunk(h.pos.x, h.pos.y);
       const fg = this.forestGround;
       if (smokeMetricsEnabled()) {

@@ -42,16 +42,16 @@
       "3. Biomet saknar helt monster i bandet: använd närmaste regions huvudfamilj och dess undertyper enligt steg 1 till 2. Ska inte inträffa i ring 1 till 7 (se tackning)."
     ],
     "tathet_per_chunk": {
-      "ring_0": [1, 3],
-      "ring_1": [1, 3],
-      "ring_2": [1, 3],
-      "ring_3": [1, 3],
-      "ring_4": [1, 3],
-      "ring_5": [1, 3],
-      "ring_6": [1, 3],
-      "ring_7": [1, 3],
-      "ring_3_och_ut": [1, 3],
-      "not": "Monster per chunk och game i mellanmark, slumpat jämnt i intervallet (medel 2,0). En chunk är 128 × 128 och skärmen ser radie 52, alltså π × 52² / 128² = 0,52 chunk per skärmläge: medel 2,0 per chunk ger cirka 1 monster per skärmläge (förut medel 1,0 per chunk, cirka 1 per 2 skärmlägen). Klart glesare än regionerna (minst 1,5 × mellanmarken, tathet.region_golv). ring_3_och_ut finns kvar för koden och är lika med ring_3 till ring_7. Namngivna regioner och delområden använder sina egna tal (varld_stor.json regioner[].tathet, bana1_stor.json)."
+      "ring_0": [18, 28],
+      "ring_1": [18, 28],
+      "ring_2": [18, 28],
+      "ring_3": [18, 28],
+      "ring_4": [18, 28],
+      "ring_5": [18, 28],
+      "ring_6": [18, 28],
+      "ring_7": [18, 28],
+      "ring_3_och_ut": [18, 28],
+      "not": "Monster per chunk och game i mellanmark, slumpat jämnt i intervallet (medel 23). En chunk är 128 × 128. Den tidigare medel 2 lämnade vägen från lägret tom: spelaren startar i säker chunk [0,0] och ser bara cirka 20 enheter. Medel 23 ger ungefär ett möte på några sekunders gång ute i mellanmarken. Namngivna regioner skalas i koden (REGION_SPAWN_SCALE) ovanpå sina egna tal. ring_3_och_ut finns kvar för koden och är lika med ring_3 till ring_7."
     },
     "grupper": "Grupper om 1 till 3, ledare (gravargsledare, skelett_kapten och liknande) alltid ensam med 2 till 3 av närmaste lägre undertyp som följe.",
     "elit": "Mellanmark: bara champions, inga unika. Från ring 2 blir en mellanmarksgrupp champion med chans 0,10 (hela gruppen, monster_niva.json elites.champion), högst en per chunk. Med tätheten 1 till 3 monster per chunk (cirka en grupp per chunk) blir det ungefär en championgrupp per 10 chunkar. Ring 0 och 1 har inga champions i mellanmarken. Unika finns bara i namngivna områden enligt spawnzoner.json session_roll.uniques. Rullas med chunk_seed vid spawn som övriga monster. Belöning: elites.champion.loot (en extra rullning, drop 1,0, kvalitet × 1,5) ovanpå undertypens tabell i drop_tabeller.json, XP × 3.",

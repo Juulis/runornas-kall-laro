@@ -17,8 +17,9 @@ export class Zone implements ZoneView {
   circle?: number;
   rect?: readonly [number, number];
   arena: Rect | null = null;
-  /** Fri cirkel i mitten där monster inte vandrar in (skogens glänta). */
+  /** Fri cirkel där monster inte vandrar in. Mittpunkten är safeCenter (lägrets eld i stor värld, origo i legacy-skog). */
   safeRadius = 0;
+  safeCenter: Vec2 = { x: 0, y: 0 };
   /** varld_stor chunk-streaming (#85 del 2) — ingen spawnzoner-rullning, obegränsad vandring. */
   bigWorldStreaming = false;
   entry: Vec2 = { x: 0, y: 0 };

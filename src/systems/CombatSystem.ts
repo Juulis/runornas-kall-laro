@@ -6,6 +6,7 @@ import type { WorldFighter } from '../entities/WorldFighter';
 import { Iso } from '../render/Iso';
 import type { MonsterSnapshot } from '../logic/CombatRules';
 import type { LootSystem } from './LootSystem';
+import { scheduleMonsterRespawn } from '../world/monsterRespawn';
 import type { World } from './World';
 import { skillUnlocked } from '../logic/skills';
 import { canStartDodge } from '../logic/dodge';
@@ -145,7 +146,10 @@ export class CombatSystem {
     m.dead = 0.001;
     m.view.play('dod');
     const first = !!m.uid && m.boss && !w.session.killed.has(m.uid);
-    if (m.uid) w.session.killed.add(m.uid);
+    if (m.uid) {
+      w.session.killed.add(m.uid);
+      scheduleMonsterRespawn(m.uid, m.boss);
+    }
     const st = w.hero.stats;
     const lo = m.es?.extraLoot;
     const reward = w.authority.killReward({
