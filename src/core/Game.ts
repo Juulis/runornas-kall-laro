@@ -22,7 +22,7 @@ import { BIG_WORLD_GROUND_VIEW_MARGIN } from '../world/bigWorld/bigWorldConfig';
 import { syncBigWorldChunkMonsters, resetBigWorldMonsterSync } from '../world/bigWorld/syncBigWorldChunkMonsters';
 import { loadBigWorldRuntime, peekBigWorldRuntime } from '../world/bigWorld/runtime';
 import { armRespawnsForKilled, resetMonsterRespawns, tickMonsterRespawns } from '../world/monsterRespawn';
-import { smokeMetricsEnabled } from '../dev/smokeGate';
+import { smokeMetricsEnabled, smokeQueryEnabled } from '../dev/smokeGate';
 import { worldToChunk } from '../world/bigWorld/bigWorldCoords';
 import { Input } from '../input/Input';
 import { Loot } from '../logic/loot/Loot';
@@ -1148,13 +1148,15 @@ export class Game {
     }
     // Frågorna får inte hoppas över medan banken laddas. Menyn startar laddningen; innan dess står monster stilla.
     const holdLearn = w.hero.s.playing && !this.questionsReady;
-    if (holdLearn) {
+    // I röktest ska hjälten kunna gå ut ur lägerflocken så chunk-streamingen kan verifieras.
+    const freezeAi = holdLearn || smokeQueryEnabled();
+    if (freezeAi) {
       this.ai.paused = true;
-      if (this.learnWanted) void this.prepareLearn();
+      if (holdLearn && this.learnWanted) void this.prepareLearn();
     }
     this.ai.update(dt);
     this.learn?.tick(dt);
-    if (holdLearn) this.ai.paused = true;
+    if (freezeAi) this.ai.paused = true;
     this.combat.update(dt);
     this.lootSys.update(dt);
     this.portals.update(dt);
