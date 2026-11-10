@@ -260,6 +260,9 @@ export function nextBankQuestion(
   if (passage) {
     return { ...base, speakText: `${passage} ${row.fraga.trim()}`, speakLang: 'sv-SE', speakPrompt: false };
   }
-  if (eng) return withSpeech(base, eng, 'en-US');
+  if (eng) {
+    // Prompten är svensk. Glosan i eng läses efteråt på engelska. Svaret läses inte.
+    return { ...withSpeech(base, eng, 'en-US'), speakPrompt: true };
+  }
   return base;
 }

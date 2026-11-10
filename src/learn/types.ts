@@ -47,12 +47,12 @@ export interface LearnQuestion {
   grade: GradeId;
   rule: string;
   meta?: QuestionMeta;
-  /** Text som läses upp. Saknas: prompten. Rättstavning läser bara prompten, aldrig ordet. */
+  /** Text som läses upp. Saknas: prompten. Rättstavning och stavning läser bara prompten, aldrig ordet. */
   speakText?: string;
   speakLang?: SpeakLang;
   /** Emoji i samma ordning som choices. null om alternativet saknar bild. */
   choiceEmojis?: readonly (string | null)[];
-  /** Läs prompten tillsammans med ordet som ska sägas. */
+  /** Sant: läs prompten på svenska och sedan speakText på speakLang. */
   speakPrompt?: boolean;
   /** Sant när frågan ska visa kladdruta. Saknas: avgörs av rule. */
   needsScratchpad?: boolean;
