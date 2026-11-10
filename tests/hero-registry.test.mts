@@ -61,15 +61,16 @@ assert.equal(sheetsFor('grisan').includes('dodge'), false);
 
 const theme = enemyThemeById('okand-tema');
 assert.equal(theme.id, DEFAULT_ENEMY_THEME_ID);
-assert.equal(enemyThemeById(DEFAULT_ENEMY_THEME_ID).id, 'klassisk');
-const extraIds = theme.extras.map((row) => row.enemy);
+assert.equal(enemyThemeById(DEFAULT_ENEMY_THEME_ID).id, 'vanliga');
+const extras = theme.extras ?? [];
+const extraIds = extras.map((row) => row.enemy);
 for (const id of MONSTERS) assert.ok(extraIds.includes(id), id);
 
 const base = [{ enemy: 'skogsvarg', weight: 70 }];
 const merged = mergeEnemyTable(base, theme);
 assert.equal(base.length, 1);
 assert.equal(base[0]?.weight, 70);
-assert.equal(merged.length, base.length + theme.extras.length);
+assert.equal(merged.length, base.length + extras.length);
 assert.equal(merged[0]?.enemy, 'skogsvarg');
 const first = merged[0];
 assert.ok(first);

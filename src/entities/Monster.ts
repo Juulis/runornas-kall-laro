@@ -43,6 +43,8 @@ export class Monster {
   lastHit = 0;
   /** Hjälten deltog i strid nära en världspatrull (belöning vid död). */
   heroAidedPatrol = false;
+  /** Spriteark som ritas. Samma som id när inget fiendetema byter utseende. */
+  readonly appearanceId: string;
 
   constructor(
     readonly def: FullMonsterDef,
@@ -52,6 +54,7 @@ export class Monster {
     spec: SpawnSpec | null,
     es: EliteStats | null,
     rnd: () => number,
+    appearanceId?: string,
   ) {
     this.facing = rnd() * 6.28;
     this.cd = rnd();
@@ -64,6 +67,7 @@ export class Monster {
     this.elite = spec?.elite ?? null;
     this.mods = spec?.modifiers ?? [];
     this.uname = spec?.uniqueName;
+    this.appearanceId = appearanceId || def.id;
     this.es = es;
     if (es) {
       this.hp = this.max = Math.round(this.max * es.hp);

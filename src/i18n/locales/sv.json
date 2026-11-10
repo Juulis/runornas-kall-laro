@@ -43,7 +43,12 @@
       "other": "{count} lediga platser"
     },
     "create_play": "Skapa och spela",
-    "name_placeholder": "Namn ({min}–{max} tecken)"
+    "name_placeholder": "Namn ({min}–{max} tecken)",
+    "choose_enemy_theme": "Välj fiender",
+    "enemy_theme_vanliga": "Vanliga (standard)",
+    "enemy_theme_digital_cirkus": "Digital cirkus",
+    "enemy_theme_karatedojo": "Karatedojo",
+    "enemy_theme_skorpionklubben": "Skorpionklubben"
   },
   "errors": {
     "name_length": "Namnet måste vara {min}–{max} tecken.",

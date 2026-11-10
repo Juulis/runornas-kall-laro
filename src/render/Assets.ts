@@ -135,7 +135,7 @@ function single(t: Texture, s: Size): Anim {
   return { frames: DIRS.map(() => [t]), anchor: s.anchor, w: s.w, h: s.h, fps: 1, loop: true, single: true };
 }
 
-function completeAnimSet(partial: Partial<AnimSet>): AnimSet {
+export function completeAnimSet(partial: Partial<AnimSet>): AnimSet {
   const gang = partial.gang ?? partial.run ?? partial.attack ?? partial.idle;
   const idle = partial.idle ?? gang;
   if (!idle) throw new Error('Tomt animationset');

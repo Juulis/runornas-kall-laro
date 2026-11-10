@@ -43,7 +43,12 @@
       "other": "{count} free slots"
     },
     "create_play": "Create and play",
-    "name_placeholder": "Name ({min}–{max} characters)"
+    "name_placeholder": "Name ({min}–{max} characters)",
+    "choose_enemy_theme": "Choose enemies",
+    "enemy_theme_vanliga": "Usual (default)",
+    "enemy_theme_digital_cirkus": "Digital Circus",
+    "enemy_theme_karatedojo": "Karate Dojo",
+    "enemy_theme_skorpionklubben": "Scorpion Club"
   },
   "errors": {
     "name_length": "The name must be {min}–{max} characters.",
