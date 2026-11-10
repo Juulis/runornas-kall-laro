@@ -1,6 +1,6 @@
 import { isHardQuestion } from '../learn/hardQuestion';
 import { readAloudOf } from '../learn/settings';
-import { canSpeak, questionUtterance, speak, cancel } from '../learn/speech';
+import { canSpeak, questionUtterances, speakSequence, cancel, warmSpeakVoices } from '../learn/speech';
 import type { LearnQuestion, LearnSettings } from '../learn/types';
 import { buildLearnFields, setLearnFieldValues } from './learnDom';
 import { Scratchpad } from './Scratchpad';
@@ -132,6 +132,8 @@ export class LearnOverlay {
 
   constructor(initial: LearnSettings) {
     this.settings = { grade: initial.grade, subject: initial.subject, readAloud: readAloudOf(initial) };
+    // Ladda röster tidigt. Själva talet sker först vid klick, i samma gest.
+    warmSpeakVoices();
     this.style = document.createElement('style');
     this.style.textContent = CSS;
     document.head.appendChild(this.style);
@@ -404,8 +406,7 @@ export class LearnOverlay {
   }
 
   private readQuestion(q: LearnQuestion): void {
-    const uttered = questionUtterance(q);
-    speak(uttered.text, uttered.lang);
+    speakSequence(questionUtterances(q));
   }
 
   /** Markerar valet tyst. Tal kommer bara från ljudknappen eller Lyssna. */
