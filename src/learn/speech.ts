@@ -147,4 +147,3 @@ export function questionUtterance(q: LearnQuestion): { text: string; lang: Speak
   const text = q.speakPrompt && q.speakText && q.prompt.trim() !== main ? `${q.prompt} ${main}`.trim() : main;
   return { text, lang };
 }
-
