@@ -191,7 +191,7 @@ assert.equal(migrated.hero.inv[0]?.base, 'rostig_kortsvard', 'gammalt startgear 
 assert.equal(menu.isOpen, true);
 assert.equal(document.querySelectorAll('.hslot').length, 8);
 assert.match(save.roster.validName('x'), /2–16/);
-assert.match(save.roster.validName('Barbar'), /redan/);
+assert.match(save.roster.validName('Barbaren'), /redan/);
 assert.equal(save.roster.validName('Åsa_1'), '');
 
 // Tab när menyn är öppen: släpps igenom

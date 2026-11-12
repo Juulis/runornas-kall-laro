@@ -101,6 +101,7 @@ const EFFECT_FILES = ['glod_rare', 'glod_set', 'glod_legendary'] as const;
  * Vikter för startladdningen. tiles/decor/hero/worldFigures/bg/icons är antal riktiga
  * steg (textur, ark eller manifest). monsters är tyngre (8-dir-ark) än en markplatta.
  * npcs = manifest + en post per npc i npc.json (13 idag; testet låser antalet).
+ * hero räknar riddarens utrustning. Klassark laddas senare, en figur i taget.
  */
 export function startupLoadWeights(): Record<'tiles' | 'decor' | 'hero' | 'worldFigures' | 'monsters' | 'npcs' | 'bg' | 'icons', number> {
   return {
@@ -235,6 +236,11 @@ export class AssetStore {
     }
     this.loadProgress?.setPhase('hero', 1);
   }
+
+  /** Laddar spriteark för den valda figuren. Redan laddad klass hoppas över. */
+  async loadHeroClass(cls: string): Promise<void> {
+    await this.heroes.loadClass(cls, (p) => tex(p));
+  }
   private async loadWorldFigures(): Promise<void> {
     const total = worldFigureLoadSteps();
     let done = 0;
@@ -250,7 +256,11 @@ export class AssetStore {
     this.loadProgress?.setPhase('worldFigures', 1);
   }
   private async loadMonsters(): Promise<void> {
-    const index = await fetchJsonResilient<{ sheets: string[]; eightDir?: string[] }>('2d/sprites/monster/index.json', {
+    const index = await fetchJsonResilient<{
+      sheets: string[];
+      eightDir?: string[];
+      eightDirAnims?: Record<string, string[]>;
+    }>('2d/sprites/monster/index.json', {
       sheets: [],
     });
     const eightDir = new Set(index.eightDir ?? []);
@@ -268,7 +278,7 @@ export class AssetStore {
       sheets.map(async (id) => {
         try {
           if (eightDir.has(id)) {
-            const eight = await loadMonster8dirSet(tex, id);
+            const eight = await loadMonster8dirSet(tex, id, index.eightDirAnims?.[id]);
             if (eight) {
               this.monsters.set(id, completeAnimSet(eight));
               return;

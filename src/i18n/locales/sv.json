@@ -14,12 +14,21 @@
     "aria": "Laddar"
   },
   "classes": {
-    "amazonkrigare": "Amazonkrigare",
-    "barbar": "Barbar",
-    "riddare": "Riddare"
+    "riddare": "Riddaren",
+    "amazonkrigare": "Amazonen",
+    "barbar": "Barbaren",
+    "kattflickan": "Kattflickan",
+    "gnistan": "Gnistan",
+    "valpen": "Valpen",
+    "grisan": "Grisan"
   },
   "menu": {
     "choose_hero": "Välj hjälte",
+    "choose_figure": "Välj figur",
+    "change_figure": "Byt figur",
+    "loading_figure": "Laddar figuren...",
+    "figure_load_failed": "Figuren gick inte att ladda. Försök igen.",
+    "figure_save_failed": "Kunde inte byta figur. Försök igen.",
     "new_hero": "Ny hjälte",
     "continue": "Fortsätt",
     "new_game": "Nytt game",

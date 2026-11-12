@@ -18,6 +18,8 @@ export class MenuModule implements GameModule {
     private readonly i18n: LocaleManager,
     private readonly host: () => HTMLElement = () => document.body,
     private readonly showOnInit = true,
+    /** Laddar spriteark för vald figur innan världen byggs. Tester kan lämna den tom. */
+    private readonly loadHeroClass: (cls: string) => Promise<void> = async () => {},
   ) {}
 
   init(ctx: GameContext): void {
@@ -37,6 +39,7 @@ export class MenuModule implements GameModule {
       confirm: new ConfirmDialog(this.i18n),
       i18n: this.i18n,
       picker: new LocalePicker(this.i18n),
+      loadHeroClass: (cls) => this.loadHeroClass(cls),
     });
     this.host().appendChild(this.menu.root);
     const menu = this.menu;

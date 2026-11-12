@@ -5,10 +5,13 @@
   "bergsulv",
   "fjallvatte",
   "forvriden_jagare",
+  "gnistan_monster",
   "gravargsledare",
   "gravgast",
+  "grisan_monster",
   "havsgast",
   "jarnmunken",
+  "kattflickan_monster",
   "klockdrunknad",
   "korpmodern",
   "likatare_varg",
@@ -28,6 +31,7 @@
   "smittad_bybo",
   "sprickvasen",
   "taggsvin",
+  "valpen_monster",
   "vandrande_skelett",
   "vargbest"
  ],
@@ -36,9 +40,12 @@
   "benkungen_valdemar",
   "bergsulv",
   "fjallvatte",
+  "gnistan_monster",
   "gravargsledare",
+  "grisan_monster",
   "havsgast",
   "jarnmunken",
+  "kattflickan_monster",
   "klockdrunknad",
   "korpmodern",
   "lyktgast",
@@ -52,8 +59,15 @@
   "skelett_vakt",
   "skogsvarg",
   "sprickvasen",
+  "valpen_monster",
   "vargbest"
  ],
  "singles": "monster.json",
- "not": "Genereras av scripts/gen-monster-index.mjs. eightDir = hero-style *_idle_8dir sheets; övriga sheets använder legacy <id>.json."
+ "not": "Genereras av scripts/gen-monster-index.mjs. eightDir = hero-style *_idle_8dir sheets; övriga sheets använder legacy <id>.json. eightDirAnims listar vilka 8dir-stammar som finns när attack eller death saknas, så att laddaren inte gör 404-anrop.",
+ "eightDirAnims": {
+  "gnistan_monster": ["idle", "walk"],
+  "grisan_monster": ["idle", "walk"],
+  "kattflickan_monster": ["idle", "walk"],
+  "valpen_monster": ["idle", "walk"]
+ }
 }

@@ -14,12 +14,21 @@
     "aria": "Loading"
   },
   "classes": {
-    "amazonkrigare": "Amazon Warrior",
-    "barbar": "Barbarian",
-    "riddare": "Knight"
+    "riddare": "The Knight",
+    "amazonkrigare": "The Amazon",
+    "barbar": "The Barbarian",
+    "kattflickan": "The Cat Girl",
+    "gnistan": "Spark",
+    "valpen": "The Pup",
+    "grisan": "The Piglet"
   },
   "menu": {
     "choose_hero": "Choose hero",
+    "choose_figure": "Choose a figure",
+    "change_figure": "Change figure",
+    "loading_figure": "Loading your figure...",
+    "figure_load_failed": "The figure could not be loaded. Try again.",
+    "figure_save_failed": "Could not change figure. Try again.",
     "new_hero": "New hero",
     "continue": "Continue",
     "new_game": "New game",
