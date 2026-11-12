@@ -256,7 +256,11 @@ export class AssetStore {
     this.loadProgress?.setPhase('worldFigures', 1);
   }
   private async loadMonsters(): Promise<void> {
-    const index = await fetchJsonResilient<{ sheets: string[]; eightDir?: string[] }>('2d/sprites/monster/index.json', {
+    const index = await fetchJsonResilient<{
+      sheets: string[];
+      eightDir?: string[];
+      eightDirAnims?: Record<string, string[]>;
+    }>('2d/sprites/monster/index.json', {
       sheets: [],
     });
     const eightDir = new Set(index.eightDir ?? []);
@@ -274,7 +278,7 @@ export class AssetStore {
       sheets.map(async (id) => {
         try {
           if (eightDir.has(id)) {
-            const eight = await loadMonster8dirSet(tex, id);
+            const eight = await loadMonster8dirSet(tex, id, index.eightDirAnims?.[id]);
             if (eight) {
               this.monsters.set(id, completeAnimSet(eight));
               return;

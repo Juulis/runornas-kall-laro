@@ -63,5 +63,11 @@
   "vargbest"
  ],
  "singles": "monster.json",
- "not": "Genereras av scripts/gen-monster-index.mjs. eightDir = hero-style *_idle_8dir sheets; övriga sheets använder legacy <id>.json."
+ "not": "Genereras av scripts/gen-monster-index.mjs. eightDir = hero-style *_idle_8dir sheets; övriga sheets använder legacy <id>.json. eightDirAnims listar vilka 8dir-stammar som finns när attack eller death saknas, så att laddaren inte gör 404-anrop.",
+ "eightDirAnims": {
+  "gnistan_monster": ["idle", "walk"],
+  "grisan_monster": ["idle", "walk"],
+  "kattflickan_monster": ["idle", "walk"],
+  "valpen_monster": ["idle", "walk"]
+ }
 }

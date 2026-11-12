@@ -121,10 +121,19 @@ export async function loadStripAnim(tex: TexLoader, dir: string, name: string): 
   };
 }
 
-/** Försök ladda monster-ark i hero-8dir-format; null om idle saknas. */
-export async function loadMonster8dirSet(tex: TexLoader, id: string): Promise<Partial<AnimSet> | null> {
+export const MONSTER_8DIR_STEMS = ['idle', 'walk', 'attack', 'death'] as const;
+
+/** Försök ladda monster-ark i hero-8dir-format; null om idle saknas.
+ *  `stems` styr vilka filer som efterfrågas, så att saknade attack/death-ark inte ger 404. */
+export async function loadMonster8dirSet(
+  tex: TexLoader,
+  id: string,
+  stems: readonly string[] = MONSTER_8DIR_STEMS,
+): Promise<Partial<AnimSet> | null> {
   const dir = `2d/sprites/monster/${id}`;
+  const wanted = new Set(stems);
   const load = async (stem: string): Promise<Anim | undefined> => {
+    if (!wanted.has(stem)) return undefined;
     try {
       return await loadSheet8dir(tex, dir, `${id}_${stem}_8dir`);
     } catch {
