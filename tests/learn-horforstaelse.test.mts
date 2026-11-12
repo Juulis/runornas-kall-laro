@@ -45,7 +45,7 @@ const SENTENCE_LIMIT: Record<GradeId, readonly [number, number]> = {
 };
 
 assert.equal(file.amne, 'horforstaelse');
-assert.equal(rows.length, 96);
+assert.equal(rows.length, 192);
 assert.deepEqual(bankSubjectsFor('horforstaelse'), ['horforstaelse']);
 assert.ok(bankSubjectsFor('blandat').includes('horforstaelse'));
 
@@ -81,8 +81,10 @@ for (const row of rows) {
 for (const grade of GRADES_ALL) {
   for (const sprak of ['sv', 'en'] as const) {
     const cell = rows.filter((row) => row.niva === grade && row.sprak === sprak);
-    assert.ok(cell.length >= 6, `${grade} ${sprak}`);
-    assert.equal(new Set(cell.map((row) => row.typ)).size, cell.length, `${grade} ${sprak} typ`);
+    assert.ok(cell.length >= 12, `${grade} ${sprak}`);
+    const perTyp = new Map<string, number>();
+    for (const row of cell) perTyp.set(row.typ, (perTyp.get(row.typ) ?? 0) + 1);
+    for (const [typ, n] of perTyp) assert.ok(n <= 2, `${grade} ${sprak} ${typ} ${n}`);
   }
   const levelTypes = new Set(rows.filter((row) => row.niva === grade).map((row) => row.typ));
   assert.equal(levelTypes.size, TYPES.length, grade);

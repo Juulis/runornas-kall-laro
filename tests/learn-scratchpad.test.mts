@@ -55,7 +55,18 @@ for (const rule of HARD_MATH_RULES) {
   assert.equal(isHardQuestion(question({ rule, needsScratchpad: false })), true, `${rule} faller tillbaka på regeln`);
 }
 
-for (const rule of ['ak79-negativ', 'gym-huvudrakning', 'ak1-plus', 'forskola-plus', 'ak46-procent', 'ak2-tabell']) {
+for (const rule of [
+  'ak79-negativ',
+  'ak79-rot',
+  'gym-huvudrakning',
+  'ak1-plus',
+  'forskola-plus',
+  'forskola-rakna',
+  'ak46-procent',
+  'ak46-rektangel',
+  'ak2-tabell',
+  'ak2-klocka',
+]) {
   assert.equal(isHardMathRule(rule), false, rule);
   assert.equal(isHardQuestion(question({ rule, grade: 'ak1' })), false, rule);
 }
@@ -89,7 +100,7 @@ assert.deepEqual([...ak79.hard].sort(), ['ak79-ekvation', 'ak79-potens']);
 assert.ok(ak79.easy.has('ak79-negativ'));
 
 const gym = tally('gymnasiet', 20261109, 48);
-assert.deepEqual([...gym.hard].sort(), ['gym-andragrads', 'gym-procent']);
+assert.deepEqual([...gym.hard].sort(), ['gym-andragrads', 'gym-ekvation', 'gym-procent']);
 assert.ok(gym.easy.has('gym-huvudrakning'));
 
 const vuxen = tally('vuxen', 11, 48);
