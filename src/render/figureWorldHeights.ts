@@ -19,7 +19,12 @@ export type FigureHeightProfile =
   | 'corrupted_human'
   | 'boss_bear'
   | 'boss_undead'
-  | 'boss_wolf';
+  | 'boss_wolf'
+  | 'stilts'
+  | 'small_dog'
+  | 'small_round'
+  | 'karate_master'
+  | 'karate_master_strong';
 
 const PROFILE_HEIGHT_M: Record<FigureHeightProfile, number> = {
   human: FIGURE_HEIGHT_HUMAN_M,
@@ -36,6 +41,11 @@ const PROFILE_HEIGHT_M: Record<FigureHeightProfile, number> = {
   boss_bear: 2.8,
   boss_undead: 2.4,
   boss_wolf: 1.45,
+  stilts: 2.12,
+  small_dog: 0.75,
+  small_round: 0.9,
+  karate_master: 1.7,
+  karate_master_strong: 2,
 };
 
 const MONSTER_PROFILE: Record<string, FigureHeightProfile> = {
@@ -65,6 +75,16 @@ const MONSTER_PROFILE: Record<string, FigureHeightProfile> = {
   grisan_monster: 'corrupted_human',
   ruttnande_lik: 'corrupted_human',
   gravgast: 'ghost',
+  knutte: 'human',
+  linnea: 'human',
+  rasmus: 'human',
+  gycklare: 'human',
+  trasdocka: 'human',
+  akrobatkub: 'human',
+  styltgangare: 'stilts',
+  robotpudel: 'small_dog',
+  ballongblob: 'small_round',
+  kaxig_mastare: 'karate_master',
 };
 
 const FAMILY_PROFILE: Record<string, FigureHeightProfile> = {
@@ -116,5 +136,6 @@ export function worldHeightMForMonster(id: string, family: string, boss = false)
   if (boss && id === 'gravargsledare') profile = 'boss_wolf';
   if (boss && id === 'grabjornen_ulvhild') profile = 'boss_bear';
   if (boss && id === 'benkungen_valdemar') profile = 'boss_undead';
+  if (boss && id === 'kaxig_mastare') profile = 'karate_master_strong';
   return PROFILE_HEIGHT_M[profile];
 }

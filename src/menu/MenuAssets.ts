@@ -78,6 +78,17 @@ export class MenuAssets {
 .hero-menu .learn-setup label{display:flex;flex-direction:column;gap:4px;color:#e6dfcc;font:16px Cinzel,serif}
 .hero-menu .learn-setup label.learn-read{flex-direction:row;align-items:center;gap:8px;font-size:18px}
 .hero-menu .learn-setup label.learn-read input{width:22px;height:22px;accent-color:#e0b060}
-.hero-menu .learn-setup select{font:20px Cinzel,serif;padding:8px 12px;background:#1a1612;color:#efe7d2;border:2px solid #c7a35a;border-radius:8px;min-width:180px}`;
+.hero-menu .learn-setup select{font:20px Cinzel,serif;padding:8px 12px;background:#1a1612;color:#efe7d2;border:2px solid #c7a35a;border-radius:8px;min-width:180px}
+.hero-menu .enemy-theme-picker{display:flex;flex-direction:column;align-items:center;gap:6px;width:min(92vw,880px);margin-top:2px}
+.hero-menu .enemy-theme-label{color:#e6dfcc;font:18px Cinzel,serif;letter-spacing:.5px}
+.hero-menu .enemy-theme-choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
+.hero-menu .enemy-theme-picker button.enemy-theme-btn{flex:1 1 160px;max-width:240px;min-width:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 12px;border-style:solid;border-width:3px;border-image:none;border-color:#3a3f45;border-radius:10px;background:#1a1612;color:#cbb994;opacity:.7;font:16px Cinzel,serif;cursor:pointer;text-shadow:0 1px 2px #000;box-shadow:none}
+.hero-menu .enemy-theme-picker button.enemy-theme-btn.sel{opacity:1;color:#e0b060;border-color:#c7a35a;box-shadow:0 0 24px 4px rgba(199,163,90,.5)}
+.hero-menu .enemy-theme-picker button.enemy-theme-btn:hover:not(:disabled){color:#efe7d2;filter:brightness(1.12) drop-shadow(0 0 6px rgba(199,163,90,.35))}
+.hero-menu .enemy-theme-picker button.enemy-theme-btn.sel:hover:not(:disabled){color:#e0b060}
+.hero-menu .enemy-theme-mark{font-size:22px;line-height:1.1}
+.hero-menu .enemy-theme-name{font:16px Cinzel,serif}
+.hero-menu .enemy-theme-sub{font:13px Cinzel,serif;color:#a89a80}
+.hero-menu .enemy-theme-picker button.enemy-theme-btn.sel .enemy-theme-sub{color:#e0b060}`;
   }
 }

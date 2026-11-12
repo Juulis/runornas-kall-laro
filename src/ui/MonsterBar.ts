@@ -1,3 +1,4 @@
+import { themedMonsterTitle } from '../entities/enemyThemes';
 import type { Monster } from '../entities/Monster';
 import { MODIFIER_NAME } from '../systems/SpawnSystem';
 import type { Text } from '../text/Text';
@@ -14,7 +15,7 @@ export class MonsterBar {
   }
 
   name(m: Monster): string {
-    return m.uname ?? this.text.data('monsterfamiljer', m.id, 'name', m.def.name);
+    return themedMonsterTitle(m.appearanceId, this.text.data('monsterfamiljer', m.id, 'name', m.def.name), m.uname);
   }
 
   show(m: Monster | null): void {

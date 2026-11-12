@@ -17,6 +17,8 @@ import { preloadLearnForPlay } from '../learn/preloadLearn';
 import { readLearnSettings, writeLearnSettings } from '../learn/settings';
 import type { LearnSettings } from '../learn/types';
 import { LocalStore } from '../core/storage';
+import { readEnemyTheme, setActiveEnemyTheme } from '../entities/enemyThemes';
+import { buildEnemyThemePicker } from './enemyThemePicker';
 
 /** Hjälteval: 8 platser, Fortsätt / Nytt game / Ny hjälte / Radera (med bekräftelse). Dubbelklick startar. */
 export class HeroSelectMenu {
@@ -110,6 +112,7 @@ export class HeroSelectMenu {
       if (!this.starting) return;
       await this.deps.loadHeroClass(d.hero.cls);
       if (!this.starting) return;
+      setActiveEnemyTheme(readEnemyTheme(new LocalStore()));
       note.remove();
       this.hide();
       await this.deps.loader.start(d, resume);
@@ -208,6 +211,7 @@ export class HeroSelectMenu {
       ...(figures ? [figures] : []),
       learn,
       el('small', { class: 'slots-free', text: 'Frågorna följer nivå och ämne.' }),
+      buildEnemyThemePicker(i18n),
       ...(this.startError ? [el('div', { class: 'hero-err', text: this.startError })] : []),
       actionRow,
       this.deps.picker.render(),

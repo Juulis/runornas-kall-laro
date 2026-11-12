@@ -14,6 +14,7 @@ import { DATA, validateData } from '../data';
 import { Hero } from '../entities/Hero';
 import type { NpcEntity } from '../entities/NpcEntity';
 import type { Monster } from '../entities/Monster';
+import { themedMonsterTitle } from '../entities/enemyThemes';
 import { MonsterFactory } from '../entities/MonsterFactory';
 import { syncProximitySpawns } from '../systems/SpawnProximity';
 import { ForestGroundChunks } from '../world/ForestGroundChunks';
@@ -741,7 +742,7 @@ export class Game {
 
   // ---------- boss / död ----------
   private bossName(m: Monster): string {
-    return this.text.data('monsterfamiljer', m.id, 'name', m.def.name);
+    return themedMonsterTitle(m.appearanceId, this.text.data('monsterfamiljer', m.id, 'name', m.def.name), m.uname);
   }
   private bossStart(m: Monster): void {
     this.heroState.stage = 3;

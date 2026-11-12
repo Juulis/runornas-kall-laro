@@ -1,3 +1,4 @@
+import { themedMonsterTitle } from '../entities/enemyThemes';
 import type { Monster } from '../entities/Monster';
 import type { WorldFighter } from '../entities/WorldFighter';
 import type { MonsterAttack } from '../entities/MonsterDefs';
@@ -307,7 +308,11 @@ export class MonsterAI {
         if (Math.hypot(h.pos.x - c.x, h.pos.y - c.y) < r) this.combat.hurt(dmg, c, m);
         else {
           m.vuln = 3;
-          w.fb.flash(w.text.t('msg.boss_vulnerable', { name: w.text.data('monsterfamiljer', m.id, 'name', m.def.name) }));
+          w.fb.flash(
+            w.text.t('msg.boss_vulnerable', {
+              name: themedMonsterTitle(m.appearanceId, w.text.data('monsterfamiljer', m.id, 'name', m.def.name), m.uname),
+            }),
+          );
         }
       }, tele * 1000);
     }
