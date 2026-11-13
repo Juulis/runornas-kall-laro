@@ -28,6 +28,7 @@ export {
   SKOG_DECOR,
   TILE_GROUPS,
   TILE_TRANSITIONS,
+  ROAD_TILES,
   TILES,
   TILES_BY_BIOME,
   TRASK_DECOR,
@@ -163,6 +164,15 @@ export class AssetStore {
   ensureDecorGroup(groupId: string, onProgress?: (ratio: number) => void): Promise<void> {
     const id = canonicalDecorGroup(groupId);
     return this.shareLoad(`decor:${id}`, () => this.loadNamedAssets([], decorForGroup(id), onProgress));
+  }
+
+  /**
+   * Hämtar namngivna plattor som inte hör till biomets vanliga lista, till exempel vägtiles i skogen.
+   * Saknad fil loggas och hoppas över.
+   */
+  ensureTiles(tileIds: readonly string[], onProgress?: (ratio: number) => void): Promise<void> {
+    const key = `tiles:${tileIds.join('|')}`;
+    return this.shareLoad(key, () => this.loadNamedAssets(tileIds, [], onProgress));
   }
 
   private shareLoad(key: string, work: () => Promise<void>): Promise<void> {

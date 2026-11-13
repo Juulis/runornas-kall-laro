@@ -29,6 +29,8 @@ export class MapPainter {
     private readonly model: MapModel,
     /** Hämtar aktuell hjältes fog (byts vid hero_loaded). */
     private readonly fog: () => FogOfWar,
+    /** session.worldSeed. Saknas → 0. */
+    private readonly worldSeed: () => number = () => 0,
   ) {}
 
   fogAnchor(): { x: number; y: number } {
@@ -70,6 +72,7 @@ export class MapPainter {
         chunkRadius: p.mini ? 3 : 8,
         showLabels: !p.mini,
         isRevealed: worldFog ? (wx, wy) => fogFn.isWorldRevealed(z.name, wx, wy) : undefined,
+        worldSeed: this.worldSeed(),
       });
     }
     if (z.circle) {

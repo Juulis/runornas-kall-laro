@@ -2,13 +2,14 @@ import type { Container, Renderer } from 'pixi.js';
 import { Container as PixiContainer, Rectangle, Sprite } from 'pixi.js';
 import { Rng } from '../../core/Rng';
 import type { Vec2, Collider } from '../../core/GameContext';
-import { biomeLoadLabel, canonicalBiomeId, decorForBiome, tilesForBiome } from '../../render/biomeAssetGroups';
+import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
 import { trackChunkLoad } from '../../ui/chunkLoad';
 import { groundRolePoolForBiome } from './biomeBlend';
 import { ChunkWorldCache } from './chunkCache';
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
+import { roadIsDrawn, roadTileIdAt, shouldSpawnDecorAt } from './roads';
 import type { ChunkWorldData } from './worldGenerator';
 import { chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
 import { patchWorldBounds } from './groundPatchBounds';
@@ -35,8 +36,15 @@ export interface BigWorldViewBounds {
 
 interface PatchVisual {
   layer: PixiContainer;
+  roadLayer: PixiContainer;
   tilesBuilt: number;
   totalTiles: number;
+}
+
+interface RoadPaint {
+  ti: number;
+  tj: number;
+  tileId: string;
 }
 
 interface ChunkVisual {
@@ -45,6 +53,9 @@ interface ChunkVisual {
   patches: PatchVisual[][];
   decor: DecorEntry[];
   decorDone: boolean;
+  roadList: RoadPaint[] | null;
+  roadCursor: number;
+  roadDone: boolean;
 }
 
 interface DecorEntry {
@@ -72,6 +83,8 @@ export function patchLayerUsable(layer: PixiContainer | null | undefined): layer
 function destroyPatch(patch: PatchVisual): void {
   if (patchLayerUsable(patch.layer)) clearContainerChildren(patch.layer);
   if (patchLayerUsable(patch.layer)) patch.layer.destroy();
+  if (patchLayerUsable(patch.roadLayer)) clearContainerChildren(patch.roadLayer);
+  if (patchLayerUsable(patch.roadLayer)) patch.roadLayer.destroy();
 }
 
 function countPixiDisplayObjects(root: PixiContainer): number {
@@ -113,6 +126,8 @@ export class BigWorldStreamGround extends PixiContainer {
   /** Biom vars plattor och dekor redan finns i AssetStore. */
   private readonly biomeReady = new Set<string>();
   private readonly biomePending = new Map<string, Promise<void>>();
+  private roadTilesReady = false;
+  private roadTilesPending: Promise<void> | null = null;
 
   constructor(
     private readonly assets: AssetStore,
@@ -243,6 +258,10 @@ export class BigWorldStreamGround extends PixiContainer {
           const on = !view || aabbOverlap(view, b.minX, b.minY, b.maxX, b.maxY);
           patch.layer.renderable = on;
           patch.layer.visible = on;
+          if (patchLayerUsable(patch.roadLayer)) {
+            patch.roadLayer.renderable = on;
+            patch.roadLayer.visible = on;
+          }
         }
       }
       for (const d of vis.decor) {
@@ -256,7 +275,7 @@ export class BigWorldStreamGround extends PixiContainer {
 
   private pendingBuild(): boolean {
     for (const vis of this.visuals.values()) {
-      if (!vis.decorDone) return true;
+      if (!vis.decorDone || !vis.roadDone) return true;
       for (const row of vis.patches) {
         for (const p of row) {
           if (p.tilesBuilt < p.totalTiles) return true;
@@ -299,19 +318,52 @@ export class BigWorldStreamGround extends PixiContainer {
         const tw = Math.min(patchTiles, tiles - ti0);
         const th = Math.min(patchTiles, tiles - tj0);
         const layer = new PixiContainer();
+        const roadLayer = new PixiContainer();
         root.addChild(layer);
-        row.push({ layer, tilesBuilt: 0, totalTiles: tw * th });
+        row.push({ layer, roadLayer, tilesBuilt: 0, totalTiles: tw * th });
       }
       patches.push(row);
     }
+    for (const row of patches) {
+      for (const patch of row) root.addChild(patch.roadLayer);
+    }
+    const drawRoad = data.roadTypes.some((typ) => roadIsDrawn(typ));
+    if (drawRoad) this.requestRoadTiles();
     this.visuals.set(key, {
       root,
       data,
       patches,
       decor: [],
       decorDone: false,
+      roadList: null,
+      roadCursor: 0,
+      roadDone: !drawRoad,
     });
     this.requestBiomeAssets(data.biomeId);
+  }
+
+  /** Vägtiles som inte ingår i chunkens biom, till exempel grus i skogen. */
+  private requestRoadTiles(): void {
+    if (this.roadTilesReady || this.roadTilesPending) return;
+    const missing = ROAD_TILES.filter((id) => !this.assets.tiles.has(id));
+    if (missing.length === 0) {
+      this.roadTilesReady = true;
+      return;
+    }
+    const ensure = this.assets.ensureTiles;
+    if (typeof ensure !== 'function') {
+      this.roadTilesReady = true;
+      return;
+    }
+    const job = trackChunkLoad('Laddar stigen…', (onProgress) => ensure.call(this.assets, ROAD_TILES, onProgress)).then(
+      () => {
+        this.roadTilesReady = true;
+      },
+      () => {
+        this.roadTilesPending = null;
+      },
+    );
+    this.roadTilesPending = job;
   }
 
   /**
@@ -373,6 +425,7 @@ export class BigWorldStreamGround extends PixiContainer {
         const decorId = raw;
         const wx = chunkMin.x + (ti + cell.float(0, decorEvery - 1)) * TILE_WORLD;
         const wy = chunkMin.y + (tj + cell.float(0, decorEvery - 1)) * TILE_WORLD;
+        if (!shouldSpawnDecorAt(this.activeWorldSeed, wx, wy)) continue;
         const s = new Sprite(d.tex);
         s.anchor.set(d.size.anchor[0] / d.size.w, d.size.anchor[1] / d.size.h);
         s.scale.set(0.35 + cell.next() * 0.2, 0.35 + cell.next() * 0.2);
@@ -393,7 +446,8 @@ export class BigWorldStreamGround extends PixiContainer {
     if (!this.allowBuild) return;
     const t0 = performance.now();
     while (performance.now() - t0 < BIG_WORLD_GROUND_BUILD_BUDGET_MS) {
-      if (!this.buildTilesStep()) break;
+      if (this.buildTilesStep()) continue;
+      if (!this.buildRoadStep()) break;
     }
     for (const vis of this.visuals.values()) {
       if (this.chunkTilesComplete(vis) && !vis.decorDone) this.spawnDecorForChunk(vis);
@@ -462,6 +516,75 @@ export class BigWorldStreamGround extends PixiContainer {
       }
     }
     return false;
+  }
+
+  private ensureRoadList(vis: ChunkVisual): RoadPaint[] {
+    if (vis.roadList) return vis.roadList;
+    const list: RoadPaint[] = [];
+    if (vis.data.roadTypes.some((typ) => roadIsDrawn(typ))) {
+      const tiles = chunkTileCount();
+      const { cx, cy, biomeId } = vis.data;
+      for (let ti = 0; ti < tiles; ti++) {
+        for (let tj = 0; tj < tiles; tj++) {
+          const tileId = roadTileIdAt(this.activeWorldSeed, cx, cy, ti, tj, biomeId);
+          if (tileId) list.push({ ti, tj, tileId });
+        }
+      }
+    }
+    vis.roadList = list;
+    return list;
+  }
+
+  /** Ett steg vägtiles. false = inget mer att rita den här bildrutan. */
+  private buildRoadStep(): boolean {
+    for (const vis of this.visuals.values()) {
+      if (vis.roadDone) continue;
+      if (this.paintRoadBatch(vis) === 'work') return true;
+    }
+    return false;
+  }
+
+  private paintRoadBatch(vis: ChunkVisual): 'work' | 'wait' | 'idle' {
+    const list = this.ensureRoadList(vis);
+    if (vis.roadCursor >= list.length) {
+      vis.roadDone = true;
+      return 'idle';
+    }
+    const data = vis.data;
+    const chunkMin = chunkMinWorld(data.cx, data.cy);
+    const patchTiles = BIG_WORLD_GROUND_PATCH_TILES;
+    let placed = 0;
+    while (vis.roadCursor < list.length && placed < 48) {
+      const cell = list[vis.roadCursor];
+      if (!cell) {
+        vis.roadCursor++;
+        continue;
+      }
+      const tex = this.assets.tiles.get(cell.tileId);
+      if (!tex) {
+        if (!this.roadTilesReady) return placed > 0 ? 'work' : 'wait';
+        vis.roadCursor++;
+        continue;
+      }
+      const pi = Math.floor(cell.ti / patchTiles);
+      const pj = Math.floor(cell.tj / patchTiles);
+      const roadLayer = vis.patches[pi]?.[pj]?.roadLayer;
+      if (!patchLayerUsable(roadLayer)) {
+        vis.roadCursor++;
+        continue;
+      }
+      const wx = chunkMin.x + cell.ti * TILE_WORLD;
+      const wy = chunkMin.y + cell.tj * TILE_WORLD;
+      const s = new Sprite(tex);
+      s.anchor.set(0.5, 0.85);
+      const pos = Iso.worldToScreen(wx, wy);
+      s.position.set(pos.x, pos.y);
+      roadLayer.addChild(s);
+      vis.roadCursor++;
+      placed++;
+    }
+    if (vis.roadCursor >= list.length) vis.roadDone = true;
+    return placed > 0 ? 'work' : 'idle';
   }
 
   probeGroundPixel(renderer: Renderer, heroScreenX: number, heroScreenY: number): boolean {
