@@ -71,7 +71,7 @@ assert.equal(SUBJECTS[5]?.id, 'horforstaelse');
 assert.equal(SUBJECTS[5]?.label, 'Hörförståelse');
 assert.equal(questionCount('boss'), 6);
 assert.equal(questionCount('champion'), 4);
-assert.equal(questionCount('normal'), 3);
+assert.equal(questionCount('normal'), 1);
 assert.equal(encounterKindOf({ boss: true, elite: 'champion' }), 'boss');
 assert.equal(encounterKindOf({ boss: false, elite: 'champion' }), 'champion');
 assert.equal(encounterKindOf({ boss: false, elite: 'minion' }), 'normal');
@@ -281,7 +281,7 @@ const otherGrade = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_
 assert.notDeepEqual(bossA, otherBoss);
 assert.notDeepEqual(bossA, otherGrade);
 assert.equal(questionsForEncounter({ kind: 'champion', monsterId: 'varg', grade: 'ak1', subject: 'svenska', seed: 3 }).length, 4);
-assert.equal(questionsForEncounter({ kind: 'normal', monsterId: 'varg', grade: 'ak1', subject: 'engelska', seed: 3 }).length, 3);
+assert.equal(questionsForEncounter({ kind: 'normal', monsterId: 'varg', grade: 'ak1', subject: 'engelska', seed: 3 }).length, 1);
 
 assert.deepEqual(applyWrongAnswer(100, 100), { damage: 25, hp: 75, died: false });
 assert.deepEqual(applyWrongAnswer(20, 100), { damage: 25, hp: 0, died: true });
@@ -740,31 +740,57 @@ try {
 const one = makeLearn('normal');
 try {
   const total = one.questions.length;
-  assert.equal(total, 3);
+  assert.equal(total, 1);
   startQuestion(one, 1, total);
-  for (let i = 0; i < total - 1; i++) {
-    one.enc.answer(one.questions[i]?.correctIndex ?? -1);
-    let guard = 0;
-    while (!one.enc.isQuestion() && guard < 80) {
-      one.enc.tick(0.05);
-      guard++;
-    }
-    assert.equal(one.kills.length, 0);
-    assert.equal(quiz(one.enc).progress, `Fråga ${i + 2} av ${total}`);
-  }
-  one.enc.answer(one.questions[total - 1]?.correctIndex ?? -1);
+  one.enc.answer(one.questions[0]?.correctIndex ?? -1);
+  assert.equal(quiz(one.enc).hidden, true, 'rätt svar går till strid');
   let t = 0;
   while (one.kills.length === 0 && t < 3) {
     one.enc.tick(0.05);
     t += 0.05;
     assert.ok(Math.abs(one.position.x) < 5, `skak driver ${one.position.x}`);
+    assert.equal(one.enc.isQuestion(), false, 'ingen andra fråga under striden');
   }
   assert.ok(t > 1.1 && t < 1.45, `sista frågan dödar efter striden (${t}s), utan extra paus`);
   assert.equal(one.kills.length, 1);
   assert.equal(one.enc.busy(), false);
   assert.equal(one.position.x, 0, 'sprite-x återställs när striden tar slut');
+  one.enc.tick(LEARN_PACK_PAUSE_S);
+  assert.equal(one.enc.isQuestion(), false, 'ingen extra fråga efter sista');
+  assert.equal(one.kills.length, 1);
+  assert.equal(quiz(one.enc).hidden, true);
 } finally {
   one.enc.dispose();
+}
+
+const normalWrong = makeLearn('normal');
+try {
+  assert.equal(normalWrong.questions.length, 1);
+  startQuestion(normalWrong, 1, 1);
+  const bad = ((normalWrong.questions[0]?.correctIndex ?? 0) + 1) % 4;
+  normalWrong.enc.answer(bad);
+  assert.equal(quiz(normalWrong.enc).hidden, false);
+  assert.match(normalWrong.enc.overlaySettings.root.textContent ?? '', /Rätt svar var:/);
+  assert.equal(normalWrong.kills.length, 0);
+  normalWrong.enc.tick(WRONG_S - 0.05);
+  assert.equal(normalWrong.enc.isQuestion(), false, 'fel-sekvensen är inte en ny fråga');
+  assert.equal(quiz(normalWrong.enc).hidden, false, 'quiz synlig under hela fel-sekvensen');
+  assert.match(normalWrong.enc.overlaySettings.root.textContent ?? '', /Rätt svar var:/);
+  assert.equal(normalWrong.kills.length, 0, 'monstret lever tills fel-sekvensen är slut');
+  assert.equal(normalWrong.hero.s.hp, 75, 'hjälten lever efter ett fel');
+  normalWrong.enc.tick(0.06);
+  assert.equal(normalWrong.kills.length, 1, 'sista fel-frågan fäller monstret');
+  assert.ok(normalWrong.monster.dead > 0);
+  assert.equal(normalWrong.hero.s.hp, 75);
+  assert.equal(normalWrong.enc.busy(), false);
+  assert.equal(normalWrong.enc.isQuestion(), false);
+  assert.equal(quiz(normalWrong.enc).hidden, true);
+  normalWrong.enc.tick(LEARN_WRONG_PAUSE_S);
+  assert.equal(normalWrong.enc.isQuestion(), false, 'ingen andra fråga efter fel');
+  assert.equal(normalWrong.kills.length, 1);
+  assert.equal(quiz(normalWrong.enc).hidden, true);
+} finally {
+  normalWrong.enc.dispose();
 }
 
 const shake = makeLearn('champion');
@@ -855,7 +881,8 @@ const missed = makeLearn('normal');
 const starHits: StarFlyInfo[] = [];
 setStarFlyHandler((info) => starHits.push(info));
 try {
-  startQuestion(missed, 1, missed.questions.length);
+  assert.equal(missed.questions.length, 1);
+  startQuestion(missed, 1, 1);
   const q = missed.questions[0];
   assert.ok(q);
   missed.enc.answer((q.correctIndex + 1) % 4);
@@ -868,7 +895,8 @@ const cheered = makeLearn('normal');
 const viaEncounter: StarFlyInfo[] = [];
 cheered.enc.onCorrectCelebrate = (info) => viaEncounter.push(info);
 try {
-  startQuestion(cheered, 1, cheered.questions.length);
+  assert.equal(cheered.questions.length, 1);
+  startQuestion(cheered, 1, 1);
   const q = cheered.questions[0];
   assert.ok(q);
   const bannersBefore = document.querySelectorAll('.rk-celebrate').length;
@@ -890,22 +918,14 @@ try {
   cheered.enc.tick(0.2);
   assert.ok(cheered.heroView.scale.y > 1, 'hjälten ska studsa');
   assert.ok(cheered.heroView.position.y < 0);
+  assert.equal(cheered.kills.length, 0, 'studsen sker medan striden pågår');
   for (let i = 0; i < 30; i++) cheered.enc.tick(0.05);
   assert.equal(cheered.heroView.scale.x, 1);
   assert.equal(cheered.heroView.scale.y, 1);
   assert.equal(cheered.heroView.position.y, 0, 'studsen ska tillbaka');
-  assert.equal(cheered.kills.length, 0, 'första rätta svaret fäller inte');
-  for (let n = 1; n < cheered.questions.length; n++) {
-    let guard = 0;
-    while (!cheered.enc.isQuestion() && cheered.kills.length === 0 && guard < 40) {
-      cheered.enc.tick(0.05);
-      guard++;
-    }
-    assert.equal(quiz(cheered.enc).progress, `Fråga ${n + 1} av ${cheered.questions.length}`);
-    cheered.enc.answer(cheered.questions[n]?.correctIndex ?? -1);
-    cheered.enc.tick(FIGHT_S + 0.05);
-  }
-  assert.equal(cheered.kills.length, 1, 'striden ska fortfarande fälla');
+  assert.equal(cheered.kills.length, 1, 'den enda frågan fäller efter striden');
+  assert.equal(cheered.enc.isQuestion(), false, 'ingen andra fråga');
+  assert.equal(cheered.enc.busy(), false);
 } finally {
   setStarFlyHandler(null);
   cheered.enc.dispose();

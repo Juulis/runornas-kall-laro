@@ -928,6 +928,6 @@ installDom();
 
 console.log('learn-rewards.test.mts: ok');
 
-// Trösklarna följer antalet frågor per möte (normal 3, champion 4, boss 6).
+// Trösklarna följer antalet frågor per möte (normal 1, champion 4, boss 6).
 assert.equal(encounterPassThreshold('champion'), 3);
 assert.equal(encounterPassThreshold('boss'), 5);
