@@ -1,13 +1,14 @@
 import type { Container, Renderer } from 'pixi.js';
 import { Container as PixiContainer, Rectangle, Sprite } from 'pixi.js';
 import { Rng } from '../../core/Rng';
-import { pickChunkGroundTileId } from './groundTiles';
 import type { Vec2, Collider } from '../../core/GameContext';
 import { biomeLoadLabel, canonicalBiomeId, decorForBiome, tilesForBiome } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
 import { trackChunkLoad } from '../../ui/chunkLoad';
+import { groundRolePoolForBiome } from './biomeBlend';
 import { ChunkWorldCache } from './chunkCache';
+import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
 import type { ChunkWorldData } from './worldGenerator';
 import { chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
 import { patchWorldBounds } from './groundPatchBounds';
@@ -424,7 +425,8 @@ export class BigWorldStreamGround extends PixiContainer {
       }
       const data = vis.data;
       const chunkMin = chunkMinWorld(data.cx, data.cy);
-      const pool = data.tilePool.length ? data.tilePool : ['gras_1'];
+      const pool = groundRolePoolForBiome(data.biomeId);
+      const origin = worldTileIndex(data.cx, data.cy, 0, 0);
       const ti0 = pi * patchTiles;
       const tj0 = pj * patchTiles;
       const tw = Math.min(patchTiles, tiles - ti0);
@@ -435,7 +437,7 @@ export class BigWorldStreamGround extends PixiContainer {
         const dj = local % tw;
         const ti = ti0 + di;
         const tj = tj0 + dj;
-        const tileId = pickChunkGroundTileId(data.chunkSeed, ti, tj, pool);
+        const tileId = pickChunkGroundTileId(this.activeWorldSeed, origin.gx + ti, origin.gy + tj, pool);
         const tex = this.assets.tiles.get(tileId);
         if (tex) {
           const wx = chunkMin.x + ti * TILE_WORLD;
