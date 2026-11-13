@@ -175,14 +175,17 @@ class FakeUtterance {
   lang = '';
   rate = 1;
   voice: { name?: string } | null = null;
+  onend: (() => void) | null = null;
   constructor(text: string) {
     this.text = text;
   }
 }
 const spoken: { text: string; lang: string; voice: string }[] = [];
+const uttered: FakeUtterance[] = [];
 const fakeSynth = {
   speak(u: FakeUtterance) {
     spoken.push({ text: u.text, lang: u.lang, voice: u.voice?.name ?? '' });
+    uttered.push(u);
   },
   cancel() {},
   pause() {},
@@ -294,6 +297,8 @@ try {
   assert.equal(spoken.length, 0, '#24: ordet läses inte upp automatiskt');
   spoken.length = 0;
   (forskola.root.querySelector('.rk-q-speak') as HTMLButtonElement).click();
+  assert.equal(spoken.length, 1, 'svensk prompt i klicket');
+  uttered[uttered.length - 1]?.onend?.();
   assert.equal(spoken.length, 2, 'svensk prompt och engelskt ord');
   assert.equal(spoken[0]?.lang, 'sv-SE');
   assert.equal(spoken[0]?.text, enQ.prompt);
@@ -380,6 +385,8 @@ try {
   assert.ok(speaker instanceof HTMLButtonElement);
   assert.equal(speaker.hidden, false, 'förskolan har alltid högtalarknappen');
   speaker.click();
+  assert.equal(spoken.length, 1, 'svensk prompt i klicket');
+  uttered[uttered.length - 1]?.onend?.();
   assert.equal(spoken.length, 2, 'förskolan läser prompt och glosa även när ljudknappen är av');
   assert.equal(spoken[0]?.lang, 'sv-SE');
   assert.equal(spoken[0]?.text, enQ.prompt);
