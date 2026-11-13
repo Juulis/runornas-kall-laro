@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ChunkWorldCache } from '../src/world/bigWorld/chunkCache';
 import { chunkWorldSeed } from '../src/world/bigWorld/worldGenerator';
+import { Zone } from '../src/world/Zone';
 
 const cache = new ChunkWorldCache({ maxEntries: 64, keepRadius: 2 });
 const worldSeed = 99;
@@ -45,5 +49,43 @@ const cache3 = new ChunkWorldCache({ maxEntries: 64, keepRadius: 1 });
 cache3.get(worldA, gs, 0, 0);
 cache3.get(worldB, gs, 0, 0);
 assert.equal(cache3.get(worldB, gs, 0, 0).chunkSeed, chunkWorldSeed(worldB, 0, 0));
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const groundSrc = readFileSync(join(root, 'src/world/bigWorld/BigWorldStreamGround.ts'), 'utf8');
+assert.equal(groundSrc.includes('colliders.remove('), true);
+assert.equal(groundSrc.includes('colliders.push('), true);
+assert.equal(groundSrc.includes('colliders.indexOf'), false);
+assert.equal(groundSrc.includes('colliders.splice'), false);
+
+// Samma kontrakt som dropChunkVisual: cirklar pushas per chunk och remove tar bort just den chunken.
+const streamed = new Zone('forest', 'stream-kollision', 256, 256);
+function pushChunk(baseX: number, count: number): { x: number; y: number; r: number }[] {
+  const list: { x: number; y: number; r: number }[] = [];
+  for (let i = 0; i < count; i++) {
+    const collider = { x: baseX + i * 4, y: 6, r: 0.9 };
+    streamed.colliders.push(collider);
+    list.push(collider);
+  }
+  return list;
+}
+const unloaded = pushChunk(0, 5);
+const kept = pushChunk(80, 4);
+assert.equal(streamed.colliders.length, unloaded.length + kept.length);
+for (const collider of unloaded) streamed.colliders.remove(collider);
+assert.equal(streamed.colliders.length, kept.length);
+const still = [...streamed.colliders];
+for (const collider of kept) assert.equal(still.includes(collider), true);
+for (const collider of unloaded) {
+  assert.equal(still.includes(collider), false);
+  const p = { x: collider.x + 0.2, y: collider.y };
+  streamed.collide(p, 0.4);
+  assert.equal(p.x, collider.x + 0.2);
+  assert.equal(p.y, collider.y);
+}
+const kept0 = kept[0];
+assert.ok(kept0);
+const keptHit = { x: kept0.x + 0.2, y: kept0.y };
+streamed.collide(keptHit, 0.4);
+assert.notEqual(keptHit.x, kept0.x + 0.2);
 
 console.log('big-world-chunk-cache.test.mts: ok');
