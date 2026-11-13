@@ -1,5 +1,6 @@
-import type { BigWorldBiome } from '../../data/bigWorldTypes';
-import { toRolePool, type GroundRolePool } from './groundTiles';
+import type { BigWorldBiome, BigWorldBiomeMarkset } from '../../data/bigWorldTypes';
+import varldStor from '../../data/varld_stor.json';
+import type { GroundRolePool } from './groundTiles';
 
 export interface BiomeWeight {
   biomeId: string;
@@ -52,8 +53,8 @@ export function blendBiomesAtChunk(
 }
 
 /**
- * Skogens mark. Bas är gräs, fläck A glänta, fläck B mossa, sällsynt blomsteräng.
- * Andra biom får egna markset i steg 4 och behåller sina nuvarande plattor.
+ * Skogens mark. Bas är gräs, fläck A skogsbotten, fläck B mossa, sällsynt blommor och ormbunke.
+ * Samma plattor som varld_stor.biomer.skog.markset. Används om json saknar markset.
  */
 export const SKOG_GROUND_ROLES: GroundRolePool = {
   base: ['gras_1', 'gras_2', 'gras_3', 'gras_4'],
@@ -62,20 +63,78 @@ export const SKOG_GROUND_ROLES: GroundRolePool = {
   rare: ['gras_blommor_1', 'gras_blommor_2', 'skogsbotten_ormbunke'],
 };
 
-const LEGACY_BIOME_TILES: Record<string, readonly string[]> = {
-  trask: ['lera_1', 'lera_2', 'gras_till_lera', 'skogsbotten_lov'],
-  fjall: ['lera_2', 'lera_3', 'gras_3'],
-  kust: ['lera_1', 'gras_2', 'gras_4'],
-  ask: ['lera_3', 'gras_till_lera', 'skogsbotten_ormbunke'],
+/** Reservpooler när biomet saknar markset. Samma plattor som i varld_stor.json. */
+const DEFAULT_BIOME_GROUND_ROLES: Record<string, GroundRolePool> = {
+  skog: SKOG_GROUND_ROLES,
+  trask: {
+    base: ['myr_1', 'myr_2', 'myr_3', 'myr_4'],
+    patchA: ['torv_1', 'torv_2'],
+    patchB: ['vassmark_1', 'vassmark_2'],
+    rare: ['myr_gol_1', 'myr_gol_2'],
+  },
+  fjall: {
+    base: ['grus_1', 'grus_2'],
+    patchA: ['ljung_1', 'ljung_2', 'ljung_3', 'ljung_4'],
+    patchB: ['berghall_1', 'berghall_2'],
+    rare: ['bergsvag_1', 'bergsvag_2', 'snoflack_1', 'snoflack_2'],
+  },
+  kust: {
+    base: ['grus_2'],
+    patchA: ['lera_1', 'lera_2', 'lera_3'],
+    patchB: ['gras_4'],
+    rare: ['kullersten'],
+  },
+  ask: {
+    base: ['aska'],
+    patchA: ['ruin_grus'],
+    patchB: ['lera_3'],
+    rare: ['stengolv_sprucket_1', 'stengolv_sprucket_2'],
+  },
 };
 
-/** Rollpool för ett biom. Okänt biom använder skogen. */
+function copyTileIds(ids: readonly string[] | undefined): string[] {
+  const out: string[] = [];
+  for (const id of ids ?? []) {
+    if (id.length > 0) out.push(id);
+  }
+  return out;
+}
+
+/** bas → base, flack_a → patchA, flack_b → patchB, sallsynt → rare. Tom bas räknas inte. */
+function poolFromMarkset(markset: BigWorldBiomeMarkset | undefined): GroundRolePool | null {
+  if (!markset) return null;
+  const base = copyTileIds(markset.bas);
+  if (base.length === 0) return null;
+  return {
+    base,
+    patchA: copyTileIds(markset.flack_a),
+    patchB: copyTileIds(markset.flack_b),
+    rare: copyTileIds(markset.sallsynt),
+  };
+}
+
+function marksetFromData(biomeId: string): BigWorldBiomeMarkset | undefined {
+  const biomer = (varldStor as { biomer?: Record<string, { markset?: BigWorldBiomeMarkset }> }).biomer;
+  return biomer?.[biomeId]?.markset;
+}
+
+function resolveGroundRoles(biomeId: string): GroundRolePool {
+  return poolFromMarkset(marksetFromData(biomeId)) ?? DEFAULT_BIOME_GROUND_ROLES[biomeId] ?? SKOG_GROUND_ROLES;
+}
+
+/** Rollpooler för de fem biomen. Markset i varld_stor vinner över reserven. */
+export const BIOME_GROUND_ROLES: Record<string, GroundRolePool> = {
+  skog: resolveGroundRoles('skog'),
+  trask: resolveGroundRoles('trask'),
+  fjall: resolveGroundRoles('fjall'),
+  kust: resolveGroundRoles('kust'),
+  ask: resolveGroundRoles('ask'),
+};
+
+/** Rollpool för ett biom. Okänt eller tomt id ger skogen. */
 export function groundRolePoolForBiome(biomeId: string): GroundRolePool {
   const id = biomeId || 'skog';
-  if (id === 'skog') return SKOG_GROUND_ROLES;
-  const tiles = LEGACY_BIOME_TILES[id];
-  if (tiles) return toRolePool(tiles);
-  return SKOG_GROUND_ROLES;
+  return BIOME_GROUND_ROLES[id] ?? BIOME_GROUND_ROLES.skog ?? SKOG_GROUND_ROLES;
 }
 
 function flattenRolePool(pool: GroundRolePool): string[] {

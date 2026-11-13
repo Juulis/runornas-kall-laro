@@ -7,12 +7,22 @@ export interface BigWorldRing {
   nivaband: [number, number];
 }
 
+/** Markplattor per roll. Svenska nycklar, samma som varld_stor.json. */
+export interface BigWorldBiomeMarkset {
+  bas: readonly string[];
+  flack_a: readonly string[];
+  flack_b: readonly string[];
+  sallsynt: readonly string[];
+}
+
 export interface BigWorldBiome {
   id: string;
   namn: string;
   kansla?: string;
   resurser?: string[];
   tiles?: string[];
+  /** Saknas i äldre data. Då används reservpoolen i biomeBlend. */
+  markset?: BigWorldBiomeMarkset;
   dekor?: string[];
   nivaband?: [number, number];
   regioner?: string[];

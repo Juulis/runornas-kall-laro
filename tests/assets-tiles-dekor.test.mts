@@ -168,7 +168,9 @@ assert.ok(tilesForBiome('fjall').includes('ljung_till_bergsvag_nh'));
 assert.ok(tilesForBiome('fjall').includes('ljung_till_myr_ov'));
 assert.equal(startupTiles.has('ljung_1'), false);
 assert.ok(tilesForBiome('ask').includes('myr_till_aska_nh'));
-assert.equal(tilesForBiome('kust').length, 0);
+assert.ok(tilesForBiome('kust').includes('grus_2'));
+assert.equal(tilesForBiome('kust').includes('gras_1'), false);
+assert.equal(tilesForBiome('kust').includes('ljung_1'), false);
 assert.equal(TILE_GROUPS.overgangar.length, 60);
 assert.equal(startupTiles.has('ljung_till_bergsvag_nh'), false);
 
