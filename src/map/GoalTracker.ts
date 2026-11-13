@@ -1,7 +1,8 @@
-import type { Vec2, ZoneView } from '../core/GameContext';
+import type { PortalView, Vec2, ZoneView } from '../core/GameContext';
 import type { VillageZoneDef } from '../data/types';
 import type { Key, Params } from '../i18n/types';
-import { isPlayableCityZone, type PlayableCityZone } from '../world/cityZones';
+import { isPlayableCityZone, PLAYABLE_CITIES, type PlayableCityZone } from '../world/cityZones';
+import { bigWorldCityPortalWorld } from '../world/bigWorld/bigWorldPortals';
 import type { MapModel } from './MapModel';
 
 const CITY_GOAL: Record<PlayableCityZone, Key> = {
@@ -9,6 +10,13 @@ const CITY_GOAL: Record<PlayableCityZone, Key> = {
   dimmerstrand: 'map.goal_dimmerstrand',
   kopparberg: 'map.goal_kopparberg',
   askeborg: 'map.goal_askeborg',
+};
+
+const PORTAL_PLACE: Record<PlayableCityZone, Key> = {
+  wolfstead: 'map.zones.wolfstead',
+  dimmerstrand: 'map.zones.dimmerstrand',
+  kopparberg: 'map.zones.kopparberg',
+  askeborg: 'map.zones.askeborg',
 };
 
 export interface Goal {
@@ -42,12 +50,58 @@ export class GoalTracker {
       if (best) return { x: best.x, y: best.y, text: 'map.goal_rune' };
     }
     if (z.runes.length) {
-      const p = z.portals[0];
-      if (p) return { x: p.x, y: p.y, text: 'map.goal_portal' };
+      const near = this.nearestPortalGoal(z.portals, hero);
+      if (near) return near;
       const fp = this.model.forestPortal();
       if (fp) return { x: fp[0], y: fp[1], text: 'map.goal_portal' };
     }
-    return null;
+    const near = this.nearestPortalGoal(z.portals, hero);
+    if (near) return near;
+    return this.nearestTownPortal(hero);
+  }
+
+  /** Närmaste portal i listan. Känd stad får platsens namn, annars den gamla portaltexten. */
+  private nearestPortalGoal(portals: readonly PortalView[], hero: Vec2): Goal | null {
+    let best: PortalView | null = null;
+    let bd = Infinity;
+    for (const p of portals) {
+      const d = Math.hypot(p.x - hero.x, p.y - hero.y);
+      if (d < bd) {
+        bd = d;
+        best = p;
+      }
+    }
+    if (!best) return null;
+    if (isPlayableCityZone(best.target)) {
+      return {
+        x: best.x,
+        y: best.y,
+        text: 'map.goal_nearest_town',
+        params: { place: this.model.t(PORTAL_PLACE[best.target]) },
+      };
+    }
+    return { x: best.x, y: best.y, text: 'map.goal_portal' };
+  }
+
+  /** Inget runmål och inga portaler i zonen: närmaste av de fyra byportalerna. */
+  private nearestTownPortal(hero: Vec2): Goal | null {
+    let best: { x: number; y: number; city: PlayableCityZone } | null = null;
+    let bd = Infinity;
+    for (const city of PLAYABLE_CITIES) {
+      const p = bigWorldCityPortalWorld(city);
+      const d = Math.hypot(p.x - hero.x, p.y - hero.y);
+      if (d < bd) {
+        bd = d;
+        best = { x: p.x, y: p.y, city };
+      }
+    }
+    if (!best) return null;
+    return {
+      x: best.x,
+      y: best.y,
+      text: 'map.goal_nearest_town',
+      params: { place: this.model.t(PORTAL_PLACE[best.city]) },
+    };
   }
 
   private villageGoal(z: ZoneView): Goal | null {

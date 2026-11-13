@@ -565,9 +565,20 @@ function distPointToCell(wx: number, wy: number, gx: number, gy: number): number
   return Math.hypot(wx - nearestX, wy - nearestY);
 }
 
-/** Dekor hoppar över vägmasken. DecorPlanner (steg 6) kan använda samma regel. */
+type DecorKeepout = (worldSeed: number, wx: number, wy: number) => boolean;
+
+/** waymarks.ts registrerar skyltfri zon så slumpdekor inte växer in i skylten. */
+let decorKeepout: DecorKeepout | null = null;
+
+export function registerDecorKeepout(fn: DecorKeepout): void {
+  decorKeepout = fn;
+}
+
+/** Dekor hoppar över vägmasken och, när waymarks är laddat, skyltarnas keepout. */
 export function shouldSpawnDecorAt(worldSeed: number, wx: number, wy: number): boolean {
-  return !isRoadMaskAtWorld(worldSeed, wx, wy);
+  if (isRoadMaskAtWorld(worldSeed, wx, wy)) return false;
+  if (decorKeepout?.(worldSeed, wx, wy)) return false;
+  return true;
 }
 
 function tilePair(typ: string, biomeId: string): readonly [string, string] {

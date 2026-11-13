@@ -29,6 +29,7 @@ export {
   TILE_GROUPS,
   TILE_TRANSITIONS,
   ROAD_TILES,
+  WAYMARK_DECOR,
   TILES,
   TILES_BY_BIOME,
   TRASK_DECOR,
@@ -173,6 +174,27 @@ export class AssetStore {
   ensureTiles(tileIds: readonly string[], onProgress?: (ratio: number) => void): Promise<void> {
     const key = `tiles:${tileIds.join('|')}`;
     return this.shareLoad(key, () => this.loadNamedAssets(tileIds, [], onProgress));
+  }
+
+  /**
+   * Hämtar namngiven dekor som inte hör till startvikten, till exempel vägvisare.
+   * Saknad fil loggas och hoppas över.
+   */
+  ensureDecor(decorIds: readonly string[], onProgress?: (ratio: number) => void): Promise<void> {
+    const key = `decor-ids:${decorIds.join('|')}`;
+    return this.shareLoad(key, () => this.loadNamedAssets([], decorIds, onProgress));
+  }
+
+  /** Horisontell dekor-anim, samma väg som lagereld_anim men utanför startvikten. */
+  ensureDecorAnim(name: string): Promise<void> {
+    if (this.decorAnims.has(name)) return Promise.resolve();
+    return this.shareLoad(`anim:${name}`, async () => {
+      try {
+        this.decorAnims.set(name, await loadStripAnim(tex, '2d/dekor', name));
+      } catch (e) {
+        console.warn(`[AssetStore] ${name}:`, e);
+      }
+    });
   }
 
   private shareLoad(key: string, work: () => Promise<void>): Promise<void> {
