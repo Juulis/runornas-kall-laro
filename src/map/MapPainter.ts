@@ -73,6 +73,7 @@ export class MapPainter {
         showLabels: !p.mini,
         isRevealed: worldFog ? (wx, wy) => fogFn.isWorldRevealed(z.name, wx, wy) : undefined,
         worldSeed: this.worldSeed(),
+        t: (key, params) => this.model.t(key, params),
       });
     }
     if (z.circle) {

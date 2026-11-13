@@ -1,15 +1,18 @@
 import type { Container, Renderer } from 'pixi.js';
-import { Container as PixiContainer, Rectangle, Sprite } from 'pixi.js';
+import { Container as PixiContainer, Rectangle, Sprite, Text, TextStyle } from 'pixi.js';
 import type { Vec2, Collider } from '../../core/GameContext';
-import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome } from '../../render/biomeAssetGroups';
+import type { Key, Params } from '../../i18n/types';
+import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome, WAYMARK_DECOR } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
+import { StripAnimSprite } from '../../render/StripAnimSprite';
 import { trackChunkLoad } from '../../ui/chunkLoad';
 import { groundRolePoolForBiome } from './biomeBlend';
 import { ChunkWorldCache } from './chunkCache';
 import { applyDecorBudget, DECOR_SPRITE_CAP, planDecorForChunk, shouldPlaceDecorAt } from './decorPlanner';
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
 import { roadIsDrawn, roadTileIdAt } from './roads';
+import { waymarkCaption, waymarksInChunk, type Waymark } from './waymarks';
 import type { ChunkWorldData } from './worldGenerator';
 import { chunkCenterWorld, chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
 import { patchWorldBounds } from './groundPatchBounds';
@@ -53,9 +56,20 @@ interface ChunkVisual {
   patches: PatchVisual[][];
   decor: DecorEntry[];
   decorDone: boolean;
+  waymarks: WaymarkVisual[];
+  waymarksDone: boolean;
   roadList: RoadPaint[] | null;
   roadCursor: number;
   roadDone: boolean;
+}
+
+interface WaymarkVisual {
+  nodes: Container[];
+  anims: StripAnimSprite[];
+  label: Text | null;
+  wx: number;
+  wy: number;
+  mark: Waymark;
 }
 
 interface DecorEntry {
@@ -103,6 +117,27 @@ function aabbOverlap(a: BigWorldViewBounds, minX: number, minY: number, maxX: nu
   return minX <= a.maxX && maxX >= a.minX && minY <= a.maxY && maxY >= a.minY;
 }
 
+const SIGN_TEXT = new TextStyle({
+  fontFamily: 'Georgia, serif',
+  fontSize: 13,
+  fontWeight: '600',
+  fill: '#3b2914',
+  align: 'center',
+  wordWrap: true,
+  wordWrapWidth: 78,
+  lineHeight: 15,
+});
+
+const FLAME_ANIM = 'fackla_flamma_anim';
+
+/** Text äger sin textur. Delade dekor- och animtexturer får leva kvar. */
+function destroyWaymarkNode(node: Container): void {
+  if (node.destroyed) return;
+  node.parent?.removeChild(node);
+  if (node instanceof Text) node.destroy({ children: true, texture: true, textureSource: true });
+  else node.destroy({ children: true, texture: false, textureSource: false });
+}
+
 /** Räknar RenderTexture-baserade mark-patchar (GPU-minne). */
 export function countBigWorldGroundRenderTextures(ground: BigWorldStreamGround): number {
   return ground.countRenderTextures();
@@ -128,6 +163,9 @@ export class BigWorldStreamGround extends PixiContainer {
   private readonly biomePending = new Map<string, Promise<void>>();
   private roadTilesReady = false;
   private roadTilesPending: Promise<void> | null = null;
+  private waymarksReady = false;
+  private waymarksPending: Promise<void> | null = null;
+  private waymarkT: ((key: Key, params?: Params) => string) | null = null;
 
   constructor(
     private readonly assets: AssetStore,
@@ -277,12 +315,20 @@ export class BigWorldStreamGround extends PixiContainer {
         d.sprite.renderable = on;
         d.sprite.visible = on;
       }
+      for (const w of vis.waymarks) {
+        const on = !view || aabbOverlap(view, w.wx, w.wy, w.wx, w.wy);
+        for (const node of w.nodes) {
+          if (node.destroyed) continue;
+          node.renderable = on;
+          node.visible = on;
+        }
+      }
     }
   }
 
   private pendingBuild(): boolean {
     for (const vis of this.visuals.values()) {
-      if (!vis.decorDone || !vis.roadDone) return true;
+      if (!vis.decorDone || !vis.roadDone || !vis.waymarksDone) return true;
       for (const row of vis.patches) {
         for (const p of row) {
           if (p.tilesBuilt < p.totalTiles) return true;
@@ -303,6 +349,9 @@ export class BigWorldStreamGround extends PixiContainer {
         d.sprite.destroy();
         if (d.collider) this.scene.zone.colliders.remove(d.collider);
       }
+    }
+    for (const w of vis.waymarks) {
+      for (const node of w.nodes) destroyWaymarkNode(node);
     }
     for (const row of vis.patches) {
       for (const p of row) destroyPatch(p);
@@ -336,17 +385,63 @@ export class BigWorldStreamGround extends PixiContainer {
     }
     const drawRoad = data.roadTypes.some((typ) => roadIsDrawn(typ));
     if (drawRoad) this.requestRoadTiles();
+    this.requestWaymarkAssets();
     this.visuals.set(key, {
       root,
       data,
       patches,
       decor: [],
       decorDone: false,
+      waymarks: [],
+      waymarksDone: false,
       roadList: null,
       roadCursor: 0,
       roadDone: !drawRoad,
     });
     this.requestBiomeAssets(data.biomeId);
+  }
+
+  /** Skylt, lykta och välkomststen. Inte i startvikten. */
+  private requestWaymarkAssets(): void {
+    if (this.waymarksReady || this.waymarksPending) return;
+    const ensureDecor = this.assets.ensureDecor;
+    if (typeof ensureDecor !== 'function') {
+      this.waymarksReady = true;
+      return;
+    }
+    const ensureAnim = this.assets.ensureDecorAnim;
+    const job = trackChunkLoad('Laddar skyltar…', async (onProgress) => {
+      await ensureDecor.call(this.assets, WAYMARK_DECOR, onProgress);
+      if (typeof ensureAnim === 'function') await ensureAnim.call(this.assets, FLAME_ANIM);
+    }).then(
+      () => {
+        this.waymarksReady = true;
+      },
+      () => {
+        this.waymarksPending = null;
+      },
+    );
+    this.waymarksPending = job;
+  }
+
+  /** Byter skylttext när språket ändras. Saknas översättare används regionens svenska namn. */
+  setWaymarkTranslator(t: (key: Key, params?: Params) => string): void {
+    this.waymarkT = t;
+    for (const vis of this.visuals.values()) {
+      for (const w of vis.waymarks) {
+        if (!w.label || w.label.destroyed) continue;
+        w.label.text = waymarkCaption(w.mark, t);
+      }
+    }
+  }
+
+  /** Flamman på lyktstolpen. Anropas från spel-loopen. */
+  tickAnims(dt: number): void {
+    for (const vis of this.visuals.values()) {
+      for (const w of vis.waymarks) {
+        for (const anim of w.anims) anim.update(dt);
+      }
+    }
   }
 
   /** Vägtiles som inte ingår i chunkens biom, till exempel grus i skogen. */
@@ -451,6 +546,88 @@ export class BigWorldStreamGround extends PixiContainer {
     vis.decorDone = true;
   }
 
+  private spawnWaymarksForChunk(vis: ChunkVisual): void {
+    if (vis.waymarksDone || !this.scene) return;
+    const marks = waymarksInChunk(this.activeWorldSeed, vis.data.cx, vis.data.cy);
+    if (marks.length === 0) {
+      vis.waymarksDone = true;
+      return;
+    }
+    if (!this.waymarksReady) {
+      this.requestWaymarkAssets();
+      return;
+    }
+    for (const wm of marks) this.placeWaymark(vis, wm);
+    vis.waymarksDone = true;
+  }
+
+  private placeWaymark(vis: ChunkVisual, wm: Waymark): void {
+    if (!this.scene) return;
+    const decor = this.assets.decor.get(wm.assetId);
+    if (!decor?.tex) return;
+    const k = wm.kind === 'sign' || wm.kind === 'milestone' ? 0.55 : wm.kind === 'portal_stone' ? 0.5 : 0.48;
+    const s = new Sprite(decor.tex);
+    s.anchor.set(decor.size.anchor[0] / decor.size.w, decor.size.anchor[1] / decor.size.h);
+    s.scale.set(k);
+    const foot = Iso.worldToScreen(wm.wx, wm.wy);
+    s.position.set(foot.x, foot.y);
+    s.zIndex = wm.wx + wm.wy + 0.7;
+    this.scene.objects.addChild(s);
+    const nodes: Container[] = [s];
+    const anims: StripAnimSprite[] = [];
+    let label: Text | null = null;
+    if (wm.kind === 'lamp') {
+      const flame = this.flameOnPole(decor.size, k, foot, wm);
+      if (flame) {
+        nodes.push(flame);
+        anims.push(flame);
+      }
+    } else if (wm.kind === 'sign' || wm.kind === 'milestone') {
+      label = this.signLabel(decor.size, k, foot, wm);
+      if (label) nodes.push(label);
+    }
+    vis.waymarks.push({ nodes, anims, label, wx: wm.wx, wy: wm.wy, mark: wm });
+  }
+
+  private signLabel(
+    size: { w: number; h: number; anchor: readonly number[] },
+    k: number,
+    foot: { x: number; y: number },
+    wm: Waymark,
+  ): Text | null {
+    if (!this.scene || typeof document === 'undefined') return null;
+    const caption = waymarkCaption(wm, this.waymarkT ?? undefined);
+    if (!caption) return null;
+    const ax = size.anchor[0] ?? size.w / 2;
+    const ay = size.anchor[1] ?? size.h;
+    const label = new Text({ text: caption, style: SIGN_TEXT });
+    label.anchor.set(0.5, 0.5);
+    label.resolution = 2;
+    label.position.set(foot.x + (size.w * 0.5 - ax) * k, foot.y + (size.h * 0.32 - ay) * k);
+    label.zIndex = wm.wx + wm.wy + 0.9;
+    this.scene.objects.addChild(label);
+    return label;
+  }
+
+  private flameOnPole(
+    size: { w: number; h: number; anchor: readonly number[] },
+    k: number,
+    foot: { x: number; y: number },
+    wm: Waymark,
+  ): StripAnimSprite | null {
+    if (!this.scene) return null;
+    const anim = this.assets.decorAnims.get(FLAME_ANIM);
+    if (!anim) return null;
+    const ax = size.anchor[0] ?? size.w / 2;
+    const ay = size.anchor[1] ?? size.h;
+    const flame = new StripAnimSprite(anim, k * 0.9);
+    flame.sprite.blendMode = 'add';
+    flame.position.set(foot.x + (size.w * 0.62 - ax) * k, foot.y + (size.h * 0.1 - ay) * k);
+    flame.zIndex = wm.wx + wm.wy + 0.82;
+    this.scene.objects.addChild(flame);
+    return flame;
+  }
+
   private tickBuildBudget(): void {
     if (!this.allowBuild) return;
     const t0 = performance.now();
@@ -459,7 +636,9 @@ export class BigWorldStreamGround extends PixiContainer {
       if (!this.buildRoadStep()) break;
     }
     for (const vis of this.visuals.values()) {
-      if (this.chunkTilesComplete(vis) && !vis.decorDone) this.spawnDecorForChunk(vis);
+      if (!this.chunkTilesComplete(vis)) continue;
+      if (!vis.decorDone) this.spawnDecorForChunk(vis);
+      if (!vis.waymarksDone) this.spawnWaymarksForChunk(vis);
     }
   }
 

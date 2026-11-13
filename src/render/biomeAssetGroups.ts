@@ -276,6 +276,12 @@ export const BY_DECOR = [
   'ortstork',
 ] as const;
 
+/**
+ * Skyltar, lyktor och välkomststenar. Inte en startvikt: anslagstavla finns redan i
+ * STARTUP_DECOR, resten hämtas med ensureDecor när vägen streamas.
+ */
+export const WAYMARK_DECOR = ['anslagstavla', 'orange_portal', 'fackla_stolpe'] as const;
+
 /** Vägrös används i alla biomens dekorpooler och måste finnas när biomet laddas. */
 const SHARED_EXPLORE_DECOR = ['vagros_blommor'] as const;
 

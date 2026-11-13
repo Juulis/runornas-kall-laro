@@ -1,6 +1,8 @@
 import type { BigWorldRoad } from '../data/bigWorldTypes';
+import type { Key, Params } from '../i18n/types';
 import { chunkCenterWorld, chunkMinWorld, chunkWorldSpan, worldToChunk } from '../world/bigWorld/bigWorldCoords';
 import { roadIsDrawn, roadPolylineWorld, roadWidthTiles } from '../world/bigWorld/roads';
+import { regionMapLabel } from '../world/bigWorld/waymarks';
 import { chunkDistanceFromStart, ringAtChunkDistance } from '../world/bigWorld/ringZone';
 import { getBigWorldCatalog } from '../world/bigWorld/worldGenerator';
 import type { Projection } from './MapPainter';
@@ -96,6 +98,8 @@ export function drawBigWorldMapLayer(
     isRevealed?: (wx: number, wy: number) => boolean;
     /** session.worldSeed. Saknas → 0, samma kurva som seed 0. */
     worldSeed?: number;
+    /** Samma nycklar som vägvisarna. Saknas översättare används region.namn. */
+    t?: (key: Key, params?: Params) => string;
   },
 ): void {
   const catalog = getBigWorldCatalog();
@@ -138,7 +142,7 @@ export function drawBigWorldMapLayer(
       c.fillStyle = '#c8d8e0';
       c.font = '11px Cinzel, Georgia, serif';
       c.textAlign = 'center';
-      c.fillText(region.namn ?? region.id, X(center.x), Y(center.y) - 10);
+      c.fillText(regionMapLabel(region.id, region.namn ?? region.id, opts.t), X(center.x), Y(center.y) - 10);
     }
   }
 

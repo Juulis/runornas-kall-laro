@@ -326,6 +326,7 @@ export class Game {
       setQuestLocale(locale);
       this.hud.relabel();
       this.invUI.relabel();
+      this.bindWaymarkLabels();
     });
     this.bus.on('pickup', ({ itemId }) => {
       const h = this.questHooks();
@@ -497,6 +498,13 @@ export class Game {
     this.questionsReady = true;
   }
 
+  /** Skylttexten följer LocaleManager via Text. Anropas vid zonbyte och språkbyte. */
+  private bindWaymarkLabels(): void {
+    const fg = this.forestGround;
+    if (!this.isStreamGround(fg)) return;
+    fg.setWaymarkTranslator((key, params) => this.text.t(key as unknown as TextKey, params ?? {}));
+  }
+
   private isStreamGround(g: unknown): g is BigWorldStreamGround {
     const Ctor = peekBigWorldRuntime()?.BigWorldStreamGround;
     return !!Ctor && g instanceof Ctor;
@@ -603,6 +611,7 @@ export class Game {
     const built = this.zones.build(name);
     r.ground.addChild(built.ground);
     this.forestGround = built.ground instanceof ForestGroundChunks || this.isStreamGround(built.ground) ? built.ground : null;
+    this.bindWaymarkLabels();
     for (const d of built.decor) r.objects.addChild(d);
     this.decorAnims = built.decorAnims;
     const hs = this.heroState;
@@ -1177,6 +1186,7 @@ export class Game {
     this.npcBark.update(dt, this.camera);
     this.refreshQuestLog();
     for (const a of this.decorAnims) a.update(dt);
+    if (this.isStreamGround(this.forestGround)) this.forestGround.tickAnims(dt);
     this.hoverUpdate();
     const boss = w.monsters.find((m) => m.boss && m.active && !m.dead);
     if (boss)
