@@ -15,6 +15,12 @@ export interface SpeakPart {
 }
 
 const SPEAK_RATE = 0.9;
+/**
+ * Chrome klipper eller tystar ett yttre runt 200 tecken (särskilt nätverksröster)
+ * och kan lägga av efter ungefär 15 sekunder. Hörförståelse som hf-en-ak7_9-002
+ * är längre än så, så texten delas innan den läses.
+ */
+const MAX_UTTERANCE_CHARS = 140;
 
 /** Håller kvar yttrena så att webbläsaren inte slänger dem innan de lästs upp. */
 const held: SpeechSynthesisUtterance[] = [];
@@ -24,12 +30,17 @@ const voiceBound = new WeakSet<object>();
 let playId = 0;
 /** Sant medan speakSequence bygger yttret, så en synkron voiceschanged inte byter kön. */
 let settling = false;
-/** Något yttre i den här omgången har börjat höras. */
-let started = false;
-/** Antal yttre som ännu inte fått onend. */
-let pendingStart = 0;
-/** Ett omförsök med sen röst per klick, så vi inte läser om i en loop. */
-let voiceRetried = false;
+/** Sant inne i applyLateVoices, så speak inte startar om samma byte. */
+let applying = false;
+/** Yttret som hör till segmentet vi just nu vill ha uppläst. */
+let active: SpeechSynthesisUtterance | null = null;
+let activePart: SpeakPart | null = null;
+/** Sant när just det här yttret fått onstart. Redan påbörjade yttre rörs inte. */
+let activeStarted = false;
+/** Segment som ännu inte speak:ats. Nästa byggs i onend, inte i samma kö. */
+let rest: SpeakPart[] = [];
+/** Ett omförsök per segment, så language-unavailable inte loopar. */
+let segmentTries = 0;
 
 function speechApi(): { synth: SpeechSynthesis; Utter: typeof SpeechSynthesisUtterance } | null {
   if (typeof window === 'undefined') return null;
@@ -83,46 +94,35 @@ function currentVoices(synth: SpeechSynthesis): SpeechSynthesisVoice[] {
   }
 }
 
-function asSpeakLang(lang: string): SpeakLang {
-  if (lang === 'en-US' || lang === 'en-GB' || lang === 'sv-SE') return lang;
-  return 'sv-SE';
-}
-
 /**
- * Chrome tystar ett yttre om voice sätts efter synth.speak(), till exempel
- * i voiceschanged. Engelska röster kommer ofta senare än svenska, så Lyssna
- * på en engelsk text hann starta utan röst och dog när rösten sedan skrevs på.
- * Därför sätts voice bara före speak. Kommer rösten senare och inget hunnit
- * börja spela talar vi om. Ett yttre som redan ligger i kön lämnas orört.
+ * Chrome tystar ett yttre om voice sätts efter synth.speak().
+ * Engelska röster kommer ofta senare än svenska. Har det här segmentet inte
+ * börjat höras, och motorn inte redan köat det, bygger vi ett nytt yttre med
+ * rösten. Det gamla lämnas orört. En redan påbörjad svensk del blockerar
+ * inte det, för det engelska segmentet finns då ännu inte som yttre.
  */
 function applyLateVoices(synth: SpeechSynthesis): void {
-  if (settling || voiceRetried || started) return;
-  if (pendingStart <= 0 || held.length === 0) return;
+  if (settling || applying) return;
+  if (!active || !activePart || activeStarted) return;
+  if (active.voice) return;
   if (synth.speaking || synth.pending) return;
-  const voices = currentVoices(synth);
-  if (!held.some((u) => !u.voice && pickSpeakVoice(voices, u.lang))) return;
+  if (!pickSpeakVoice(currentVoices(synth), activePart.lang)) return;
   const Utter = speechApi()?.Utter;
   if (!Utter) return;
-  const parts: SpeakPart[] = [];
-  for (const u of held) {
-    const text = u.text.trim();
-    if (!text) continue;
-    parts.push({ text, lang: asSpeakLang(u.lang) });
-  }
-  if (!parts.length) return;
-  voiceRetried = true;
-  playId += 1;
-  const id = playId;
-  const next = parts.map((part) => buildUtterance(Utter, synth, part, id));
-  held.length = 0;
-  for (const u of next) held.push(u);
-  pendingStart = next.length;
-  started = false;
+  applying = true;
   try {
-    for (const u of next) synth.speak(u);
-    if (synth.paused) synth.resume();
-  } catch {
-    /* API:t finns men gick inte att använda. */
+    const next = buildUtterance(Utter, synth, activePart, playId);
+    active = next;
+    activeStarted = false;
+    held.push(next);
+    try {
+      synth.speak(next);
+      if (synth.paused) synth.resume();
+    } catch {
+      /* API:t finns men gick inte att använda. */
+    }
+  } finally {
+    applying = false;
   }
 }
 
@@ -163,15 +163,110 @@ export function canSpeak(): boolean {
 /** Avbryter pågående uppläsning. Gör inget om API:t saknas. */
 export function cancel(): void {
   playId += 1;
-  started = false;
-  voiceRetried = false;
-  pendingStart = 0;
+  active = null;
+  activePart = null;
+  activeStarted = false;
+  segmentTries = 0;
+  rest = [];
   held.length = 0;
   try {
     speechApi()?.synth.cancel();
   } catch {
     /* API:t finns men gick inte att använda. */
   }
+}
+
+function isRetryable(error: string): boolean {
+  return error === 'language-unavailable' || error === 'voice-unavailable' || error === 'synthesis-failed';
+}
+
+/** Delar en lång text vid meningar så att Chrome inte klipper den. */
+function chunkTexts(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  if (trimmed.length <= MAX_UTTERANCE_CHARS) return [trimmed];
+  const clean = trimmed.replace(/\s+/g, ' ');
+  if (clean.length <= MAX_UTTERANCE_CHARS) return [clean];
+  const sentences = clean.split(/(?<=[.!?])\s+/);
+  const chunks: string[] = [];
+  let buf = '';
+  const flush = (): void => {
+    if (!buf) return;
+    chunks.push(buf);
+    buf = '';
+  };
+  for (const sentence of sentences) {
+    const pieces = sentence.length > MAX_UTTERANCE_CHARS ? splitLong(sentence) : [sentence];
+    for (const piece of pieces) {
+      if (!piece) continue;
+      if (!buf) {
+        buf = piece;
+        continue;
+      }
+      const joined = `${buf} ${piece}`;
+      if (joined.length <= MAX_UTTERANCE_CHARS) buf = joined;
+      else {
+        flush();
+        buf = piece;
+      }
+    }
+  }
+  flush();
+  return chunks;
+}
+
+function splitLong(text: string): string[] {
+  const out: string[] = [];
+  let left = text.trim();
+  while (left.length > MAX_UTTERANCE_CHARS) {
+    let cut = left.lastIndexOf(' ', MAX_UTTERANCE_CHARS);
+    if (cut < 40) cut = MAX_UTTERANCE_CHARS;
+    const piece = left.slice(0, cut).trim();
+    if (piece) out.push(piece);
+    left = left.slice(cut).trim();
+  }
+  if (left) out.push(left);
+  return out;
+}
+
+function expandParts(parts: readonly SpeakPart[]): SpeakPart[] {
+  const out: SpeakPart[] = [];
+  for (const part of parts) {
+    for (const text of chunkTexts(part.text)) out.push({ text, lang: part.lang });
+  }
+  return out;
+}
+
+function utter(synth: SpeechSynthesis, part: SpeakPart, id: number): SpeechSynthesisUtterance | null {
+  const api = speechApi();
+  if (!api || id !== playId) return null;
+  const utterance = buildUtterance(api.Utter, synth, part, id);
+  active = utterance;
+  activePart = part;
+  activeStarted = false;
+  held.push(utterance);
+  try {
+    synth.speak(utterance);
+    if (synth.paused) synth.resume();
+  } catch {
+    /* API:t finns men gick inte att använda. */
+  }
+  return utterance;
+}
+
+/** Tar nästa segment och talar det. Anropas i klicket och sedan från onend. */
+function speakCurrent(synth: SpeechSynthesis, id: number): SpeechSynthesisUtterance | null {
+  if (id !== playId) return null;
+  const part = rest.shift();
+  if (!part) {
+    active = null;
+    activePart = null;
+    activeStarted = false;
+    segmentTries = 0;
+    return null;
+  }
+  segmentTries = 0;
+  return utter(synth, part, id);
 }
 
 function buildUtterance(
@@ -187,76 +282,95 @@ function buildUtterance(
   // Bara före speak. Att sätta voice senare tystar Chrome.
   if (voice) utterance.voice = voice;
   utterance.onstart = () => {
-    if (id !== playId) return;
-    started = true;
+    if (id !== playId || active !== utterance) return;
+    activeStarted = true;
   };
   utterance.onend = () => {
-    if (id !== playId) return;
-    pendingStart = Math.max(0, pendingStart - 1);
-    // Chrome kan pausa kön mellan två yttre. Återuppta, utan att avbryta nästa.
+    if (id !== playId || active !== utterance) return;
+    // Nästa segment byggs här, med röstlistan som finns nu. Ingen gemensam kö.
     try {
       if (synth.paused) synth.resume();
     } catch {
       /* motorn ville inte återuppta */
     }
+    speakCurrent(synth, id);
+    const next = active;
+    // Chrome släpper ibland speak som görs i onend utan att sätta speaking.
+    // Om inget hann börja, tala samma yttre igen. Redan påbörjade rörs inte.
+    setTimeout(() => {
+      if (id !== playId || !next || active !== next || activeStarted) return;
+      if (synth.speaking || synth.pending) return;
+      try {
+        synth.speak(next);
+        if (synth.paused) synth.resume();
+      } catch {
+        /* API:t finns men gick inte att använda. */
+      }
+    }, 50);
   };
   utterance.onerror = (ev: SpeechSynthesisErrorEvent) => {
-    if (id !== playId) return;
-    pendingStart = Math.max(0, pendingStart - 1);
-    if (ev.error === 'voice-unavailable' || ev.error === 'language-unavailable' || ev.error === 'synthesis-failed') {
-      voiceRetried = false;
+    if (id !== playId || active !== utterance) return;
+    if (!isRetryable(ev.error)) return;
+    const failed = activePart;
+    if (!failed) return;
+    if (segmentTries >= 1) {
+      speakCurrent(synth, id);
+      return;
     }
+    segmentTries += 1;
+    // Nytt yttre, samma lang. Aldrig en svensk röst på engelsk text.
+    utter(synth, failed, id);
   };
   return utterance;
 }
 
-function retrySequence(synth: SpeechSynthesis, utterances: readonly SpeechSynthesisUtterance[], id: number): void {
-  if (id !== playId) return;
-  if (held[0] !== utterances[0]) return;
-  if (synth.speaking || synth.pending) return;
-  try {
-    for (const u of utterances) synth.speak(u);
-    if (synth.paused) synth.resume();
-  } catch {
-    /* API:t finns men gick inte att använda. */
-  }
-}
-
 /**
- * Läser segmenten i ordning i samma klick (gesten får inte tappas).
- * Inget cancel mellan segmenten, för det skulle klippa nästa.
- * Chrome slänger speak i samma tur som cancel, så vid pågående tal
- * talar vi ändå direkt och försöker igen strax efter.
+ * Engelska hördes inte efter #41. Två saker i koden gjorde den tyst på Chrome:
+ * Hela kön speak:ades på en gång, och vid språkbyte (svensk prompt, sedan
+ * engelskt ord) släpper Chrome ofta det andra yttret. Samtidigt satte den
+ * svenska delen started så fort den började, och applyLateVoices avbröt då
+ * (`started` eller `speaking`). Den engelska rösten kommer senare än den
+ * svenska, så det engelska yttret låg kvar utan röst. Chrome svarar
+ * language-unavailable och ger inget ljud, och felet byggde inget nytt yttre.
+ * Därför talas ett segment i taget. Nästa byggs i onend med aktuella röster.
+ * Voice sätts bara före speak. Saknas engelsk röst talas texten ändå med
+ * lang en-US eller en-GB, aldrig med en svensk röst. Samma fel försöker om
+ * en gång. Långa texter delas, för Chrome klipper runt 200 tecken.
+ * Första speak sker i samma klick. Chrome slänger speak i samma tur som
+ * cancel, så vid pågående tal talar vi direkt och försöker igen strax efter.
  */
 export function speakSequence(parts: readonly SpeakPart[]): void {
   const api = speechApi();
   if (!api) return;
-  const cleaned: SpeakPart[] = [];
-  for (const part of parts) {
-    const text = part.text.trim();
-    if (!text) continue;
-    cleaned.push({ text, lang: part.lang });
-  }
+  const cleaned = expandParts(parts);
   if (!cleaned.length) return;
-  const { synth, Utter } = api;
+  const { synth } = api;
   settling = true;
   try {
     ensureVoices(synth);
     playId += 1;
     const id = playId;
-    voiceRetried = false;
-    started = false;
-    const utterances = cleaned.map((part) => buildUtterance(Utter, synth, part, id));
-    held.length = 0;
-    for (const u of utterances) held.push(u);
-    pendingStart = utterances.length;
+    active = null;
+    activePart = null;
+    activeStarted = false;
+    segmentTries = 0;
+    rest = cleaned;
     if (synth.paused) synth.resume();
     const busy = !!(synth.speaking || synth.pending);
     if (busy) synth.cancel();
-    for (const u of utterances) synth.speak(u);
-    if (synth.paused) synth.resume();
+    held.length = 0;
+    const utterance = speakCurrent(synth, id);
     if (!busy) return;
-    const retry = (): void => retrySequence(synth, utterances, id);
+    const retry = (): void => {
+      if (id !== playId || !utterance || active !== utterance) return;
+      if (synth.speaking || synth.pending) return;
+      try {
+        synth.speak(utterance);
+        if (synth.paused) synth.resume();
+      } catch {
+        /* API:t finns men gick inte att använda. */
+      }
+    };
     queueMicrotask(retry);
     setTimeout(retry, 40);
   } catch {
@@ -315,7 +429,7 @@ function isSpelling(rule: string): boolean {
 /**
  * Segment som ska läsas för en fråga. Stavning läser bara prompten, aldrig ordet.
  * Översättning med eng/speakText delas: svensk prompt, sedan det engelska ordet.
- * Hörförståelse är ett enda yttre på textens språk.
+ * Hörförståelse är ett stycke på textens språk. Lång text delas vid uppspelning.
  */
 export function questionUtterances(q: LearnQuestion): SpeakPart[] {
   const prompt = q.prompt.trim();

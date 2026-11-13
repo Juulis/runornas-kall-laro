@@ -315,6 +315,21 @@ function fireVoices(): void {
   synth.onvoiceschanged?.call(synth, new Event('voiceschanged'));
 }
 
+/** Spelar färdigt sista yttret, och de som onend sedan startar. */
+function drain(): void {
+  const done = new Set<FakeUtterance>();
+  let guard = 0;
+  while (guard < 40) {
+    guard += 1;
+    const last = made[made.length - 1];
+    if (!last || done.has(last)) break;
+    done.add(last);
+    const before = said.length;
+    last.onend?.();
+    if (said.length === before) break;
+  }
+}
+
 function resetSpeech(): void {
   cancel();
   said.length = 0;
@@ -327,19 +342,20 @@ function resetSpeech(): void {
 resetSpeech();
 const duoCancels = cancels;
 speakSequence(preParts);
-assert.deepEqual(
-  said.map((row) => row.lang),
-  ['sv-SE', 'en-US'],
-);
-assert.deepEqual(
-  said.map((row) => row.voice),
-  ['Alva', 'Sam'],
-);
+assert.equal(said.length, 1, 'engelska ordet ska inte köas i samma speak som svenskan');
+assert.equal(said[0]?.lang, 'sv-SE');
+assert.equal(said[0]?.voice, 'Alva');
 assert.equal(said[0]?.text, pre.prompt);
-assert.equal(said[1]?.text, pre.speakText);
 assert.ok((said[0]?.text ?? '').trim().length > 0);
-assert.ok((said[1]?.text ?? '').trim().length > 0);
 assert.equal(cancels, duoCancels, 'segmenten ska inte avbryta varandra');
+made[0]?.onend?.();
+assert.equal(said.length, 2, 'engelska ordet startar i onend');
+assert.equal(said[1]?.lang, 'en-US');
+assert.equal(said[1]?.voice, 'Sam');
+assert.equal(said[1]?.text, pre.speakText);
+assert.ok((said[1]?.text ?? '').trim().length > 0);
+assert.notEqual(said[1]?.voice, 'Alva');
+assert.equal(cancels, duoCancels, 'nästa segment ska inte avbryta det förra');
 
 resetSpeech();
 speakSequence(questionUtterances(spelling));
@@ -376,9 +392,11 @@ resetSpeech();
 voices = [];
 speak(bugText, 'en-US');
 assert.equal(said.length, 1);
-assert.equal(said[0]?.text, bugText);
 assert.equal(said[0]?.lang, 'en-US');
 assert.equal(said[0]?.voice, '');
+assert.ok((said[0]?.text ?? '').length > 0);
+assert.ok((said[0]?.text.length ?? 0) <= 140, 'lång engelsk text delas innan Chrome klipper den');
+assert.ok(bugText.startsWith(said[0]?.text ?? ''));
 const dropped = made[0];
 assert.ok(dropped);
 assert.equal(dropped.lang, 'en-US');
@@ -388,7 +406,12 @@ voices = [{ lang: 'en-US', name: 'Sam', localService: true, default: false }];
 fireVoices();
 assert.equal(cancels, cancelsAtLate, 'voiceschanged får inte avbryta');
 assert.equal(dropped.voice, null, 'voice efter speak tystar Chrome');
-assert.ok(said.some((row) => row.voice === 'Sam' && row.lang === 'en-US' && row.text === bugText));
+assert.ok(said.some((row) => row.voice === 'Sam' && row.lang === 'en-US' && row.text === dropped.text));
+drain();
+const withSam = said.filter((row) => row.voice === 'Sam');
+assert.equal(withSam.map((row) => row.text).join(' '), bugText);
+assert.ok(withSam.every((row) => row.lang === 'en-US' && row.voice !== 'Alva'));
+assert.ok(withSam.every((row) => row.text.length <= 140));
 
 resetSpeech();
 voices = [];
@@ -412,9 +435,13 @@ synth.pending = false;
 said.length = 0;
 made.length = 0;
 speak(bugText, 'en-US');
-assert.equal(said[0]?.text, bugText);
 assert.equal(said[0]?.lang, 'en-US');
 assert.equal(said[0]?.voice, 'Sam');
+assert.ok(bugText.startsWith(said[0]?.text ?? ''));
+assert.ok((said[0]?.text ?? '').trim().length > 0);
+drain();
+assert.equal(said.map((row) => row.text).join(' '), bugText);
+assert.ok(said.every((row) => row.lang === 'en-US' && row.voice === 'Sam'));
 
 resetSpeech();
 voices = [{ lang: 'sv-SE', name: 'Alva', localService: true, default: true }];
@@ -434,12 +461,15 @@ try {
   listen.click();
   assert.equal(listen.textContent, 'Lyssna igen');
   assert.equal(cancels, quietCancels, 'Lyssna ska inte avbryta när motorn är ledig');
-  assert.equal(said.length, 1);
-  assert.equal(said[0]?.text, bugText);
-  assert.ok(said[0]?.text.trim().length > 0);
+  assert.ok(said.length >= 1);
   assert.equal(said[0]?.lang, 'en-US');
   assert.equal(said[0]?.voice, '');
   assert.notEqual(said[0]?.voice, 'Alva');
+  assert.ok((said[0]?.text ?? '').trim().length > 0);
+  assert.ok(bugText.startsWith(said[0]?.text ?? ''));
+  drain();
+  assert.equal(said.map((row) => row.text).join(' '), bugText);
+  assert.ok(said.every((row) => row.lang === 'en-US' && row.voice === '' && row.voice !== 'Alva'));
 
   said.length = 0;
   made.length = 0;
@@ -452,7 +482,7 @@ try {
   assert.equal(listen.textContent, 'Lyssna igen');
   assert.equal(cancels, lateCancels);
   assert.equal(said[0]?.lang, 'en-US');
-  assert.equal(said[0]?.text, bugText);
+  assert.ok(bugText.startsWith(said[0]?.text ?? ''));
   assert.ok((said[0]?.text ?? '').trim().length > 0);
   const first = made[0];
   assert.ok(first);
@@ -461,15 +491,18 @@ try {
   fireVoices();
   assert.equal(cancels, lateCancels, 'sen röst får inte tysta Lyssna');
   assert.equal(first.voice, null);
-  assert.ok(said.some((row) => row.lang === 'en-US' && row.text === bugText && row.voice === 'Sam'));
+  assert.ok(said.some((row) => row.lang === 'en-US' && row.voice === 'Sam' && row.text.length > 0 && bugText.startsWith(row.text)));
   const beforeAgain = said.length;
   listen.click();
   assert.ok(said.length > beforeAgain, 'Lyssna igen ska tala igen');
-  assert.equal(said.at(-1)?.text, bugText);
+  assert.ok(bugText.startsWith(said.at(-1)?.text ?? ''));
   assert.equal(said.at(-1)?.lang, 'en-US');
   assert.equal(said.at(-1)?.voice, 'Sam');
   assert.equal(listen.textContent, 'Lyssna igen');
   assert.equal(cancels, lateCancels);
+  drain();
+  const again = said.slice(beforeAgain).filter((row) => row.voice === 'Sam');
+  assert.equal(again.map((row) => row.text).join(' '), bugText);
 
   const choice = overlay.root.querySelector('.rk-q-choices button');
   assert.ok(choice instanceof HTMLButtonElement);
@@ -488,12 +521,117 @@ try {
   listen.click();
   assert.equal(cancels, cancelsBusy + 1, 'pågående tal byts vid Lyssna igen');
   assert.ok(said.length > beforeBusy);
-  assert.equal(said.at(-1)?.text, bugText);
+  assert.ok(bugText.startsWith(said.at(-1)?.text ?? ''));
   assert.equal(said.at(-1)?.lang, 'en-US');
   assert.ok((said.at(-1)?.text ?? '').trim().length > 0);
   synth.speaking = false;
 } finally {
   overlay.dispose();
 }
+
+resetSpeech();
+voices = [{ lang: 'sv-SE', name: 'Alva', localService: true, default: true }];
+speakSequence([
+  { text: 'Vad betyder det här ordet?', lang: 'sv-SE' },
+  { text: 'dog', lang: 'en-US' },
+]);
+assert.equal(said.length, 1);
+assert.equal(said[0]?.lang, 'sv-SE');
+assert.equal(said[0]?.voice, 'Alva');
+made[0]?.onstart?.();
+synth.speaking = true;
+voices = [
+  { lang: 'sv-SE', name: 'Alva', localService: true, default: true },
+  { lang: 'en-US', name: 'Sam', localService: true },
+];
+const duringSv = cancels;
+fireVoices();
+assert.equal(cancels, duringSv, 'påbörjad svensk del ska inte nollas');
+assert.equal(said.length, 1, 'engelska ordet väntar tills svenskan är klar');
+assert.equal(made[0]?.voice?.name, 'Alva');
+synth.speaking = false;
+made[0]?.onend?.();
+assert.equal(said[1]?.text, 'dog');
+assert.equal(said[1]?.lang, 'en-US');
+assert.equal(said[1]?.voice, 'Sam');
+assert.notEqual(said[1]?.voice, 'Alva');
+
+resetSpeech();
+voices = [{ lang: 'sv-SE', name: 'Alva', localService: true, default: true }];
+speakSequence([
+  { text: 'Vad betyder det här ordet?', lang: 'sv-SE' },
+  { text: 'dog', lang: 'en-US' },
+]);
+made[0]?.onend?.();
+assert.equal(said[1]?.text, 'dog');
+assert.equal(said[1]?.lang, 'en-US');
+assert.equal(said[1]?.voice, '');
+const english = made[1];
+assert.ok(english);
+assert.equal(english.voice, null);
+voices = [
+  { lang: 'sv-SE', name: 'Alva', localService: true, default: true },
+  { lang: 'en-US', name: 'Sam', localService: true },
+];
+const afterSv = cancels;
+fireVoices();
+assert.equal(cancels, afterSv);
+assert.equal(english.voice, null, 'voice skrivs inte på yttret som redan speak:ats');
+assert.equal(said.at(-1)?.text, 'dog');
+assert.equal(said.at(-1)?.lang, 'en-US');
+assert.equal(said.at(-1)?.voice, 'Sam');
+assert.notEqual(said.at(-1)?.voice, 'Alva');
+
+resetSpeech();
+voices = [{ lang: 'sv-SE', name: 'Alva', localService: true, default: true }];
+speak('dog', 'en-US');
+assert.equal(said.length, 1);
+assert.equal(said[0]?.lang, 'en-US');
+assert.equal(said[0]?.voice, '');
+assert.equal(made[0]?.voice, null);
+const unavailableCancels = cancels;
+made[0]?.onerror?.({ error: 'language-unavailable' });
+assert.equal(cancels, unavailableCancels, 'omförsök ska inte cancel:a bort talet');
+assert.equal(said.length, 2);
+assert.equal(said[1]?.text, 'dog');
+assert.equal(said[1]?.lang, 'en-US');
+assert.equal(said[1]?.voice, '');
+assert.equal(made[1]?.voice, null);
+assert.notEqual(said[1]?.voice, 'Alva');
+made[1]?.onerror?.({ error: 'synthesis-failed' });
+assert.equal(said.length, 2, 'bara ett omförsök per segment');
+assert.equal(cancels, unavailableCancels);
+
+resetSpeech();
+voices = [];
+speak('park', 'en-US');
+made[0]?.onstart?.();
+synth.speaking = true;
+voices = [
+  { lang: 'sv-SE', name: 'Alva', localService: true, default: true },
+  { lang: 'en-US', name: 'Sam', localService: true },
+];
+const startedCancels = cancels;
+fireVoices();
+assert.equal(cancels, startedCancels);
+assert.equal(made.length, 1, 'påbörjat yttre byts inte ut');
+assert.equal(made[0]?.voice, null);
+synth.speaking = false;
+made[0]?.onerror?.({ error: 'synthesis-failed' });
+assert.equal(said.length, 2);
+assert.equal(said[1]?.text, 'park');
+assert.equal(said[1]?.lang, 'en-US');
+assert.equal(said[1]?.voice, 'Sam');
+assert.notEqual(said[1]?.voice, 'Alva');
+assert.equal(made[0]?.voice, null);
+
+resetSpeech();
+voices = [{ lang: 'sv-SE', name: 'Alva', localService: true, default: true }];
+speak('colour', 'en-GB');
+made[0]?.onerror?.({ error: 'voice-unavailable' });
+assert.equal(said[1]?.text, 'colour');
+assert.equal(said[1]?.lang, 'en-GB');
+assert.equal(said[1]?.voice, '');
+assert.equal(made[1]?.voice, null);
 
 console.log('learn speech ok');
