@@ -230,6 +230,28 @@
       ],
       "variant": {},
       "id": "skog",
+      "markset": {
+        "bas": [
+          "gras_1",
+          "gras_2",
+          "gras_3",
+          "gras_4"
+        ],
+        "flack_a": [
+          "skogsbotten_lov",
+          "skogsbotten_barr_1",
+          "skogsbotten_barr_2"
+        ],
+        "flack_b": [
+          "mossa_1",
+          "mossa_2"
+        ],
+        "sallsynt": [
+          "gras_blommor_1",
+          "gras_blommor_2",
+          "skogsbotten_ormbunke"
+        ]
+      },
       "monsterfamiljer": {
         "bestar": [
           "skogsvarg",
@@ -424,6 +446,26 @@
         "rutt": "Sjuk skog och giftträsk, svulster som pulserar."
       },
       "id": "trask",
+      "markset": {
+        "bas": [
+          "myr_1",
+          "myr_2",
+          "myr_3",
+          "myr_4"
+        ],
+        "flack_a": [
+          "torv_1",
+          "torv_2"
+        ],
+        "flack_b": [
+          "vassmark_1",
+          "vassmark_2"
+        ],
+        "sallsynt": [
+          "myr_gol_1",
+          "myr_gol_2"
+        ]
+      },
       "monsterfamiljer": {
         "ododa": [
           "myrhund",
@@ -615,6 +657,28 @@
       ],
       "variant": {},
       "id": "fjall",
+      "markset": {
+        "bas": [
+          "grus_1",
+          "grus_2"
+        ],
+        "flack_a": [
+          "ljung_1",
+          "ljung_2",
+          "ljung_3",
+          "ljung_4"
+        ],
+        "flack_b": [
+          "berghall_1",
+          "berghall_2"
+        ],
+        "sallsynt": [
+          "bergsvag_1",
+          "bergsvag_2",
+          "snoflack_1",
+          "snoflack_2"
+        ]
+      },
       "monsterfamiljer": {
         "gastar": [
           "dimgast",
@@ -831,6 +895,22 @@
       ],
       "variant": {},
       "id": "kust",
+      "markset": {
+        "bas": [
+          "grus_2"
+        ],
+        "flack_a": [
+          "lera_1",
+          "lera_2",
+          "lera_3"
+        ],
+        "flack_b": [
+          "gras_4"
+        ],
+        "sallsynt": [
+          "kullersten"
+        ]
+      },
       "monsterfamiljer": {
         "gastar": [
           "klagokvinna",
@@ -1016,6 +1096,21 @@
       ],
       "variant": {},
       "id": "ask",
+      "markset": {
+        "bas": [
+          "aska"
+        ],
+        "flack_a": [
+          "ruin_grus"
+        ],
+        "flack_b": [
+          "lera_3"
+        ],
+        "sallsynt": [
+          "stengolv_sprucket_1",
+          "stengolv_sprucket_2"
+        ]
+      },
       "monsterfamiljer": {
         "ododa": [
           "skelett_bagskytt",

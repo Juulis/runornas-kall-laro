@@ -1,4 +1,4 @@
-import type { BigWorldDataFile } from './bigWorldTypes';
+import type { BigWorldBiome, BigWorldDataFile } from './bigWorldTypes';
 import type { MonsterDef } from './types';
 import { filterSubtypesByBand, regionSpawnLevelBand } from '../world/bigWorld/spawnRules';
 
@@ -11,6 +11,24 @@ export interface VarldStorValidateCtx {
 /** Känd platshållare tills design #107 synkas (fjall_bergsulvar). */
 export function filterKnownVarldStorDataDebt(issues: string[]): string[] {
   return issues.filter((i) => !(i.includes('egna_monster fjall_bergsulvar') && i.includes('gruvspindel') && i.includes('insekter')));
+}
+
+function isNonEmptyTileList(ids: unknown): ids is readonly string[] {
+  return Array.isArray(ids) && ids.every((id) => typeof id === 'string' && id.trim() !== '');
+}
+
+/** Markset är valfritt. Finns det ska bas ha minst en tile och varje id vara en icke-tom sträng. */
+function validateBiomeMarkset(bid: string, biome: BigWorldBiome, issues: string[]): void {
+  const markset = biome.markset;
+  if (!markset) return;
+  if (!isNonEmptyTileList(markset.bas) || markset.bas.length < 1) {
+    issues.push(`varld_stor biom ${bid}: markset.bas saknar tile`);
+  }
+  for (const role of ['flack_a', 'flack_b', 'sallsynt'] as const) {
+    const ids = markset[role];
+    if (ids == null) continue;
+    if (!isNonEmptyTileList(ids)) issues.push(`varld_stor biom ${bid}: markset.${role} har tomt tile-id`);
+  }
 }
 
 export function validateVarldStor(bw: BigWorldDataFile, ctx: VarldStorValidateCtx): string[] {
@@ -57,6 +75,7 @@ export function validateVarldStor(bw: BigWorldDataFile, ctx: VarldStorValidateCt
   }
 
   for (const [bid, biome] of Object.entries(bw.biomer)) {
+    validateBiomeMarkset(bid, biome, issues);
     for (const slot of biome.egna_monster ?? []) {
       for (const id of slot.undertyper_nu) {
         if (!ctx.monsterIds.has(id)) issues.push(`varld_stor biom ${bid} egna_monster: okänd undertyp ${id}`);

@@ -123,6 +123,12 @@ export const FJALL_TILES = [
   'ljung_mossa_blandning',
 ] as const;
 
+/**
+ * Kustens markplattor som inte redan ligger i startup.
+ * lera, gras_4 och kullersten laddas med starten. Sand kommer senare.
+ */
+export const KUST_TILES = ['grus_2'] as const;
+
 export interface TileTransitionGroup {
   id: string;
   /** Biom som behöver gruppen. Ljung mot bergsväg hör bara till fjäll (båda sidor). */
@@ -142,7 +148,7 @@ export const TILE_TRANSITIONS: readonly TileTransitionGroup[] = [
 const TRANSITION_TILES = unique(TILE_TRANSITIONS.map((group) => group.tiles));
 
 /** Komplett lista: varje png i public/assets/2d/tiles/. */
-export const TILES: readonly string[] = unique([STARTUP_TILES, TRASK_TILES, FJALL_TILES, TRANSITION_TILES]);
+export const TILES: readonly string[] = unique([STARTUP_TILES, TRASK_TILES, FJALL_TILES, KUST_TILES, TRANSITION_TILES]);
 
 /**
  * Grupper per biom. skog/startup är de 39 som laddas direkt
@@ -232,7 +238,7 @@ export const FJALL_DECOR = [
   'vindtall_krokig',
 ] as const;
 
-/** Kust delar vrak och nät med träsket. Ingen egen markgrafik än. */
+/** Kust delar vrak och nät med träsket. Egen sand kommer senare. */
 export const KUST_DECOR = ['sjunken_bat', 'sjunken_klocka', 'natstang'] as const;
 
 /**
@@ -290,7 +296,7 @@ export const DECOR_GROUPS = {
 /** Plattor som ska hämtas för biomet. Startup-plattorna ingår inte — de är redan laddade. */
 export function tilesForBiome(biomeId: string): readonly string[] {
   const id = canonicalBiomeId(biomeId);
-  const own = id === 'trask' ? TRASK_TILES : id === 'fjall' ? FJALL_TILES : [];
+  const own = id === 'trask' ? TRASK_TILES : id === 'fjall' ? FJALL_TILES : id === 'kust' ? KUST_TILES : [];
   const edges = TILE_TRANSITIONS.filter((group) => group.biomes.includes(id)).map((group) => group.tiles);
   return unique([own, ...edges]);
 }
