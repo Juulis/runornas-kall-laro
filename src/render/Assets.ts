@@ -5,9 +5,35 @@ import { WorldFigureSprites, worldFigureLoadSteps } from './WorldFigureSprites';
 import { fraction, WeightedLoadProgress } from './loadProgress';
 import { fetchJsonResilient, loadTextureResilient } from './resilientAssets';
 import { loadMonster8dirSet, loadSheet8dir, loadStripAnim } from './sheet8dir';
+import {
+  canonicalBiomeId,
+  canonicalDecorGroup,
+  decorForBiome,
+  decorForGroup,
+  STARTUP_DECOR,
+  STARTUP_TILES,
+  tilesForBiome,
+} from './biomeAssetGroups';
 import { assetUrl, DIRS, type Anim, type AnimName, type AnimSet } from './spriteAnim';
 
 export { assetUrl, DIRS, type Anim, type AnimName, type AnimSet };
+export { canonicalBiomeId, canonicalDecorGroup, decorForBiome, decorForGroup, STARTUP_DECOR, STARTUP_TILES, tilesForBiome };
+export {
+  biomeLoadLabel,
+  BY_DECOR,
+  DECOR,
+  DECOR_GROUPS,
+  FJALL_DECOR,
+  FJALL_TILES,
+  SKOG_DECOR,
+  TILE_GROUPS,
+  TILE_TRANSITIONS,
+  TILES,
+  TILES_BY_BIOME,
+  TRASK_DECOR,
+  TRASK_TILES,
+} from './biomeAssetGroups';
+export type { DecorId, TileTransitionGroup } from './biomeAssetGroups';
 
 interface SheetAnim {
   file: string;
@@ -24,89 +50,20 @@ interface Size {
   anchor: [number, number];
 }
 
-export const TILES = [
-  'gras_1',
-  'gras_2',
-  'gras_3',
-  'gras_4',
-  'gras_blommor_1',
-  'gras_blommor_2',
-  'gras_till_kullersten',
-  'gras_till_kullersten_2',
-  'gras_till_kullersten_ov',
-  'gras_till_lera',
-  'gras_till_lera_ov',
-  'gras_till_lera_oh',
-  'gras_till_lera_oh_2',
-  'gras_till_lera_nh',
-  'gras_till_lera_nv',
-  'gras_till_skogsbotten',
-  'lera_1',
-  'lera_2',
-  'lera_3',
-  'kullersten',
-  'kullersten_mossig',
-  'mossa_1',
-  'mossa_2',
-  'aska',
-  'ruin_grus',
-  'skogsbotten_lov',
-  'skogsbotten_ormbunke',
-  'skogsbotten_barr_1',
-  'skogsbotten_barr_2',
-  'skogsbotten_till_kullersten',
-  'skogsbotten_till_kullersten_2',
-  'skogsbotten_till_kullersten_ov',
-  'skogsbotten_till_kullersten_ov_2',
-  'skogsbotten_till_kullersten_oh',
-  'skogsbotten_till_kullersten_nh',
-  'skogsbotten_till_kullersten_nv',
-  'skogsbotten_till_lera',
-  'stengolv_sprucket_1',
-  'stengolv_sprucket_2',
-] as const;
-
-export const DECOR = [
-  'dod_ek',
-  'gran',
-  'gran_ung',
-  'stubbe',
-  'ormbunkar',
-  'runsten',
-  'stenhog',
-  'ruinmur',
-  'ruinmur_horn',
-  'ruinmur_rasad',
-  'rod_portal',
-  'vindfalle',
-  'buske',
-  'bjork',
-  'gras_tuva',
-  'pelare',
-  'pelare_liggande',
-  'talt',
-  'vedtrave',
-  'sittstock',
-  'gravkors_bjork',
-  'anslagstavla',
-  'barnsang',
-  'eldstad_kall',
-] as const;
-export type DecorId = (typeof DECOR)[number];
-
 const BG_FILES = ['himmel.jpg', 'fjarran_skog.png', 'fjarran_portalby.png', 'fjarran_stad.png'] as const;
 const EFFECT_FILES = ['glod_rare', 'glod_set', 'glod_legendary'] as const;
 
 /**
- * Vikter för startladdningen. tiles/decor/hero/worldFigures/bg/icons är antal riktiga
- * steg (textur, ark eller manifest). monsters är tyngre (8-dir-ark) än en markplatta.
+ * Vikter för startladdningen. tiles/decor räknar bara startup-grupperna
+ * (39 plattor, 24 dekor + dekor.json + lagereld_anim), inte hela katalogerna.
+ * Övriga biom hämtas via ensureBiomeAssets. monsters är tyngre (8-dir-ark) än en markplatta.
  * npcs = manifest + en post per npc i npc.json (13 idag; testet låser antalet).
  * hero räknar riddarens utrustning. Klassark laddas senare, en figur i taget.
  */
 export function startupLoadWeights(): Record<'tiles' | 'decor' | 'hero' | 'worldFigures' | 'monsters' | 'npcs' | 'bg' | 'icons', number> {
   return {
-    tiles: TILES.length,
-    decor: DECOR.length + 2,
+    tiles: STARTUP_TILES.length,
+    decor: STARTUP_DECOR.length + 2,
     hero: HERO_SHEET_STEPS + KNIGHT_EQUIP_INDEX_STEPS + KNIGHT_EQUIP_SHEET_STEPS,
     worldFigures: worldFigureLoadSteps(),
     monsters: 90,
@@ -159,10 +116,14 @@ export class AssetStore {
   readonly worldFigures = new WorldFigureSprites();
   readonly backgrounds = new Map<string, Texture>();
   readonly effects = new Map<string, Texture>();
-  /** Animerad dekor (t.ex. lägereld). */
+  /** Animerad dekor (t.ex. lägereld). *_anim.png hör hit, inte i DECOR. */
   readonly decorAnims = new Map<string, Anim>();
   iconIndex: Record<string, string> = {};
   private loadProgress: WeightedLoadProgress | null = null;
+  private decorMeta: Record<string, Size> = {};
+  private decorMetaReady = false;
+  /** Pågående lazy-laddningar. Samma nyckel delar löfte, även vid parallella anrop. */
+  private readonly loadJobs = new Map<string, Promise<void>>();
 
   /** @param onProgress kvot 0..1 av verkligt startarbete (plattor, ark, manifest). */
   async load(onProgress?: (ratio: number) => void): Promise<void> {
@@ -186,11 +147,92 @@ export class AssetStore {
       this.loadProgress = null;
     }
   }
+  /**
+   * Hämtar plattor och dekor för ett biom. Idempotent: parallella anrop delar samma löfte.
+   * Saknad fil loggas och hoppas över, den kraschar inte laddningen.
+   */
+  ensureBiomeAssets(biomeId: string, onProgress?: (ratio: number) => void): Promise<void> {
+    const id = canonicalBiomeId(biomeId);
+    return this.shareLoad(`biome:${id}`, () => this.loadNamedAssets(tilesForBiome(id), decorForBiome(id), onProgress));
+  }
+
+  /**
+   * Hämtar en dekorgrupp som inte hör till startladdningen, till exempel by och interiör.
+   * Samma löfte delas om gruppen redan laddas.
+   */
+  ensureDecorGroup(groupId: string, onProgress?: (ratio: number) => void): Promise<void> {
+    const id = canonicalDecorGroup(groupId);
+    return this.shareLoad(`decor:${id}`, () => this.loadNamedAssets([], decorForGroup(id), onProgress));
+  }
+
+  private shareLoad(key: string, work: () => Promise<void>): Promise<void> {
+    const pending = this.loadJobs.get(key);
+    if (pending) return pending;
+    const job = work().catch((err: unknown) => {
+      this.loadJobs.delete(key);
+      throw err;
+    });
+    this.loadJobs.set(key, job);
+    return job;
+  }
+
+  private async loadNamedAssets(
+    tileIds: readonly string[],
+    decorIds: readonly string[],
+    onProgress?: (ratio: number) => void,
+  ): Promise<void> {
+    const tiles = tileIds.filter((id) => !this.tiles.has(id));
+    const decor = decorIds.filter((id) => !this.decor.has(id));
+    const total = tiles.length + decor.length;
+    if (total === 0) {
+      onProgress?.(1);
+      return;
+    }
+    if (decor.length > 0) await this.ensureDecorMeta();
+    let done = 0;
+    const tick = (): void => {
+      done += 1;
+      onProgress?.(done / total);
+    };
+    await Promise.all([
+      ...tiles.map(async (id) => {
+        try {
+          this.tiles.set(id, await tex(`2d/tiles/${id}.png`));
+        } catch (e) {
+          console.warn(`[AssetStore] tile ${id}:`, e);
+        } finally {
+          tick();
+        }
+      }),
+      ...decor.map(async (id) => {
+        try {
+          const size = this.decorMeta[id];
+          if (!size?.w || !size.h || !Array.isArray(size.anchor) || size.anchor.length < 2) {
+            console.warn(`[AssetStore] dekor ${id} saknar mått`);
+          } else {
+            this.decor.set(id, { tex: await tex(`2d/dekor/${id}.png`), size });
+          }
+        } catch (e) {
+          console.warn(`[AssetStore] dekor ${id}:`, e);
+        } finally {
+          tick();
+        }
+      }),
+    ]);
+    onProgress?.(1);
+  }
+
+  private async ensureDecorMeta(): Promise<void> {
+    if (this.decorMetaReady) return;
+    this.decorMeta = await fetchJsonResilient<Record<string, Size>>('2d/dekor/dekor.json', {});
+    this.decorMetaReady = true;
+  }
+
   private async loadTiles(): Promise<void> {
-    const total = TILES.length;
+    const total = STARTUP_TILES.length;
     let done = 0;
     await Promise.all(
-      TILES.map(async (t) => {
+      STARTUP_TILES.map(async (t) => {
         this.tiles.set(t, await tex(`2d/tiles/${t}.png`));
         done += 1;
         this.loadProgress?.setPhase('tiles', fraction(done, total));
@@ -199,17 +241,17 @@ export class AssetStore {
     this.loadProgress?.setPhase('tiles', 1);
   }
   private async loadDecor(): Promise<void> {
-    const total = DECOR.length + 2;
+    const total = STARTUP_DECOR.length + 2;
     let done = 0;
     const tick = (): void => {
       done += 1;
       this.loadProgress?.setPhase('decor', fraction(done, total));
     };
-    const meta = await fetchJsonResilient<Record<string, Size>>('2d/dekor/dekor.json', {});
+    await this.ensureDecorMeta();
     tick();
     await Promise.all(
-      DECOR.map(async (d) => {
-        const size = meta[d];
+      STARTUP_DECOR.map(async (d) => {
+        const size = this.decorMeta[d];
         if (size) this.decor.set(d, { tex: await tex(`2d/dekor/${d}.png`), size });
         tick();
       }),

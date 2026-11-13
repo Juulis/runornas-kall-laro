@@ -126,13 +126,13 @@ test('viktad resursprogress är 0..1 och når 1 när faserna är klara', async (
 });
 
 test('startup-vikter följer riktiga steg och varje setPhase-fas har vikt', async () => {
-  const { startupLoadWeights, TILES, DECOR } = await import('../src/render/Assets');
+  const { startupLoadWeights, STARTUP_TILES, STARTUP_DECOR } = await import('../src/render/Assets');
   const { HERO_SHEET_STEPS } = await import('../src/render/HeroSprites');
   const { KNIGHT_EQUIP_INDEX_STEPS, KNIGHT_EQUIP_SHEET_STEPS } = await import('../src/render/KnightEquipmentSprites');
   const { worldFigureLoadSteps } = await import('../src/render/WorldFigureSprites');
   const weights = startupLoadWeights();
-  assert.equal(weights.tiles, TILES.length);
-  assert.equal(weights.decor, DECOR.length + 2);
+  assert.equal(weights.tiles, STARTUP_TILES.length);
+  assert.equal(weights.decor, STARTUP_DECOR.length + 2);
   assert.equal(weights.hero, HERO_SHEET_STEPS + KNIGHT_EQUIP_INDEX_STEPS + KNIGHT_EQUIP_SHEET_STEPS);
   assert.equal(HERO_SHEET_STEPS, 0);
   assert.equal(weights.worldFigures, worldFigureLoadSteps());
