@@ -1,6 +1,5 @@
 import type { Container, Renderer } from 'pixi.js';
 import { Container as PixiContainer, Rectangle, Sprite } from 'pixi.js';
-import { Rng } from '../../core/Rng';
 import type { Vec2, Collider } from '../../core/GameContext';
 import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
@@ -8,10 +7,11 @@ import { Iso, TILE_WORLD } from '../../render/Iso';
 import { trackChunkLoad } from '../../ui/chunkLoad';
 import { groundRolePoolForBiome } from './biomeBlend';
 import { ChunkWorldCache } from './chunkCache';
+import { applyDecorBudget, DECOR_SPRITE_CAP, planDecorForChunk, shouldPlaceDecorAt } from './decorPlanner';
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
-import { roadIsDrawn, roadTileIdAt, shouldSpawnDecorAt } from './roads';
+import { roadIsDrawn, roadTileIdAt } from './roads';
 import type { ChunkWorldData } from './worldGenerator';
-import { chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
+import { chunkCenterWorld, chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
 import { patchWorldBounds } from './groundPatchBounds';
 import {
   BIG_WORLD_CACHE_KEEP_RADIUS,
@@ -145,6 +145,13 @@ export class BigWorldStreamGround extends PixiContainer {
 
   countGroundDisplayObjects(): number {
     return countPixiDisplayObjects(this);
+  }
+
+  /** Levande dekorsprites, inte markrutor. Taket i spawn räknar den här summan. */
+  countLiveDecorSprites(): number {
+    let n = 0;
+    for (const vis of this.visuals.values()) n += vis.decor.length;
+    return n;
   }
 
   countRenderTextures(): number {
@@ -407,37 +414,39 @@ export class BigWorldStreamGround extends PixiContainer {
     if (vis.decorDone || !this.scene) return;
     if (!this.chunkBiomeReady(vis)) return;
     const data = vis.data;
-    if (data.decorPool.length === 0 || data.safe) {
+    const pool = data.decorLayers;
+    if (pool.stor.length + pool.mellan.length + pool.liten.length === 0) {
       vis.decorDone = true;
       return;
     }
-    const tiles = chunkTileCount();
-    const chunkMin = chunkMinWorld(data.cx, data.cy);
-    const decorEvery = 11;
-    for (let ti = 0; ti < tiles; ti += decorEvery) {
-      for (let tj = 0; tj < tiles; tj += decorEvery) {
-        const cell = new Rng(Rng.hash(data.chunkSeed, 'decor', ti, tj));
-        if (cell.next() > 0.55) continue;
-        const raw = cell.pick(data.decorPool.length ? data.decorPool : ['gran']);
-        if (!this.assets.decor.has(raw)) continue;
-        const d = this.assets.decor.get(raw);
-        if (!d?.tex) continue;
-        const decorId = raw;
-        const wx = chunkMin.x + (ti + cell.float(0, decorEvery - 1)) * TILE_WORLD;
-        const wy = chunkMin.y + (tj + cell.float(0, decorEvery - 1)) * TILE_WORLD;
-        if (!shouldSpawnDecorAt(this.activeWorldSeed, wx, wy)) continue;
-        const s = new Sprite(d.tex);
-        s.anchor.set(d.size.anchor[0] / d.size.w, d.size.anchor[1] / d.size.h);
-        s.scale.set(0.35 + cell.next() * 0.2, 0.35 + cell.next() * 0.2);
-        const p = Iso.worldToScreen(wx, wy);
-        s.position.set(p.x, p.y);
-        s.zIndex = wx + wy + 0.5;
-        this.scene.objects.addChild(s);
-        const collider: Collider | null =
-          decorId === 'gran' ? { x: wx, y: wy, r: 0.9 } : decorId === 'stenhog' || decorId === 'stubbe' ? { x: wx, y: wy, r: 0.8 } : null;
-        if (collider) this.scene.zone.colliders.push(collider);
-        vis.decor.push({ sprite: s, collider, wx, wy });
-      }
+    const planned = planDecorForChunk({
+      worldSeed: this.activeWorldSeed,
+      chunkSeed: data.chunkSeed,
+      cx: data.cx,
+      cy: data.cy,
+      biomeId: data.biomeId,
+      pool,
+    });
+    const drawable = planned.filter((item) => {
+      if (!shouldPlaceDecorAt(this.activeWorldSeed, item.wx, item.wy)) return false;
+      const asset = this.assets.decor.get(item.id);
+      return asset?.tex != null;
+    });
+    const focus = Number.isFinite(this.lastHeroWx) ? { x: this.lastHeroWx, y: this.lastHeroWy } : chunkCenterWorld(data.cx, data.cy);
+    const kept = applyDecorBudget(drawable, this.countLiveDecorSprites(), DECOR_SPRITE_CAP, focus);
+    for (const item of kept) {
+      const d = this.assets.decor.get(item.id);
+      if (!d?.tex) continue;
+      const s = new Sprite(d.tex);
+      s.anchor.set(d.size.anchor[0] / d.size.w, d.size.anchor[1] / d.size.h);
+      s.scale.set(item.scaleX, item.scaleY);
+      const p = Iso.worldToScreen(item.wx, item.wy);
+      s.position.set(p.x, p.y);
+      s.zIndex = item.wx + item.wy + 0.5;
+      this.scene.objects.addChild(s);
+      const collider: Collider | null = item.collider ? { x: item.collider.x, y: item.collider.y, r: item.collider.r } : null;
+      if (collider) this.scene.zone.colliders.push(collider);
+      vis.decor.push({ sprite: s, collider, wx: item.wx, wy: item.wy });
     }
     vis.decorDone = true;
   }
@@ -610,4 +619,9 @@ export class BigWorldStreamGround extends PixiContainer {
       return false;
     }
   }
+}
+
+/** Summan av vis.decor över laddade chunkar. Samma tal som spawn använder mot taket. */
+export function countLiveDecorSprites(ground: BigWorldStreamGround): number {
+  return ground.countLiveDecorSprites();
 }
