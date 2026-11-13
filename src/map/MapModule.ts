@@ -49,7 +49,11 @@ export class MapModule implements GameModule {
     const goals = new GoalTracker(model);
     const bus = ctx.bus;
     void this.fogRepo.prepare(ctx.hero.id).then(() => this.resetFog(ctx.hero.id));
-    const painter = new MapPainter(model, () => this.fog);
+    const painter = new MapPainter(
+      model,
+      () => this.fog,
+      () => this.ctx?.session.worldSeed ?? 0,
+    );
     this.views = { big: new MapView(painter, model, goals), mini: new MiniMapView(painter, goals) };
     this.host().append(this.views.big.canvas, this.views.mini.canvas);
     this.input = new MapInput(

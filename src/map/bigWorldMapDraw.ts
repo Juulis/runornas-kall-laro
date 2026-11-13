@@ -1,4 +1,6 @@
+import type { BigWorldRoad } from '../data/bigWorldTypes';
 import { chunkCenterWorld, chunkMinWorld, chunkWorldSpan, worldToChunk } from '../world/bigWorld/bigWorldCoords';
+import { roadIsDrawn, roadPolylineWorld, roadWidthTiles } from '../world/bigWorld/roads';
 import { chunkDistanceFromStart, ringAtChunkDistance } from '../world/bigWorld/ringZone';
 import { getBigWorldCatalog } from '../world/bigWorld/worldGenerator';
 import type { Projection } from './MapPainter';
@@ -70,13 +72,31 @@ function ringColor(ring: number): string {
   return RING_FILL[idx] ?? '#243028';
 }
 
+/** Samma punkter som världen ritar. Saknas worldSeed används 0. */
+export function bigWorldMapRoadPolyline(road: BigWorldRoad, worldSeed = 0): { x: number; y: number }[] {
+  return roadPolylineWorld(road, worldSeed);
+}
+
+function mapRoadWidth(typ: string, scale: number): number {
+  const tiles = roadWidthTiles(typ);
+  if (tiles >= 3) return Math.max(1.25, scale * 0.55);
+  if (tiles === 2) return Math.max(1, scale * 0.35);
+  return Math.max(1, scale * 0.22);
+}
+
 /** Chunk-rutnät, regionprickar och vägar för stor skog (minikarta / Tab-karta). */
 export function drawBigWorldMapLayer(
   c: CanvasRenderingContext2D,
   heroWx: number,
   heroWy: number,
   p: Projection,
-  opts: { chunkRadius: number; showLabels: boolean; isRevealed?: (wx: number, wy: number) => boolean },
+  opts: {
+    chunkRadius: number;
+    showLabels: boolean;
+    isRevealed?: (wx: number, wy: number) => boolean;
+    /** session.worldSeed. Saknas → 0, samma kurva som seed 0. */
+    worldSeed?: number;
+  },
 ): void {
   const catalog = getBigWorldCatalog();
   const span = chunkWorldSpan();
@@ -122,34 +142,40 @@ export function drawBigWorldMapLayer(
     }
   }
 
-  c.strokeStyle = '#6a7a60';
-  c.lineWidth = Math.max(1, p.s * 0.4);
+  const worldSeed = opts.worldSeed ?? 0;
+  const reach = (r + 3) * span;
+  const clip =
+    p.clipX0 != null && p.clipY0 != null && p.clipX1 != null && p.clipY1 != null
+      ? { x0: p.clipX0, y0: p.clipY0, x1: p.clipX1, y1: p.clipY1 }
+      : null;
+  c.lineJoin = 'round';
+  c.lineCap = 'round';
   for (const road of catalog.data.vagar) {
-    const pts: { x: number; y: number }[] = [];
-    for (const id of road.strackning) {
-      const reg = catalog.regionById.get(id);
-      if (!reg) continue;
-      const c0 = chunkCenterWorld(reg.chunk[0], reg.chunk[1]);
-      if (Math.abs(reg.chunk[0] - heroChunk.cx) > r + 3 || Math.abs(reg.chunk[1] - heroChunk.cy) > r + 3) continue;
-      pts.push(c0);
-    }
+    const pts = bigWorldMapRoadPolyline(road, worldSeed);
     if (pts.length < 2) continue;
-    const first = pts[0];
-    if (!first) continue;
-    const firstReg = catalog.regionById.get(road.strackning[0] ?? '');
-    const revealWx = firstReg ? chunkMinWorld(firstReg.chunk[0], firstReg.chunk[1]).x : first.x;
-    const revealWy = firstReg ? chunkMinWorld(firstReg.chunk[0], firstReg.chunk[1]).y : first.y;
-    if (opts.isRevealed && !opts.isRevealed(revealWx, revealWy)) continue;
-    const clip =
-      p.clipX0 != null && p.clipY0 != null && p.clipX1 != null && p.clipY1 != null
-        ? { x0: p.clipX0, y0: p.clipY0, x1: p.clipX1, y1: p.clipY1 }
-        : null;
+    c.strokeStyle = roadIsDrawn(road.typ) ? '#6a7a60' : '#8a7560';
+    c.lineWidth = mapRoadWidth(road.typ, p.s);
+    const far = (x: number, y: number): boolean => Math.abs(x - heroWx) > reach || Math.abs(y - heroWy) > reach;
     if (!clip) {
       c.beginPath();
-      c.moveTo(X(first.x), Y(first.y));
+      let pen = false;
       for (let i = 1; i < pts.length; i++) {
-        const pt = pts[i];
-        if (pt) c.lineTo(X(pt.x), Y(pt.y));
+        const a = pts[i - 1];
+        const b = pts[i];
+        if (!a || !b) continue;
+        if (far(a.x, a.y) && far(b.x, b.y)) {
+          pen = false;
+          continue;
+        }
+        const midX = (a.x + b.x) / 2;
+        const midY = (a.y + b.y) / 2;
+        if (opts.isRevealed && !opts.isRevealed(midX, midY)) {
+          pen = false;
+          continue;
+        }
+        if (!pen) c.moveTo(X(a.x), Y(a.y));
+        c.lineTo(X(b.x), Y(b.y));
+        pen = true;
       }
       c.stroke();
       continue;
@@ -158,6 +184,10 @@ export function drawBigWorldMapLayer(
       const a = pts[i - 1];
       const b = pts[i];
       if (!a || !b) continue;
+      if (far(a.x, a.y) && far(b.x, b.y)) continue;
+      const midX = (a.x + b.x) / 2;
+      const midY = (a.y + b.y) / 2;
+      if (opts.isRevealed && !opts.isRevealed(midX, midY)) continue;
       const seg = clipSegment(a.x, a.y, b.x, b.y, clip.x0, clip.y0, clip.x1, clip.y1);
       if (!seg) continue;
       c.beginPath();

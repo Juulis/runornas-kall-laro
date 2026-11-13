@@ -275,6 +275,7 @@ function rollChunkSpawns(
   mellanmark: boolean,
   region: BigWorldRegion,
   roadIds: readonly string[],
+  worldSeed: number,
 ): BigWorldSpawnRoll[] {
   if (!genereradSpawn || subtypes.length === 0) return [];
   const allowed = filterSubtypesByBand(subtypes, band);
@@ -284,7 +285,8 @@ function rollChunkSpawns(
   const range = mellanmark ? mellanmarkSpawnCountRange(ring) : regionSpawnCountRange(region, ring, catalog.data, cx, cy, gameSeed);
   const target = rng.int(range);
   const tileSize = catalog.data.meta.chunk?.storlek_rutor ?? 64;
-  const hasRoadAtTile = (ccx: number, ccy: number, ti: number, tj: number) => roadTileInChunk(catalog.roads, ccx, ccy, ti, tj, tileSize);
+  const hasRoadAtTile = (ccx: number, ccy: number, ti: number, tj: number) =>
+    roadTileInChunk(catalog.roads, ccx, ccy, ti, tj, tileSize, worldSeed);
   const out: BigWorldSpawnRoll[] = [];
   const fixed = DATA.monsterLevels.fixed_levels ?? {};
   const levelBonus = DATA.monsterLevels.elites.champion.level_bonus;
@@ -461,6 +463,7 @@ export function generateChunkWorldData(
       mellanmark,
       region,
       roads,
+      worldSeed,
     ),
   };
 }

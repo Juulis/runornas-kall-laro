@@ -88,6 +88,22 @@ export const TRASK_TILES = [
   'myr_vass_blandning',
 ] as const;
 
+/**
+ * Vägytor. Kullersten ligger redan i STARTUP_TILES.
+ * Grus och bergsväg hör till fjäll, spång till träsk — skogschunkar med stig
+ * måste ändå kunna begära dem. STARTUP_TILES ändras inte.
+ */
+export const ROAD_TILES = [
+  'kullersten',
+  'kullersten_mossig',
+  'grus_1',
+  'grus_2',
+  'spang_1',
+  'spang_2',
+  'bergsvag_1',
+  'bergsvag_2',
+] as const;
+
 /** Fjällets egna plattor, inklusive blandningar. */
 export const FJALL_TILES = [
   'berghall_1',
