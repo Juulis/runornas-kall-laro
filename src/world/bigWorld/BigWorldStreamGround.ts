@@ -274,10 +274,7 @@ export class BigWorldStreamGround extends PixiContainer {
       for (const d of vis.decor) {
         d.sprite.parent?.removeChild(d.sprite);
         d.sprite.destroy();
-        if (d.collider) {
-          const i = this.scene.zone.colliders.indexOf(d.collider);
-          if (i >= 0) this.scene.zone.colliders.splice(i, 1);
-        }
+        if (d.collider) this.scene.zone.colliders.remove(d.collider);
       }
     }
     for (const row of vis.patches) {

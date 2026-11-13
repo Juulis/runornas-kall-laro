@@ -61,6 +61,16 @@ export interface Collider {
   r: number;
   off?: boolean;
 }
+
+/**
+ * Kolliderare som kan läsas i insättningsordning.
+ * Uppfylls av det spatiala rutnätet och av en vanlig array (tester och mockar).
+ */
+export interface ColliderList {
+  readonly length: number;
+  [Symbol.iterator](): IterableIterator<Collider>;
+  every(predicate: (c: Collider, index: number) => boolean): boolean;
+}
 export interface RuneView {
   x: number;
   y: number;
@@ -83,7 +93,7 @@ export interface ZoneView {
   circle?: number;
   /** Rektangulär zon: [min, max] på båda axlarna. */
   rect?: readonly [number, number];
-  colliders: readonly Collider[];
+  colliders: ColliderList | readonly Collider[];
   runes: readonly RuneView[];
   portals: readonly PortalView[];
   /** Rensade delområden (bara information, ingen spärr). */
