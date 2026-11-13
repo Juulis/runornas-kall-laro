@@ -144,6 +144,11 @@
       "resurser": ["timmer", "guld i övergivna hus"],
       "tiles": ["mossa", "barr", "stig", "rötter", "glänta"],
       "dekor": ["gran", "björk", "runsten", "kolmila", "gravkors av björk", "vägrös"],
+      "dekor_pool": {
+        "stor": ["gran", "gran_ung", "bjork", "dod_ek"],
+        "mellan": ["buske", "stenhog", "stubbe", "vindfalle", "runsten", "rotvalta"],
+        "liten": ["gras_tuva", "ormbunkar", "vagros_blommor"]
+      },
       "variant": {},
       "id": "skog",
       "monsterfamiljer": {
@@ -251,6 +256,11 @@
       "resurser": ["timmer (sjunket virke)", "guld i sjunkna gårdar"],
       "tiles": ["myr", "grunt vatten", "spång", "vass", "torv"],
       "dekor": ["döda tallar", "bläckfärgade gölar", "spånglyktor", "sjunkna båtar"],
+      "dekor_pool": {
+        "stor": ["dod_tall", "dod_tall_knackt", "dod_ek", "sjunken_bat"],
+        "mellan": ["stubbe_vatten", "natstang", "stubbe", "myrkors", "stolprad_rutten", "sjunken_klocka"],
+        "liten": ["kaveldun", "myrull", "vasstuva", "vagros_blommor"]
+      },
       "variant": {
         "rutt": "Sjuk skog och giftträsk, svulster som pulserar."
       },
@@ -370,6 +380,11 @@
       "resurser": ["sten", "järn"],
       "tiles": ["sten", "grus", "ljung", "snöfläck", "bergsväg"],
       "dekor": ["vindtall", "rösen", "gruvvagnar", "silkesnät", "kristaller"],
+      "dekor_pool": {
+        "stor": ["vindtall", "vindtall_krokig", "fjallbjork", "stenblock", "stenblock_lav"],
+        "mellan": ["stenhog", "stubbe", "renskalle", "kristaller", "buske"],
+        "liten": ["ljungtuva", "gras_tuva", "vagros_blommor"]
+      },
       "variant": {},
       "id": "fjall",
       "monsterfamiljer": {
@@ -482,6 +497,11 @@
       "resurser": ["sten", "timmer (drivved)", "guld i vrak"],
       "tiles": ["klippa", "sand", "tång", "ebbsand", "grunt vatten"],
       "dekor": ["vrak", "båtar med nät", "korpar", "fyr", "bryggor"],
+      "dekor_pool": {
+        "stor": ["sjunken_bat"],
+        "mellan": ["natstang", "sjunken_klocka", "stubbe", "buske"],
+        "liten": ["vagros_blommor", "gras_tuva", "ormbunkar"]
+      },
       "variant": {},
       "id": "kust",
       "monsterfamiljer": {
@@ -583,6 +603,11 @@
       "resurser": ["sten", "järn (smälta statyer)", "guld i brända hus"],
       "tiles": ["aska", "sotig jord", "glödspricka", "lavasten", "bränd väg"],
       "dekor": ["svarta stammar", "smälta statyer", "kulttecken", "pilgrimsstavar", "rökpelare"],
+      "dekor_pool": {
+        "stor": ["dod_ek", "pelare", "ruinmur_rasad"],
+        "mellan": ["stenkors", "ruinmur", "pelare_liggande", "stenhog", "stubbe"],
+        "liten": ["vagros_blommor", "gras_tuva", "ormbunkar"]
+      },
       "variant": {},
       "id": "ask",
       "monsterfamiljer": {

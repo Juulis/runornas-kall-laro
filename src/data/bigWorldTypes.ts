@@ -24,6 +24,8 @@ export interface BigWorldBiome {
   /** Saknas i äldre data. Då används reservpoolen i biomeBlend. */
   markset?: BigWorldBiomeMarkset;
   dekor?: string[];
+  /** Riktiga sprite-id per lager. Smaktexten i `dekor` rörs inte. */
+  dekor_pool?: { stor: string[]; mellan: string[]; liten: string[] };
   nivaband?: [number, number];
   regioner?: string[];
   monsterfamiljer?: Record<string, string[]>;

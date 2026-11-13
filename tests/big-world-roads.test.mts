@@ -293,7 +293,8 @@ const slowest = Math.max(...times);
 console.log('vägchunk-raster ms', times.map((ms) => ms.toFixed(2)).join(', '), `långsammast ${slowest.toFixed(2)}`);
 
 const groundSrc = readFileSync(join(root, 'src/world/bigWorld/BigWorldStreamGround.ts'), 'utf8');
-assert.match(groundSrc, /shouldSpawnDecorAt/);
+const plannerSrc = readFileSync(join(root, 'src/world/bigWorld/decorPlanner.ts'), 'utf8');
+assert.match(plannerSrc, /shouldSpawnDecorAt/);
 assert.match(groundSrc, /ensureTiles/);
 assert.match(groundSrc, /Laddar stigen/);
 

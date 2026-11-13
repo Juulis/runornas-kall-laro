@@ -1,5 +1,6 @@
 import type { BigWorldBiome, BigWorldBiomeMarkset } from '../../data/bigWorldTypes';
 import varldStor from '../../data/varld_stor.json';
+import { decorPoolForBiome, type DecorLayerPool } from './decorPlanner';
 import type { GroundRolePool } from './groundTiles';
 
 export interface BiomeWeight {
@@ -150,25 +151,37 @@ function flattenRolePool(pool: GroundRolePool): string[] {
   return out.length > 0 ? out : ['gras_1'];
 }
 
-/** Platshållartiles/dekor tills #89/#102 — byts via data utan kod. */
+/** Korta listor om biomet saknar dekor_pool. Lagerpoolen kommer ändå från decorPoolForBiome. */
+const LEGACY_DECOR: Record<string, readonly string[]> = {
+  skog: ['gran', 'bjork', 'runsten', 'vagros_blommor'],
+  trask: ['vagros_blommor', 'runsten'],
+  fjall: ['runsten', 'vagros_blommor'],
+  kust: ['vagros_blommor'],
+  ask: ['vagros_blommor', 'runsten'],
+};
+
+function hasDecorPool(pool: { stor: readonly string[]; mellan: readonly string[]; liten: readonly string[] } | undefined): boolean {
+  return !!pool && pool.stor.length + pool.mellan.length + pool.liten.length > 0;
+}
+
+/** Mark och dekor för en chunk. dekor_pool plattas ut till decorPool när fältet finns. */
 export function biomeRenderPlaceholders(biome: BigWorldBiome | undefined): {
   tilePool: string[];
   decorPool: string[];
+  decorLayers: DecorLayerPool;
   music: 'explore' | 'town';
 } {
   const id = biome?.id ?? 'skog';
-  const decor: Record<string, string[]> = {
-    skog: ['gran', 'bjork', 'runsten', 'vagros_blommor'],
-    trask: ['vagros_blommor', 'runsten'],
-    fjall: ['runsten', 'vagros_blommor'],
-    kust: ['vagros_blommor'],
-    ask: ['vagros_blommor', 'runsten'],
-  };
-  const skogDecor = decor.skog ?? ['vagros_blommor'];
+  const raw = biome?.dekor_pool;
+  const decorLayers =
+    hasDecorPool(raw) && raw ? { stor: [...raw.stor], mellan: [...raw.mellan], liten: [...raw.liten] } : decorPoolForBiome(id);
+  const legacy = LEGACY_DECOR[id] ?? LEGACY_DECOR.skog ?? ['vagros_blommor'];
+  const decorPool = hasDecorPool(raw) && raw ? [...raw.stor, ...raw.mellan, ...raw.liten] : [...legacy];
   return {
     tilePool: flattenRolePool(groundRolePoolForBiome(id)),
-    decorPool: decor[id] ?? skogDecor,
-    music: id === 'skog' ? 'explore' : 'explore',
+    decorPool,
+    decorLayers,
+    music: 'explore',
   };
 }
 

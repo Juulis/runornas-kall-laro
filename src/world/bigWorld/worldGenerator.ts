@@ -4,6 +4,7 @@ import type { EliteKind } from '../../data/types';
 import { Rng } from '../../core/Rng';
 import { TILE_WORLD } from '../../render/Iso';
 import { blendBiomesAtChunk, biomeRenderPlaceholders, isTownBiomeChunk } from './biomeBlend';
+import type { DecorLayerPool } from './decorPlanner';
 import { chunkSpawnToWorld } from './bigWorldCoords';
 import { buildRoadIndex, roadTileInChunk, roadsAtChunk, type RoadIndex } from './roads';
 import { resolveRegionAtChunk } from './regionIndex';
@@ -58,6 +59,7 @@ export interface ChunkWorldData {
   generatedSpawn: boolean;
   tilePool: string[];
   decorPool: string[];
+  decorLayers: DecorLayerPool;
   music: 'explore' | 'town';
   spawns: BigWorldSpawnRoll[];
 }
@@ -450,6 +452,7 @@ export function generateChunkWorldData(
     generatedSpawn,
     tilePool: placeholders.tilePool,
     decorPool: placeholders.decorPool,
+    decorLayers: placeholders.decorLayers,
     music: town ? 'town' : placeholders.music,
     spawns: rollChunkSpawns(
       catalog,

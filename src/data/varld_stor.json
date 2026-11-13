@@ -228,6 +228,11 @@
         "gravkors av björk",
         "vägrös"
       ],
+      "dekor_pool": {
+        "stor": ["gran", "gran_ung", "bjork", "dod_ek"],
+        "mellan": ["buske", "stenhog", "stubbe", "vindfalle", "runsten", "rotvalta"],
+        "liten": ["gras_tuva", "ormbunkar", "vagros_blommor"]
+      },
       "variant": {},
       "id": "skog",
       "markset": {
@@ -442,6 +447,11 @@
         "spånglyktor",
         "sjunkna båtar"
       ],
+      "dekor_pool": {
+        "stor": ["dod_tall", "dod_tall_knackt", "dod_ek", "sjunken_bat"],
+        "mellan": ["stubbe_vatten", "natstang", "stubbe", "myrkors", "stolprad_rutten", "sjunken_klocka"],
+        "liten": ["kaveldun", "myrull", "vasstuva", "vagros_blommor"]
+      },
       "variant": {
         "rutt": "Sjuk skog och giftträsk, svulster som pulserar."
       },
@@ -655,6 +665,11 @@
         "silkesnät",
         "kristaller"
       ],
+      "dekor_pool": {
+        "stor": ["vindtall", "vindtall_krokig", "fjallbjork", "stenblock", "stenblock_lav"],
+        "mellan": ["stenhog", "stubbe", "renskalle", "kristaller", "buske"],
+        "liten": ["ljungtuva", "gras_tuva", "vagros_blommor"]
+      },
       "variant": {},
       "id": "fjall",
       "markset": {
@@ -893,6 +908,11 @@
         "fyr",
         "bryggor"
       ],
+      "dekor_pool": {
+        "stor": ["sjunken_bat"],
+        "mellan": ["natstang", "sjunken_klocka", "stubbe", "buske"],
+        "liten": ["vagros_blommor", "gras_tuva", "ormbunkar"]
+      },
       "variant": {},
       "id": "kust",
       "markset": {
@@ -1094,6 +1114,11 @@
         "pilgrimsstavar",
         "rökpelare"
       ],
+      "dekor_pool": {
+        "stor": ["dod_ek", "pelare", "ruinmur_rasad"],
+        "mellan": ["stenkors", "ruinmur", "pelare_liggande", "stenhog", "stubbe"],
+        "liten": ["vagros_blommor", "gras_tuva", "ormbunkar"]
+      },
       "variant": {},
       "id": "ask",
       "markset": {
