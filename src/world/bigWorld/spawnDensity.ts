@@ -14,11 +14,19 @@ function ringKey(ring: number): string {
   return specific;
 }
 
-/** Mellanmark — monster per chunk från varldsgenerator.json (tät nog att en kort promenad möter fiender). */
+/** Mellanmark, monster per chunk. Ring 0-1 medel 48, ring 2-3 medel 38, ring 4 och ut medel 30. */
 export function mellanmarkSpawnCountRange(ring: number): RingRange {
   const key = ringKey(ring);
-  return genTable[key] ?? genTable.ring_3_och_ut ?? [18, 28];
+  return genTable[key] ?? genTable.ring_3_och_ut ?? [26, 34];
 }
+
+/** Mellanmarksgrupp: 2 till 4 monster, slumpat, snitt cirka 3. */
+export const MELLANMARK_GROUP_MIN = 2;
+export const MELLANMARK_GROUP_MAX = 4;
+/** Hur långt från gruppens mitt ett monster får stå, världsenheter. */
+export const MELLANMARK_GROUP_SPREAD = 3;
+/** Minsta avstånd mellan två gruppers centra, världsenheter. */
+export const MELLANMARK_GROUP_SEPARATION = 14;
 
 /** Namngiven region — fördelar region.tathet.monster_per_game över regionens chunkar. */
 export function regionSpawnCountRange(
@@ -42,7 +50,12 @@ export function namedRegionSpawnCountRange(region: BigWorldRegion): RingRange {
   return regionSpawnCountRange(region, region.ringzon ?? 0);
 }
 
-/** Avstånd i rutor från vägcentrum inom chunk (varldsgenerator: 4 rutor). */
+/** Manhattan-rutor från vägens mitt. Ring 0 och 1 har ett hårt band, från ring 2 det vidare bandet. */
+export function roadSkipRadius(ring: number): number {
+  return ring <= 1 ? 2 : 4;
+}
+
+/** Avstånd i rutor från vägcentrum inom chunk. radius är Manhattan-gränsen. */
 export function spawnTileNearRoad(
   localX: number,
   localY: number,
@@ -50,22 +63,29 @@ export function spawnTileNearRoad(
   cy: number,
   roadIds: readonly string[],
   hasRoadAtTile: (cx: number, cy: number, ti: number, tj: number) => boolean,
+  radius = 4,
 ): boolean {
   if (roadIds.length === 0) return false;
   const ti = Math.floor(localX);
   const tj = Math.floor(localY);
-  for (let dj = -4; dj <= 4; dj++) {
-    for (let di = -4; di <= 4; di++) {
-      if (Math.abs(di) + Math.abs(dj) > 4) continue;
+  const r = Math.max(0, Math.floor(radius));
+  for (let dj = -r; dj <= r; dj++) {
+    for (let di = -r; di <= r; di++) {
+      if (Math.abs(di) + Math.abs(dj) > r) continue;
       if (hasRoadAtTile(cx, cy, ti + di, tj + dj)) return true;
     }
   }
   return false;
 }
 
-/** 50 % chans att hoppa över spawn vid väg (per monster, inte hela chunken). */
-export function skipSpawnNearRoad(nearRoad: boolean, rngNext: number): boolean {
-  return nearRoad && rngNext > 0.5;
+/**
+ * Ring 0 och 1: alltid hoppa över om rutan är nära vägen.
+ * Från ring 2: hoppa över med 50 procents chans (rngNext > 0,5).
+ */
+export function skipSpawnNearRoad(nearRoad: boolean, rngNext: number, ring = 2): boolean {
+  if (!nearRoad) return false;
+  if (ring <= 1) return true;
+  return rngNext > 0.5;
 }
 
 /** Champion per grupp (hela gruppen), från elit_modell. Inte per chunk. */

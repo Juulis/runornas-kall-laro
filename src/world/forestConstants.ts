@@ -10,6 +10,8 @@ export const FOREST_DECOR_OUTER = FOREST_PLAY_RADIUS * (57 / 45);
 export const FOREST_DECOR_MID = FOREST_PLAY_RADIUS * (44 / 45);
 /** Monster instansieras när hjälten är inom detta avstånd (världsenheter). */
 export const FOREST_SPAWN_ACTIVE_RADIUS = 52;
+/** Högst så många levande monster inom FOREST_SPAWN_ACTIVE_RADIUS. */
+export const MAX_LIVE_MONSTERS = 60;
 /** Mark-chunks laddas inom denna radie runt hjälten. */
 export const FOREST_GROUND_CHUNK_RADIUS = 70;
 export const FOREST_GROUND_CHUNK_TILES = 16;

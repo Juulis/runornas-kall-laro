@@ -32,7 +32,7 @@
       "trappa": 3,
       "schakt": 2
     },
-    "vagar_spawn": "Inom 4 rutor från väg spawnar högst hälften av normal täthet, så att vägar känns lite tryggare. Ingen säker zon."
+    "vagar_spawn": "Ring 0 och 1: inga monster inom 2 rutor (Manhattan) från vägens mitt, alltid. Från ring 2: inom 4 rutor från vägens mitt spawnar högst hälften av den normala tätheten, så vägen känns lite tryggare. Ingen säker zon."
   },
   "monsterpooler": {
     "regel": "Pool = biomens egna_monster (varld_stor.json) där undertypens fasta nivå ligger i chunkens nivåfönster. Fönstret är malniva(d) ± 2, klippt till ringens nivaband.",
@@ -42,19 +42,19 @@
       "3. Biomet saknar helt monster i bandet: använd närmaste regions huvudfamilj och dess undertyper enligt steg 1 till 2. Ska inte inträffa i ring 1 till 7 (se tackning)."
     ],
     "tathet_per_chunk": {
-      "ring_0": [18, 28],
-      "ring_1": [18, 28],
-      "ring_2": [18, 28],
-      "ring_3": [18, 28],
-      "ring_4": [18, 28],
-      "ring_5": [18, 28],
-      "ring_6": [18, 28],
-      "ring_7": [18, 28],
-      "ring_3_och_ut": [18, 28],
-      "not": "Monster per chunk och game i mellanmark, slumpat jämnt i intervallet (medel 23). En chunk är 128 × 128. Den tidigare medel 2 lämnade vägen från lägret tom: spelaren startar i säker chunk [0,0] och ser bara cirka 20 enheter. Medel 23 ger ungefär ett möte på några sekunders gång ute i mellanmarken. Namngivna regioner skalas i koden (REGION_SPAWN_SCALE) ovanpå sina egna tal. ring_3_och_ut finns kvar för koden och är lika med ring_3 till ring_7."
+      "ring_0": [40, 56],
+      "ring_1": [40, 56],
+      "ring_2": [32, 44],
+      "ring_3": [32, 44],
+      "ring_4": [26, 34],
+      "ring_5": [26, 34],
+      "ring_6": [26, 34],
+      "ring_7": [26, 34],
+      "ring_3_och_ut": [26, 34],
+      "not": "Monster per chunk och game i mellanmark, slumpat jämnt i intervallet. Ring 0 och 1: 40 till 56 (medel 48, cirka 4 per skärm). Ring 2 och 3: 32 till 44 (medel 38, cirka 3 per skärm). Ring 4 och ut: 26 till 34 (medel 30, cirka 2,5 per skärm). En chunk är 128 × 128. Namngivna regioner skalas i koden (regionSpawnScale) ovanpå sina egna tal. ring_3_och_ut är reserv för koden och följer ring 4 och ut."
     },
-    "grupper": "Grupper om 1 till 3, ledare (gravargsledare, skelett_kapten och liknande) alltid ensam med 2 till 3 av närmaste lägre undertyp som följe.",
-    "elit": "Mellanmark: bara champions, inga unika. Från ring 2 blir en mellanmarksgrupp champion med chans 0,10 (hela gruppen, monster_niva.json elites.champion), högst en per chunk. Med tätheten 1 till 3 monster per chunk (cirka en grupp per chunk) blir det ungefär en championgrupp per 10 chunkar. Ring 0 och 1 har inga champions i mellanmarken. Unika finns bara i namngivna områden enligt spawnzoner.json session_roll.uniques. Rullas med chunk_seed vid spawn som övriga monster. Belöning: elites.champion.loot (en extra rullning, drop 1,0, kvalitet × 1,5) ovanpå undertypens tabell i drop_tabeller.json, XP × 3.",
+    "grupper": "Mellanmark: grupper om 2 till 4 (snitt cirka 3), spridda cirka 3 enheter, minst 14 enheter mellan gruppernas centra. En familj per chunk. Namngivna regioner: grupper om 1 till 4. Ledare (gravargsledare, skelett_kapten och liknande) tar med sig följe av närmaste lägre undertyp när budgeten räcker till en hel grupp.",
+    "elit": "Mellanmark: bara champions, inga unika. Från ring 2 blir en mellanmarksgrupp champion med chans 0,10 (hela gruppen, monster_niva.json elites.champion), högst en per chunk. Varje grupp från ring 2 slumpas för sig, men chunken får bara en championgrupp. Ring 0 och 1 har inga champions i mellanmarken. Unika finns bara i namngivna områden enligt spawnzoner.json session_roll.uniques. Rullas med chunk_seed vid spawn som övriga monster. Belöning: elites.champion.loot (en extra rullning, drop 1,0, kvalitet × 1,5) ovanpå undertypens tabell i drop_tabeller.json, XP × 3.",
     "per_biom": [
       {
         "biom": "skog",

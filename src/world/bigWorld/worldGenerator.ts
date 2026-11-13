@@ -2,20 +2,28 @@ import { DATA } from '../../data';
 import type { BigWorldDataFile, BigWorldRegion } from '../../data/bigWorldTypes';
 import type { EliteKind } from '../../data/types';
 import { Rng } from '../../core/Rng';
+import { TILE_WORLD } from '../../render/Iso';
 import { blendBiomesAtChunk, biomeRenderPlaceholders, isTownBiomeChunk } from './biomeBlend';
+import { chunkSpawnToWorld } from './bigWorldCoords';
 import { buildRoadIndex, roadTileInChunk, roadsAtChunk, type RoadIndex } from './roads';
 import { resolveRegionAtChunk } from './regionIndex';
 import { chunkDistanceFromStart, ringAtChunkDistance } from './ringZone';
 import { planMellanmarkSpawn, filterSubtypesByBand, regionSpawnLevelBand, mellanmarkLevelBand } from './spawnRules';
 import {
+  MELLANMARK_GROUP_MAX,
+  MELLANMARK_GROUP_MIN,
+  MELLANMARK_GROUP_SEPARATION,
+  MELLANMARK_GROUP_SPREAD,
   mellanmarkChampionRoll,
   mellanmarkSpawnCountRange,
   regionSpawnCountRange,
+  roadSkipRadius,
   skipSpawnNearRoad,
   spawnTileNearRoad,
   subtypeSpawnWeight,
 } from './spawnDensity';
-import { isLegacyOnlySpawnChunk } from './startskogenFootprint';
+import { CAMP_SAFE_RADIUS, campFirePos, START_POS_SAFE_RADIUS } from './campMonsterField';
+import { campStartPos, isLegacyOnlySpawnChunk } from './startskogenFootprint';
 import { regionMonsterPerGame } from './regionSpawnBudget';
 
 export interface BigWorldSpawnRoll {
@@ -117,7 +125,112 @@ function neighborBiomeFactory(catalog: BigWorldCatalog): (ncx: number, ncy: numb
   return (ncx, ncy) => primaryBiomeAt(catalog, ncx, ncy).region.biom;
 }
 
-const GROUP_MAX = 3;
+const GROUP_MAX = 4;
+
+/** Gruppstorlekar 2 till 4 som summerar exakt till target. Snitt cirka 3. */
+function planGroupSizes(rng: Rng, total: number): number[] {
+  const sizes: number[] = [];
+  let left = total;
+  while (left > 0) {
+    if (left <= MELLANMARK_GROUP_MAX) {
+      if (left < MELLANMARK_GROUP_MIN && sizes.length > 0) {
+        const prev = sizes.pop() ?? MELLANMARK_GROUP_MIN;
+        const merged = prev + left;
+        if (merged <= MELLANMARK_GROUP_MAX) sizes.push(merged);
+        else sizes.push(MELLANMARK_GROUP_MIN, merged - MELLANMARK_GROUP_MIN);
+      } else if (left >= MELLANMARK_GROUP_MIN) {
+        sizes.push(left);
+      }
+      break;
+    }
+    let size = rng.int([MELLANMARK_GROUP_MIN, MELLANMARK_GROUP_MAX]);
+    if (left - size < MELLANMARK_GROUP_MIN) size = left - MELLANMARK_GROUP_MIN;
+    sizes.push(size);
+    left -= size;
+  }
+  return sizes;
+}
+
+function centersSeparated(x: number, y: number, chosen: readonly { x: number; y: number }[]): boolean {
+  const min2 = MELLANMARK_GROUP_SEPARATION * MELLANMARK_GROUP_SEPARATION;
+  for (const c of chosen) {
+    const dx = (x - c.x) * TILE_WORLD;
+    const dy = (y - c.y) * TILE_WORLD;
+    if (dx * dx + dy * dy < min2) return false;
+  }
+  return true;
+}
+
+/** Rutnät med jitter så centra hamnar minst MELLANMARK_GROUP_SEPARATION isär. */
+function pickGroupCenters(
+  rng: Rng,
+  count: number,
+  tileSize: number,
+  accept: (x: number, y: number) => boolean,
+): { x: number; y: number }[] {
+  const margin = 8;
+  const minTiles = MELLANMARK_GROUP_SEPARATION / TILE_WORLD;
+  const step = minTiles + 1;
+  const jitter = (step - minTiles) * 0.4;
+  const lo = margin + step / 2;
+  const hi = tileSize - margin - step / 2;
+  const candidates: { x: number; y: number }[] = [];
+  for (let x = lo; x <= hi + 1e-6; x += step) {
+    for (let y = lo; y <= hi + 1e-6; y += step) {
+      candidates.push({
+        x: x + (rng.next() - 0.5) * 2 * jitter,
+        y: y + (rng.next() - 0.5) * 2 * jitter,
+      });
+    }
+  }
+  const chosen: { x: number; y: number }[] = [];
+  for (const p of rng.shuffle(candidates)) {
+    if (chosen.length >= count) break;
+    if (!centersSeparated(p.x, p.y, chosen)) continue;
+    if (!accept(p.x, p.y)) continue;
+    chosen.push(p);
+  }
+  let guard = 0;
+  while (chosen.length < count && guard < 500) {
+    guard++;
+    const x = rng.float(margin, tileSize - margin);
+    const y = rng.float(margin, tileSize - margin);
+    if (!centersSeparated(x, y, chosen)) continue;
+    if (!accept(x, y)) continue;
+    chosen.push({ x, y });
+  }
+  return chosen;
+}
+
+/** Symmetrisk ring så gruppens tyngdpunkt blir centret. Radie cirka 3 världsenheter. */
+function placeSymmetricGroup(
+  rng: Rng,
+  center: { x: number; y: number },
+  size: number,
+  tileSize: number,
+  accept: (x: number, y: number) => boolean,
+): { x: number; y: number }[] | null {
+  const spreadTiles = MELLANMARK_GROUP_SPREAD / TILE_WORLD;
+  const margin = 8;
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const base = rng.next() * Math.PI * 2;
+    const rad = spreadTiles * (0.85 + 0.15 * rng.next());
+    const pts: { x: number; y: number }[] = [];
+    let ok = true;
+    for (let i = 0; i < size; i++) {
+      const ang = base + (i * Math.PI * 2) / size;
+      const x = center.x + Math.cos(ang) * rad;
+      const y = center.y + Math.sin(ang) * rad;
+      if (x < margin || y < margin || x > tileSize - margin || y > tileSize - margin || !accept(x, y)) {
+        ok = false;
+        break;
+      }
+      pts.push({ x, y });
+    }
+    if (ok) return pts;
+  }
+  return null;
+}
 
 function isPackLeader(id: string): boolean {
   return id.includes('ledare') || id.endsWith('kapten');
@@ -175,39 +288,60 @@ function rollChunkSpawns(
   const out: BigWorldSpawnRoll[] = [];
   const fixed = DATA.monsterLevels.fixed_levels ?? {};
   const levelBonus = DATA.monsterLevels.elites.champion.level_bonus;
-  let guard = 0;
-  const place = (id: string, makeChamp: boolean): boolean => {
-    for (let attempt = 0; attempt < 40; attempt++) {
-      const localX = rng.float(8, tileSize - 8);
-      const localY = rng.float(8, tileSize - 8);
-      const nearRoad = spawnTileNearRoad(localX, localY, cx, cy, roadIds, hasRoadAtTile);
-      if (skipSpawnNearRoad(nearRoad, rng.next())) continue;
-      const base = fixed[id] ?? band[0];
-      out.push({
-        uid: `bw:${cx},${cy}:${out.length}:${id}`,
-        enemy: id,
-        level: makeChamp ? base + levelBonus : base,
-        localX,
-        localY,
-        elite: makeChamp ? 'champion' : null,
-      });
-      return true;
-    }
+  const fire = campFirePos();
+  const start = campStartPos();
+  const roadRadius = roadSkipRadius(ring);
+
+  const campBlocked = (localX: number, localY: number): boolean => {
+    const world = chunkSpawnToWorld(cx, cy, localX, localY);
+    if (Math.hypot(world.x - fire.x, world.y - fire.y) < CAMP_SAFE_RADIUS) return true;
+    if (Math.hypot(world.x - start.x, world.y - start.y) < START_POS_SAFE_RADIUS) return true;
     return false;
   };
-  // Mellanmark: en familj, utspridd över chunken. Högst en liten championflock.
+
+  const acceptSpot = (localX: number, localY: number): boolean => {
+    if (campBlocked(localX, localY)) return false;
+    const nearRoad = spawnTileNearRoad(localX, localY, cx, cy, roadIds, hasRoadAtTile, roadRadius);
+    if (!nearRoad) return true;
+    if (ring <= 1) return false;
+    return !skipSpawnNearRoad(true, rng.next(), ring);
+  };
+
+  const pushAt = (id: string, localX: number, localY: number, makeChamp: boolean) => {
+    const base = fixed[id] ?? band[0];
+    out.push({
+      uid: `bw:${cx},${cy}:${out.length}:${id}`,
+      enemy: id,
+      level: makeChamp ? base + levelBonus : base,
+      localX,
+      localY,
+      elite: makeChamp ? 'champion' : null,
+    });
+  };
+
+  // Mellanmark: en familj, grupper om 2 till 4. Högst en championgrupp.
   if (mellanmark) {
     const enemy = weightedSubtype(rng, allowed);
-    const champs = ring >= champ.minRing && rng.chance(champ.chance) ? Math.min(3, target) : 0;
-    let left = champs;
-    while (out.length < target && guard < target * 24) {
-      guard++;
-      const asChamp = left > 0;
-      if (!place(enemy, asChamp)) continue;
-      if (asChamp) left--;
+    const sizes = planGroupSizes(rng, target);
+    const centers = pickGroupCenters(rng, sizes.length, tileSize, acceptSpot);
+    let championUsed = false;
+    for (let g = 0; g < sizes.length; g++) {
+      const size = sizes[g] ?? MELLANMARK_GROUP_MIN;
+      const center = centers[g];
+      if (!center) continue;
+      const makeChamp = !championUsed && ring >= champ.minRing && rng.chance(champ.chance);
+      if (makeChamp) championUsed = true;
+      const pts = placeSymmetricGroup(rng, center, size, tileSize, acceptSpot);
+      if (pts) {
+        for (const p of pts) pushAt(enemy, p.x, p.y, makeChamp);
+      } else {
+        for (let i = 0; i < size; i++) pushAt(enemy, center.x, center.y, makeChamp);
+      }
     }
     return out;
   }
+
+  let guard = 0;
   while (out.length < target && guard < Math.max(target * 16, 16)) {
     guard++;
     const remaining = target - out.length;
@@ -225,7 +359,13 @@ function rollChunkSpawns(
     for (const id of members) {
       if (out.length >= target) break;
       let placed = false;
-      for (let t = 0; t < 12 && !placed; t++) placed = place(id, false);
+      for (let t = 0; t < 40 && !placed; t++) {
+        const localX = rng.float(8, tileSize - 8);
+        const localY = rng.float(8, tileSize - 8);
+        if (!acceptSpot(localX, localY)) continue;
+        pushAt(id, localX, localY, false);
+        placed = true;
+      }
     }
   }
   return out;
