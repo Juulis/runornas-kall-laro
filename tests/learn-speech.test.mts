@@ -8,7 +8,11 @@ import { bankCount, ensureBank } from '../src/learn/bank';
 import { generateQuestions } from '../src/learn/questions';
 import { canSpeak, cancel, pickSpeakVoice, questionUtterance, questionUtterances, speak, speakSequence } from '../src/learn/speech';
 import type { LearnQuestion } from '../src/learn/types';
+import { resetVoiceManifestForTests, setVoiceManifestForTests } from '../src/learn/voiceClips';
 import { LearnOverlay } from '../src/ui/LearnOverlay';
+
+// Det här testet kollar talsyntesen. Färdiga filer ska inte ta över.
+setVoiceManifestForTests(null);
 
 await ensureBank('engelska');
 await ensureBank('horforstaelse');
@@ -634,4 +638,5 @@ assert.equal(said[1]?.lang, 'en-GB');
 assert.equal(said[1]?.voice, '');
 assert.equal(made[1]?.voice, null);
 
+resetVoiceManifestForTests();
 console.log('learn speech ok');

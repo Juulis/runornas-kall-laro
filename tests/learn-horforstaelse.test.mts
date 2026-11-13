@@ -11,11 +11,15 @@ import { LISTEN_REVEAL_S, LearnEncounter } from '../src/learn/LearnEncounter';
 import { generateQuestions, questionsForEncounter } from '../src/learn/questions';
 import { canSpeak, questionUtterance, questionUtterances } from '../src/learn/speech';
 import { GRADES, isValidQuestion, type GradeId, type LearnQuestion } from '../src/learn/types';
+import { resetVoiceManifestForTests, setVoiceManifestForTests } from '../src/learn/voiceClips';
 import { LearnOverlay } from '../src/ui/LearnOverlay';
 import { buildLearnFields } from '../src/ui/learnDom';
 import type { CombatSystem } from '../src/systems/CombatSystem';
 import type { MonsterAI } from '../src/systems/MonsterAI';
 import type { World } from '../src/systems/World';
+
+// Det här testet kollar talsyntesen. Färdiga filer ska inte ta över.
+setVoiceManifestForTests(null);
 
 interface HorRow {
   id: string;
@@ -474,4 +478,5 @@ try {
   quiet.dispose();
 }
 
+resetVoiceManifestForTests();
 console.log('learn horforstaelse ok', { bank: bankCount('horforstaelse', 'ak1'), rows: rows.length });

@@ -1,4 +1,5 @@
 import type { LearnQuestion, SpeakLang } from './types';
+import { hasVoiceClips, lookupVoiceClip, voiceClipUrl } from './voiceClips';
 
 /** Röst som räcker för att välja språk. Web Speech-röster uppfyller det. */
 export interface SpeakVoice {
@@ -18,12 +19,14 @@ const SPEAK_RATE = 0.9;
 /**
  * Chrome klipper eller tystar ett yttre runt 200 tecken (särskilt nätverksröster)
  * och kan lägga av efter ungefär 15 sekunder. Hörförståelse som hf-en-ak7_9-002
- * är längre än så, så texten delas innan den läses.
+ * är längre än så. Det gäller bara talsyntesen. En färdig fil spelas hel.
  */
 const MAX_UTTERANCE_CHARS = 140;
 
 /** Håller kvar yttrena så att webbläsaren inte slänger dem innan de lästs upp. */
 const held: SpeechSynthesisUtterance[] = [];
+/** Håller kvar ljudet så att skräpsamlaren inte tar filen innan den spelats klart. */
+const heldAudio: HTMLAudioElement[] = [];
 const voiceBound = new WeakSet<object>();
 
 /** Generation så att en sen voiceschanged inte rör ett nyare klick. */
@@ -37,8 +40,13 @@ let active: SpeechSynthesisUtterance | null = null;
 let activePart: SpeakPart | null = null;
 /** Sant när just det här yttret fått onstart. Redan påbörjade yttre rörs inte. */
 let activeStarted = false;
-/** Segment som ännu inte speak:ats. Nästa byggs i onend, inte i samma kö. */
-let rest: SpeakPart[] = [];
+/** Ett stycke i kön: hel mp3, eller ett yttre när filen saknas. */
+type SpeechItem = { kind: 'clip'; part: SpeakPart; file: string } | { kind: 'tts'; part: SpeakPart };
+
+/** Segment som ännu inte startats. Nästa byggs i onend eller audio.onended. */
+let rest: SpeechItem[] = [];
+/** Ljudfilen som spelas just nu. cancel pausar den och glömmer den. */
+let activeAudio: HTMLAudioElement | null = null;
 /** Ett omförsök per segment, så language-unavailable inte loopar. */
 let segmentTries = 0;
 
@@ -155,12 +163,32 @@ export function warmSpeakVoices(): void {
   ensureVoices(api.synth);
 }
 
-/** Sant när Web Speech API finns. */
+/** Sant när talsyntes finns, eller när färdiga röstfiler kan spelas. */
 export function canSpeak(): boolean {
-  return speechApi() !== null;
+  return speechApi() !== null || hasVoiceClips();
 }
 
-/** Avbryter pågående uppläsning. Gör inget om API:t saknas. */
+function silenceAudio(audio: HTMLAudioElement): void {
+  audio.onended = null;
+  audio.onerror = null;
+  try {
+    audio.pause();
+    audio.src = '';
+  } catch {
+    /* spelaren ville inte stanna */
+  }
+}
+
+/** Stoppar pågående fil och släpper referenserna. */
+function stopHeldAudio(): void {
+  const current = activeAudio;
+  activeAudio = null;
+  const list = heldAudio.splice(0);
+  if (current && !list.includes(current)) list.push(current);
+  for (const audio of list) silenceAudio(audio);
+}
+
+/** Avbryter pågående uppläsning, både fil och talsyntes. */
 export function cancel(): void {
   playId += 1;
   active = null;
@@ -169,6 +197,7 @@ export function cancel(): void {
   segmentTries = 0;
   rest = [];
   held.length = 0;
+  stopHeldAudio();
   try {
     speechApi()?.synth.cancel();
   } catch {
@@ -229,12 +258,38 @@ function splitLong(text: string): string[] {
   return out;
 }
 
-function expandParts(parts: readonly SpeakPart[]): SpeakPart[] {
-  const out: SpeakPart[] = [];
+/** Färdig fil för hela stycket. Saknas filen delas texten som för talsyntesen. */
+function queueFromParts(parts: readonly SpeakPart[]): SpeechItem[] {
+  const out: SpeechItem[] = [];
   for (const part of parts) {
-    for (const text of chunkTexts(part.text)) out.push({ text, lang: part.lang });
+    const text = part.text.trim();
+    if (!text) continue;
+    const clip = lookupVoiceClip(part.lang, text);
+    if (clip) {
+      out.push({ kind: 'clip', part: { text, lang: part.lang }, file: clip.file });
+      continue;
+    }
+    for (const chunk of chunkTexts(text)) out.push({ kind: 'tts', part: { text: chunk, lang: part.lang } });
   }
   return out;
+}
+
+function createClipAudio(file: string): HTMLAudioElement | null {
+  if (typeof Audio !== 'function') return null;
+  try {
+    // Laddas först när stycket ska spelas, inte alla filer i förväg.
+    return new Audio(voiceClipUrl(file));
+  } catch {
+    return null;
+  }
+}
+
+/** Filen gick inte att spela. Samma stycke läses med talsyntes, i samma omgång. */
+function fallbackToSpeech(part: SpeakPart, synth: SpeechSynthesis | null, id: number): SpeechSynthesisUtterance | null {
+  if (id !== playId) return null;
+  const chunks: SpeechItem[] = chunkTexts(part.text).map((text) => ({ kind: 'tts', part: { text, lang: part.lang } }));
+  rest = [...chunks, ...rest];
+  return speakCurrent(synth ?? speechApi()?.synth ?? null, id);
 }
 
 function utter(synth: SpeechSynthesis, part: SpeakPart, id: number): SpeechSynthesisUtterance | null {
@@ -254,19 +309,73 @@ function utter(synth: SpeechSynthesis, part: SpeakPart, id: number): SpeechSynth
   return utterance;
 }
 
-/** Tar nästa segment och talar det. Anropas i klicket och sedan från onend. */
-function speakCurrent(synth: SpeechSynthesis, id: number): SpeechSynthesisUtterance | null {
+/**
+ * Spelar en mp3 för hela stycket. play() anropas direkt, utan att vänta på nätet.
+ * Misslyckas det läses samma stycke med talsyntes.
+ */
+function playClip(part: SpeakPart, file: string, synth: SpeechSynthesis | null, id: number): SpeechSynthesisUtterance | null {
   if (id !== playId) return null;
-  const part = rest.shift();
-  if (!part) {
-    active = null;
-    activePart = null;
-    activeStarted = false;
-    segmentTries = 0;
-    return null;
+  const audio = createClipAudio(file);
+  if (!audio) return fallbackToSpeech(part, synth, id);
+  activeAudio = audio;
+  heldAudio.push(audio);
+  active = null;
+  activePart = null;
+  activeStarted = false;
+  let done = false;
+  const fail = (): SpeechSynthesisUtterance | null => {
+    if (done || id !== playId || activeAudio !== audio) return null;
+    done = true;
+    audio.onended = null;
+    audio.onerror = null;
+    try {
+      audio.pause();
+      audio.src = '';
+    } catch {
+      /* redan stoppad */
+    }
+    if (activeAudio === audio) activeAudio = null;
+    return fallbackToSpeech(part, synth, id);
+  };
+  audio.onended = () => {
+    if (done || id !== playId || activeAudio !== audio) return;
+    done = true;
+    if (activeAudio === audio) activeAudio = null;
+    speakCurrent(speechApi()?.synth ?? synth, id);
+  };
+  audio.onerror = () => {
+    fail();
+  };
+  try {
+    const pending = audio.play();
+    if (pending && typeof pending.catch === 'function') {
+      pending.catch(() => {
+        fail();
+      });
+    }
+  } catch {
+    return fail();
   }
+  return null;
+}
+
+/** Tar nästa segment. En fil spelas hel. Talsyntes är ett yttre i taget. */
+function speakCurrent(synth: SpeechSynthesis | null, id: number): SpeechSynthesisUtterance | null {
+  if (id !== playId) return null;
+  while (rest.length > 0) {
+    const item = rest.shift();
+    if (!item) break;
+    segmentTries = 0;
+    if (item.kind === 'clip') return playClip(item.part, item.file, synth, id);
+    const engine = synth ?? speechApi()?.synth ?? null;
+    if (!engine) continue;
+    return utter(engine, item.part, id);
+  }
+  active = null;
+  activePart = null;
+  activeStarted = false;
   segmentTries = 0;
-  return utter(synth, part, id);
+  return null;
 }
 
 function buildUtterance(
@@ -325,6 +434,11 @@ function buildUtterance(
 }
 
 /**
+ * Färdiga röstfiler spelas först, ett stycke per fil. Nästa segment startar
+ * i audio.onended. Saknas filen, eller om uppspelningen misslyckas, läses
+ * just det stycket med talsyntes. Blandade frågor (fil och talsyntes) går
+ * i följd, ett segment i taget.
+ *
  * Engelska hördes inte efter #41. Två saker i koden gjorde den tyst på Chrome:
  * Hela kön speak:ades på en gång, och vid språkbyte (svensk prompt, sedan
  * engelskt ord) släpper Chrome ofta det andra yttret. Samtidigt satte den
@@ -335,32 +449,43 @@ function buildUtterance(
  * Därför talas ett segment i taget. Nästa byggs i onend med aktuella röster.
  * Voice sätts bara före speak. Saknas engelsk röst talas texten ändå med
  * lang en-US eller en-GB, aldrig med en svensk röst. Samma fel försöker om
- * en gång. Långa texter delas, för Chrome klipper runt 200 tecken.
- * Första speak sker i samma klick. Chrome slänger speak i samma tur som
- * cancel, så vid pågående tal talar vi direkt och försöker igen strax efter.
+ * en gång. Långa texter delas bara i talsyntesen, för Chrome klipper runt
+ * 200 tecken. En färdig fil delas inte.
+ * Första speak eller play sker i samma klick. Chrome slänger speak i samma
+ * tur som cancel, så vid pågående tal talar vi direkt och försöker igen
+ * strax efter.
  */
 export function speakSequence(parts: readonly SpeakPart[]): void {
+  const queued = queueFromParts(parts);
+  if (!queued.length) return;
   const api = speechApi();
-  if (!api) return;
-  const cleaned = expandParts(parts);
-  if (!cleaned.length) return;
+  const clipPossible = queued.some((item) => item.kind === 'clip') && typeof Audio === 'function';
+  if (!api && !clipPossible) return;
+
+  stopHeldAudio();
+  playId += 1;
+  const id = playId;
+  active = null;
+  activePart = null;
+  activeStarted = false;
+  segmentTries = 0;
+  rest = queued;
+
+  if (!api) {
+    speakCurrent(null, id);
+    return;
+  }
+
   const { synth } = api;
   settling = true;
   try {
     ensureVoices(synth);
-    playId += 1;
-    const id = playId;
-    active = null;
-    activePart = null;
-    activeStarted = false;
-    segmentTries = 0;
-    rest = cleaned;
     if (synth.paused) synth.resume();
     const busy = !!(synth.speaking || synth.pending);
     if (busy) synth.cancel();
     held.length = 0;
     const utterance = speakCurrent(synth, id);
-    if (!busy) return;
+    if (!busy || !utterance) return;
     const retry = (): void => {
       if (id !== playId || !utterance || active !== utterance) return;
       if (synth.speaking || synth.pending) return;
@@ -429,7 +554,8 @@ function isSpelling(rule: string): boolean {
 /**
  * Segment som ska läsas för en fråga. Stavning läser bara prompten, aldrig ordet.
  * Översättning med eng/speakText delas: svensk prompt, sedan det engelska ordet.
- * Hörförståelse är ett stycke på textens språk. Lång text delas vid uppspelning.
+ * Hörförståelse och läsförståelse är ett stycke på textens språk.
+ * Lång text delas bara om talsyntesen läser. En färdig fil spelas hel.
  */
 export function questionUtterances(q: LearnQuestion): SpeakPart[] {
   const prompt = q.prompt.trim();
