@@ -69,8 +69,8 @@ assert.equal(SUBJECTS[4]?.id, 'lasforstaelse');
 assert.equal(SUBJECTS[4]?.label, 'Läsförståelse');
 assert.equal(SUBJECTS[5]?.id, 'horforstaelse');
 assert.equal(SUBJECTS[5]?.label, 'Hörförståelse');
-assert.equal(questionCount('boss'), 6);
-assert.equal(questionCount('champion'), 4);
+assert.equal(questionCount('boss'), 5);
+assert.equal(questionCount('champion'), 3);
 assert.equal(questionCount('normal'), 1);
 assert.equal(encounterKindOf({ boss: true, elite: 'champion' }), 'boss');
 assert.equal(encounterKindOf({ boss: false, elite: 'champion' }), 'champion');
@@ -269,7 +269,7 @@ for (const grade of grades) {
 
 const bossA = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_ulvhild', grade: 'ak2', subject: 'matte', seed: 1 });
 const bossB = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_ulvhild', grade: 'ak2', subject: 'matte', seed: 999 });
-assert.equal(bossA.length, 6);
+assert.equal(bossA.length, 5);
 assert.deepEqual(bossA, bossB);
 for (const q of bossA) {
   assert.equal(isValidQuestion(q), true);
@@ -280,7 +280,7 @@ const otherBoss = questionsForEncounter({ kind: 'boss', monsterId: 'benkungen_va
 const otherGrade = questionsForEncounter({ kind: 'boss', monsterId: 'grabjornen_ulvhild', grade: 'ak3', subject: 'matte', seed: 1 });
 assert.notDeepEqual(bossA, otherBoss);
 assert.notDeepEqual(bossA, otherGrade);
-assert.equal(questionsForEncounter({ kind: 'champion', monsterId: 'varg', grade: 'ak1', subject: 'svenska', seed: 3 }).length, 4);
+assert.equal(questionsForEncounter({ kind: 'champion', monsterId: 'varg', grade: 'ak1', subject: 'svenska', seed: 3 }).length, 3);
 assert.equal(questionsForEncounter({ kind: 'normal', monsterId: 'varg', grade: 'ak1', subject: 'engelska', seed: 3 }).length, 1);
 
 assert.deepEqual(applyWrongAnswer(100, 100), { damage: 25, hp: 75, died: false });
@@ -646,7 +646,7 @@ assert.ok(HERO_HURT_FLASH_S >= 1 && HERO_HURT_FLASH_S <= 1.2);
 const champ = makeLearn('champion');
 try {
   const total = champ.questions.length;
-  assert.equal(total, 4);
+  assert.equal(total, 3);
   startQuestion(champ, 1, total);
   champ.enc.answer(champ.questions[0]?.correctIndex ?? -1);
   assert.equal(quiz(champ.enc).hidden, true, 'rätt svar går till strid');
@@ -684,7 +684,7 @@ try {
 const wrong = makeLearn('champion');
 try {
   const total = wrong.questions.length;
-  assert.equal(total, 4);
+  assert.equal(total, 3);
   startQuestion(wrong, 1, total);
   const bad = ((wrong.questions[0]?.correctIndex ?? 0) + 1) % 4;
   wrong.enc.answer(bad);

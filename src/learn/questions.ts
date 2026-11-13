@@ -53,7 +53,7 @@ export function generateQuestions(opts: {
 }
 
 /**
- * Frågor för ett möte. Bossar är alltid samma sex frågor för samma boss-id, nivå och ämne
+ * Frågor för ett möte. Bossar är alltid samma fem frågor för samma boss-id, nivå och ämne
  * (seedat, oberoende av mötets slumpseed).
  */
 export function questionsForEncounter(opts: {

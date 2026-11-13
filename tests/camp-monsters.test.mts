@@ -2,13 +2,20 @@ import assert from 'node:assert/strict';
 import { DATA } from '../src/data';
 import { Zone } from '../src/world/Zone';
 import type { World } from '../src/systems/World';
-import { CAMP_SAFE_RADIUS, campFirePos, campMonsterSpecs, keepOutsideSafeRadius } from '../src/world/bigWorld/campMonsterField';
+import {
+  CAMP_SAFE_RADIUS,
+  START_POS_SAFE_RADIUS,
+  campFirePos,
+  campMonsterSpecs,
+  keepOutsideSafeRadius,
+} from '../src/world/bigWorld/campMonsterField';
 import { worldToChunk } from '../src/world/bigWorld/bigWorldCoords';
 import { generateChunkWorldData } from '../src/world/bigWorld/worldGenerator';
 import { campStartPos } from '../src/world/bigWorld/startskogenFootprint';
 import { ensureStartskogenSpawnQueue, spawnPointInsideStartskogenFootprint } from '../src/world/bigWorld/startskogenSpawn';
 import { syncProximitySpawns } from '../src/systems/SpawnProximity';
 import { FOREST_SPAWN_ACTIVE_RADIUS } from '../src/world/forestConstants';
+import { HERO_WORLD_SPEED_MULT } from '../src/logic/heroMovement';
 
 const start = campStartPos();
 const fire = campFirePos();
@@ -24,23 +31,29 @@ assert.ok(distToGlade > 100, 'Rungläntans pack vid origo ligger långt från l�
 
 const specs = campMonsterSpecs(7);
 assert.ok(specs.length >= 40, `lägerflocken ska vara stor (${specs.length})`);
+const walkSpeed = 6.2 * HERO_WORLD_SPEED_MULT;
+const walk6 = walkSpeed * 6;
 let near = 0;
 let inView = 0;
+let withinWalk = 0;
 for (const s of specs) {
   const dFire = Math.hypot(s.pos[0] - fire.x, s.pos[1] - fire.y);
   assert.ok(dFire >= CAMP_SAFE_RADIUS + 0.5, `${s.uid} inne i gläntan`);
+  const d = Math.hypot(s.pos[0] - start.x, s.pos[1] - start.y);
+  assert.ok(d >= START_POS_SAFE_RADIUS - 0.05, `${s.uid} för nära start (${d.toFixed(2)})`);
   assert.equal(
     spawnPointInsideStartskogenFootprint({ x: s.pos[0], y: s.pos[1] }),
     false,
     'lägerflock får inte filtreras bort som legacy-chunk',
   );
-  const d = Math.hypot(s.pos[0] - start.x, s.pos[1] - start.y);
   assert.ok(d <= FOREST_SPAWN_ACTIVE_RADIUS, `${s.uid} ska aktiveras från start`);
   if (d <= 36) near++;
-  if (d <= 24) inView++;
+  if (d <= 28) inView++;
+  if (d <= walk6) withinWalk++;
 }
 assert.ok(near >= 16, `minst en ring nära start, fick ${near}`);
 assert.ok(inView >= 8, `inre ringen ska synas från start, fick ${inView}`);
+assert.ok(withinWalk >= 1, `minst ett lägermonster inom 6 s gång (${walkSpeed.toFixed(2)} enheter/s), fick ${withinWalk}`);
 
 const again = campMonsterSpecs(7);
 assert.deepEqual(

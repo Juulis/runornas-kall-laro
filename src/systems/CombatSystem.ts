@@ -148,7 +148,7 @@ export class CombatSystem {
     const first = !!m.uid && m.boss && !w.session.killed.has(m.uid);
     if (m.uid) {
       w.session.killed.add(m.uid);
-      scheduleMonsterRespawn(m.uid, m.boss);
+      scheduleMonsterRespawn(m.uid, m.boss, m.pos);
     }
     const st = w.hero.stats;
     const lo = m.es?.extraLoot;

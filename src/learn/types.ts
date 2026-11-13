@@ -88,10 +88,10 @@ export function choiceMatchesAnswer(choice: string, answer: string): boolean {
   return choice.endsWith(` ${answer}`);
 }
 
-/** Antal frågor i mötet. Vanliga monster har en fråga, medan champion och boss har flera. */
+/** Antal frågor i mötet. Vanliga monster har en fråga, champion tre, boss fem. */
 export function questionCount(kind: EncounterKind): number {
-  if (kind === 'boss') return 6;
-  if (kind === 'champion') return 4;
+  if (kind === 'boss') return 5;
+  if (kind === 'champion') return 3;
   return 1;
 }
 

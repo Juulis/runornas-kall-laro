@@ -267,7 +267,7 @@ export function unlockNewStickers(state: RewardState): StickerId[] {
 /** Andel rätt som krävs för att ett champion- eller bossmöte räknas (designens 2/3 och 4/5). */
 const PASS_RATIO: Record<EncounterKind, number> = { normal: 0, champion: 2 / 3, boss: 4 / 5 };
 
-/** Minsta antal rätt i mötet för att det ska räknas. Följer antalet frågor: champion 3 av 4, boss 5 av 6. */
+/** Minsta antal rätt i mötet för att det ska räknas. Följer antalet frågor: champion 2 av 3, boss 4 av 5. */
 export function encounterPassThreshold(kind: EncounterKind): number {
   return Math.ceil(questionCount(kind) * PASS_RATIO[kind] - 1e-9);
 }

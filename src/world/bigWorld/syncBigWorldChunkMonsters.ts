@@ -1,6 +1,7 @@
 import type { Vec2 } from '../../core/GameContext';
 import type { MonsterFactory } from '../../entities/MonsterFactory';
-import { FOREST_SPAWN_ACTIVE_RADIUS } from '../forestConstants';
+import { FOREST_SPAWN_ACTIVE_RADIUS, MAX_LIVE_MONSTERS } from '../forestConstants';
+import { countLiveMonstersNear } from '../../systems/SpawnProximity';
 import type { World } from '../../systems/World';
 import type { SpawnSpec } from '../../systems/SpawnSystem';
 import type { ChunkWorldCache } from './chunkCache';
@@ -92,13 +93,14 @@ function spawnNearHero(
 ): number {
   let spawned = 0;
   const spawnR = FOREST_SPAWN_ACTIVE_RADIUS;
+  let room = MAX_LIVE_MONSTERS - countLiveMonstersNear(w, hero, spawnR);
   for (const { cx: ccx, cy: ccy } of fillNearChunks(hero.x, hero.y, spawnR)) {
-    if (spawned >= budget) break;
+    if (spawned >= budget || room <= 0) break;
     const data = cache.get(worldSeed, gameSeed, ccx, ccy);
     if (data.safe) continue;
     if (data.spawns.length === 0) continue;
     for (const s of data.spawns) {
-      if (spawned >= budget) break;
+      if (spawned >= budget || room <= 0) break;
       if (w.session.killed.has(s.uid)) continue;
       if (live.has(s.uid)) continue;
       const pos = chunkSpawnToWorld(ccx, ccy, s.localX, s.localY);
@@ -107,6 +109,7 @@ function spawnNearHero(
       factory.create(w, s.enemy, pos, s.level, bwSpec(s.uid, s.enemy, s.level, s.elite ?? null));
       live.add(s.uid);
       spawned++;
+      room--;
     }
   }
   return spawned;

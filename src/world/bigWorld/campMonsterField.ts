@@ -2,18 +2,21 @@ import { DATA, monsterDef } from '../../data';
 import type { Vec2 } from '../../core/GameContext';
 import { Rng } from '../../core/Rng';
 import type { SpawnSpec } from '../../systems/SpawnSystem';
+import { campStartPos } from './startskogenFootprint';
 
 /**
  * Lägerflock runt startelden.
  *
  * Spelaren börjar vid start_pos i chunk [0,0] (startlagret), som är sakert och
  * därför hoppas över av chunk-spawnen. Den täta listan i spawnzoner.json ligger
- * kvar vid Rungläntan (världens origo), ungefär 180 enheter bort — utanför både
+ * kvar vid Rungläntan (världens origo), ungefär 180 enheter bort, utanför både
  * kameran och aktiveringsradien. Den här flocken läggs därför i världskoordinater
  * runt elden, utanför den lilla gläntan, så man ser vargar direkt och möter en
  * inom några sekunders gång.
  */
 export const CAMP_SAFE_RADIUS = 14;
+/** Inga vanliga monster närmare start_pos än så här (världsenheter). */
+export const START_POS_SAFE_RADIUS = 22;
 export const CAMP_FIELD_UID_PREFIX = 'lager:';
 
 const RINGS = [18, 30, 44] as const;
@@ -48,9 +51,19 @@ export function keepOutsideSafeRadius(pos: Vec2, center: Vec2, radius: number): 
   }
 }
 
-/** Stabil flock per game-seed. Inre ringen ligger inom synhåll från start_pos. */
+/** Håller en lägerpunkt utanför eldens glänta och utanför start_pos. */
+function pushCampPoint(x: number, y: number, fire: Vec2, start: Vec2): Vec2 {
+  const pos = { x, y };
+  keepOutsideSafeRadius(pos, fire, CAMP_SAFE_RADIUS + 1);
+  keepOutsideSafeRadius(pos, start, START_POS_SAFE_RADIUS);
+  keepOutsideSafeRadius(pos, fire, CAMP_SAFE_RADIUS + 1);
+  return pos;
+}
+
+/** Stabil flock per game-seed. Inre ringen är grupper om 2 och ligger inom en kort gång från start_pos. */
 export function campMonsterSpecs(seed: number): SpawnSpec[] {
   const fire = campFirePos();
+  const start = campStartPos();
   const rng = new Rng(Rng.hash(seed, 'lager-monster'));
   const rot = rng.next() * Math.PI * 2;
   const out: SpawnSpec[] = [];
@@ -62,21 +75,13 @@ export function campMonsterSpecs(seed: number): SpawnSpec[] {
       const level = monsterDef(enemy).level;
       for (let g = 0; g < PACK; g++) {
         const side = g === 0 ? -0.9 : 0.9;
-        let x = fire.x + Math.cos(ang) * radius + Math.cos(ang + Math.PI / 2) * side;
-        let y = fire.y + Math.sin(ang) * radius + Math.sin(ang + Math.PI / 2) * side;
-        const dx = x - fire.x;
-        const dy = y - fire.y;
-        const dist = Math.hypot(dx, dy);
-        const minD = CAMP_SAFE_RADIUS + 1;
-        if (dist < minD) {
-          const k = minD / Math.max(dist, 0.01);
-          x = fire.x + dx * k;
-          y = fire.y + dy * k;
-        }
+        const rawX = fire.x + Math.cos(ang) * radius + Math.cos(ang + Math.PI / 2) * side;
+        const rawY = fire.y + Math.sin(ang) * radius + Math.sin(ang + Math.PI / 2) * side;
+        const pos = pushCampPoint(rawX, rawY, fire, start);
         out.push({
           uid: `${CAMP_FIELD_UID_PREFIX}${n}`,
           enemy,
-          pos: [x, y],
+          pos: [pos.x, pos.y],
           level,
           elite: null,
           modifiers: [],
