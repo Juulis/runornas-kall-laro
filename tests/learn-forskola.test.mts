@@ -12,8 +12,12 @@ import { generateQuestions } from '../src/learn/questions';
 import { parseLearnSettings, readLearnSettings, writeLearnSettings } from '../src/learn/settings';
 import { canSpeak, pickSpeakVoice, questionUtterance, questionUtterances, speak } from '../src/learn/speech';
 import { isValidQuestion, type LearnQuestion } from '../src/learn/types';
+import { resetVoiceManifestForTests, setVoiceManifestForTests } from '../src/learn/voiceClips';
 import { LearnOverlay } from '../src/ui/LearnOverlay';
 import { buildLearnFields } from '../src/ui/learnDom';
+
+// Det här testet kollar talsyntesen. Färdiga filer ska inte ta över.
+setVoiceManifestForTests(null);
 
 await ensureBank('svenska');
 await ensureBank('engelska');
@@ -490,4 +494,5 @@ assert.equal(canSpeak(), false);
 speak('hej', 'sv-SE');
 assert.equal(spoken.length, beforeQuiet);
 
+resetVoiceManifestForTests();
 console.log('learn forskola ok', { sv: svRows.length, stavning: stavning.length, en: enRows.length });
