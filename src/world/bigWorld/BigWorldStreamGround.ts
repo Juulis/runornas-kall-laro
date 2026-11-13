@@ -3,8 +3,10 @@ import { Container as PixiContainer, Rectangle, Sprite } from 'pixi.js';
 import { Rng } from '../../core/Rng';
 import { pickChunkGroundTileId } from './groundTiles';
 import type { Vec2, Collider } from '../../core/GameContext';
-import type { AssetStore, DecorId } from '../../render/Assets';
+import { biomeLoadLabel, canonicalBiomeId, decorForBiome, tilesForBiome } from '../../render/biomeAssetGroups';
+import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
+import { trackChunkLoad } from '../../ui/chunkLoad';
 import { ChunkWorldCache } from './chunkCache';
 import type { ChunkWorldData } from './worldGenerator';
 import { chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
@@ -17,15 +19,6 @@ import {
   BIG_WORLD_SKY_CLEAR_COLOR,
 } from './bigWorldConfig';
 import type { Zone } from '../Zone';
-
-const DECOR_ALIASES: Record<string, DecorId> = {
-  gran: 'gran',
-  björk: 'gran',
-  runsten: 'runsten',
-  vägrös: 'buske',
-  kolmila: 'stubbe',
-  stubbe: 'stubbe',
-};
 
 export interface BigWorldStreamScene {
   objects: Container;
@@ -116,6 +109,9 @@ export class BigWorldStreamGround extends PixiContainer {
   private scene: BigWorldStreamScene | null = null;
   private allowBuild = true;
   private viewBounds: BigWorldViewBounds | null = null;
+  /** Biom vars plattor och dekor redan finns i AssetStore. */
+  private readonly biomeReady = new Set<string>();
+  private readonly biomePending = new Map<string, Promise<void>>();
 
   constructor(
     private readonly assets: AssetStore,
@@ -259,6 +255,7 @@ export class BigWorldStreamGround extends PixiContainer {
 
   private pendingBuild(): boolean {
     for (const vis of this.visuals.values()) {
+      if (!vis.decorDone) return true;
       for (const row of vis.patches) {
         for (const p of row) {
           if (p.tilesBuilt < p.totalTiles) return true;
@@ -316,10 +313,49 @@ export class BigWorldStreamGround extends PixiContainer {
       decor: [],
       decorDone: false,
     });
+    this.requestBiomeAssets(data.biomeId);
+  }
+
+  /**
+   * Startar lazy-laddning för chunkens biom. Klar genast om texturerna redan finns
+   * eller om anroparen inte har ensureBiomeAssets (tester med färdiga texturer).
+   */
+  private biomeAssetsPresent(id: string): boolean {
+    return (
+      tilesForBiome(id).every((tileId) => this.assets.tiles.has(tileId)) &&
+      decorForBiome(id).every((decorId) => this.assets.decor.has(decorId))
+    );
+  }
+
+  private requestBiomeAssets(biomeId: string): void {
+    const id = canonicalBiomeId(biomeId || 'skog');
+    if (this.biomeReady.has(id) || this.biomePending.has(id)) return;
+    const ensure = this.assets.ensureBiomeAssets;
+    if (typeof ensure !== 'function' || this.biomeAssetsPresent(id)) {
+      this.biomeReady.add(id);
+      return;
+    }
+    const job = trackChunkLoad(biomeLoadLabel(id), (onProgress) => ensure.call(this.assets, id, onProgress)).then(
+      () => {
+        this.biomeReady.add(id);
+      },
+      () => {
+        this.biomePending.delete(id);
+      },
+    );
+    this.biomePending.set(id, job);
+  }
+
+  private chunkBiomeReady(vis: ChunkVisual): boolean {
+    const id = canonicalBiomeId(vis.data.biomeId || 'skog');
+    if (this.biomeReady.has(id)) return true;
+    this.requestBiomeAssets(id);
+    return this.biomeReady.has(id);
   }
 
   private spawnDecorForChunk(vis: ChunkVisual): void {
     if (vis.decorDone || !this.scene) return;
+    if (!this.chunkBiomeReady(vis)) return;
     const data = vis.data;
     if (data.decorPool.length === 0 || data.safe) {
       vis.decorDone = true;
@@ -333,10 +369,10 @@ export class BigWorldStreamGround extends PixiContainer {
         const cell = new Rng(Rng.hash(data.chunkSeed, 'decor', ti, tj));
         if (cell.next() > 0.55) continue;
         const raw = cell.pick(data.decorPool.length ? data.decorPool : ['gran']);
-        const decorId = DECOR_ALIASES[raw] ?? (this.assets.decor.has(raw as DecorId) ? (raw as DecorId) : null);
-        if (!decorId) continue;
-        const d = this.assets.decor.get(decorId);
+        if (!this.assets.decor.has(raw)) continue;
+        const d = this.assets.decor.get(raw);
         if (!d?.tex) continue;
+        const decorId = raw;
         const wx = chunkMin.x + (ti + cell.float(0, decorEvery - 1)) * TILE_WORLD;
         const wy = chunkMin.y + (tj + cell.float(0, decorEvery - 1)) * TILE_WORLD;
         const s = new Sprite(d.tex);

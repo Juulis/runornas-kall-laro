@@ -65,14 +65,14 @@ export function biomeRenderPlaceholders(biome: BigWorldBiome | undefined): {
     ask: ['lera_3', 'gras_till_lera', 'skogsbotten_ormbunke'],
   };
   const decor: Record<string, string[]> = {
-    skog: ['gran', 'björk', 'runsten', 'vägrös'],
-    trask: ['vägrös', 'runsten'],
-    fjall: ['runsten', 'vägrös'],
-    kust: ['vägrös'],
-    ask: ['vägrös', 'runsten'],
+    skog: ['gran', 'bjork', 'runsten', 'vagros_blommor'],
+    trask: ['vagros_blommor', 'runsten'],
+    fjall: ['runsten', 'vagros_blommor'],
+    kust: ['vagros_blommor'],
+    ask: ['vagros_blommor', 'runsten'],
   };
   const skogTiles = exploreTiles.skog ?? ['gras_1'];
-  const skogDecor = decor.skog ?? ['vägrös'];
+  const skogDecor = decor.skog ?? ['vagros_blommor'];
   return {
     tilePool: exploreTiles[id] ?? skogTiles,
     decorPool: decor[id] ?? skogDecor,
