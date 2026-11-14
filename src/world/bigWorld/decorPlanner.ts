@@ -68,6 +68,12 @@ const ROCK_RADIUS = 0.8;
 const COUNT_LO = 154;
 const COUNT_HI = 172;
 const MIN_LITEN = 12;
+/**
+ * Fri gång mellan collider-cirklar så man kan gå mellan dungarna.
+ * Tre rutor isär räcker alltid: TILE_WORLD är 2 och jitteret ryms i rutan.
+ */
+const MIN_PASSAGE = 2.2;
+const PASSAGE_TILE_REACH = 2;
 
 const ROCK_IDS: ReadonlySet<string> = new Set([
   'stenhog',
@@ -95,24 +101,24 @@ const FALLBACK_POOLS: Record<string, DecorLayerPool> = {
     liten: ['gras_tuva', 'ormbunkar', 'vagros_blommor'],
   },
   trask: {
-    stor: ['dod_tall', 'dod_tall_knackt', 'dod_ek', 'sjunken_bat'],
-    mellan: ['stubbe_vatten', 'natstang', 'stubbe', 'myrkors', 'stolprad_rutten', 'sjunken_klocka'],
-    liten: ['kaveldun', 'myrull', 'vasstuva', 'vagros_blommor'],
+    stor: ['dod_tall', 'dod_tall_knackt', 'sjunken_bat'],
+    mellan: ['stubbe_vatten', 'spanglykta', 'myrkors', 'sjunken_klocka'],
+    liten: ['myrull', 'kaveldun', 'vasstuva'],
   },
   fjall: {
     stor: ['vindtall', 'vindtall_krokig', 'fjallbjork', 'stenblock', 'stenblock_lav'],
-    mellan: ['stenhog', 'stubbe', 'renskalle', 'kristaller', 'buske'],
-    liten: ['ljungtuva', 'gras_tuva', 'vagros_blommor'],
+    mellan: ['kristaller', 'silkesnat', 'gruvvagn', 'renskalle'],
+    liten: ['ljungtuva'],
   },
   kust: {
-    stor: ['sjunken_bat'],
-    mellan: ['natstang', 'sjunken_klocka', 'stubbe', 'buske'],
-    liten: ['vagros_blommor', 'gras_tuva', 'ormbunkar'],
+    stor: ['sjunken_bat', 'stenblock', 'gruvvagn_valt'],
+    mellan: ['stubbe_vatten', 'stolprad_rutten', 'rals_bit', 'kapellruin_horn'],
+    liten: ['kaveldun'],
   },
   ask: {
-    stor: ['dod_ek', 'pelare', 'ruinmur_rasad'],
-    mellan: ['stenkors', 'ruinmur', 'pelare_liggande', 'stenhog', 'stubbe'],
-    liten: ['vagros_blommor', 'gras_tuva', 'ormbunkar'],
+    stor: ['dod_tall_knackt', 'pelare', 'ruinmur_rasad'],
+    mellan: ['stenkors', 'hard_glod', 'hard_kall', 'natstang', 'pelare_liggande'],
+    liten: [],
   },
 };
 
@@ -236,6 +242,97 @@ function colliderRadius(id: string): number {
   return ROCK_IDS.has(id) ? ROCK_RADIUS : TREE_RADIUS;
 }
 
+interface ColliderCircle {
+  x: number;
+  y: number;
+  r: number;
+}
+
+/** Samma hash som chunkWorldSeed, så en grannchunk kan räknas utan att importera generatorn. */
+function layoutChunkSeed(worldSeed: number, cx: number, cy: number): number {
+  return Rng.hash('chunk', worldSeed, cx, cy);
+}
+
+function tileChunk(gx: number, gy: number): { cx: number; cy: number } {
+  return worldToChunk(gx * TILE_WORLD + TILE_WORLD * 0.5, gy * TILE_WORLD + TILE_WORLD * 0.5);
+}
+
+function tileIsEarlier(ax: number, ay: number, bx: number, by: number): boolean {
+  return ax < bx || (ax === bx && ay < by);
+}
+
+function jitteredWorldPos(
+  worldSeed: number,
+  chunkSeed: number,
+  gx: number,
+  gy: number,
+): { wx: number; wy: number; scaleX: number; scaleY: number } {
+  const rng = new Rng(Rng.hash(worldSeed, chunkSeed, 'dekor-form', gx, gy));
+  const scale = 0.35 + rng.next() * 0.25;
+  const mirror = rng.next() < 0.5;
+  const jx = (0.12 + rng.next() * 0.76) * TILE_WORLD;
+  const jy = (0.12 + rng.next() * 0.76) * TILE_WORLD;
+  return {
+    wx: gx * TILE_WORLD + jx,
+    wy: gy * TILE_WORLD + jy,
+    scaleX: mirror ? -scale : scale,
+    scaleY: scale,
+  };
+}
+
+function blocksPassage(a: ColliderCircle, b: ColliderCircle): boolean {
+  return Math.hypot(a.x - b.x, a.y - b.y) - a.r - b.r < MIN_PASSAGE;
+}
+
+/**
+ * Stor dekor i en grannchunk, om rutan skulle få en collider.
+ * Radien räknas som träd (0,9) så stenen (0,8) också ryms, oavsett vilket biom grannen har.
+ */
+function probeNeighborCollider(worldSeed: number, gx: number, gy: number): ColliderCircle | null {
+  const slot = slotForTile(worldSeed, gx, gy);
+  if (!slot || slot.onlyLiten || slot.wanted !== 'stor') return null;
+  const owner = tileChunk(gx, gy);
+  const pos = jitteredWorldPos(worldSeed, layoutChunkSeed(worldSeed, owner.cx, owner.cy), gx, gy);
+  const placed = worldToChunk(pos.wx, pos.wy);
+  if (placed.cx !== owner.cx || placed.cy !== owner.cy) return null;
+  if (!shouldPlaceDecorAt(worldSeed, pos.wx, pos.wy)) return null;
+  if (!clearsForbidden(worldSeed, pos.wx, pos.wy, ROCK_RADIUS)) return null;
+  return { x: pos.wx, y: pos.wy, r: TREE_RADIUS };
+}
+
+function passageAllows(
+  circle: ColliderCircle,
+  gx: number,
+  gy: number,
+  cx: number,
+  cy: number,
+  accepted: readonly ColliderCircle[],
+  probes: Map<string, ColliderCircle | null>,
+  worldSeed: number,
+): boolean {
+  for (const other of accepted) {
+    if (blocksPassage(circle, other)) return false;
+  }
+  for (let dx = -PASSAGE_TILE_REACH; dx <= PASSAGE_TILE_REACH; dx += 1) {
+    for (let dy = -PASSAGE_TILE_REACH; dy <= PASSAGE_TILE_REACH; dy += 1) {
+      if (dx === 0 && dy === 0) continue;
+      const ox = gx + dx;
+      const oy = gy + dy;
+      if (!tileIsEarlier(ox, oy, gx, gy)) continue;
+      const owner = tileChunk(ox, oy);
+      if (owner.cx === cx && owner.cy === cy) continue;
+      const key = `${ox},${oy}`;
+      let other = probes.get(key);
+      if (other === undefined) {
+        other = probeNeighborCollider(worldSeed, ox, oy);
+        probes.set(key, other);
+      }
+      if (other && blocksPassage(circle, other)) return false;
+    }
+  }
+  return true;
+}
+
 function pickDecorId(
   worldSeed: number,
   chunkSeed: number,
@@ -278,13 +375,9 @@ function materialize(
   if (!layer) return null;
   const id = pickDecorId(worldSeed, chunkSeed, slot.gx, slot.gy, layer, usePool, useBiome);
   if (!id) return null;
-  const rng = new Rng(Rng.hash(worldSeed, chunkSeed, 'dekor-form', slot.gx, slot.gy));
-  const scale = 0.35 + rng.next() * 0.25;
-  const mirror = rng.next() < 0.5;
-  const jx = (0.12 + rng.next() * 0.76) * TILE_WORLD;
-  const jy = (0.12 + rng.next() * 0.76) * TILE_WORLD;
-  const wx = slot.gx * TILE_WORLD + jx;
-  const wy = slot.gy * TILE_WORLD + jy;
+  const posed = jitteredWorldPos(worldSeed, chunkSeed, slot.gx, slot.gy);
+  const wx = posed.wx;
+  const wy = posed.wy;
   const owner = worldToChunk(wx, wy);
   if (owner.cx !== cx || owner.cy !== cy) return null;
   if (!shouldPlaceDecorAt(worldSeed, wx, wy)) return null;
@@ -295,8 +388,8 @@ function materialize(
     wx,
     wy,
     layer,
-    scaleX: mirror ? -scale : scale,
-    scaleY: scale,
+    scaleX: posed.scaleX,
+    scaleY: posed.scaleY,
     collider: radius > 0 ? { x: wx, y: wy, r: radius } : null,
   };
 }
@@ -420,9 +513,16 @@ export function planDecorForChunk(args: {
       }
     : undefined;
   const placed: PlannedDecor[] = [];
+  const accepted: ColliderCircle[] = [];
+  const probes = new Map<string, ColliderCircle | null>();
   for (const slot of collectSlots(args.worldSeed, args.cx, args.cy)) {
     const made = materialize(args.worldSeed, args.chunkSeed, args.cx, args.cy, slot, pool, biomeId, blend);
-    if (made) placed.push(made);
+    if (!made) continue;
+    if (made.collider && !passageAllows(made.collider, slot.gx, slot.gy, args.cx, args.cy, accepted, probes, args.worldSeed)) {
+      continue;
+    }
+    if (made.collider) accepted.push(made.collider);
+    placed.push(made);
   }
   const thinned = thinToCap(placed, args.worldSeed, args.chunkSeed, pool);
   return fillToFloor(thinned, args.worldSeed, args.chunkSeed, args.cx, args.cy, pool, biomeId, blend);

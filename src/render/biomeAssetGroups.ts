@@ -238,8 +238,29 @@ export const FJALL_DECOR = [
   'vindtall_krokig',
 ] as const;
 
-/** Kust delar vrak och nät med träsket. Egen sand kommer senare. */
-export const KUST_DECOR = ['sjunken_bat', 'sjunken_klocka', 'natstang'] as const;
+/** Kustens pool, även sprites som träsk eller fjäll redan listar. Annars syns de inte vid stranden. */
+export const KUST_DECOR = [
+  'sjunken_bat',
+  'stenblock',
+  'gruvvagn_valt',
+  'stubbe_vatten',
+  'stolprad_rutten',
+  'rals_bit',
+  'kaveldun',
+  'kapellruin_horn',
+] as const;
+
+/** Askfältets pool. Härdar och ruiner, inte skogens gräs. */
+export const ASK_DECOR = [
+  'dod_tall_knackt',
+  'pelare',
+  'ruinmur_rasad',
+  'stenkors',
+  'hard_glod',
+  'hard_kall',
+  'natstang',
+  'pelare_liggande',
+] as const;
 
 /**
  * Byggnader och inredning. Inte med i startladdningen.
@@ -282,7 +303,7 @@ export const BY_DECOR = [
  */
 export const WAYMARK_DECOR = ['anslagstavla', 'orange_portal', 'fackla_stolpe'] as const;
 
-/** Vägrös används i alla biomens dekorpooler och måste finnas när biomet laddas. */
+/** Vägrös hör till skogens pool och laddas även med de andra biomen. */
 const SHARED_EXPLORE_DECOR = ['vagros_blommor'] as const;
 
 /** Komplett dekorlista: varje png utom lista_saknade och *_anim. */
@@ -295,6 +316,7 @@ export const DECOR_GROUPS = {
   trask: TRASK_DECOR,
   fjall: FJALL_DECOR,
   kust: KUST_DECOR,
+  ask: ASK_DECOR,
   by: BY_DECOR,
   interiör: BY_DECOR,
 } as const;
@@ -310,7 +332,18 @@ export function tilesForBiome(biomeId: string): readonly string[] {
 /** Dekor som ska hämtas för biomet, utöver startup-dekoren. */
 export function decorForBiome(biomeId: string): readonly string[] {
   const id = canonicalBiomeId(biomeId);
-  const own = id === 'skog' ? SKOG_DECOR : id === 'trask' ? TRASK_DECOR : id === 'fjall' ? FJALL_DECOR : id === 'kust' ? KUST_DECOR : [];
+  const own =
+    id === 'skog'
+      ? SKOG_DECOR
+      : id === 'trask'
+        ? TRASK_DECOR
+        : id === 'fjall'
+          ? FJALL_DECOR
+          : id === 'kust'
+            ? KUST_DECOR
+            : id === 'ask'
+              ? ASK_DECOR
+              : [];
   if (own.length === 0 && id !== 'ask' && id !== 'skog' && id !== 'trask' && id !== 'fjall' && id !== 'kust') return [];
   return unique([SHARED_EXPLORE_DECOR, own]);
 }
@@ -349,6 +382,7 @@ export function decorForGroup(groupId: string): readonly string[] {
   if (id === 'trask') return TRASK_DECOR;
   if (id === 'fjall') return FJALL_DECOR;
   if (id === 'kust') return KUST_DECOR;
+  if (id === 'ask') return ASK_DECOR;
   return [];
 }
 
