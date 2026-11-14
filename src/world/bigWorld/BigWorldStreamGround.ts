@@ -5,6 +5,7 @@ import type { Key, Params } from '../../i18n/types';
 import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome, WAYMARK_DECOR } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
+import { attachShadow, destroyShadowSprite, setShadowInView, shadowKindForDecorLayer } from '../../render/ShadowLayer';
 import { StripAnimSprite } from '../../render/StripAnimSprite';
 import { trackChunkLoad } from '../../ui/chunkLoad';
 import { groundRolePoolForBiome } from './biomeBlend';
@@ -67,6 +68,7 @@ interface WaymarkVisual {
   nodes: Container[];
   anims: StripAnimSprite[];
   label: Text | null;
+  shadow: Sprite | null;
   wx: number;
   wy: number;
   mark: Waymark;
@@ -74,6 +76,8 @@ interface WaymarkVisual {
 
 interface DecorEntry {
   sprite: Sprite;
+  /** Syskon i objektlagret. Räknas inte mot DECOR_SPRITE_CAP. */
+  shadow: Sprite | null;
   collider: Collider | null;
   wx: number;
   wy: number;
@@ -185,7 +189,7 @@ export class BigWorldStreamGround extends PixiContainer {
     return countPixiDisplayObjects(this);
   }
 
-  /** Levande dekorsprites, inte markrutor. Taket i spawn räknar den här summan. */
+  /** Levande dekorsprites, inte markrutor och inte skuggspriter. Taket i spawn räknar den här summan. */
   countLiveDecorSprites(): number {
     let n = 0;
     for (const vis of this.visuals.values()) n += vis.decor.length;
@@ -314,6 +318,7 @@ export class BigWorldStreamGround extends PixiContainer {
         const on = !view || aabbOverlap(view, d.wx, d.wy, d.wx, d.wy);
         d.sprite.renderable = on;
         d.sprite.visible = on;
+        if (d.shadow && !d.shadow.destroyed) setShadowInView(d.shadow, on);
       }
       for (const w of vis.waymarks) {
         const on = !view || aabbOverlap(view, w.wx, w.wy, w.wx, w.wy);
@@ -322,6 +327,7 @@ export class BigWorldStreamGround extends PixiContainer {
           node.renderable = on;
           node.visible = on;
         }
+        if (w.shadow && !w.shadow.destroyed) setShadowInView(w.shadow, on);
       }
     }
   }
@@ -343,14 +349,15 @@ export class BigWorldStreamGround extends PixiContainer {
   }
 
   private dropChunkVisual(_key: string, vis: ChunkVisual): void {
-    if (this.scene) {
-      for (const d of vis.decor) {
-        d.sprite.parent?.removeChild(d.sprite);
-        d.sprite.destroy();
-        if (d.collider) this.scene.zone.colliders.remove(d.collider);
-      }
+    for (const d of vis.decor) {
+      destroyShadowSprite(d.shadow);
+      if (!this.scene) continue;
+      d.sprite.parent?.removeChild(d.sprite);
+      d.sprite.destroy();
+      if (d.collider) this.scene.zone.colliders.remove(d.collider);
     }
     for (const w of vis.waymarks) {
+      destroyShadowSprite(w.shadow);
       for (const node of w.nodes) destroyWaymarkNode(node);
     }
     for (const row of vis.patches) {
@@ -539,9 +546,10 @@ export class BigWorldStreamGround extends PixiContainer {
       s.position.set(p.x, p.y);
       s.zIndex = item.wx + item.wy + 0.5;
       this.scene.objects.addChild(s);
+      const shadow = attachShadow(s, shadowKindForDecorLayer(item.layer));
       const collider: Collider | null = item.collider ? { x: item.collider.x, y: item.collider.y, r: item.collider.r } : null;
       if (collider) this.scene.zone.colliders.push(collider);
-      vis.decor.push({ sprite: s, collider, wx: item.wx, wy: item.wy });
+      vis.decor.push({ sprite: s, shadow, collider, wx: item.wx, wy: item.wy });
     }
     vis.decorDone = true;
   }
@@ -573,6 +581,7 @@ export class BigWorldStreamGround extends PixiContainer {
     s.position.set(foot.x, foot.y);
     s.zIndex = wm.wx + wm.wy + 0.7;
     this.scene.objects.addChild(s);
+    const shadow = attachShadow(s, 'waymark');
     const nodes: Container[] = [s];
     const anims: StripAnimSprite[] = [];
     let label: Text | null = null;
@@ -586,7 +595,7 @@ export class BigWorldStreamGround extends PixiContainer {
       label = this.signLabel(decor.size, k, foot, wm);
       if (label) nodes.push(label);
     }
-    vis.waymarks.push({ nodes, anims, label, wx: wm.wx, wy: wm.wy, mark: wm });
+    vis.waymarks.push({ nodes, anims, label, shadow, wx: wm.wx, wy: wm.wy, mark: wm });
   }
 
   private signLabel(

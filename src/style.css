@@ -32,3 +32,26 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
+#plate {
+  position: fixed;
+  top: 10px;
+  right: 14px;
+  z-index: 6;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+#plate .shadow-ctl button {
+  color: #e6dfcc;
+  background: #1a1612cc;
+  border: 1px solid #6a5a40;
+  padding: 4px 10px;
+  font:
+    14px Cinzel,
+    Georgia,
+    serif;
+  cursor: pointer;
+}
+#plate .shadow-ctl.off button {
+  opacity: 0.55;
+}
