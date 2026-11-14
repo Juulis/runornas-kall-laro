@@ -71,3 +71,54 @@ export function worldValueNoise(worldSeed: number, gx: number, gy: number): numb
   const n1 = valueNoiseOctave(worldSeed, gx / OCTAVE1_TILES, gy / OCTAVE1_TILES, 1);
   return n0 * OCTAVE0_WEIGHT + n1 * OCTAVE1_WEIGHT;
 }
+
+interface SaltedCell extends NoiseCell {
+  salt: string;
+}
+
+function freshSalted(): SaltedCell {
+  return { seed: 0, x: Number.NaN, y: Number.NaN, v00: 0, v10: 0, v01: 0, v11: 0, salt: '' };
+}
+
+/** Egen cache så ett annat salt inte kastar om markbrusets cell. */
+const saltCell0 = freshSalted();
+const saltCell1 = freshSalted();
+
+function saltLattice(worldSeed: number, ix: number, iy: number, octave: number, salt: string): number {
+  return new Rng(Rng.hash(worldSeed, salt, octave, ix, iy)).next();
+}
+
+function saltCorners(worldSeed: number, x0: number, y0: number, octave: number, salt: string): readonly [number, number, number, number] {
+  const cell = octave === 0 ? saltCell0 : saltCell1;
+  if (cell.salt === salt && cell.seed === worldSeed && cell.x === x0 && cell.y === y0) {
+    return [cell.v00, cell.v10, cell.v01, cell.v11];
+  }
+  cell.salt = salt;
+  cell.seed = worldSeed;
+  cell.x = x0;
+  cell.y = y0;
+  cell.v00 = saltLattice(worldSeed, x0, y0, octave, salt);
+  cell.v10 = saltLattice(worldSeed, x0 + 1, y0, octave, salt);
+  cell.v01 = saltLattice(worldSeed, x0, y0 + 1, octave, salt);
+  cell.v11 = saltLattice(worldSeed, x0 + 1, y0 + 1, octave, salt);
+  return [cell.v00, cell.v10, cell.v01, cell.v11];
+}
+
+function saltedOctave(worldSeed: number, x: number, y: number, octave: number, salt: string): number {
+  const x0 = Math.floor(x);
+  const y0 = Math.floor(y);
+  const sx = fade(x - x0);
+  const sy = fade(y - y0);
+  const [v00, v10, v01, v11] = saltCorners(worldSeed, x0, y0, octave, salt);
+  return lerp(lerp(v00, v10, sx), lerp(v01, v11, sx), sy);
+}
+
+/**
+ * Samma två oktaver som worldValueNoise, men med ett eget hash-salt.
+ * Markbrusets cache och värden rörs inte.
+ */
+export function worldValueNoiseSalted(worldSeed: number, gx: number, gy: number, salt: string): number {
+  const n0 = saltedOctave(worldSeed, gx / OCTAVE0_TILES, gy / OCTAVE0_TILES, 0, salt);
+  const n1 = saltedOctave(worldSeed, gx / OCTAVE1_TILES, gy / OCTAVE1_TILES, 1, salt);
+  return n0 * OCTAVE0_WEIGHT + n1 * OCTAVE1_WEIGHT;
+}

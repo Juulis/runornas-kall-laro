@@ -25,6 +25,7 @@ import {
 } from './spawnDensity';
 import { CAMP_SAFE_RADIUS, campFirePos, START_POS_SAFE_RADIUS } from './campMonsterField';
 import { campStartPos, isLegacyOnlySpawnChunk } from './startskogenFootprint';
+import { isWaterAtWorld } from './waterPlanner';
 import { regionMonsterPerGame } from './regionSpawnBudget';
 
 export interface BigWorldSpawnRoll {
@@ -270,6 +271,11 @@ function weightedSubtype(rng: Rng, ids: readonly string[]): string {
   return rng.weighted(ids.map((id) => ({ id, weight: subtypeSpawnWeight(id) }))).id;
 }
 
+/** Sant om punkten inte ligger på vatten. Samma kontroll i acceptSpot, lägret och startskogen. */
+export function spawnTileAllowed(worldSeed: number, wx: number, wy: number): boolean {
+  return !isWaterAtWorld(worldSeed, wx, wy);
+}
+
 function rollChunkSpawns(
   catalog: BigWorldCatalog,
   gameSeed: number,
@@ -310,6 +316,8 @@ function rollChunkSpawns(
 
   const acceptSpot = (localX: number, localY: number): boolean => {
     if (campBlocked(localX, localY)) return false;
+    const world = chunkSpawnToWorld(cx, cy, localX, localY);
+    if (!spawnTileAllowed(worldSeed, world.x, world.y)) return false;
     const nearRoad = spawnTileNearRoad(localX, localY, cx, cy, roadIds, hasRoadAtTile, roadRadius);
     if (!nearRoad) return true;
     if (ring <= 1) return false;
@@ -344,7 +352,10 @@ function rollChunkSpawns(
       if (pts) {
         for (const p of pts) pushAt(enemy, p.x, p.y, makeChamp);
       } else {
-        for (let i = 0; i < size; i++) pushAt(enemy, center.x, center.y, makeChamp);
+        const centerWorld = chunkSpawnToWorld(cx, cy, center.x, center.y);
+        if (spawnTileAllowed(worldSeed, centerWorld.x, centerWorld.y)) {
+          for (let i = 0; i < size; i++) pushAt(enemy, center.x, center.y, makeChamp);
+        }
       }
     }
     return out;

@@ -1,8 +1,10 @@
 import { DATA, monsterDef } from '../../data';
 import type { Vec2 } from '../../core/GameContext';
 import { Rng } from '../../core/Rng';
+import { TILE_WORLD } from '../../render/Iso';
 import type { SpawnSpec } from '../../systems/SpawnSystem';
 import { campStartPos } from './startskogenFootprint';
+import { isWaterAtWorld } from './waterPlanner';
 
 /**
  * Lägerflock runt startelden.
@@ -60,8 +62,11 @@ function pushCampPoint(x: number, y: number, fire: Vec2, start: Vec2): Vec2 {
   return pos;
 }
 
-/** Stabil flock per game-seed. Inre ringen är grupper om 2 och ligger inom en kort gång från start_pos. */
-export function campMonsterSpecs(seed: number): SpawnSpec[] {
+/**
+ * Stabil flock per game-seed. Inre ringen är grupper om 2 och ligger inom en kort gång från start_pos.
+ * worldSeed styr vatten. Utan den används seed, så äldre anrop fortfarande hoppar över vatten.
+ */
+export function campMonsterSpecs(seed: number, worldSeed = seed): SpawnSpec[] {
   const fire = campFirePos();
   const start = campStartPos();
   const rng = new Rng(Rng.hash(seed, 'lager-monster'));
@@ -78,6 +83,19 @@ export function campMonsterSpecs(seed: number): SpawnSpec[] {
         const rawX = fire.x + Math.cos(ang) * radius + Math.cos(ang + Math.PI / 2) * side;
         const rawY = fire.y + Math.sin(ang) * radius + Math.sin(ang + Math.PI / 2) * side;
         const pos = pushCampPoint(rawX, rawY, fire, start);
+        if (isWaterAtWorld(worldSeed, pos.x, pos.y)) {
+          let dry = false;
+          for (let step = 1; step <= 8; step++) {
+            const nudged = pushCampPoint(pos.x + Math.cos(ang) * step * TILE_WORLD, pos.y + Math.sin(ang) * step * TILE_WORLD, fire, start);
+            if (!isWaterAtWorld(worldSeed, nudged.x, nudged.y)) {
+              pos.x = nudged.x;
+              pos.y = nudged.y;
+              dry = true;
+              break;
+            }
+          }
+          if (!dry) continue;
+        }
         out.push({
           uid: `${CAMP_FIELD_UID_PREFIX}${n}`,
           enemy,

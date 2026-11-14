@@ -67,7 +67,7 @@ function lookupRespawnPos(w: World, uid: string): { x: number; y: number } | nul
     if (q.spec.uid === uid) return { x: q.pos.x, y: q.pos.y };
   }
   if (isCampFieldUid(uid)) {
-    const spec = campMonsterSpecs(w.session.seed).find((s) => s.uid === uid);
+    const spec = campMonsterSpecs(w.session.seed, w.session.worldSeed).find((s) => s.uid === uid);
     if (spec) return { x: spec.pos[0], y: spec.pos[1] };
   }
   const parsed = parseBigWorldSpawnUid(uid);

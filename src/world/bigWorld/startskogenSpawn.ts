@@ -4,6 +4,7 @@ import type { World } from '../../systems/World';
 import { campMonsterSpecs, isCampFieldUid } from './campMonsterField';
 import { worldToChunk } from './bigWorldCoords';
 import { isLegacyOnlySpawnChunk, runglantanWorldCenter } from './startskogenFootprint';
+import { isWaterAtWorld } from './waterPlanner';
 
 /** Legacy spawnzoner är i Rungläntans lokala koordinater (origo = värld 0,0). */
 export function startskogenLegacyAnchor(): Vec2 {
@@ -26,6 +27,7 @@ export function spawnPointInsideStartskogenFootprint(worldPos: Vec2): boolean {
 }
 
 export function mapStartskogenSpecsToQueue(w: World, specs: readonly SpawnSpec[]): World['spawnQueue'] {
+  const worldSeed = w.session.worldSeed;
   return specs
     .map((s) => {
       const local = w.zone.toWorld(s.pos);
@@ -33,14 +35,14 @@ export function mapStartskogenSpecsToQueue(w: World, specs: readonly SpawnSpec[]
       w.zone.collide(p, 0.5);
       return { spec: s, pos: p, done: false };
     })
-    .filter((q) => spawnPointInsideStartskogenFootprint(q.pos));
+    .filter((q) => spawnPointInsideStartskogenFootprint(q.pos) && !isWaterAtWorld(worldSeed, q.pos.x, q.pos.y));
 }
 
 export function ensureStartskogenSpawnQueue(w: World, roll: () => SpawnSpec[]): void {
   if (!w.zone.bigWorldStreaming) return;
   if (w.spawnQueue.length > 0) return;
   const legacy = mapStartskogenSpecsToQueue(w, roll());
-  const camp = campMonsterSpecs(w.session.seed).map((s) => ({
+  const camp = campMonsterSpecs(w.session.seed, w.session.worldSeed).map((s) => ({
     spec: s,
     pos: { x: s.pos[0], y: s.pos[1] },
     done: false,

@@ -226,8 +226,31 @@ const walk = new Zone('forest', 'blocked-walk', 20, 20);
 walk.setBlocked(0, 0, true);
 const free = { x: 0, y: 0 };
 walk.collide(free, 0.5);
-assert.equal(free.x, 0);
+assert.equal(free.x, -0.5, 'hörnet i en spärrad ruta puttas till närmaste fria kant');
 assert.equal(free.y, 0);
+assert.equal(walk.blocked(free.x, free.y), false);
+
+const beside = { x: -0.2, y: 1 };
+walk.collide(beside, 0.5);
+assert.equal(beside.x, -0.5, 'ett steg in i spärren ska landa utanför');
+assert.equal(beside.y, 1);
+assert.equal(walk.blocked(beside.x, beside.y), false);
+
+const tangent = { x: -0.5, y: 1 };
+walk.collide(tangent, 0.5);
+assert.equal(tangent.x, -0.5, 'en cirkel som bara tangerar rutan ska stå kvar');
+assert.equal(tangent.y, 1);
+
+const openA = new Zone('forest', 'utan-spärr', 40, 40);
+const openB = new Zone('forest', 'tom-spärr', 40, 40);
+openA.colliders.push({ x: 4, y: -1, r: 1.2 });
+openB.colliders.push({ x: 4, y: -1, r: 1.2 });
+const circleA = { x: 4.4, y: -0.7 };
+const circleB = { x: 4.4, y: -0.7 };
+openA.collide(circleA, 0.5);
+openB.collide(circleB, 0.5);
+assert.equal(circleA.x, circleB.x, 'cirklar utan spärrade rutor ska puttas likadant');
+assert.equal(circleA.y, circleB.y);
 
 const mask = new Zone('village', 'spärr', 64, 64);
 assert.equal(mask.blocked(0, 0), false);

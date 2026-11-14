@@ -9,6 +9,7 @@ import { chunkTileCount, worldToChunk } from './bigWorldCoords';
 import { worldTileIndex } from './groundTiles';
 import { isRoadMaskAtWorld, shouldSpawnDecorAt } from './roads';
 import { campStartPos } from './startskogenFootprint';
+import { isShoreTile, isWaterTile, SHORE_PLANT_IDS } from './waterPlanner';
 import { worldValueNoise } from './worldNoise';
 
 export type DecorLayer = 'stor' | 'mellan' | 'liten';
@@ -74,6 +75,14 @@ const MIN_LITEN = 12;
  */
 const MIN_PASSAGE = 2.2;
 const PASSAGE_TILE_REACH = 2;
+
+/** Byggs vid första strandrutan. Importeras inte vid modulstart: waterPlanner och decorPlanner bildar en cykel. */
+let shorePlants: ReadonlySet<string> | null = null;
+
+function shorePlantSet(): ReadonlySet<string> {
+  shorePlants ??= new Set(SHORE_PLANT_IDS);
+  return shorePlants;
+}
 
 const ROCK_IDS: ReadonlySet<string> = new Set([
   'stenhog',
@@ -368,13 +377,26 @@ function materialize(
   biomeId: string,
   blend?: (gx: number, gy: number) => { pool: DecorLayerPool; biomeId: string } | null,
 ): PlannedDecor | null {
+  if (isWaterTile(worldSeed, slot.gx, slot.gy)) return null;
+  const shore = isShoreTile(worldSeed, slot.gx, slot.gy);
   const picked = blend?.(slot.gx, slot.gy);
   const usePool = picked?.pool ?? pool;
   const useBiome = picked?.biomeId ?? biomeId;
-  const layer = resolveLayer(slot.wanted, usePool, slot.onlyLiten);
-  if (!layer) return null;
-  const id = pickDecorId(worldSeed, chunkSeed, slot.gx, slot.gy, layer, usePool, useBiome);
-  if (!id) return null;
+  let layer: DecorLayer | null;
+  let id: string | null;
+  if (shore) {
+    const plants = usePool.liten.filter((item) => shorePlantSet().has(item));
+    const plant = plants[0];
+    if (!plant) return null;
+    layer = 'liten';
+    const pick = new Rng(Rng.hash(worldSeed, chunkSeed, 'strand-art', slot.gx, slot.gy));
+    id = plants.length === 1 ? plant : pick.pick(plants);
+  } else {
+    layer = resolveLayer(slot.wanted, usePool, slot.onlyLiten);
+    if (!layer) return null;
+    id = pickDecorId(worldSeed, chunkSeed, slot.gx, slot.gy, layer, usePool, useBiome);
+  }
+  if (!layer || !id) return null;
   const posed = jitteredWorldPos(worldSeed, chunkSeed, slot.gx, slot.gy);
   const wx = posed.wx;
   const wy = posed.wy;

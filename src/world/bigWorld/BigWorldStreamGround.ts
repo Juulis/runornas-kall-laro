@@ -14,6 +14,7 @@ import { applyDecorBudget, DECOR_SPRITE_CAP, planDecorForChunk, shouldPlaceDecor
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
 import { blendWeightsAtTile, pickBlendedGroundTileId, pickWeightedBiomeId } from './transitionResolver';
 import { roadIsDrawn, roadTileIdAt } from './roads';
+import { applyChunkWaterBlocked, WATER_TILE_IDS, waterShimmerAlpha, waterTileIdAt } from './waterPlanner';
 import { waymarkCaption, waymarksInChunk, type Waymark } from './waymarks';
 import type { ChunkWorldData } from './worldGenerator';
 import { chunkCenterWorld, chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
@@ -63,6 +64,9 @@ interface ChunkVisual {
   roadList: RoadPaint[] | null;
   roadCursor: number;
   roadDone: boolean;
+  waterSprites: Sprite[];
+  /** Zonen spärrarna skrevs till, så urlastning träffar rätt även om scenen bytts. */
+  waterZone: Zone | null;
 }
 
 interface WaymarkVisual {
@@ -171,6 +175,9 @@ export class BigWorldStreamGround extends PixiContainer {
   private waymarksReady = false;
   private waymarksPending: Promise<void> | null = null;
   private waymarkT: ((key: Key, params?: Params) => string) | null = null;
+  private waterTilesReady = false;
+  private waterTilesPending: Promise<void> | null = null;
+  private shimmerTime = 0;
 
   constructor(
     private readonly assets: AssetStore,
@@ -350,6 +357,8 @@ export class BigWorldStreamGround extends PixiContainer {
   }
 
   private dropChunkVisual(_key: string, vis: ChunkVisual): void {
+    vis.waterZone?.clearBlockedChunk(vis.data.cx, vis.data.cy);
+    vis.waterSprites.length = 0;
     for (const d of vis.decor) {
       destroyShadowSprite(d.shadow);
       if (!this.scene) continue;
@@ -394,6 +403,10 @@ export class BigWorldStreamGround extends PixiContainer {
     const drawRoad = data.roadTypes.some((typ) => roadIsDrawn(typ));
     if (drawRoad) this.requestRoadTiles();
     this.requestWaymarkAssets();
+    const waterZone = this.scene?.zone ?? null;
+    if (waterZone && applyChunkWaterBlocked(waterZone, this.activeWorldSeed, data.cx, data.cy)) {
+      this.requestWaterTiles();
+    }
     this.visuals.set(key, {
       root,
       data,
@@ -405,6 +418,8 @@ export class BigWorldStreamGround extends PixiContainer {
       roadList: null,
       roadCursor: 0,
       roadDone: !drawRoad,
+      waterSprites: [],
+      waterZone,
     });
     this.requestChunkBiomes(data);
   }
@@ -449,13 +464,46 @@ export class BigWorldStreamGround extends PixiContainer {
     }
   }
 
-  /** Flamman på lyktstolpen. Anropas från spel-loopen. */
+  /** Flamman på lyktstolpen, och samma glimt på alla vattentiles. Anropas från spel-loopen. */
   tickAnims(dt: number): void {
+    if (Number.isFinite(dt) && dt > 0) this.shimmerTime += dt;
+    const alpha = waterShimmerAlpha(this.shimmerTime);
     for (const vis of this.visuals.values()) {
+      for (const sprite of vis.waterSprites) {
+        if (sprite.destroyed) continue;
+        sprite.alpha = alpha;
+      }
       for (const w of vis.waymarks) {
         for (const anim of w.anims) anim.update(dt);
       }
     }
+  }
+
+  /**
+   * myr_gol ligger i träskets grupp. Kustchunkar (och skogskanter med tjärn)
+   * begär dem här, utan att röra STARTUP_TILES eller laddningsvikterna.
+   */
+  private requestWaterTiles(): void {
+    if (this.waterTilesReady || this.waterTilesPending) return;
+    const missing = WATER_TILE_IDS.filter((id) => !this.assets.tiles.has(id));
+    if (missing.length === 0) {
+      this.waterTilesReady = true;
+      return;
+    }
+    const ensure = this.assets.ensureTiles;
+    if (typeof ensure !== 'function') {
+      this.waterTilesReady = true;
+      return;
+    }
+    const job = trackChunkLoad('Laddar vattnet…', (onProgress) => ensure.call(this.assets, WATER_TILE_IDS, onProgress)).then(
+      () => {
+        this.waterTilesReady = true;
+      },
+      () => {
+        this.waterTilesPending = null;
+      },
+    );
+    this.waterTilesPending = job;
   }
 
   /** Vägtiles som inte ingår i chunkens biom, till exempel grus i skogen. */
@@ -711,16 +759,33 @@ export class BigWorldStreamGround extends PixiContainer {
         const tj = tj0 + dj;
         const gx = origin.gx + ti;
         const gy = origin.gy + tj;
+        const waterId = waterTileIdAt(this.activeWorldSeed, gx, gy);
+        let waterTex: Texture | undefined;
+        if (waterId) {
+          this.requestWaterTiles();
+          waterTex = this.assets.tiles.get(waterId);
+          if (!waterTex && !this.waterTilesReady) return built > 0;
+        }
         const tileId = pickBlendedGroundTileId(this.activeWorldSeed, gx, gy);
         const tex = this.textureForGround(tileId, data.biomeId, gx, gy);
+        const wx = chunkMin.x + ti * TILE_WORLD;
+        const wy = chunkMin.y + tj * TILE_WORLD;
         if (tex) {
-          const wx = chunkMin.x + ti * TILE_WORLD;
-          const wy = chunkMin.y + tj * TILE_WORLD;
           const s = new Sprite(tex);
           s.anchor.set(0.5, 0.85);
           const pos = Iso.worldToScreen(wx, wy);
           s.position.set(pos.x, pos.y);
           patch.layer.addChild(s);
+        }
+        if (waterTex) {
+          const s = new Sprite(waterTex);
+          s.anchor.set(0.5, 0.85);
+          s.eventMode = 'none';
+          s.alpha = waterShimmerAlpha(this.shimmerTime);
+          const pos = Iso.worldToScreen(wx, wy);
+          s.position.set(pos.x, pos.y);
+          patch.layer.addChild(s);
+          vis.waterSprites.push(s);
         }
         patch.tilesBuilt++;
         built++;
