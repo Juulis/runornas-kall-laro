@@ -443,14 +443,15 @@
       ],
       "dekor": [
         "döda tallar",
-        "bläckfärgade gölar",
         "spånglyktor",
-        "sjunkna båtar"
+        "sjunkna båtar",
+        "myrull",
+        "kaveldun"
       ],
       "dekor_pool": {
-        "stor": ["dod_tall", "dod_tall_knackt", "dod_ek", "sjunken_bat"],
-        "mellan": ["stubbe_vatten", "natstang", "stubbe", "myrkors", "stolprad_rutten", "sjunken_klocka"],
-        "liten": ["kaveldun", "myrull", "vasstuva", "vagros_blommor"]
+        "stor": ["dod_tall", "dod_tall_knackt", "sjunken_bat"],
+        "mellan": ["stubbe_vatten", "spanglykta", "myrkors", "sjunken_klocka"],
+        "liten": ["myrull", "kaveldun", "vasstuva"]
       },
       "variant": {
         "rutt": "Sjuk skog och giftträsk, svulster som pulserar."
@@ -659,16 +660,17 @@
         "bergsväg"
       ],
       "dekor": [
-        "vindtall",
-        "rösen",
+        "vindtallar",
+        "stenblock",
         "gruvvagnar",
         "silkesnät",
-        "kristaller"
+        "kristaller",
+        "ljung"
       ],
       "dekor_pool": {
         "stor": ["vindtall", "vindtall_krokig", "fjallbjork", "stenblock", "stenblock_lav"],
-        "mellan": ["stenhog", "stubbe", "renskalle", "kristaller", "buske"],
-        "liten": ["ljungtuva", "gras_tuva", "vagros_blommor"]
+        "mellan": ["kristaller", "silkesnat", "gruvvagn", "renskalle"],
+        "liten": ["ljungtuva"]
       },
       "variant": {},
       "id": "fjall",
@@ -902,16 +904,17 @@
         "grunt vatten"
       ],
       "dekor": [
-        "vrak",
-        "båtar med nät",
-        "korpar",
-        "fyr",
-        "bryggor"
+        "sjunkna båtar",
+        "stenblock",
+        "välta vagnar",
+        "rutten stolprad",
+        "kaveldun",
+        "kapellruin"
       ],
       "dekor_pool": {
-        "stor": ["sjunken_bat"],
-        "mellan": ["natstang", "sjunken_klocka", "stubbe", "buske"],
-        "liten": ["vagros_blommor", "gras_tuva", "ormbunkar"]
+        "stor": ["sjunken_bat", "stenblock", "gruvvagn_valt"],
+        "mellan": ["stubbe_vatten", "stolprad_rutten", "rals_bit", "kapellruin_horn"],
+        "liten": ["kaveldun"]
       },
       "variant": {},
       "id": "kust",
@@ -1108,16 +1111,17 @@
         "bränd väg"
       ],
       "dekor": [
-        "svarta stammar",
-        "smälta statyer",
-        "kulttecken",
-        "pilgrimsstavar",
-        "rökpelare"
+        "knäckta tallar",
+        "pelare",
+        "rasade murar",
+        "stenkors",
+        "härdar",
+        "natstänger"
       ],
       "dekor_pool": {
-        "stor": ["dod_ek", "pelare", "ruinmur_rasad"],
-        "mellan": ["stenkors", "ruinmur", "pelare_liggande", "stenhog", "stubbe"],
-        "liten": ["vagros_blommor", "gras_tuva", "ormbunkar"]
+        "stor": ["dod_tall_knackt", "pelare", "ruinmur_rasad"],
+        "mellan": ["stenkors", "hard_glod", "hard_kall", "natstang", "pelare_liggande"],
+        "liten": []
       },
       "variant": {},
       "id": "ask",
