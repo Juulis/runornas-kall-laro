@@ -269,10 +269,14 @@ function materialize(
   slot: Slot,
   pool: DecorLayerPool,
   biomeId: string,
+  blend?: (gx: number, gy: number) => { pool: DecorLayerPool; biomeId: string } | null,
 ): PlannedDecor | null {
-  const layer = resolveLayer(slot.wanted, pool, slot.onlyLiten);
+  const picked = blend?.(slot.gx, slot.gy);
+  const usePool = picked?.pool ?? pool;
+  const useBiome = picked?.biomeId ?? biomeId;
+  const layer = resolveLayer(slot.wanted, usePool, slot.onlyLiten);
   if (!layer) return null;
-  const id = pickDecorId(worldSeed, chunkSeed, slot.gx, slot.gy, layer, pool, biomeId);
+  const id = pickDecorId(worldSeed, chunkSeed, slot.gx, slot.gy, layer, usePool, useBiome);
   if (!id) return null;
   const rng = new Rng(Rng.hash(worldSeed, chunkSeed, 'dekor-form', slot.gx, slot.gy));
   const scale = 0.35 + rng.next() * 0.25;
@@ -349,6 +353,7 @@ function fillToFloor(
   cy: number,
   pool: DecorLayerPool,
   biomeId: string,
+  blend?: (gx: number, gy: number) => { pool: DecorLayerPool; biomeId: string } | null,
 ): PlannedDecor[] {
   if (list.length >= COUNT_LO || pool.liten.length === 0) return list;
   const occupied = new Set<string>();
@@ -372,7 +377,16 @@ function fillToFloor(
   const out = list.slice();
   for (const spot of extra) {
     if (out.length >= COUNT_LO) break;
-    const made = materialize(worldSeed, chunkSeed, cx, cy, { gx: spot.gx, gy: spot.gy, wanted: 'liten', onlyLiten: true }, pool, biomeId);
+    const made = materialize(
+      worldSeed,
+      chunkSeed,
+      cx,
+      cy,
+      { gx: spot.gx, gy: spot.gy, wanted: 'liten', onlyLiten: true },
+      pool,
+      biomeId,
+      blend,
+    );
     if (!made) continue;
     out.push(made);
   }
@@ -386,17 +400,32 @@ export function planDecorForChunk(args: {
   cy: number;
   biomeId: string;
   pool?: DecorLayerPool;
+  /**
+   * Biom för en ruta i blandzonen. Samma vikt som marken, från worldSeed och position.
+   * Utan den här används bara chunkens pool, så rena anrop beter sig som förut.
+   */
+  blendBiomeAt?: (gx: number, gy: number) => string;
 }): PlannedDecor[] {
   const biomeId = canonicalBiomeId(args.biomeId || 'skog');
   const pool = args.pool ?? decorPoolForBiome(biomeId);
   if (poolSize(pool) === 0) return [];
+  const choose = args.blendBiomeAt;
+  const blend = choose
+    ? (gx: number, gy: number) => {
+        const id = canonicalBiomeId(choose(gx, gy) || biomeId);
+        if (id === biomeId) return null;
+        const alt = decorPoolForBiome(id);
+        if (poolSize(alt) === 0) return null;
+        return { pool: alt, biomeId: id };
+      }
+    : undefined;
   const placed: PlannedDecor[] = [];
   for (const slot of collectSlots(args.worldSeed, args.cx, args.cy)) {
-    const made = materialize(args.worldSeed, args.chunkSeed, args.cx, args.cy, slot, pool, biomeId);
+    const made = materialize(args.worldSeed, args.chunkSeed, args.cx, args.cy, slot, pool, biomeId, blend);
     if (made) placed.push(made);
   }
   const thinned = thinToCap(placed, args.worldSeed, args.chunkSeed, pool);
-  return fillToFloor(thinned, args.worldSeed, args.chunkSeed, args.cx, args.cy, pool, biomeId);
+  return fillToFloor(thinned, args.worldSeed, args.chunkSeed, args.cx, args.cy, pool, biomeId, blend);
 }
 
 /**

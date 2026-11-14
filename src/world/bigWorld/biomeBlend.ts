@@ -21,8 +21,8 @@ const NEIGHBOR_OFFSETS: readonly [number, number][] = [
 ];
 
 /**
- * Mjuka biomövergångar: primär biom + grannar med annan biom får vikt
- * (design: overgangar per biom — här approximeras med grannchunkar).
+ * Grov vikt per chunk: primär biom plus grannchunkar.
+ * Själva rutorna blandas i transitionResolver (sex rutor från gränsen).
  */
 export function blendBiomesAtChunk(
   cx: number,

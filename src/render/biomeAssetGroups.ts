@@ -4,7 +4,7 @@
  * Id är filnamn utan .png.
  */
 
-const EDGE_SUFFIXES = ['horn_h', 'horn_n', 'horn_o', 'horn_v', 'nh', 'nh_nv', 'nv', 'nv_ov', 'oh', 'oh_nh', 'ov', 'ov_oh'] as const;
+export const EDGE_SUFFIXES = ['horn_h', 'horn_n', 'horn_o', 'horn_v', 'nh', 'nh_nv', 'nv', 'nv_ov', 'oh', 'oh_nh', 'ov', 'ov_oh'] as const;
 
 function edgeTiles(prefix: string): readonly string[] {
   return EDGE_SUFFIXES.map((suffix) => `${prefix}_${suffix}`);

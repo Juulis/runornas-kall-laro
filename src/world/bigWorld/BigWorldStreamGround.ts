@@ -1,4 +1,4 @@
-import type { Container, Renderer } from 'pixi.js';
+import type { Container, Renderer, Texture } from 'pixi.js';
 import { Container as PixiContainer, Rectangle, Sprite, Text, TextStyle } from 'pixi.js';
 import type { Vec2, Collider } from '../../core/GameContext';
 import type { Key, Params } from '../../i18n/types';
@@ -12,6 +12,7 @@ import { groundRolePoolForBiome } from './biomeBlend';
 import { ChunkWorldCache } from './chunkCache';
 import { applyDecorBudget, DECOR_SPRITE_CAP, planDecorForChunk, shouldPlaceDecorAt } from './decorPlanner';
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
+import { blendWeightsAtTile, pickBlendedGroundTileId, pickWeightedBiomeId } from './transitionResolver';
 import { roadIsDrawn, roadTileIdAt } from './roads';
 import { waymarkCaption, waymarksInChunk, type Waymark } from './waymarks';
 import type { ChunkWorldData } from './worldGenerator';
@@ -405,7 +406,13 @@ export class BigWorldStreamGround extends PixiContainer {
       roadCursor: 0,
       roadDone: !drawRoad,
     });
+    this.requestChunkBiomes(data);
+  }
+
+  /** Eget biom och grannar i biomeBlend, så övergångar och frans finns när rutan ritas. */
+  private requestChunkBiomes(data: ChunkWorldData): void {
     this.requestBiomeAssets(data.biomeId);
+    for (const part of data.biomeBlend) this.requestBiomeAssets(part.biomeId);
   }
 
   /** Skylt, lykta och välkomststen. Inte i startvikten. */
@@ -506,10 +513,16 @@ export class BigWorldStreamGround extends PixiContainer {
   }
 
   private chunkBiomeReady(vis: ChunkVisual): boolean {
-    const id = canonicalBiomeId(vis.data.biomeId || 'skog');
-    if (this.biomeReady.has(id)) return true;
-    this.requestBiomeAssets(id);
-    return this.biomeReady.has(id);
+    const ids = new Set<string>();
+    ids.add(canonicalBiomeId(vis.data.biomeId || 'skog'));
+    for (const part of vis.data.biomeBlend) ids.add(canonicalBiomeId(part.biomeId || 'skog'));
+    let ready = true;
+    for (const id of ids) {
+      if (this.biomeReady.has(id)) continue;
+      this.requestBiomeAssets(id);
+      if (!this.biomeReady.has(id)) ready = false;
+    }
+    return ready;
   }
 
   private spawnDecorForChunk(vis: ChunkVisual): void {
@@ -528,6 +541,7 @@ export class BigWorldStreamGround extends PixiContainer {
       cy: data.cy,
       biomeId: data.biomeId,
       pool,
+      blendBiomeAt: (gx, gy) => pickWeightedBiomeId(this.activeWorldSeed, gx, gy, blendWeightsAtTile(this.activeWorldSeed, gx, gy)),
     });
     const drawable = planned.filter((item) => {
       if (!shouldPlaceDecorAt(this.activeWorldSeed, item.wx, item.wy)) return false;
@@ -660,6 +674,14 @@ export class BigWorldStreamGround extends PixiContainer {
     return true;
   }
 
+  /** Saknad textur faller tillbaka till chunkens egen mark, sedan gräs. Kraschar inte. */
+  private textureForGround(tileId: string, biomeId: string, gx: number, gy: number): Texture | undefined {
+    const direct = this.assets.tiles.get(tileId);
+    if (direct) return direct;
+    const homeId = pickChunkGroundTileId(this.activeWorldSeed, gx, gy, groundRolePoolForBiome(biomeId));
+    return this.assets.tiles.get(homeId) ?? this.assets.tiles.get('gras_1');
+  }
+
   private buildTilesStep(): boolean {
     const view = this.viewBounds;
     const patchTiles = BIG_WORLD_GROUND_PATCH_TILES;
@@ -676,7 +698,6 @@ export class BigWorldStreamGround extends PixiContainer {
       }
       const data = vis.data;
       const chunkMin = chunkMinWorld(data.cx, data.cy);
-      const pool = groundRolePoolForBiome(data.biomeId);
       const origin = worldTileIndex(data.cx, data.cy, 0, 0);
       const ti0 = pi * patchTiles;
       const tj0 = pj * patchTiles;
@@ -688,8 +709,10 @@ export class BigWorldStreamGround extends PixiContainer {
         const dj = local % tw;
         const ti = ti0 + di;
         const tj = tj0 + dj;
-        const tileId = pickChunkGroundTileId(this.activeWorldSeed, origin.gx + ti, origin.gy + tj, pool);
-        const tex = this.assets.tiles.get(tileId);
+        const gx = origin.gx + ti;
+        const gy = origin.gy + tj;
+        const tileId = pickBlendedGroundTileId(this.activeWorldSeed, gx, gy);
+        const tex = this.textureForGround(tileId, data.biomeId, gx, gy);
         if (tex) {
           const wx = chunkMin.x + ti * TILE_WORLD;
           const wy = chunkMin.y + tj * TILE_WORLD;
