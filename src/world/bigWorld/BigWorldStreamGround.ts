@@ -2,10 +2,17 @@ import type { Container, Renderer, Texture } from 'pixi.js';
 import { Container as PixiContainer, Rectangle, Sprite, Text, TextStyle } from 'pixi.js';
 import type { Vec2, Collider } from '../../core/GameContext';
 import type { Key, Params } from '../../i18n/types';
+import { Rng } from '../../core/Rng';
 import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome, WAYMARK_DECOR } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
-import { attachShadow, destroyShadowSprite, setShadowInView, shadowKindForDecorLayer } from '../../render/ShadowLayer';
+import {
+  attachShadow,
+  destroyShadowSprite,
+  setShadowInView,
+  shadowKindForDecorId,
+  shadowKindForDecorLayer,
+} from '../../render/ShadowLayer';
 import { StripAnimSprite } from '../../render/StripAnimSprite';
 import { trackChunkLoad } from '../../ui/chunkLoad';
 import { groundRolePoolForBiome } from './biomeBlend';
@@ -13,7 +20,8 @@ import { ChunkWorldCache } from './chunkCache';
 import { applyDecorBudget, DECOR_SPRITE_CAP, planDecorForChunk, shouldPlaceDecorAt } from './decorPlanner';
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
 import { blendWeightsAtTile, pickBlendedGroundTileId, pickWeightedBiomeId } from './transitionResolver';
-import { roadIsDrawn, roadTileIdAt } from './roads';
+import { isRidgeHighlandTile, planRidgesForChunk, shouldPlaceRidgesAtChunk } from './ridgePlanner';
+import { roadIsDrawn, roadMaskTileInChunk, roadTileIdAt } from './roads';
 import { waymarkCaption, waymarksInChunk, type Waymark } from './waymarks';
 import type { ChunkWorldData } from './worldGenerator';
 import { chunkCenterWorld, chunkMinWorld, chunkTileCount, chunkWorldSpan, worldToChunk } from './bigWorldCoords';
@@ -58,6 +66,8 @@ interface ChunkVisual {
   patches: PatchVisual[][];
   decor: DecorEntry[];
   decorDone: boolean;
+  ridges: RidgeEntry[];
+  ridgesDone: boolean;
   waymarks: WaymarkVisual[];
   waymarksDone: boolean;
   roadList: RoadPaint[] | null;
@@ -83,6 +93,18 @@ interface DecorEntry {
   wx: number;
   wy: number;
 }
+
+interface RidgeEntry {
+  sprite: Sprite | null;
+  shadow: Sprite | null;
+  collider: Collider;
+  wx: number;
+  wy: number;
+}
+
+/** Stenblocken finns i fjälldekoren. Gravåsen och kusten behöver dem explicit. */
+const RIDGE_DECOR_IDS = ['stenblock', 'stenblock_lav'] as const;
+const RIDGE_TILE_IDS = ['bergsvag_1', 'bergsvag_2'] as const;
 
 function visualKey(worldSeed: number, gameSeed: number, cx: number, cy: number): string {
   return `${worldSeed}|${gameSeed}|${cx}|${cy}`;
@@ -171,6 +193,8 @@ export class BigWorldStreamGround extends PixiContainer {
   private waymarksReady = false;
   private waymarksPending: Promise<void> | null = null;
   private waymarkT: ((key: Key, params?: Params) => string) | null = null;
+  private ridgeReady = false;
+  private ridgePending: Promise<void> | null = null;
 
   constructor(
     private readonly assets: AssetStore,
@@ -330,12 +354,20 @@ export class BigWorldStreamGround extends PixiContainer {
         }
         if (w.shadow && !w.shadow.destroyed) setShadowInView(w.shadow, on);
       }
+      for (const ridge of vis.ridges) {
+        const on = !view || aabbOverlap(view, ridge.wx, ridge.wy, ridge.wx, ridge.wy);
+        if (ridge.sprite && !ridge.sprite.destroyed) {
+          ridge.sprite.renderable = on;
+          ridge.sprite.visible = on;
+        }
+        if (ridge.shadow && !ridge.shadow.destroyed) setShadowInView(ridge.shadow, on);
+      }
     }
   }
 
   private pendingBuild(): boolean {
     for (const vis of this.visuals.values()) {
-      if (!vis.decorDone || !vis.roadDone || !vis.waymarksDone) return true;
+      if (!vis.decorDone || !vis.roadDone || !vis.waymarksDone || !vis.ridgesDone) return true;
       for (const row of vis.patches) {
         for (const p of row) {
           if (p.tilesBuilt < p.totalTiles) return true;
@@ -356,6 +388,14 @@ export class BigWorldStreamGround extends PixiContainer {
       d.sprite.parent?.removeChild(d.sprite);
       d.sprite.destroy();
       if (d.collider) this.scene.zone.colliders.remove(d.collider);
+    }
+    for (const ridge of vis.ridges) {
+      destroyShadowSprite(ridge.shadow);
+      if (ridge.sprite && !ridge.sprite.destroyed) {
+        ridge.sprite.parent?.removeChild(ridge.sprite);
+        ridge.sprite.destroy();
+      }
+      if (this.scene) this.scene.zone.colliders.remove(ridge.collider);
     }
     for (const w of vis.waymarks) {
       destroyShadowSprite(w.shadow);
@@ -394,12 +434,16 @@ export class BigWorldStreamGround extends PixiContainer {
     const drawRoad = data.roadTypes.some((typ) => roadIsDrawn(typ));
     if (drawRoad) this.requestRoadTiles();
     this.requestWaymarkAssets();
+    const placeRidges = shouldPlaceRidgesAtChunk(data.cx, data.cy);
+    if (placeRidges) this.requestRidgeAssets();
     this.visuals.set(key, {
       root,
       data,
       patches,
       decor: [],
       decorDone: false,
+      ridges: [],
+      ridgesDone: !placeRidges,
       waymarks: [],
       waymarksDone: false,
       roadList: null,
@@ -651,6 +695,71 @@ export class BigWorldStreamGround extends PixiContainer {
     return flame;
   }
 
+  private ridgeAssetsPresent(): boolean {
+    return RIDGE_TILE_IDS.every((id) => this.assets.tiles.has(id)) && RIDGE_DECOR_IDS.every((id) => this.assets.decor.has(id));
+  }
+
+  /** Bergsväg och stenblock när åsen inte ligger i ett biom som redan laddar dem. */
+  private requestRidgeAssets(): void {
+    if (this.ridgeReady || this.ridgePending) return;
+    if (this.ridgeAssetsPresent()) {
+      this.ridgeReady = true;
+      return;
+    }
+    const ensureTiles = this.assets.ensureTiles;
+    const ensureDecor = this.assets.ensureDecor;
+    if (typeof ensureTiles !== 'function' && typeof ensureDecor !== 'function') {
+      this.ridgeReady = true;
+      return;
+    }
+    const job = trackChunkLoad('Laddar klippor…', async (onProgress) => {
+      if (typeof ensureTiles === 'function') await ensureTiles.call(this.assets, RIDGE_TILE_IDS, onProgress);
+      if (typeof ensureDecor === 'function') await ensureDecor.call(this.assets, RIDGE_DECOR_IDS, onProgress);
+    }).then(
+      () => {
+        this.ridgeReady = true;
+      },
+      () => {
+        this.ridgePending = null;
+      },
+    );
+    this.ridgePending = job;
+  }
+
+  private spawnRidgesForChunk(vis: ChunkVisual): void {
+    if (vis.ridgesDone || !this.scene) return;
+    if (!shouldPlaceRidgesAtChunk(vis.data.cx, vis.data.cy)) {
+      vis.ridgesDone = true;
+      return;
+    }
+    if (!this.ridgeReady) {
+      this.requestRidgeAssets();
+      if (!this.ridgeReady) return;
+    }
+    const planned = planRidgesForChunk({ worldSeed: this.activeWorldSeed, cx: vis.data.cx, cy: vis.data.cy });
+    for (const item of planned) {
+      const collider: Collider = { x: item.collider.x, y: item.collider.y, r: item.collider.r };
+      this.scene.zone.colliders.push(collider);
+      const asset = this.assets.decor.get(item.id);
+      let sprite: Sprite | null = null;
+      let shadow: Sprite | null = null;
+      if (asset?.tex) {
+        const scale = item.id === 'stenhog' ? 0.34 : 0.55;
+        const mirror = (Rng.hash(this.activeWorldSeed, 'as-spegel', Math.round(item.wx * 2), Math.round(item.wy * 2)) & 1) === 0;
+        sprite = new Sprite(asset.tex);
+        sprite.anchor.set(asset.size.anchor[0] / asset.size.w, asset.size.anchor[1] / asset.size.h);
+        sprite.scale.set(mirror ? -scale : scale, scale);
+        const p = Iso.worldToScreen(item.wx, item.wy);
+        sprite.position.set(p.x, p.y);
+        sprite.zIndex = item.wx + item.wy + 0.4;
+        this.scene.objects.addChild(sprite);
+        shadow = attachShadow(sprite, shadowKindForDecorId(item.id));
+      }
+      vis.ridges.push({ sprite, shadow, collider, wx: item.wx, wy: item.wy });
+    }
+    vis.ridgesDone = true;
+  }
+
   private tickBuildBudget(): void {
     if (!this.allowBuild) return;
     const t0 = performance.now();
@@ -661,6 +770,7 @@ export class BigWorldStreamGround extends PixiContainer {
     for (const vis of this.visuals.values()) {
       if (!this.chunkTilesComplete(vis)) continue;
       if (!vis.decorDone) this.spawnDecorForChunk(vis);
+      if (!vis.ridgesDone) this.spawnRidgesForChunk(vis);
       if (!vis.waymarksDone) this.spawnWaymarksForChunk(vis);
     }
   }
@@ -711,7 +821,15 @@ export class BigWorldStreamGround extends PixiContainer {
         const tj = tj0 + dj;
         const gx = origin.gx + ti;
         const gy = origin.gy + tj;
-        const tileId = pickBlendedGroundTileId(this.activeWorldSeed, gx, gy);
+        let tileId = pickBlendedGroundTileId(this.activeWorldSeed, gx, gy);
+        if (!roadMaskTileInChunk(this.activeWorldSeed, data.cx, data.cy, ti, tj) && isRidgeHighlandTile(this.activeWorldSeed, gx, gy)) {
+          const variant = (Rng.hash('as-hojd', this.activeWorldSeed, gx, gy) & 1) === 0 ? 'bergsvag_1' : 'bergsvag_2';
+          if (this.assets.tiles.has(variant)) tileId = variant;
+          else if (!this.ridgeReady) {
+            this.requestRidgeAssets();
+            if (!this.ridgeReady) return built > 0;
+          }
+        }
         const tex = this.textureForGround(tileId, data.biomeId, gx, gy);
         if (tex) {
           const wx = chunkMin.x + ti * TILE_WORLD;

@@ -123,6 +123,22 @@ function primaryBiomeAt(catalog: BigWorldCatalog, cx: number, cy: number): { reg
   return { region, mellanmark: !inside };
 }
 
+export interface RegionAtChunkInfo {
+  id: string;
+  biom: string;
+  /** Falskt på mellanmark: närmaste region, men chunken ligger utanför radien. */
+  inside: boolean;
+}
+
+/**
+ * Region för en chunk. Samma val som markens biom, ingen egen karta.
+ * `inside` är sant bara inom regionens radie.
+ */
+export function regionAt(cx: number, cy: number, catalog: BigWorldCatalog = getBigWorldCatalog()): RegionAtChunkInfo {
+  const { region, mellanmark } = primaryBiomeAt(catalog, cx, cy);
+  return { id: region.id, biom: region.biom, inside: !mellanmark };
+}
+
 /** Samma biom som chunkens region. TransitionResolver använder den här, inte en egen karta. */
 export function chunkRegionBiome(cx: number, cy: number, catalog: BigWorldCatalog = getBigWorldCatalog()): string {
   return primaryBiomeAt(catalog, cx, cy).region.biom;
