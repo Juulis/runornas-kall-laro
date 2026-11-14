@@ -567,17 +567,19 @@ function distPointToCell(wx: number, wy: number, gx: number, gy: number): number
 
 type DecorKeepout = (worldSeed: number, wx: number, wy: number) => boolean;
 
-/** waymarks.ts registrerar skyltfri zon så slumpdekor inte växer in i skylten. */
-let decorKeepout: DecorKeepout | null = null;
+/** Skyltar och åsar lägger till egna zoner. Flera får vara registrerade samtidigt. */
+const decorKeepouts: DecorKeepout[] = [];
 
 export function registerDecorKeepout(fn: DecorKeepout): void {
-  decorKeepout = fn;
+  if (!decorKeepouts.includes(fn)) decorKeepouts.push(fn);
 }
 
-/** Dekor hoppar över vägmasken och, när waymarks är laddat, skyltarnas keepout. */
+/** Dekor hoppar över vägmasken och registrerade keepout-zoner (skyltar, klippor). */
 export function shouldSpawnDecorAt(worldSeed: number, wx: number, wy: number): boolean {
   if (isRoadMaskAtWorld(worldSeed, wx, wy)) return false;
-  if (decorKeepout?.(worldSeed, wx, wy)) return false;
+  for (const keepout of decorKeepouts) {
+    if (keepout(worldSeed, wx, wy)) return false;
+  }
   return true;
 }
 
