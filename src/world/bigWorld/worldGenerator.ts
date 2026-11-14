@@ -123,6 +123,11 @@ function primaryBiomeAt(catalog: BigWorldCatalog, cx: number, cy: number): { reg
   return { region, mellanmark: !inside };
 }
 
+/** Samma biom som chunkens region. TransitionResolver använder den här, inte en egen karta. */
+export function chunkRegionBiome(cx: number, cy: number, catalog: BigWorldCatalog = getBigWorldCatalog()): string {
+  return primaryBiomeAt(catalog, cx, cy).region.biom;
+}
+
 function neighborBiomeFactory(catalog: BigWorldCatalog): (ncx: number, ncy: number) => string {
   return (ncx, ncy) => primaryBiomeAt(catalog, ncx, ncy).region.biom;
 }
