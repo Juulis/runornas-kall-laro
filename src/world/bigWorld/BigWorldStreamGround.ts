@@ -5,6 +5,7 @@ import type { Key, Params } from '../../i18n/types';
 import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome, WAYMARK_DECOR } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
+import { attachLight, detachLight, lightKindForDecorId } from '../../render/LightLayer';
 import { attachShadow, destroyShadowSprite, setShadowInView, shadowKindForDecorLayer } from '../../render/ShadowLayer';
 import { StripAnimSprite } from '../../render/StripAnimSprite';
 import { trackChunkLoad } from '../../ui/chunkLoad';
@@ -352,6 +353,7 @@ export class BigWorldStreamGround extends PixiContainer {
   private dropChunkVisual(_key: string, vis: ChunkVisual): void {
     for (const d of vis.decor) {
       destroyShadowSprite(d.shadow);
+      detachLight(d.sprite);
       if (!this.scene) continue;
       d.sprite.parent?.removeChild(d.sprite);
       d.sprite.destroy();
@@ -359,7 +361,10 @@ export class BigWorldStreamGround extends PixiContainer {
     }
     for (const w of vis.waymarks) {
       destroyShadowSprite(w.shadow);
-      for (const node of w.nodes) destroyWaymarkNode(node);
+      for (const node of w.nodes) {
+        detachLight(node);
+        destroyWaymarkNode(node);
+      }
     }
     for (const row of vis.patches) {
       for (const p of row) destroyPatch(p);
@@ -561,6 +566,8 @@ export class BigWorldStreamGround extends PixiContainer {
       s.zIndex = item.wx + item.wy + 0.5;
       this.scene.objects.addChild(s);
       const shadow = attachShadow(s, shadowKindForDecorLayer(item.layer));
+      const glow = lightKindForDecorId(item.id);
+      if (glow) attachLight(s, glow, { x: item.wx, y: item.wy });
       const collider: Collider | null = item.collider ? { x: item.collider.x, y: item.collider.y, r: item.collider.r } : null;
       if (collider) this.scene.zone.colliders.push(collider);
       vis.decor.push({ sprite: s, shadow, collider, wx: item.wx, wy: item.wy });
@@ -596,6 +603,8 @@ export class BigWorldStreamGround extends PixiContainer {
     s.zIndex = wm.wx + wm.wy + 0.7;
     this.scene.objects.addChild(s);
     const shadow = attachShadow(s, 'waymark');
+    const glow = wm.kind === 'lamp' ? (lightKindForDecorId(wm.assetId) ?? 'torch') : lightKindForDecorId(wm.assetId);
+    if (glow) attachLight(s, glow, { x: wm.wx, y: wm.wy });
     const nodes: Container[] = [s];
     const anims: StripAnimSprite[] = [];
     let label: Text | null = null;

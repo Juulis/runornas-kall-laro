@@ -5,6 +5,7 @@ import type { MonsterAttack } from '../entities/MonsterDefs';
 import type { MonsterFactory } from '../entities/MonsterFactory';
 import { dirIndex } from '../render/Assets';
 import { Iso } from '../render/Iso';
+import { detachLight, syncLight } from '../render/LightLayer';
 import { isCampFieldUid, keepOutsideSafeRadius } from '../world/bigWorld/campMonsterField';
 import type { CombatSystem } from './CombatSystem';
 import type { World } from './World';
@@ -38,6 +39,7 @@ export class MonsterAI {
         m.view.update(dt);
         m.view.alpha = Math.max(0, 1 - Math.max(0, m.dead - 0.8) * 1.5);
         if (m.dead > 1.6) {
+          detachLight(m.view);
           m.view.destroy({ children: true });
           w.monsters.splice(w.monsters.indexOf(m), 1);
         }
@@ -227,6 +229,7 @@ export class MonsterAI {
     const s = Iso.worldToScreen(m.pos.x, m.pos.y);
     v.position.set(s.x, s.y);
     v.zIndex = m.pos.x + m.pos.y;
+    syncLight(v, m.pos);
   }
 
   /** Benkungen: liehugg (0,35 s uppladdning), benstorm, de dödas hov, gravslag med telegraf (miss = sårbar 3 s). */

@@ -81,7 +81,10 @@
   "gfx": {
     "shadows": "Shadows",
     "shadows_on": "Shadows on",
-    "shadows_off": "Shadows off"
+    "shadows_off": "Shadows off",
+    "darkness": "Darkness",
+    "darkness_normal": "Darkness: normal night",
+    "darkness_light": "Darkness: mild night"
   },
   "map": {
     "zones": {

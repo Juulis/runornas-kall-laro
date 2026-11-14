@@ -7,6 +7,7 @@ import type { SpawnSpec } from '../../systems/SpawnSystem';
 import type { ChunkWorldCache } from './chunkCache';
 import { chunkSpawnToWorld, parseBigWorldSpawnUid, worldToChunk } from './bigWorldCoords';
 import { BIG_WORLD_MONSTER_SPAWN_BUDGET } from './bigWorldConfig';
+import { detachLight } from '../../render/LightLayer';
 import { isCampFieldUid } from './campMonsterField';
 import { releaseStartskogenQueueSlot } from './startskogenSpawn';
 
@@ -75,6 +76,7 @@ function despawnFarStreamed(w: World, hero: Vec2, r: number): void {
     if (!isStreamedMonsterUid(mon.uid)) continue;
     if (Math.hypot(mon.pos.x - hero.x, mon.pos.y - hero.y) <= r) continue;
     releaseStartskogenQueueSlot(w, mon.uid);
+    detachLight(mon.view);
     mon.view.destroy({ children: true });
     w.objects.removeChild(mon.view);
     w.monsters.splice(i, 1);

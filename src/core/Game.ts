@@ -25,6 +25,7 @@ import { loadBigWorldRuntime, peekBigWorldRuntime } from '../world/bigWorld/runt
 import { armRespawnsForKilled, resetMonsterRespawns, tickMonsterRespawns } from '../world/monsterRespawn';
 import { smokeMetricsEnabled, smokeQueryEnabled } from '../dev/smokeGate';
 import { worldToChunk } from '../world/bigWorld/bigWorldCoords';
+import { effectiveBiomeAtTile } from '../world/bigWorld/transitionResolver';
 import { Input } from '../input/Input';
 import { Loot } from '../logic/loot/Loot';
 import type { Item } from '../logic/loot/types';
@@ -34,7 +35,8 @@ import { DirSprite } from '../render/DirSprite';
 import { buildHeroEquipmentView } from '../render/heroEquipmentView';
 import { scaleKForWorldHeightM, shadowRadiusForWorldHeightM, worldHeightMForHeroOrNpc } from '../render/figureWorldHeights';
 import type { StripAnimSprite } from '../render/StripAnimSprite';
-import { Iso } from '../render/Iso';
+import { Iso, TILE_WORLD } from '../render/Iso';
+import { attachLight } from '../render/LightLayer';
 import { Parallax } from '../render/Parallax';
 import { Renderer } from '../render/Renderer';
 import { CombatSystem } from '../systems/CombatSystem';
@@ -687,6 +689,11 @@ export class Game {
       this.assets.backgrounds.get(name === 'village' ? 'fjarran_portalby' : 'fjarran_skog'),
     );
     this.camera.snap(hs.pos);
+    const foot = Iso.worldToScreen(hs.pos.x, hs.pos.y);
+    hero.view.position.set(foot.x, foot.y);
+    hero.view.zIndex = hs.pos.x + hs.pos.y;
+    attachLight(hero.view, 'hero', { x: hs.pos.x, y: hs.pos.y });
+    this.syncNight(0, name);
     this.hud.boss(null);
     this.invUI.setHero(hero);
     this.syncZoneView(zone);
@@ -1108,7 +1115,6 @@ export class Game {
     this.gameClock.advance(dt);
     this.worldState.setGameDay(this.gameClock.day);
     this.worldState.tickPending(this.gameClock.day, this.consequenceRuntime());
-    this.dayNight?.update(dt, w.zone.name);
     this.flushPendingItemGrants();
     this.questAnchors.update(w);
     const qh = this.questHooks();
@@ -1195,6 +1201,24 @@ export class Game {
         boss.hp / boss.max,
         this.text.t('monster.phase', { n: boss.phase + 1, name: boss.def.phases?.[boss.phase]?.name ?? '' }),
       );
+    this.syncNight(dt, w.zone.name);
+  }
+
+  /** Biom vid hjälten: träsk och aska mörkare, kust ljusare. Städer utan streaming får ett fast biom. */
+  private nightBiome(w: World): string | undefined {
+    if (w.zone.name === 'askeborg') return 'ask';
+    if (w.zone.name === 'dimmerstrand') return 'kust';
+    if (!w.zone.bigWorldStreaming) return undefined;
+    const gx = Math.floor(w.hero.pos.x / TILE_WORLD);
+    const gy = Math.floor(w.hero.pos.y / TILE_WORLD);
+    return effectiveBiomeAtTile(w.session.worldSeed, gx, gy);
+  }
+
+  private syncNight(dt: number, zoneName: string): void {
+    const w = this.world;
+    if (!w) return;
+    const h = w.hero;
+    this.dayNight?.update(dt, zoneName, { x: h.pos.x, y: h.pos.y, biomeId: this.nightBiome(w) });
   }
 
   private heroUpdate(dt: number): void {
@@ -1328,6 +1352,7 @@ export class Game {
     const sp = Iso.worldToScreen(h.pos.x, h.pos.y);
     v.position.set(sp.x, sp.y);
     v.zIndex = h.pos.x + h.pos.y;
+    attachLight(v, 'hero', { x: h.pos.x, y: h.pos.y });
   }
 
   private hoverUpdate(): void {

@@ -1,6 +1,8 @@
 import type { Vec2 } from '../core/GameContext';
 import type { AssetStore } from '../render/Assets';
 import { DirSprite } from '../render/DirSprite';
+import { Iso } from '../render/Iso';
+import { attachLight, isGlowingMonsterId } from '../render/LightLayer';
 import { scaleKForWorldHeightM, shadowRadiusForWorldHeightM, worldHeightMForMonster } from '../render/figureWorldHeights';
 import type { AnimSet } from '../render/spriteAnim';
 import type { SpawnSpec, SpawnSystem } from '../systems/SpawnSystem';
@@ -55,6 +57,10 @@ export class MonsterFactory {
       : worldHeightMForMonster(id, def.family, def.boss);
     const view = new DirSprite(resolved.set, scaleKForWorldHeightM(resolved.set, hm), shadowRadiusForWorldHeightM(hm), true, 'monster');
     view.sprite.tint = usingTheme ? 0xffffff : look.tint;
+    const screen = Iso.worldToScreen(pos.x, pos.y);
+    view.position.set(screen.x, screen.y);
+    view.zIndex = pos.x + pos.y;
+    if (isGlowingMonsterId(def.id)) attachLight(view, 'monster', pos);
     const es = spec?.elite ? this.spawn.eliteStats(spec) : null;
     const m = new Monster(def, lvl ?? spec?.level ?? def.level, pos, view, spec, es, () => w.rng.next(), resolved.id);
     if (m.elite) {

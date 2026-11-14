@@ -55,3 +55,18 @@ body {
 #plate .shadow-ctl.off button {
   opacity: 0.55;
 }
+#plate .darkness-ctl button {
+  color: #e6dfcc;
+  background: #1a1612cc;
+  border: 1px solid #6a5a40;
+  padding: 4px 10px;
+  font:
+    14px Cinzel,
+    Georgia,
+    serif;
+  cursor: pointer;
+}
+#plate .darkness-ctl.mild button {
+  color: #fff4d2;
+  background: #3a3428cc;
+}

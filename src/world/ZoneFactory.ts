@@ -4,6 +4,7 @@ import { villageLayout } from '../core/GameContext';
 import { DATA } from '../data';
 import type { AssetStore, DecorId } from '../render/Assets';
 import { Iso, TILE_WORLD } from '../render/Iso';
+import { attachLight, lightKindForDecorId } from '../render/LightLayer';
 import { attachShadow, shadowKindForDecorId } from '../render/ShadowLayer';
 import { StripAnimSprite } from '../render/StripAnimSprite';
 import { FOREST_CITY_PORTALS, FOREST_DECOR_MID, FOREST_DECOR_OUTER, FOREST_PLAY_RADIUS, FOREST_SAFE_RADIUS } from './forestConstants';
@@ -72,7 +73,23 @@ export class ZoneFactory {
     s.position.set(p.x, p.y);
     s.zIndex = x + y;
     attachShadow(s, shadowKindForDecorId(id));
+    const glow = lightKindForDecorId(id);
+    if (glow) attachLight(s, glow, { x, y });
     return s;
+  }
+
+  /** Lägerelden: eldstad plus låga. Ljuset sitter på lågan när animen finns. */
+  private placeCampfire(x: number, y: number, decor: Container[], decorAnims: StripAnimSprite[]): void {
+    const hearth = this.decorSprite('eldstad_kall', x, y, 0.34);
+    decor.push(hearth);
+    const fire = this.decorAnimSprite('lagereld_anim', x, y, 0.34);
+    if (fire) {
+      decor.push(fire);
+      decorAnims.push(fire);
+      attachLight(fire, 'campfire', { x, y });
+      return;
+    }
+    attachLight(hearth, 'campfire', { x, y });
   }
 
   private decorAnimSprite(id: string, x: number, y: number, k: number): StripAnimSprite | null {
@@ -134,12 +151,7 @@ export class ZoneFactory {
       const p = FOREST_CITY_PORTALS[city];
       zone.portals.push({ x: p.x, y: p.y, target: city });
     }
-    decor.push(this.decorSprite('eldstad_kall', -1.2, 2.6, 0.34));
-    const fire = this.decorAnimSprite('lagereld_anim', -1.2, 2.6, 0.34);
-    if (fire) {
-      decor.push(fire);
-      decorAnims.push(fire);
-    }
+    this.placeCampfire(-1.2, 2.6, decor, decorAnims);
     return { zone, ground, decor, decorAnims, runeSprites };
   }
 
@@ -163,13 +175,8 @@ export class ZoneFactory {
       runeSprites.push(s);
       decor.push(s);
     }
-    const camp = { x: -128, y: -128 };
-    decor.push(this.decorSprite('eldstad_kall', camp.x, camp.y, 0.34));
-    const fire = this.decorAnimSprite('lagereld_anim', camp.x, camp.y, 0.34);
-    if (fire) {
-      decor.push(fire);
-      decorAnims.push(fire);
-    }
+    const camp = campFirePos();
+    this.placeCampfire(camp.x, camp.y, decor, decorAnims);
     for (const city of PLAYABLE_CITIES) {
       const p = bigWorldCityPortalWorld(city);
       zone.portals.push({ x: p.x, y: p.y, target: city });

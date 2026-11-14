@@ -81,7 +81,10 @@
   "gfx": {
     "shadows": "Skuggor",
     "shadows_on": "Skuggor på",
-    "shadows_off": "Skuggor av"
+    "shadows_off": "Skuggor av",
+    "darkness": "Mörker",
+    "darkness_normal": "Mörker: vanlig natt",
+    "darkness_light": "Mörker: mild natt"
   },
   "map": {
     "zones": {
