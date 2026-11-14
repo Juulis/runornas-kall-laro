@@ -40,7 +40,7 @@ export class WorldFighter {
     this.damage = opts.damage;
     const hm = worldHeightMForHeroOrNpc();
     const k = scaleKForWorldHeightM(set, hm);
-    this.sprite = new DirSprite(set, k, shadowRadiusForWorldHeightM(hm), false);
+    this.sprite = new DirSprite(set, k, shadowRadiusForWorldHeightM(hm), false, 'npc');
     this.sprite.play('idle');
     this.view.addChild(this.sprite);
     this.syncView();

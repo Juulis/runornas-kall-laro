@@ -78,6 +78,11 @@
     "sound_on": "Ljud på (M)",
     "sound_off": "Ljud av (M)"
   },
+  "gfx": {
+    "shadows": "Skuggor",
+    "shadows_on": "Skuggor på",
+    "shadows_off": "Skuggor av"
+  },
   "map": {
     "zones": {
       "forest": "Den dimmiga skogen",

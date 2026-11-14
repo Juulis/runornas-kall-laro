@@ -1,16 +1,18 @@
-import { Container, Graphics, Sprite } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
 import { equipmentDrawOrder, equipmentDrawOrderUnarmed, type UtrustningLayer } from './heroEquipment';
 import type { HeroEquipmentViewState } from './heroEquipmentView';
+import { attachShadow, type ShadowKind } from './ShadowLayer';
 import type { Anim, AnimName, AnimSet } from './spriteAnim';
 import { animDisplayScale, animSetRefHeight } from './spriteLayout';
 
 /** Animerad 8-riktningsfigur med skugga. Fotpunkt = containerns origo. */
 export class DirSprite extends Container {
   readonly sprite = new Sprite();
+  /** Delad skuggtextur, barn vid fotpunkten så den följer med utan extra sync. */
+  readonly shadowSprite: Sprite;
   private readonly layerRoot = new Container();
   private readonly layerSprites: Sprite[] = [];
   private equipment: HeroEquipmentViewState | null = null;
-  private readonly shadow = new Graphics();
   private anim: AnimName = 'idle';
   private t = 0;
   dir = 0;
@@ -27,12 +29,25 @@ export class DirSprite extends Container {
     private readonly scaleK: number,
     shadowR: number,
     private readonly mirrorSingle = true,
+    shadowKind: ShadowKind = 'hero',
   ) {
     super();
+    void shadowR;
     this.refH = animSetRefHeight(set);
-    this.shadow.ellipse(0, 0, shadowR, shadowR / 2).fill({ color: 0x000000, alpha: 0.35 });
-    this.addChild(this.shadow, this.layerRoot, this.sprite);
+    this.shadowSprite = attachShadow(this, shadowKind);
+    this.addChild(this.layerRoot, this.sprite);
     this.apply();
+  }
+
+  /** Visa eller dölj skuggan utan att bygga om figuren. */
+  setShadowVisible(on: boolean): void {
+    this.shadowSprite.visible = on;
+    this.shadowSprite.renderable = on;
+  }
+
+  /** Sätter skuggans alfa (natt och inställning kan också styra den delade listan). */
+  setShadowAlpha(alpha: number): void {
+    this.shadowSprite.alpha = alpha;
   }
 
   /** Riddare paper-doll; null = enkel sprite (amazon/barbar). */

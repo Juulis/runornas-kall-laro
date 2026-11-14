@@ -178,6 +178,16 @@ assert.equal(audio.volume.isMuted, true);
 await new Promise((r) => setTimeout(r, 50));
 assert.equal(store.get(`${LocalStorageSaveBackend.SETTING_PREFIX}mute`), '1');
 assert.ok(document.querySelector('#plate .sfx-ctl'), 'volymreglage monterat');
+assert.ok(document.querySelector('#plate .shadow-ctl'), 'skuggknapp monterat');
+const shadowBtn = document.querySelector<HTMLButtonElement>('#plate .shadow-ctl button');
+assert.equal(shadowBtn?.textContent, 'Skuggor');
+assert.equal(shadowBtn?.getAttribute('aria-label'), 'Skuggor på');
+assert.equal(shadowBtn?.getAttribute('aria-pressed'), 'true');
+shadowBtn?.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));
+assert.equal(shadowBtn?.textContent, 'Skuggor av');
+assert.equal(shadowBtn?.getAttribute('aria-pressed'), 'false');
+await new Promise((r) => setTimeout(r, 50));
+assert.equal(store.get(`${LocalStorageSaveBackend.SETTING_PREFIX}shadows`), '0');
 
 // engångsmigrering rk_inv_
 const heroes = save.roster.list();

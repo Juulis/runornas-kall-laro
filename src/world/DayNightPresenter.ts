@@ -3,8 +3,8 @@ import type { Container } from 'pixi.js';
 import type { EventBus } from '../core/EventBus';
 import type { GameEvents } from '../core/events';
 import type { Rng } from '../core/Rng';
-import type { GameClock } from './GameClock';
-import { nightBlend } from './GameClock';
+import { setClockTime } from '../render/ShadowLayer';
+import { nightBlend, type GameClock } from './GameClock';
 import { Zone } from './Zone';
 
 const VILLAGE_TORCH_TILES: [number, number][] = [
@@ -35,6 +35,7 @@ export class DayNightPresenter {
     this.attachWorldEffects(worldEffects);
     this.shade.eventMode = 'none';
     this.torches.eventMode = 'none';
+    setClockTime(this.clock.timeSeconds);
   }
 
   get torchLayer(): Graphics {
@@ -59,6 +60,7 @@ export class DayNightPresenter {
   }
 
   update(dt: number, zoneName: string): void {
+    setClockTime(this.clock.timeSeconds);
     const blend = nightBlend(this.clock.timeSeconds);
     this.drawShade(blend);
     this.drawTorches(zoneName, blend);

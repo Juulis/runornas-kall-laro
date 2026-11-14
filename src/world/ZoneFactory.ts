@@ -4,6 +4,7 @@ import { villageLayout } from '../core/GameContext';
 import { DATA } from '../data';
 import type { AssetStore, DecorId } from '../render/Assets';
 import { Iso, TILE_WORLD } from '../render/Iso';
+import { attachShadow, shadowKindForDecorId } from '../render/ShadowLayer';
 import { StripAnimSprite } from '../render/StripAnimSprite';
 import { FOREST_CITY_PORTALS, FOREST_DECOR_MID, FOREST_DECOR_OUTER, FOREST_PLAY_RADIUS, FOREST_SAFE_RADIUS } from './forestConstants';
 import { ForestGroundChunks } from './ForestGroundChunks';
@@ -70,6 +71,7 @@ export class ZoneFactory {
     const p = Iso.worldToScreen(x, y);
     s.position.set(p.x, p.y);
     s.zIndex = x + y;
+    attachShadow(s, shadowKindForDecorId(id));
     return s;
   }
 
@@ -80,6 +82,7 @@ export class ZoneFactory {
     const p = Iso.worldToScreen(x, y);
     s.position.set(p.x, p.y);
     s.zIndex = x + y + 0.01;
+    attachShadow(s, 'decor_small');
     return s;
   }
 

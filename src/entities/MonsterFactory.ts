@@ -53,7 +53,7 @@ export class MonsterFactory {
     const hm = usingTheme
       ? worldHeightMForMonster(resolved.id, def.family, resolved.id === 'kaxig_mastare')
       : worldHeightMForMonster(id, def.family, def.boss);
-    const view = new DirSprite(resolved.set, scaleKForWorldHeightM(resolved.set, hm), shadowRadiusForWorldHeightM(hm));
+    const view = new DirSprite(resolved.set, scaleKForWorldHeightM(resolved.set, hm), shadowRadiusForWorldHeightM(hm), true, 'monster');
     view.sprite.tint = usingTheme ? 0xffffff : look.tint;
     const es = spec?.elite ? this.spawn.eliteStats(spec) : null;
     const m = new Monster(def, lvl ?? spec?.level ?? def.level, pos, view, spec, es, () => w.rng.next(), resolved.id);

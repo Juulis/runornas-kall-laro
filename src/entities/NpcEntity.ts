@@ -25,14 +25,14 @@ export class NpcEntity {
     const npcShadow = shadowRadiusForWorldHeightM(npcHm);
     if (anim && !anim.single) {
       const set: AnimSet = { idle: anim, gang: anim };
-      const v = new DirSprite(set, scaleKForWorldHeightM(set, npcHm), npcShadow, false);
+      const v = new DirSprite(set, scaleKForWorldHeightM(set, npcHm), npcShadow, false, 'npc');
       v.dir = NPC_FACE_DIR;
       v.play('idle');
       this.sprite = v;
       this.view.addChild(v);
     } else if (anim?.frames[0]?.[0]) {
       const set: AnimSet = { idle: anim, gang: anim };
-      const v = new DirSprite(set, scaleKForWorldHeightM(set, npcHm), npcShadow, true);
+      const v = new DirSprite(set, scaleKForWorldHeightM(set, npcHm), npcShadow, true, 'npc');
       v.dir = NPC_FACE_DIR;
       v.play('idle');
       this.sprite = v;
