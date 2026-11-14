@@ -5,6 +5,7 @@ import type { Key, Params } from '../../i18n/types';
 import { biomeLoadLabel, canonicalBiomeId, decorForBiome, ROAD_TILES, tilesForBiome, WAYMARK_DECOR } from '../../render/biomeAssetGroups';
 import type { AssetStore } from '../../render/Assets';
 import { Iso, TILE_WORLD } from '../../render/Iso';
+import { ensureProceduralRoadTile } from '../../render/roadMaskTextures';
 import { attachShadow, destroyShadowSprite, setShadowInView, shadowKindForDecorLayer } from '../../render/ShadowLayer';
 import { StripAnimSprite } from '../../render/StripAnimSprite';
 import { trackChunkLoad } from '../../ui/chunkLoad';
@@ -13,6 +14,7 @@ import { ChunkWorldCache } from './chunkCache';
 import { applyDecorBudget, DECOR_SPRITE_CAP, planDecorForChunk, shouldPlaceDecorAt } from './decorPlanner';
 import { pickChunkGroundTileId, worldTileIndex } from './groundTiles';
 import { blendWeightsAtTile, pickBlendedGroundTileId, pickWeightedBiomeId } from './transitionResolver';
+import { isProceduralRoadTile, roadSurfaceTileIdAt } from './roadTileResolver';
 import { roadIsDrawn, roadTileIdAt } from './roads';
 import { waymarkCaption, waymarksInChunk, type Waymark } from './waymarks';
 import type { ChunkWorldData } from './worldGenerator';
@@ -50,6 +52,8 @@ interface RoadPaint {
   ti: number;
   tj: number;
   tileId: string;
+  /** Steg 7-par om procedurtexturen inte kan ritas. */
+  fallbackId: string | null;
 }
 
 interface ChunkVisual {
@@ -746,13 +750,30 @@ export class BigWorldStreamGround extends PixiContainer {
       const { cx, cy, biomeId } = vis.data;
       for (let ti = 0; ti < tiles; ti++) {
         for (let tj = 0; tj < tiles; tj++) {
-          const tileId = roadTileIdAt(this.activeWorldSeed, cx, cy, ti, tj, biomeId);
-          if (tileId) list.push({ ti, tj, tileId });
+          const tileId = roadSurfaceTileIdAt(this.activeWorldSeed, cx, cy, ti, tj, biomeId);
+          if (!tileId) continue;
+          const fallbackId = isProceduralRoadTile(tileId) ? roadTileIdAt(this.activeWorldSeed, cx, cy, ti, tj, biomeId) : null;
+          list.push({ ti, tj, tileId, fallbackId });
         }
       }
     }
     vis.roadList = list;
     return list;
+  }
+
+  /** Procedurtextur om den finns, annars png-fallback. 'wait' om png ännu laddas. */
+  private textureForRoadCell(cell: RoadPaint): Texture | 'wait' | null {
+    if (isProceduralRoadTile(cell.tileId)) {
+      const drawn = ensureProceduralRoadTile(this.assets, cell.tileId);
+      if (drawn) return drawn;
+      if (!cell.fallbackId) return null;
+      if (!this.roadTilesReady) return 'wait';
+      return this.assets.tiles.get(cell.fallbackId) ?? null;
+    }
+    const png = this.assets.tiles.get(cell.tileId);
+    if (png) return png;
+    if (!this.roadTilesReady) return 'wait';
+    return null;
   }
 
   /** Ett steg vägtiles. false = inget mer att rita den här bildrutan. */
@@ -780,9 +801,9 @@ export class BigWorldStreamGround extends PixiContainer {
         vis.roadCursor++;
         continue;
       }
-      const tex = this.assets.tiles.get(cell.tileId);
+      const tex = this.textureForRoadCell(cell);
+      if (tex === 'wait') return placed > 0 ? 'work' : 'wait';
       if (!tex) {
-        if (!this.roadTilesReady) return placed > 0 ? 'work' : 'wait';
         vis.roadCursor++;
         continue;
       }
