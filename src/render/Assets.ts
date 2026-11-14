@@ -14,6 +14,7 @@ import {
   STARTUP_TILES,
   tilesForBiome,
 } from './biomeAssetGroups';
+import { placeProceduralRoadTile } from './roadMaskTextures';
 import { assetUrl, DIRS, type Anim, type AnimName, type AnimSet } from './spriteAnim';
 
 export { assetUrl, DIRS, type Anim, type AnimName, type AnimSet };
@@ -229,7 +230,7 @@ export class AssetStore {
     await Promise.all([
       ...tiles.map(async (id) => {
         try {
-          this.tiles.set(id, await tex(`2d/tiles/${id}.png`));
+          if (!placeProceduralRoadTile(this, id)) this.tiles.set(id, await tex(`2d/tiles/${id}.png`));
         } catch (e) {
           console.warn(`[AssetStore] tile ${id}:`, e);
         } finally {

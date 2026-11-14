@@ -529,6 +529,28 @@ export function roadMaskTileInChunk(worldSeed: number, cx: number, cy: number, t
   return (readLocal(worldSeed, cx, cy, ti, tj)?.on ?? 0) === 1;
 }
 
+/** Världsruta (gx, gy) på masken, mitt eller kant. Samma svar oavsett vilken chunk som frågar. */
+export function roadMaskAtWorldTile(worldSeed: number, gx: number, gy: number): boolean {
+  const own = chunkOfGx(gx, gy);
+  const local = localOfGx(own.cx, own.cy, gx, gy);
+  return roadMaskTileInChunk(worldSeed, own.cx, own.cy, local.ti, local.tj);
+}
+
+/** Ritad väg på rutan: världsindex och typ. Null om rutan inte ligger på masken. */
+export function roadMaskHitAt(
+  worldSeed: number,
+  cx: number,
+  cy: number,
+  ti: number,
+  tj: number,
+): { gx: number; gy: number; typ: string } | null {
+  const hit = readLocal(worldSeed, cx, cy, ti, tj);
+  if (!hit || hit.on !== 1 || hit.road >= 254) return null;
+  const line = ensureGeom(worldSeed).lines[hit.road];
+  if (!line) return null;
+  return { gx: hit.gx, gy: hit.gy, typ: line.typ };
+}
+
 /** Manhattan-rutor till närmaste ritade vägs mittlinje, eller Infinity. */
 export function roadCenterTileDistance(worldSeed: number, cx: number, cy: number, ti: number, tj: number): number {
   const dist = readLocal(worldSeed, cx, cy, ti, tj)?.dist ?? 255;
@@ -591,13 +613,14 @@ function tilePair(typ: string, biomeId: string): readonly [string, string] {
   return ['kullersten', 'kullersten_mossig'];
 }
 
-/** Tile-id för maskrutan, eller null om rutan inte är väg. */
+/**
+ * Tile-id för steg 7: ett par hela plattor, eller null om rutan inte är väg.
+ * Kantmasken ritas via roadSurfaceTileIdAt. Den här vägen är fallback när familjen saknas.
+ */
 export function roadTileIdAt(worldSeed: number, cx: number, cy: number, ti: number, tj: number, biomeId: string): string | null {
-  const hit = readLocal(worldSeed, cx, cy, ti, tj);
-  if (!hit || hit.on !== 1 || hit.road >= 254) return null;
-  const line = ensureGeom(worldSeed).lines[hit.road];
-  if (!line) return null;
-  const pair = tilePair(line.typ, biomeId);
+  const hit = roadMaskHitAt(worldSeed, cx, cy, ti, tj);
+  if (!hit) return null;
+  const pair = tilePair(hit.typ, biomeId);
   const h = Rng.hash('vag-tile', worldSeed, hit.gx, hit.gy);
   return (h & 1) === 0 ? pair[0] : pair[1];
 }
